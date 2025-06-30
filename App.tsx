@@ -80,7 +80,7 @@ function App() {
         loop={true}
         autoplay={{ delay: 14000, disableOnInteraction: false }}
         coverflowEffect={{
-          rotate: 0,      // 公式ドキュメントの推奨値例
+          rotate: 0,      
           stretch: 30,
           depth: 100,
           modifier: 1.5,
