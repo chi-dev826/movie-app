@@ -12,7 +12,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 type Movie = {
-    id: number;
+    id: string;
     backdrop_path: string;
     original_title: string;
     poster_path: string;

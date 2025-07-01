@@ -1,7 +1,19 @@
 import "../styles/App.css"
 import { Link } from "react-router-dom";
 
-const HeroMovieComponents = (props) => {
+type Movie = {
+  id: string;
+  poster_path: string;
+  original_title: string;
+  backdrop_path: string | null;
+  overview: string | null;
+};
+
+type Props = {
+  movie: Movie;
+}
+
+const HeroMovieComponents = (props: Props) => {
     const { movie } = props;
 
     return (
