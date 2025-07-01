@@ -49,7 +49,7 @@
 
 
 .MovieDetail-overlay-contents .Movie-title {
-  font-size: 70px;
+  font-size: 100px;
   font-weight: bold;
   margin-top: 0;
   margin-bottom: 0;
@@ -82,6 +82,9 @@
 
 .moviecard-title {
   position: relative;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   z-index: 1;
   color: #fff;
   margin: 3rem 4.2rem 1rem;

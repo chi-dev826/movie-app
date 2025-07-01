@@ -162,7 +162,7 @@ function MovieDetail() {
             <section className="hero-content">
               <div className="hero-metadata">
                 <div key={heroMovie.id} className="MovieDetail-overlay-contents"> 
-                  <img src={`https://image.tmdb.org/t/p/w92/${heroMovie.company_logo}`}
+                  <img src={`https://image.tmdb.org/t/p/w300/${heroMovie.company_logo}`}
                        alt="logo"
                        className="company-logo" />
                   <h1 className="Movie-title">{heroMovie.original_title.replace(/\s+/g, "")}</h1>

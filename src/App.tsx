@@ -78,7 +78,7 @@ function App() {
         centeredSlides={true}
         slidesPerView={2}
         loop={true}
-        autoplay={{ delay: 14000, disableOnInteraction: false }}
+        autoplay={{ delay: 10000, disableOnInteraction: false }}
         coverflowEffect={{
           rotate: 0,      
           stretch: 30,
