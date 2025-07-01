@@ -1,0 +1,32 @@
+name: CI
+
+on: 
+  push:
+    branches:
+      - main
+      - feature/*
+
+jobs:
+  build:  
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Node.jsをセットアップ
+        uses: actions/setup-node@v4
+        with: 
+          node-version: 18
+
+      - name: 依存関係をインストール
+        run: npm ci
+
+      - name: 型チェック
+        run: npm run typecheck
+
+      - name: Lintチェック
+        run: npm run lint
+
+      - name: Viteビルド
+        run: npm run build
