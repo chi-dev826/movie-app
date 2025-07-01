@@ -8,7 +8,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 const router = createBrowserRouter([
   { path: "/", Component: App},
   { path: "/movies/:movieId", Component: MovieDetail },
-]);
+  ],
+  {
+    basename: "/movie-app", //GitHub pages用
+  }
+);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
