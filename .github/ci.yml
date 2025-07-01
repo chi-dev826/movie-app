@@ -6,6 +6,11 @@ on:
       - main
       - feature/*
 
+env:
+  VITE_TMDB_API_KEY: ${{ secrets.VITE_TMDB_API_KEY }}
+
+
+
 jobs:
   build:  
     runs-on: ubuntu-latest
@@ -24,9 +29,14 @@ jobs:
 
       - name: 型チェック
         run: npm run typecheck
+      - name: 型チェック
+        run: npm run typecheck
 
       - name: Lintチェック
         run: npm run lint
+
+      - name: Create .env
+        run: echo "VITE_TMDB_API_KEY=${{ secrets.VITE_TMDB_API_KEY }}" > .env
 
       - name: Viteビルド
         run: npm run build

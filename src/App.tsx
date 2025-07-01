@@ -50,7 +50,6 @@ function App() {
 
       const data = await response.json();
       const result = data.results;
-      console.log(result);
       const movieList = result.map((movie: MovieJson) => ({
         id: movie.id,
         backdrop_path: movie.backdrop_path,
