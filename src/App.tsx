@@ -1,8 +1,9 @@
-import HeroMovieComponents from "./components/heroMovieComponents.tsx";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState } from "react";
-import MovieCard from "./components/MovieCard.tsx";
 import { EffectCoverflow, Autoplay } from "swiper/modules";
+import HeroMovieComponents from "./components/heroMovieComponents.tsx";
+import MovieCard from "./components/MovieCard.tsx";
+import type { Movie, MovieJson } from './types'
 
 import "swiper/css/effect-coverflow";
 import "./styles/App.css";
@@ -11,29 +12,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-type Movie = {
-    id: string;
-    backdrop_path: string;
-    original_title: string;
-    poster_path: string;
-    overview: string;
-};
-
-type MovieJson = {
-    adult: boolean;
-    backdrop_path: string;
-    genre_ids: number[];
-    id: string;
-    original_language: string;
-    overview: string;
-    popularity: number;
-    poster_path: string;
-    release_date: string;
-    title: string;
-    video: boolean;
-    vote_average: number;
-    vote_count: number;
-};
 
 function App() {
   const [movieList, setMovieList] = useState<Movie[]>([]);
@@ -63,9 +41,9 @@ function App() {
   }, []);
 
   //ヒーローセクションデータ
-    const heroMovieList = movieList
-    .filter((movie) => movie.overview && movie.overview.trim() !== "")
-    .slice(0, 5);
+  const heroMovieList = movieList
+                        .filter((movie) => movie.overview && movie.overview.trim() !== "")
+                        .slice(0, 5);
 
   return (
     <div>

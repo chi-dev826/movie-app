@@ -1,95 +1,25 @@
-import { useParams } from "react-router";
-import { useEffect, useState } from "react";
-import "../styles/MovieDetail.css";
-import MovieCard from "./MovieCard";
-
-type MovieDetailJson = {
-  adult: boolean;
-  backdrop_path: string | null;
-  belongs_to_collection: null;
-  budget: number;
-  genres: { id: number; name: string }[];
-  homepage: string;
-  id: string;
-  imdb_id: string;
-  origin_country: string[];
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  production_companies: {
-    id: number;
-    logo_path: string | null;
-    name: string;
-    origin_country: string;
-  }[];
-  production_countries: {
-    iso_3166_1: string;
-    name: string;
-  }[];
-  release_date: string;
-  revenue: number;
-  runtime: number;
-  spoken_languages: {
-    english_name: string;
-    iso_639_1: string;
-    name: string;
-  }[];
-  status: string;
-  tagline: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-};
-
-type MovieJson = {
-    adult: boolean;
-    backdrop_path: string;
-    genre_ids: number[];
-    id: string;
-    original_language: string;
-    overview: string;
-    popularity: number;
-    poster_path: string;
-    release_date: string;
-    title: string;
-    video: boolean;
-    vote_average: number;
-    vote_count: number;
-};
-
-type Movie = {
-  id: string;
-  backdrop_path: string | null;
-  original_title: string;
-  overview: string;
-  poster_path: string;
-  year: number;
-  rating: number;
-  runtime: number;
-  score: number;
-  genres: string[];
-  company_logo: string | null;
-};
+import { useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import MovieCard from './MovieCard';
+import type { Movie, MovieJson, MovieDetailJson } from '../types';
+import '../styles/MovieDetail.css';
 
 function MovieDetail() {
   const { movieId } = useParams();
-  const [ similarMovieList, setSimilarMovie ] = useState<Movie[]>([]);
-  const [ heroMovie, setHeroMovie ] = useState<Movie | null>(null);
-  const [ youtubeKey, setYoutubeKey] = useState<string | null>(null);
+  const [similarMovieList, setSimilarMovie] = useState<Movie[]>([]);
+  const [heroMovie, setHeroMovie] = useState<Movie | null>(null);
+  const [youtubeKey, setYoutubeKey] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMovie = async() => {
-      const url = `https://api.themoviedb.org/3/movie/${movieId}?language=ja`
+    const fetchMovie = async () => {
+      const url = `https://api.themoviedb.org/3/movie/${movieId}?language=ja`;
       const response = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-        }
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+        },
       });
 
-      const data = (await response.json()) as MovieDetailJson
+      const data = (await response.json()) as MovieDetailJson;
       setHeroMovie({
         id: data.id,
         backdrop_path: data.backdrop_path,
@@ -101,30 +31,31 @@ function MovieDetail() {
         runtime: data.runtime,
         score: data.vote_count,
         genres: data.genres ? data.genres.map((g: { name: string }) => g.name) : [],
-        company_logo: Array.isArray(data.production_companies) && data.production_companies.length > 0
-        ? data.production_companies[0].logo_path ?? ""
-        : ""
-      })
+        company_logo:
+          Array.isArray(data.production_companies) && data.production_companies.length > 0
+            ? (data.production_companies[0].logo_path ?? '')
+            : '',
+      });
     };
 
     fetchMovie();
-  }, [movieId])
+  }, [movieId]);
 
   //Youtubeのkeyデータ取得
   useEffect(() => {
-    const fetchUrl = async() => {
+    const fetchUrl = async () => {
       const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=ja`;
       const response = await fetch(url, {
-          headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-        }
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+        },
       });
 
       const data = await response.json();
       setYoutubeKey(data.results[0].key);
-    }
+    };
     fetchUrl();
-  }, [movieId])
+  }, [movieId]);
 
   // 関連映画データ取得
   useEffect(() => {
@@ -150,36 +81,42 @@ function MovieDetail() {
     };
     fetchMovie();
   }, [movieId]);
-  
-    return (
-      <div className="movie-page"
-       style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/original${heroMovie?.backdrop_path})`,
-         }}>
-        {heroMovie && (
-          <>
-            <div className="MovieDetail-gradient"></div>
 
-            <section className="hero-content">
-              <div className="hero-metadata">
-                <div key={heroMovie.id} className="MovieDetail-overlay-contents"> 
-                  {heroMovie.company_logo && (
-                  <img src={`https://image.tmdb.org/t/p/w300/${heroMovie.company_logo}`}
-                       alt="logo"
-                       className="company-logo" />
-                  )}
-                  {heroMovie.original_title && (
-                  <h1 className="Movie-title">{heroMovie.original_title.replace(/\s+/g, "")}</h1>
-                  )}
-                  <span className="MovieDetail-overlay">
-                    <span>{heroMovie.year}・{heroMovie.runtime}分・{heroMovie.genres.join(",")}</span>
+  return (
+    <div
+      className="movie-page"
+      style={{
+        backgroundImage: `url(https://image.tmdb.org/t/p/original${heroMovie?.backdrop_path})`,
+      }}
+    >
+      {heroMovie && (
+        <>
+          <div className="MovieDetail-gradient"></div>
+
+          <section className="hero-content">
+            <div className="hero-metadata">
+              <div key={heroMovie.id} className="MovieDetail-overlay-contents">
+                {heroMovie.company_logo && (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w300/${heroMovie.company_logo}`}
+                    alt="logo"
+                    className="company-logo"
+                  />
+                )}
+                {heroMovie.original_title && (
+                  <h1 className="Movie-title">{heroMovie.original_title.replace(/\s+/g, '')}</h1>
+                )}
+                <span className="MovieDetail-overlay">
+                  <span>
+                    {heroMovie.year}・{heroMovie.runtime}分・{heroMovie.genres.join(',')}
                   </span>
-                  <p className="MovieDetail-overview">{heroMovie.overview}</p>
-                </div>
+                </span>
+                <p className="MovieDetail-overview">{heroMovie.overview}</p>
               </div>
-              <div className="video-container">
-                <div className="video-wrapper">
-                  {youtubeKey && (
+            </div>
+            <div className="video-container">
+              <div className="video-wrapper">
+                {youtubeKey && (
                   <iframe
                     src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=1&mute=1&loop=1&rel=0&modestbranding=1&showinfo=0&controls=1`}
                     width="1200"
@@ -188,22 +125,22 @@ function MovieDetail() {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
-                  )}
-                </div>
+                )}
               </div>
-            </section>
-            <section className="moviecard-section">
-              <h2 className="moviecard-title">関連作品</h2>
-              <div className="moviecard-list">
-                {similarMovieList.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))}
-              </div>
-            </section>
-          </>
-        )}
-      </div>
-    )
+            </div>
+          </section>
+          <section className="moviecard-section">
+            <h2 className="moviecard-title">関連作品</h2>
+            <div className="moviecard-list">
+              {similarMovieList.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default MovieDetail;
