@@ -92,63 +92,64 @@ body {
 
 /* 横スクロール映画リスト */
 .movie-section {
-    width: 100vw;
-    max-width: 100vw;
-    box-sizing: border-box;
-    margin-top: 1rem;
+  width: 100vw;
+  max-width: 100vw;
+  box-sizing: border-box;
+  margin-top: 1rem;
 }
 
 .movie-list__header {
-    color: #fff;
-    margin: 1.5rem 2.5rem 1rem;
-    
+  font-weight: bold;
+  font-size: 20px;
+  color: #fff;
+  margin: 1.5rem 2.5rem 1rem;  
 }
 
 .movie-list {
-    display: flex;
-    overflow-x: auto;
-    gap: 2rem;
-    padding: 1rem 2vw;
-    scrollbar-width: none;
+  display: flex;
+  overflow-x: auto;
+  gap: 2rem;
+  padding: 1rem 2vw;
+  scrollbar-width: none;
 }
 
 .movie-img-wrap {
-    position: relative;
-    min-width: 200px;
-    height: 300px;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #232323;
-    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.22);
-    cursor: pointer;
-    transition: transform 0.2s ease;
+  position: relative;
+  min-width: 200px;
+  height: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #232323;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .movie-img-wrap:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 32px rgb(124, 67, 67);
+  transform: scale(1.05);
+  box-shadow: 0 8px 32px rgb(124, 67, 67);
 }
 
 .movie-card__image {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    border-radius: 14px;
-    transition: filter 0.2s ease;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 14px;
+  transition: filter 0.2s ease;
 }
 
 .movie-card__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: flex-end;
-    background: linear-gradient(0deg, rgba(0,0,0,0.85) 60%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-    border-radius: 14px;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(0deg, rgba(0,0,0,0.85) 60%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  border-radius: 14px;
 }
 
 .movie-img-wrap:hover .movie-card__overlay {
@@ -156,10 +157,10 @@ body {
 }
 
 .movie-card__title {
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-shadow: 0 2px 12px rgb(71, 60, 60);
-    margin-bottom: 2rem;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 12px rgb(71, 60, 60);
+  margin-bottom: 2rem;
 }

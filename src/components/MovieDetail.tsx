@@ -116,15 +116,20 @@ function MovieDetail() {
             </div>
             <div className="video-container">
               <div className="video-wrapper">
-                {youtubeKey && (
+                {youtubeKey ? (
                   <iframe
-                    src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=1&mute=1&loop=1&rel=0&modestbranding=1&showinfo=0&controls=1`}
+                    src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=1&mute=0&loop=1&rel=0&modestbranding=1&showinfo=0&controls=1`}
                     width="1200"
                     height="680"
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
+                ) : (
+                  <>
+                    {/*レイアウト保持のため空のフレームを挿入*/}
+                    <iframe width="1280" height="680" title="No video available" />
+                  </>
                 )}
               </div>
             </div>

@@ -1,17 +1,9 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { useEffect, useState } from "react";
-import { EffectCoverflow, Autoplay } from "swiper/modules";
-import HeroMovieComponents from "./components/heroMovieComponents.tsx";
-import MovieCard from "./components/MovieCard.tsx";
-import type { Movie, MovieJson } from './types'
+import { useEffect, useState } from 'react';
+import HeroSwiper from './components/HeroSwiper.tsx';
+import MovieCard from './components/MovieCard.tsx';
+import type { Movie, MovieJson } from './types';
 
-import "swiper/css/effect-coverflow";
-import "./styles/App.css";
-import 'swiper/css/autoplay';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-
+import './styles/App.css';
 
 function App() {
   const [movieList, setMovieList] = useState<Movie[]>([]);
@@ -19,7 +11,7 @@ function App() {
   // 映画データ取得
   useEffect(() => {
     const fetchMovieList = async () => {
-      const url = "https://api.themoviedb.org/3/movie/popular?language=ja&page=1";
+      const url = 'https://api.themoviedb.org/3/movie/popular?language=ja&page=1';
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
@@ -42,44 +34,28 @@ function App() {
 
   //ヒーローセクションデータ
   const heroMovieList = movieList
-                        .filter((movie) => movie.overview && movie.overview.trim() !== "")
-                        .slice(0, 5);
+    .filter((movie) => movie.overview && movie.overview.trim() !== '')
+    .slice(0, 5);
 
   return (
     <div>
-      {heroMovieList.length >= 3 && (
-      <Swiper
-        modules={[EffectCoverflow, Autoplay]}
-        effect="coverflow"
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={2}
-        loop={true}
-        autoplay={{ delay: 10000, disableOnInteraction: false }}
-        coverflowEffect={{
-          rotate: 0,      
-          stretch: 30,
-          depth: 100,
-          modifier: 1.5,
-          slideShadows: false,
-        }}
-        className="hero-swiper"
-        >
-      {heroMovieList.map((movie) => (
-        <SwiperSlide key={movie.id} className="hero-slide">
-          <HeroMovieComponents key={movie.id} movie={movie} />
-        </SwiperSlide>
-      ))}
-      </Swiper>
+      {heroMovieList.length >= 5 && (
+        <>
+          <HeroSwiper movies={heroMovieList} />
+        </>
       )}
 
       <section className="movie-section">
         <h3 className="movie-list__header">人気映画</h3>
         {/* 映画リストの横スクロール */}
         <div className="movie-list">
-          {movieList.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-          ))}
+          {movieList && (
+            <>
+              {movieList.map((movie: Movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </>
+          )}
         </div>
       </section>
     </div>

@@ -6,7 +6,7 @@ const MovieCard = (props: Props) => {
   const { movie } = props;
 
   return (
-    <Link to={`/movies/${movie.id}`} key={movie.id} className="movie-img-wrap">
+    <Link to={`/movie/${movie.id}`} key={movie.id} className="movie-img-wrap">
       <img
         src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`}
         alt={movie.original_title}

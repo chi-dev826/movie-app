@@ -69,6 +69,10 @@ export type MovieDetailJson = {
   vote_count: number;
 };
 
+export type PropsList = {
+  movies: Movie[];
+};
+
 export type Props = {
   movie: Movie;
 };

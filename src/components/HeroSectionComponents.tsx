@@ -7,7 +7,7 @@ const HeroMovieComponents = (props: Props) => {
 
   return (
     <Link
-      to={`/movies/${movie.id}`}
+      to={`/movie/${movie.id}`}
       className="heroMovie-img-wrap"
       style={{
         backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
