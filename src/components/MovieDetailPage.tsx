@@ -1,13 +1,13 @@
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import MovieCard from './MovieCard';
-import type { Movie, MovieJson, MovieDetailJson } from '../types';
+import type { Movie, MovieDetail, MovieJson, MovieDetailJson } from '../types';
 import '../styles/MovieDetail.css';
 
-function MovieDetail() {
+function MovieDetailPage() {
   const { movieId } = useParams();
   const [similarMovieList, setSimilarMovie] = useState<Movie[]>([]);
-  const [heroMovie, setHeroMovie] = useState<Movie | null>(null);
+  const [heroMovie, setHeroMovie] = useState<MovieDetail | null>(null);
   const [youtubeKey, setYoutubeKey] = useState<string | null>(null);
 
   useEffect(() => {
@@ -148,4 +148,4 @@ function MovieDetail() {
   );
 }
 
-export default MovieDetail;
+export default MovieDetailPage;

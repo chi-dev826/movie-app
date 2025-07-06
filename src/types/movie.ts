@@ -4,12 +4,6 @@ export type Movie = {
   original_title: string;
   overview: string;
   poster_path: string;
-  year: number;
-  rating: number;
-  runtime: number;
-  score: number;
-  genres: string[];
-  company_logo: string | null;
 };
 
 export type MovieJson = {
@@ -26,6 +20,20 @@ export type MovieJson = {
   video: boolean;
   vote_average: number;
   vote_count: number;
+};
+
+export type MovieDetail = {
+  id: string;
+  backdrop_path: string | null;
+  original_title: string;
+  overview: string;
+  poster_path: string;
+  year: number;
+  rating: number;
+  runtime: number;
+  score: number;
+  genres: string[];
+  company_logo: string | null;
 };
 
 export type MovieDetailJson = {
