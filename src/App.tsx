@@ -1,6 +1,6 @@
 import { useMovies } from './hooks/useMovies';
-import HeroSwiper from './components/HeroSwiper.tsx';
-import MovieCard from './components/MovieCard.tsx';
+import HeroSwiper from './components/HeroSwiper';
+import MovieCard from './components/MovieCard';
 import './styles/App.css';
 
 function App() {
