@@ -9,7 +9,7 @@ body {
 .hero-swiper {
   width: 100vw;
   max-width: 100vw;
-  height: 900px;
+  height: 70vh;
 }
 
 .hero-slide {
@@ -28,7 +28,7 @@ body {
 .heroMovie-img-wrap {
   position: relative;
   width: 100%;
-  height: 900px;
+  height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
