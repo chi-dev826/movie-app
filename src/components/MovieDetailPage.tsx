@@ -2,7 +2,7 @@ import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import MovieCard from './MovieCard';
 import type { Movie, MovieDetail, MovieJson, MovieDetailJson } from '../types';
-import '../styles/MovieDetail.css';
+import '../styles/MovieDetailPage.css';
 
 function MovieDetailPage() {
   const { movieId } = useParams();
