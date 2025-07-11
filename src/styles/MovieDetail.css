@@ -56,7 +56,9 @@
 }
 
 .MovieDetail-overlay-contents .MovieDetail-overlay {
+  display: inline-block;
   font-size: 12px;
+  margin-bottom: 1rem;
 }
 
 .MovieDetail-overlay-contents .MovieDetail-overview {
