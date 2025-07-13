@@ -1,10 +1,12 @@
 import '../styles/App.css';
 import { Link } from 'react-router-dom';
-import type { Props } from '../types';
+import type { Movie } from '../types';
 
-const HeroMovieComponents = (props: Props) => {
-  const { movie } = props;
+type Props = {
+  movie: Movie;
+};
 
+const HeroSection = ({ movie }: Props) => {
   return (
     <Link
       to={`/movie/${movie.id}`}
@@ -25,4 +27,4 @@ const HeroMovieComponents = (props: Props) => {
   );
 };
 
-export default HeroMovieComponents;
+export default HeroSection;

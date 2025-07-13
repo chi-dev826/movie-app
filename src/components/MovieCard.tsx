@@ -1,10 +1,12 @@
 import '../styles/App.css';
 import { Link } from 'react-router-dom';
-import type { Props } from '../types';
+import type { Movie } from '../types';
 
-const MovieCard = (props: Props) => {
-  const { movie } = props;
+type Props = {
+  movie: Movie;
+};
 
+const MovieCard = ({ movie }: Props) => {
   return (
     <Link to={`/movie/${movie.id}`} key={movie.id} className="movie-img-wrap">
       <img

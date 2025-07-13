@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import HeroSectionComponents from './HeroSectionComponents';
+import HeroSectionComponents from './HeroSection';
 import { EffectCoverflow, Autoplay } from 'swiper/modules';
-import type { PropsList } from '../types';
+import type { Movie } from '../types';
 
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -10,9 +10,11 @@ import '../styles/App.css';
 import 'swiper/css/autoplay';
 import 'swiper/css';
 
-const HeroSwiper = (props: PropsList) => {
-  const { movies } = props;
+type Props = {
+  movies: Movie[];
+};
 
+const HeroSwiper = ({ movies }: Props) => {
   const SwiperSettings = {
     modules: [EffectCoverflow, Autoplay],
     effect: 'coverflow',
