@@ -60,7 +60,7 @@ export const fetchYoutubeKey = async (movieId: string): Promise<string | null> =
   const data = await fetchFromApi<TmdbResponse<{ key: string }[]>>(
     `/movie/${movieId}/videos?language=ja`,
   );
-  return data.results[0].key ?? null;
+  return data.results[0]?.key ?? null;
 };
 
 export const fetchSimilarMovies = async (movieId: string): Promise<Movie[]> => {

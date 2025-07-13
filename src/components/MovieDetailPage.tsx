@@ -3,7 +3,7 @@ import HeroMetadata from '../components/HeroMetadata';
 import HeroMovie from '../components/HeroMovie';
 import { useMovies } from '../hooks/useMovies';
 import { TMDB_IMAGE_BASE_URL } from '../../config';
-import '../styles/MovieDetail.css';
+import '../styles/MovieDetailPage.css';
 
 function MovieDetailPage() {
   const { movieDetail, youtubeKey, similarMovies, isLoading, error } = useMovies();
