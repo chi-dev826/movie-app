@@ -12,6 +12,7 @@ export type MovieJson = {
   genre_ids: number[];
   id: string;
   original_language: string;
+  original_title: string;
   overview: string;
   popularity: number;
   poster_path: string;
@@ -77,10 +78,33 @@ export type MovieDetailJson = {
   vote_count: number;
 };
 
-export type PropsList = {
-  movies: Movie[];
-};
-
-export type Props = {
-  movie: Movie;
+export type ImagesJson = {
+  id: string;
+  backdrops: {
+    aspect_ratio: number;
+    file_path: string;
+    height: number;
+    iso_639_1: string | null;
+    vote_average: number;
+    vote_count: number;
+    width: number;
+  }[];
+  logos: {
+    aspect_ratio: number;
+    height: number;
+    iso_639_1: string | null;
+    file_path: string;
+    vote_average: number;
+    vote_count: number;
+    width: number;
+  }[];
+  posters: {
+    aspect_ratio: number;
+    file_path: string;
+    height: number;
+    iso_639_1: string | null;
+    vote_average: number;
+    vote_count: number;
+    width: number;
+  }[];
 };

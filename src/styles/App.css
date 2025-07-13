@@ -91,7 +91,7 @@ body {
 }
 
 /* 横スクロール映画リスト */
-.movie-section {
+.moviecard-section {
   width: 100vw;
   max-width: 100vw;
   box-sizing: border-box;

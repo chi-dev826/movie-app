@@ -1,13 +1,13 @@
-import { useMovies } from './hooks/useMovies';
+import { usePopularMovies } from './hooks/usePopularMovies';
 import HeroSwiper from './components/HeroSwiper';
 import MovieCard from './components/MovieCard';
 import './styles/App.css';
 
 function App() {
-  const { movieList, isLoading, error } = useMovies();
+  const { popularMovies, isLoading, error } = usePopularMovies();
 
   //ヒーローセクション用データフィルタリング
-  const heroMovieList = movieList
+  const heroMovieList = popularMovies
     .filter((movie) => movie.overview && movie.overview.trim() !== '')
     .slice(0, 5);
 
@@ -23,10 +23,10 @@ function App() {
     <div>
       {heroMovieList.length >= 3 && <HeroSwiper movies={heroMovieList} />}
 
-      <section className="movie-section">
+      <section className="moviecard-section">
         <h3 className="movie-list__header">人気映画</h3>
         <div className="movie-list">
-          {movieList.map((movie) => (
+          {popularMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
