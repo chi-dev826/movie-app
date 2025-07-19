@@ -6,27 +6,55 @@ body {
     overflow-y: hidden;
 }
 
-.hero-swiper {
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff; /* ボタンの色 */
+  top: 50%; /* 垂直方向の中央に配置 */
+  transform: translateY(-50%);
+  z-index: 10; /* 他の要素の上に表示 */
+}
+
+/* Swiperのページネーションの色を調整（任意） */
+.swiper-pagination-bullet-active {
+  background: #fff; /* アクティブなドットの色 */
+}
+
+/* ナビゲーションボタンとページネーションをSwiperの親要素内に配置するためのコンテナ */
+.hero-swiper-container {
+  position: relative; /* 子要素の絶対配置の基準 */
+  width: 100vw;
+  height: 70vh; /* hero-swiperと同じ高さ */
+}
+
+.swiper {
   width: 100vw;
   max-width: 100vw;
   height: 70vh;
 }
 
-.hero-slide {
+.swiper-slide {
   display: flex;
-  width: 100%;
-  height: 100%;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* スライド内の要素を絶対配置するための基準 */
+  border-radius: 14px;
+  overflow: hidden; /* スライド内の要素がはみ出さないようにする */
+}
+
+.swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.5;
+  transform: scale(0.9);
 }
 
 .heroMovie-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(46, 45, 45, 0.6) 60%, rgba(44, 44, 44, 0.85)90%);
+  background: linear-gradient(180deg, rgba(71, 71, 71, 0.6) 80%, rgba(70, 69, 69, 0.85)100%);
   z-index: 0;
 }
 
 .heroMovie-img-wrap {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   background-size: cover;
@@ -43,7 +71,7 @@ body {
   position: relative;
   z-index: 1;
   padding: 2rem 3rem;
-  max-width: 800px;
+  max-width: 17vw;
   color: white;
 }
 
@@ -91,7 +119,7 @@ body {
 }
 
 /* 横スクロール映画リスト */
-.movie-section {
+.moviecard-section {
   width: 100vw;
   max-width: 100vw;
   box-sizing: border-box;
@@ -102,7 +130,7 @@ body {
   font-weight: bold;
   font-size: 20px;
   color: #fff;
-  margin: 1.5rem 2.5rem 1rem;  
+  margin: 1.5rem 2.5rem 1rem;
 }
 
 .movie-list {
