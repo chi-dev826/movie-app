@@ -2,7 +2,7 @@ type Props = {
   youtubeKey: string | null;
 };
 
-const HeroVideo = ({ youtubeKey }: Props) => {
+export const HeroVideo = ({ youtubeKey }: Props) => {
   return (
     <div className="video-container">
       <div className="video-wrapper">
@@ -30,5 +30,3 @@ const HeroVideo = ({ youtubeKey }: Props) => {
     </div>
   );
 };
-
-export default HeroVideo;

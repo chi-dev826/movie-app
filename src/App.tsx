@@ -1,6 +1,7 @@
 import { usePopularMovies } from './hooks/usePopularMovies';
-import HeroSwiper from './components/HeroSwiper';
-import MovieCard from './components/MovieCard';
+import { HeroSwiper } from './components/HeroSwiper';
+import { MovieCard } from './components/MovieCard';
+import { Header } from './components/Header';
 import './styles/App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <div>
+      <Header />
       <section className="hero-section">
         {heroMovieList.length >= 3 && <HeroSwiper movies={heroMovieList} />}
       </section>

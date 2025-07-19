@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import HeroSectionContents from './HeroSectionContents';
+import { HeroSectionContents } from './HeroSectionContents';
 import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
 import type { Movie } from '../types';
 
@@ -16,7 +16,7 @@ type Props = {
   movies: Movie[];
 };
 
-const HeroSwiper = ({ movies }: Props) => {
+export const HeroSwiper = ({ movies }: Props) => {
   const SwiperSettings = {
     // modulesにNavigationとPaginationを追加
     modules: [Navigation, Pagination, Autoplay, EffectCoverflow],
@@ -64,5 +64,3 @@ const HeroSwiper = ({ movies }: Props) => {
     </div>
   );
 };
-
-export default HeroSwiper;

@@ -6,7 +6,7 @@ type Props = {
   movieDetail: MovieDetail;
 };
 
-const HeroMetadata = ({ movieDetail }: Props) => {
+export const HeroMetadata = ({ movieDetail }: Props) => {
   const { titleImagePath } = useMovies();
   const logoUrl = `${TMDB_IMAGE_BASE_URL}w500${titleImagePath}`;
   const companyLogoUrl = `${TMDB_IMAGE_BASE_URL}w185${movieDetail.company_logo}`;
@@ -38,5 +38,3 @@ const HeroMetadata = ({ movieDetail }: Props) => {
     </div>
   );
 };
-
-export default HeroMetadata;

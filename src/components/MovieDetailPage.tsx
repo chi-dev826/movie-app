@@ -1,6 +1,6 @@
-import MovieCard from './MovieCard';
-import HeroMetadata from '../components/HeroMetadata';
-import HeroMovie from '../components/HeroMovie';
+import { MovieCard } from './MovieCard';
+import { HeroMetadata } from './HeroMetadata';
+import { HeroVideo } from './HeroVideo';
 import { useMovies } from '../hooks/useMovies';
 import { TMDB_IMAGE_BASE_URL } from '../../config';
 import '../styles/MovieDetailPage.css';
@@ -30,7 +30,7 @@ function MovieDetailPage() {
 
           <section className="hero-content">
             <HeroMetadata movieDetail={movieDetail} />
-            <HeroMovie youtubeKey={youtubeKey} />
+            <HeroVideo youtubeKey={youtubeKey} />
           </section>
           <section className="moviecard-section">
             <h2 className="moviecard-title">関連作品</h2>

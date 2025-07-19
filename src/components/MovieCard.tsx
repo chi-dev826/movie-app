@@ -7,7 +7,7 @@ type Props = {
   movie: Movie;
 };
 
-const MovieCard = ({ movie }: Props) => {
+export const MovieCard = ({ movie }: Props) => {
   const movieImageUrl = `${TMDB_IMAGE_BASE_URL}w300_and_h450_bestv2${movie.poster_path}`;
 
   return (
@@ -19,5 +19,3 @@ const MovieCard = ({ movie }: Props) => {
     </Link>
   );
 };
-
-export default MovieCard;

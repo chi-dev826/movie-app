@@ -7,7 +7,7 @@ type Props = {
   movie: Movie;
 };
 
-const HeroSection = ({ movie }: Props) => {
+export const HeroSectionContents = ({ movie }: Props) => {
   const backgorundImageUrl = `${TMDB_IMAGE_BASE_URL}original${movie.backdrop_path}`;
   const movieCardUrl = `${TMDB_IMAGE_BASE_URL}w300_and_h450_bestv2${movie.poster_path}`;
 
@@ -30,5 +30,3 @@ const HeroSection = ({ movie }: Props) => {
     </Link>
   );
 };
-
-export default HeroSection;
