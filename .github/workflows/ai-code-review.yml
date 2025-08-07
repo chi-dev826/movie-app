@@ -1,0 +1,40 @@
+name: Gemini AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize] # PRが作成・更新された時に実行
+
+permissions:
+  contents: read
+  pull-requests: write # PRにコメントを書き込むために必要
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 差分比較のために全履歴を取得
+
+      # 2. Geminiレビューアクションを実行
+      - name: Run Gemini Code Review
+        uses: google/gemini-cli-review-action@main
+        with:
+          # レビューの方針をプロンプトで指示
+          review_prompt: |
+            あなたは優秀なシニアソフトウェアエンジニアです。
+            このプルリクエストの変更点をレビューしてください。
+            特に以下の観点に注目してください。
+            - バグや潜在的なエラーがないか
+            - パフォーマンスの問題を引き起こさないか
+            - コードの可読性と保守性は高いか
+            - TypeScriptの型は適切に使用されているか
+            - プロジェクトのコーディング規約に準拠しているか
+            
+            問題点や改善提案があれば、具体的なコードを添えてコメントしてください。
+            問題がなければ、「LGTM!」とコメントしてください。
+          
+          # GitHubの操作に必要なトークン
+          github_token: ${{ secrets.GITHUB_TOKEN }}
