@@ -41,6 +41,7 @@ export const fetchPopularMovies = async (): Promise<Movie[]> => {
 
 export const fetchMovieDetail = async (movieId: string): Promise<MovieDetail> => {
   const data = await fetchFromApi<MovieDetailJson>(`/movie/${movieId}?language=ja`);
+  console.log(movieId);
   return {
     id: data.id,
     backdrop_path: data.backdrop_path,

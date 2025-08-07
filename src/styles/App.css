@@ -71,6 +71,14 @@ body::-webkit-scrollbar {
   margin-top: 2rem; /* ヘッダーの高さを考慮してマージンを追加 */
 }
 
+.main-content-wrapper {
+  padding-top: 2vh; /* ヘッダーの高さ分、コンテンツを下にずらす */
+}
+
+.main-content-wrapper {
+  
+}
+
 .swiper {
   width: 100vw;
   max-width: 100vw;

@@ -1,13 +1,25 @@
+import './styles/App.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
-import App from './App';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MovieDetailPage from './components/MovieDetailPage';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import App from './App';
+import Layout from './components/Layout';
 
 const router = createBrowserRouter([
-  { path: '/', Component: App },
-  { path: '/movie/:movieId', Component: MovieDetailPage },
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <App />,
+      },
+      {
+        path: '/movie/:movieId',
+        element: <MovieDetailPage />,
+      },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(

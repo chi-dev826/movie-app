@@ -5,7 +5,7 @@ import { useMovies } from '../hooks/useMovies';
 import { TMDB_IMAGE_BASE_URL } from '../../config';
 import '../styles/MovieDetailPage.css';
 
-function MovieDetailPage() {
+const MovieDetailPage = () => {
   const { movieDetail, youtubeKey, similarMovies, isLoading, error } = useMovies();
   const backdropUrl = `${TMDB_IMAGE_BASE_URL}original${movieDetail?.backdrop_path}`;
 
@@ -44,6 +44,6 @@ function MovieDetailPage() {
       )}
     </div>
   );
-}
+};
 
 export default MovieDetailPage;

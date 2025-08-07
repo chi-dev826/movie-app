@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FaHome, FaSearch, FaTh } from 'react-icons/fa';
 
-export const Header = () => {
+function Header() {
   return (
     <header className="app-header">
       <nav className="app-header__nav">
@@ -25,4 +25,6 @@ export const Header = () => {
       </nav>
     </header>
   );
-};
+}
+
+export default Header;
