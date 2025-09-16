@@ -29,9 +29,9 @@ export const fetchPopularMovies = async (): Promise<Movie[]> => {
   const data = await fetchFromApi<TmdbResponse<MovieJson[]>>('/movie/popular?language=ja&page=1');
   return data.results.map((movie: MovieJson) => ({
     id: movie.id,
-    backdrop_path: movie.backdrop_path,
+    backdrop_path: movie.backdrop_path || null,
     original_title: movie.original_title,
-    poster_path: movie.poster_path,
+    poster_path: movie.poster_path || null,
     overview: movie.overview,
   }));
 };
@@ -40,9 +40,9 @@ export const fetchMovieDetail = async (movieId: string): Promise<MovieDetail> =>
   const data = await fetchFromApi<MovieDetailJson>(`/movie/${movieId}?language=ja`);
   return {
     id: data.id,
-    backdrop_path: data.backdrop_path,
+    backdrop_path: data.backdrop_path || null,
     original_title: data.original_title,
-    poster_path: data.poster_path,
+    poster_path: data.poster_path || null,
     overview: data.overview,
     year: new Date(data.release_date).getFullYear(),
     rating: data.vote_average,
@@ -66,9 +66,9 @@ export const fetchSimilarMovies = async (movieId: string): Promise<Movie[]> => {
   );
   return data.results.map((movie: MovieJson) => ({
     id: movie.id,
-    backdrop_path: movie.backdrop_path,
+    backdrop_path: movie.backdrop_path || null,
     original_title: movie.original_title,
-    poster_path: movie.poster_path,
+    poster_path: movie.poster_path || null,
     overview: movie.overview,
   }));
 };
@@ -76,4 +76,17 @@ export const fetchSimilarMovies = async (movieId: string): Promise<Movie[]> => {
 export const fetchTitleImagePath = async (movieId: string): Promise<string> => {
   const data = await fetchFromApi<ImagesJson>(`/movie/${movieId}/images?language=ja`);
   return data.logos[0]?.file_path ?? '';
+};
+
+export const searchMovies = async (query: string): Promise<Movie[]> => {
+  const data = await fetchFromApi<TmdbResponse<MovieJson[]>>(
+    `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1`
+  );
+  return data.results.map((movie: MovieJson) => ({
+    id: movie.id,
+    backdrop_path: movie.backdrop_path || null,
+    original_title: movie.original_title,
+    poster_path: movie.poster_path || null,
+    overview: movie.overview,
+  }));
 };

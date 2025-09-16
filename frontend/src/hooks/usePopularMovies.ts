@@ -3,17 +3,17 @@ import type { Movie } from '../types';
 import { fetchPopularMovies } from '../services/movieApi';
 
 export const usePopularMovies = () => {
-  const [popularMovies, setPupularMovies] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const LoadPoupularMovies = async () => {
+    const loadPopularMovies = async () => {
       try {
         setIsLoading(true);
         setError(null);
         const movies = await fetchPopularMovies();
-        setPupularMovies(movies);
+        setPopularMovies(movies);
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -24,7 +24,7 @@ export const usePopularMovies = () => {
         setIsLoading(false);
       }
     };
-    LoadPoupularMovies();
+    loadPopularMovies();
   }, []);
 
   return { popularMovies, isLoading, error };

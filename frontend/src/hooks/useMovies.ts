@@ -5,6 +5,7 @@ import {
   fetchYoutubeKey,
   fetchSimilarMovies,
   fetchTitleImagePath,
+  searchMovies as searchMoviesApi,
 } from '../services/movieApi';
 import type { Movie, MovieDetail } from '../types';
 
@@ -46,5 +47,15 @@ export const useMovies = () => {
     loadMovies();
   }, [movieId]);
 
-  return { movieDetail, youtubeKey, similarMovies, titleImagePath, isLoading, error };
+  const searchMovies = async (query: string): Promise<Movie[]> => {
+    try {
+      const results = await searchMoviesApi(query);
+      return results;
+    } catch (err) {
+      console.error('Search error:', err);
+      throw new Error('検索中にエラーが発生しました');
+    }
+  };
+
+  return { movieDetail, youtubeKey, similarMovies, titleImagePath, isLoading, error, searchMovies };
 };

@@ -12,11 +12,28 @@ function HomePage() {
     .slice(0, 5);
 
   if (isLoading) {
-    return <div className="text-white">読み込み中...</div>;
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-gray-400">読み込み中...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-white">エラーが発生しました:</div>;
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">エラーが発生しました</h2>
+          <p className="text-gray-400 mb-4">{error}</p>
+          <p className="text-sm text-gray-500">
+            バックエンドサーバーが起動していることを確認してください
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -2,13 +2,13 @@ body {
     background: hsl(0, 0%, 9%);
     margin: 0;
     max-width: 100vw;
-    width: 100vw;
-    overflow-y: hidden;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .hero-swiper {
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: 70vh;
 }
 
@@ -92,8 +92,8 @@ body {
 
 /* 横スクロール映画リスト */
 .moviecard-section {
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   margin-top: 1rem;
 }
