@@ -1,5 +1,5 @@
 export type Movie = {
-  id: number;
+  id: string;
   backdrop_path: string | null;
   original_title: string;
   overview: string;
@@ -24,7 +24,7 @@ export type MovieJson = {
 };
 
 export type MovieDetail = {
-  id: number;
+  id: string;
   backdrop_path: string | null;
   original_title: string;
   overview: string;
