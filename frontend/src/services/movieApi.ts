@@ -80,7 +80,7 @@ export const fetchTitleImagePath = async (movieId: string): Promise<string> => {
 
 export const searchMovies = async (query: string): Promise<Movie[]> => {
   const data = await fetchFromApi<TmdbResponse<MovieJson[]>>(
-    `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1`
+    `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1`,
   );
   return data.results.map((movie: MovieJson) => ({
     id: movie.id,

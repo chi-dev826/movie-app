@@ -24,3 +24,5 @@ venv/
 
 # Project-specific tools
 .serena/
+
+node_modules/
