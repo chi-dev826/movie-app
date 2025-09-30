@@ -18,19 +18,19 @@ const HeroSection = ({ movie }: Props) => {
         backgroundImage: `url(${backgorundImageUrl})`,
       }}
     >
-      {/* Gradient Overlay */}
+      {/* グラデーションオーバーレイ */}
       <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
 
-      {/* Content */}
+      {/* コンテンツ */}
       <div className="relative z-10 flex items-end gap-8 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto">
-        {/* Poster Image (hidden on mobile) */}
+        {/* ポスター画像（モバイルでは非表示） */}
         <div className="hidden md:block flex-shrink-0">
           <div className="relative rounded-2xl overflow-hidden shadow-2xl w-[200px] h-[300px] lg:w-[250px] lg:h-[375px]">
             <img src={movieCardUrl} alt={movie.original_title} className="w-full h-full object-cover" />
           </div>
         </div>
 
-        {/* Text Content */}
+        {/* テキストコンテンツ */}
         <div className="py-4">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 drop-shadow-lg">
             {movie.original_title}

@@ -1,16 +1,10 @@
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
-import {
-  fetchMovieDetail,
-  fetchYoutubeKey,
-  fetchSimilarMovies,
-  fetchTitleImagePath,
-  searchMovies as searchMoviesApi,
-} from '../services/movieApi';
+import { fetchFullMovieData, searchMovies as searchMoviesApi } from '../services/movieApi';
 import type { Movie, MovieDetail } from '../types';
 
 export const useMovies = () => {
-  const { movieId } = useParams<{ movieId: string }>();
+  const { id: movieId } = useParams<{ id: string }>();
   const [movieDetail, setMovieDetail] = useState<MovieDetail | null>(null);
   const [youtubeKey, setYoutubeKey] = useState<string | null>(null);
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
@@ -19,20 +13,43 @@ export const useMovies = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadMovies = async () => {
+    const loadMovieData = async () => {
+      if (!movieId) return;
+
       try {
         setIsLoading(true);
         setError(null);
-        const movieList = await Promise.all([
-          movieId ? fetchMovieDetail(movieId) : Promise.resolve(null),
-          movieId ? fetchYoutubeKey(movieId) : Promise.resolve(null),
-          movieId ? fetchSimilarMovies(movieId) : Promise.resolve([]),
-          movieId ? fetchTitleImagePath(movieId) : Promise.resolve(''),
-        ]);
-        setMovieDetail(movieList[0]);
-        setYoutubeKey(movieList[1]);
-        setSimilarMovies(movieList[2]);
-        setTitleImagePath(movieList[3]);
+
+        const fullData = await fetchFullMovieData(movieId);
+
+        const detailData = fullData.details;
+        setMovieDetail({
+          id: detailData.id,
+          backdrop_path: detailData.backdrop_path || null,
+          original_title: detailData.original_title,
+          poster_path: detailData.poster_path || null,
+          overview: detailData.overview,
+          year: new Date(detailData.release_date).getFullYear(),
+          rating: detailData.vote_average,
+          runtime: detailData.runtime,
+          score: detailData.vote_average * 10,
+          genres: detailData.genres.map((genre) => genre.name),
+          company_logo: detailData.production_companies[0]?.logo_path ?? null,
+        });
+
+        setYoutubeKey(fullData.videos.results[0]?.key ?? null);
+
+        setSimilarMovies(
+          fullData.similar.results.map((movie) => ({
+            id: movie.id,
+            backdrop_path: movie.backdrop_path || null,
+            original_title: movie.original_title,
+            poster_path: movie.poster_path || null,
+            overview: movie.overview,
+          })),
+        );
+
+        setTitleImagePath(fullData.images.logos[0]?.file_path ?? '');
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -44,7 +61,7 @@ export const useMovies = () => {
       }
     };
 
-    loadMovies();
+    loadMovieData();
   }, [movieId]);
 
   const searchMovies = useCallback(async (query: string): Promise<Movie[]> => {

@@ -6,11 +6,11 @@ client = TestClient(app)
 
 def test_get_popular_movies():
     """
-    Tests the /api/movie/popular endpoint.
+    /api/movie/popular エンドポイントをテストします。
     """
     response = client.get("/api/movie/popular")
     assert response.status_code == 200
-    # Check if the response is a JSON object and has a 'results' key which is a list
+    # レスポンスがJSONオブジェクトであり、'results'キー（リスト）を持っているか確認します
     response_json = response.json()
     assert isinstance(response_json, dict)
     assert "results" in response_json
@@ -18,11 +18,11 @@ def test_get_popular_movies():
 
 def test_get_movie_details_not_found():
     """
-    Tests the /api/movie/{movie_id} endpoint with a non-existent movie ID.
+    存在しない映画IDで /api/movie/{movie_id} エンドポイントをテストします。
     """
-    # A movie ID that is highly unlikely to exist
+    # 存在しそうにない映画ID
     non_existent_movie_id = 999999999
     response = client.get(f"/api/movie/{non_existent_movie_id}")
-    # The external API should return a 404, which our proxy should forward.
+    # 外部APIは404を返し、プロキシはそれを転送する必要があります
     assert response.status_code == 404
 

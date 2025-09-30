@@ -40,10 +40,8 @@ function HomePage() {
       {heroMovieList.length >= 3 && <HeroSwiper movies={heroMovieList} />}
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <h3 className="text-2xl font-bold tracking-tight text-white sm:text-3xl mb-6">
-          人気映画
-        </h3>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-x-6 xl:gap-x-8">
+        <h3 className="text-2xl font-bold tracking-tight text-white sm:text-3xl mb-6">人気映画</h3>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 sm:gap-x-6 xl:gap-x-20">
           {popularMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
