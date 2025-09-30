@@ -21,16 +21,18 @@
 - **変更理由:** `frontend/src/index.css` をTailwind CSSの純粋なエントリーポイント（起点）にするため、既存のカスタムCSSを削除し、意図しないスタイルの競合を防ぎます。
 - **実行ツール:** `write_file`
 - **変更前 (`frontend/src/index.css`):**
+
   ```css
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
 
   .slide-container {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
   }
   ```
+
 - **変更後 (`frontend/src/index.css`):**
   ```css
   @tailwind base;
@@ -106,9 +108,7 @@
 - **変更内容の例:**
   - **変更前 (JSX):**
     ```jsx
-    <div className="movie-list">
-      {/* MovieCardコンポーネントのリスト */}
-    </div>
+    <div className="movie-list">{/* MovieCardコンポーネントのリスト */}</div>
     ```
   - **変更前 (`App.css`):**
     ```css
@@ -124,7 +124,7 @@
       {/* MovieCardコンポーネントのリスト */}
     </div>
     ```
-    *補足: 横スクロールからグリッドレイアウトへ変更する想定の例です。*
+    _補足: 横スクロールからグリッドレイアウトへ変更する想定の例です。_
 
 ---
 
