@@ -1,4 +1,3 @@
-import '../styles/App.css';
 import { Link } from 'react-router-dom';
 import { TMDB_IMAGE_BASE_URL } from '../../config';
 import type { Movie } from '../types';
@@ -14,18 +13,32 @@ const HeroSection = ({ movie }: Props) => {
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className="heroMovie-img-wrap"
+      className="relative w-full h-full bg-cover bg-center flex items-end justify-start overflow-hidden text-white"
       style={{
         backgroundImage: `url(${backgorundImageUrl})`,
       }}
     >
-      <div className="heroMovie-gradient"></div>
-      <div className="heroMovie-overlay-content">
-        <div className="heroMovie-card">
-          <img src={`${movieCardUrl}`} />
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
+
+      {/* Content */}
+      <div className="relative z-10 flex items-end gap-8 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto">
+        {/* Poster Image (hidden on mobile) */}
+        <div className="hidden md:block flex-shrink-0">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl w-[200px] h-[300px] lg:w-[250px] lg:h-[375px]">
+            <img src={movieCardUrl} alt={movie.original_title} className="w-full h-full object-cover" />
+          </div>
         </div>
-        <h2 className="heroMovie-title">{movie.original_title}</h2>
-        <p className="heroMovie-overview">{movie.overview}</p>
+
+        {/* Text Content */}
+        <div className="py-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 drop-shadow-lg">
+            {movie.original_title}
+          </h2>
+          <p className="text-gray-200 leading-relaxed drop-shadow-md line-clamp-3 md:line-clamp-4 max-w-2xl">
+            {movie.overview}
+          </p>
+        </div>
       </div>
     </Link>
   );

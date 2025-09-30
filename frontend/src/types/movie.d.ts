@@ -3,7 +3,7 @@ export type Movie = {
     backdrop_path: string | null;
     original_title: string;
     overview: string;
-    poster_path: string;
+    poster_path: string | null;
 };
 export type MovieJson = {
     adult: boolean;

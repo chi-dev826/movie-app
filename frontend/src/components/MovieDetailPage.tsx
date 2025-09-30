@@ -3,44 +3,60 @@ import HeroMetadata from '../components/HeroMetadata';
 import HeroMovie from '../components/HeroMovie';
 import { useMovies } from '../hooks/useMovies';
 import { TMDB_IMAGE_BASE_URL } from '../../config';
-import '../styles/MovieDetailPage.css';
 
 function MovieDetailPage() {
   const { movieDetail, youtubeKey, similarMovies, isLoading, error } = useMovies();
   const backdropUrl = `${TMDB_IMAGE_BASE_URL}original${movieDetail?.backdrop_path}`;
 
   if (isLoading) {
-    return <div>読み込み中...</div>;
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <p>読み込み中...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>エラーが発生しました</div>;
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <p>エラーが発生しました</p>
+      </div>
+    );
   }
 
   return (
     <div
-      className="movie-page"
+      className="relative min-h-screen bg-cover bg-center"
       style={{
         backgroundImage: `url(${backdropUrl})`,
       }}
     >
-      {movieDetail && (
-        <>
-          <div className="MovieDetail-gradient"></div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/60 to-black/90" />
 
-          <section className="hero-content">
-            <HeroMetadata movieDetail={movieDetail} />
-            <HeroMovie youtubeKey={youtubeKey} />
-          </section>
-          <section className="moviecard-section">
-            <h2 className="moviecard-title">関連作品</h2>
-            <div className="moviecard-list">
-              {similarMovies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
+      {movieDetail && (
+        <div className="relative z-10 text-white">
+          <section className="flex flex-col md:flex-row items-center gap-8 p-4 sm:p-8 md:p-12">
+            <div className="w-full md:w-3/5 lg:w-2/5">
+              <HeroMetadata movieDetail={movieDetail} />
+            </div>
+            <div className="w-full md:w-2/5 lg:w-3/5">
+              <HeroMovie youtubeKey={youtubeKey} />
             </div>
           </section>
-        </>
+
+          {similarMovies.length > 0 && (
+            <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+              <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl mb-6">
+                関連作品
+              </h2>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-x-6 xl:gap-x-8">
+                {similarMovies.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       )}
     </div>
   );

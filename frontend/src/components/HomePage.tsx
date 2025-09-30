@@ -1,7 +1,6 @@
 import { usePopularMovies } from '../hooks/usePopularMovies';
 import HeroSwiper from './HeroSwiper';
 import MovieCard from './MovieCard';
-import '../styles/App.css';
 
 function HomePage() {
   const { popularMovies, isLoading, error } = usePopularMovies();
@@ -37,17 +36,19 @@ function HomePage() {
   }
 
   return (
-    <div>
+    <div className="bg-gray-900">
       {heroMovieList.length >= 3 && <HeroSwiper movies={heroMovieList} />}
 
-      <section className="moviecard-section">
-        <h3 className="movie-list__header">人気映画</h3>
-        <div className="movie-list">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <h3 className="text-2xl font-bold tracking-tight text-white sm:text-3xl mb-6">
+          人気映画
+        </h3>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-x-6 xl:gap-x-8">
           {popularMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 }

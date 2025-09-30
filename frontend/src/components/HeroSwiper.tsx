@@ -6,7 +6,6 @@ import type { Movie } from '../types';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import '../styles/App.css';
 import 'swiper/css/autoplay';
 import 'swiper/css';
 
@@ -33,10 +32,10 @@ const HeroSwiper = ({ movies }: Props) => {
   };
 
   return (
-    <Swiper {...SwiperSettings} className="hero-swiper">
+    <Swiper {...SwiperSettings} className="w-full h-[70vh]">
       {movies.map((movie) => (
-        <SwiperSlide className="hero-slide">
-          <HeroSectionComponents key={movie.id} movie={movie} />
+        <SwiperSlide key={movie.id} className="flex w-full h-full">
+          <HeroSectionComponents movie={movie} />
         </SwiperSlide>
       ))}
     </Swiper>
