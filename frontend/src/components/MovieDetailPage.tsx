@@ -45,11 +45,11 @@ function MovieDetailPage() {
           </section>
 
           {similarMovies.length > 0 && (
-            <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <section className="mx-auto max-w-20xl px-4 py-8 sm:px-6 lg:px-8">
               <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl mb-6">
                 関連作品
               </h2>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-x-6 xl:gap-x-8">
+              <div className="flex space-x-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
                 {similarMovies.map((movie) => (
                   <MovieCard key={movie.id} movie={movie} />
                 ))}
