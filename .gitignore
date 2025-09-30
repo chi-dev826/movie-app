@@ -1,4 +1,13 @@
-# Logs
+# IDE settings
+.vscode/
+!.vscode/extensions.json
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
 logs
 *.log
 npm-debug.log*
@@ -7,16 +16,26 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Python virtual environment
+venv/
+.venv/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
+# Node.js dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Cache folders
+.ruff_cache/
+.vite/
+
+# Project-specific tools
+.serena/
+
+# Local files
+*.local
 *.suo
 *.ntvs*
 *.njsproj
