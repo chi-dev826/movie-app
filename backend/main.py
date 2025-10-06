@@ -34,7 +34,7 @@ async def request_error_handler(request: Request, exc: httpx.RequestError):
 # --- ミドルウェア ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5175"],  # フロントエンドのオリジンに合わせて調整してください
+    allow_origins=["http://localhost:5173"],  # フロントエンドのオリジンに合わせて調整してください
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -60,7 +60,7 @@ async def execute_proxy_request(request: Request, client: httpx.AsyncClient):
         query_params['language'] = 'ja'
 
     response = await client.get(path, params=query_params)
-    response.raise_for_status()  
+    response.raise_for_status()
     return response.json()
 
 # --- APIエンドポイント ---
@@ -73,7 +73,7 @@ async def full_movie_details(movie_id: int, client: httpx.AsyncClient = Depends(
         client.get(f"/movie/{movie_id}/similar", params={"language": "ja", "page": "1"}),
         client.get(f"/movie/{movie_id}/images", params={"language": "ja"}),
     ]
-    
+
     # すべてのリクエストを並行して実行
     details_res, videos_res, similar_res, images_res = await asyncio.gather(*requests)
 

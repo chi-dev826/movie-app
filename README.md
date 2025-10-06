@@ -1,54 +1,86 @@
-# React + TypeScript + Vite
+# movie-app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+これは、ReactのフロントエンドとFastAPIのバックエンドで構築された、映画情報閲覧アプリケーションです。
 
-Currently, two official plugins are available:
+## 目次
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [前提条件](#-前提条件)
+- [セットアップ](#-セットアップ)
+  - [1-環境変数の設定](#1-環境変数の設定)
+  - [2-バックエンドのセットアップ](#2-バックエンドのセットアップ)
+  - [3-フロントエンドのセットアップ](#3-フロントエンドのセットアップ)
+- [アプリケーションの実行](#-アプリケーションの実行)
+  - [バックエンド](#バックエンド)
+  - [フロントエンド](#フロントエンド)
 
-## Expanding the ESLint configuration
+## 前提条件
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [Node.js](https://nodejs.org/) (v18以降を推奨)
+- [Python](https://www.python.org/) (v3.8以降を推奨)
+- [The Movie Database (TMDB)](https://www.themoviedb.org/) のAPIキー
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## セットアップ
+
+### 1. 環境変数の設定
+
+バックエンドは、TMDBからデータを取得するためにAPI認証情報が必要です。
+
+1.  `backend` ディレクトリに移動します。
+2.  `.env` という名前で新しいファイルを作成します。
+3.  `.env` ファイルに以下の内容を追加し、`your_api_key` を実際のTMDB APIキーに置き換えてください。
+
+```
+VITE_API_KEY="your_api_key"
+VITE_API_URL="https://api.themoviedb.org/3"
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. バックエンドのセットアップ
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1.  `backend` ディレクトリに移動します。
+2.  仮想環境の作成を推奨します:
+    ```bash
+    python -m venv venv
+    ```
+3.  仮想環境を有効化します:
+    -   **Windows:**
+        ```bash
+        .\venv\Scripts\activate
+        ```
+    -   **macOS/Linux:**
+        ```bash
+        source venv/bin/activate
+        ```
+4.  必要なPythonパッケージをインストールします:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### 3. フロントエンドのセットアップ
+
+1.  `frontend` ディレクトリに移動します。
+2.  必要なnpmパッケージをインストールします:
+    ```bash
+    npm install
+    ```
+
+## アプリケーションの実行
+
+バックエンドとフロントエンドのサーバーを、それぞれ別のターミナルで同時に実行する必要があります。
+
+### バックエンド
+
+1.  `backend` ディレクトリにいること、そして仮想環境が有効化されていることを確認してください。
+2.  以下のコマンドを実行してFastAPIサーバーを起動します:
+    ```bash
+    uvicorn main:app --reload
+    ```
+    サーバーは `http://127.0.0.1:8000` で利用可能になります。
+
+### フロントエンド
+
+1.  `frontend` ディレクトリにいることを確認してください。
+2.  以下のコマンドを実行してVite開発サーバーを起動します:
+    ```bash
+    npm run dev
+    ```
+    アプリケーションは `http://localhost:5173` で利用可能になります。
