@@ -1,6 +1,6 @@
-import MovieCard from './MovieCard';
-import HeroMetadata from '../components/HeroMetadata';
-import HeroMovie from '../components/HeroMovie';
+import MovieCard from '../components/MovieCard';
+import HeroMetadata from '../components/Detail/HeroMetadata';
+import HeroMovie from '../components/Detail/HeroMovie';
 import { useMovies } from '../hooks/useMovies';
 import { TMDB_IMAGE_BASE_URL } from '../../config';
 

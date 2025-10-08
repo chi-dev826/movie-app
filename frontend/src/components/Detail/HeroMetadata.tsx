@@ -1,6 +1,6 @@
-import { useMovies } from '../hooks/useMovies';
-import { TMDB_IMAGE_BASE_URL } from '../../config';
-import type { MovieDetail } from '../types';
+import { useMovies } from '../../hooks/useMovies';
+import { TMDB_IMAGE_BASE_URL } from '../../../config';
+import type { MovieDetail } from '../../types';
 
 type Props = {
   movieDetail: MovieDetail;

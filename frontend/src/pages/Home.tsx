@@ -1,6 +1,6 @@
 import { usePopularMovies } from '../hooks/usePopularMovies';
-import HeroSwiper from './HeroSwiper';
-import MovieCard from './MovieCard';
+import HeroSwiper from '../components/Home/HeroSwiper';
+import MovieCard from '../components/MovieCard';
 
 function HomePage() {
   const { popularMovies, isLoading, error } = usePopularMovies();

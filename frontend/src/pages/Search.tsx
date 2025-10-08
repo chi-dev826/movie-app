@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import MovieCard from './MovieCard';
+import MovieCard from '../components/MovieCard';
 import { useMovies } from '../hooks/useMovies';
 import type { Movie } from '../types/movie';
 
