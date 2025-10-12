@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import HeroSectionComponents from './HeroSection';
 import { EffectCoverflow, Autoplay } from 'swiper/modules';
-import type { Movie } from '../types';
+import type { Movie } from '../../types';
 
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';

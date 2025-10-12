@@ -1,16 +1,16 @@
-import type { Movie, MovieJson, MovieDetailJson, ImagesJson } from '../types';
+import { Movie, MovieJson, MovieDetail, VideoItemJson } from '@/types/movie';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
 interface TmdbResponse<T> {
   results: T;
 }
 
 export interface FullMovieData {
-  details: MovieDetailJson;
-  videos: TmdbResponse<{ key: string }[]>;
-  similar: TmdbResponse<MovieJson[]>;
-  images: ImagesJson;
+  details: MovieDetail;
+  videos: VideoItemJson;
+  similar: MovieJson[];
+  images: string | null;
 }
 
 /**
@@ -48,7 +48,7 @@ export const fetchFullMovieData = async (movieId: string): Promise<FullMovieData
 
 export const searchMovies = async (query: string): Promise<Movie[]> => {
   const data = await fetchFromApi<TmdbResponse<MovieJson[]>>(
-    `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1`,
+    `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1&include_adult=false`,
   );
   return data.results.map((movie: MovieJson) => ({
     id: movie.id,

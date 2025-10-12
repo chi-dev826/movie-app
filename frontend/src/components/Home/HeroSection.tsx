@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { TMDB_IMAGE_BASE_URL } from '../../config';
-import type { Movie } from '../types';
+import { TMDB_IMAGE_BASE_URL } from '../../../config';
+import type { Movie } from '@/types/movie';
 
 type Props = {
   movie: Movie;
@@ -26,7 +26,11 @@ const HeroSection = ({ movie }: Props) => {
         {/* ポスター画像（モバイルでは非表示） */}
         <div className="hidden md:block flex-shrink-0">
           <div className="relative rounded-2xl overflow-hidden shadow-2xl w-[200px] h-[300px] lg:w-[250px] lg:h-[375px]">
-            <img src={movieCardUrl} alt={movie.original_title} className="w-full h-full object-cover" />
+            <img
+              src={movieCardUrl}
+              alt={movie.original_title}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
 

@@ -1,5 +1,0 @@
-[tool.ruff.lint]
-select = ["E", "F", "W", "I"]
-
-[tool.ruff]
-line-length = 88

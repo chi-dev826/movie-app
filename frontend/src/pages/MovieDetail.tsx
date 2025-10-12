@@ -1,11 +1,18 @@
-import MovieCard from './MovieCard';
-import HeroMetadata from '../components/HeroMetadata';
-import HeroMovie from '../components/HeroMovie';
-import { useMovies } from '../hooks/useMovies';
+import { useParams } from 'react-router-dom';
+
+import MovieCard from '../components/MovieCard';
+import HeroMetadata from '../components/Detail/HeroMetadata';
+import HeroMovie from '../components/Detail/HeroMovie';
+import { useFullMovieData } from '../hooks/useMovies';
 import { TMDB_IMAGE_BASE_URL } from '../../config';
 
 function MovieDetailPage() {
-  const { movieDetail, youtubeKey, similarMovies, isLoading, error } = useMovies();
+  const { id: movieId } = useParams<{ id: string }>();
+  const { data, isLoading, error } = useFullMovieData(movieId);
+  const movieDetail = data?.details;
+  const titleImagePath = data?.images || null;
+  const similarMovies = data?.similar || [];
+  const youtubeKey = data?.videos.key || '';
   const backdropUrl = `${TMDB_IMAGE_BASE_URL}original${movieDetail?.backdrop_path}`;
 
   if (isLoading) {
@@ -37,7 +44,7 @@ function MovieDetailPage() {
         <div className="relative z-10 text-white">
           <section className="flex flex-col md:flex-row items-center gap-8 p-4 sm:p-8 md:p-12">
             <div className="w-full md:w-3/5 lg:w-2/5">
-              <HeroMetadata movieDetail={movieDetail} />
+              <HeroMetadata movieDetail={movieDetail} titleImagePath={titleImagePath} />
             </div>
             <div className="w-full md:w-2/5 lg:w-3/5">
               <HeroMovie youtubeKey={youtubeKey} />

@@ -1,13 +1,12 @@
-import { useMovies } from '../hooks/useMovies';
-import { TMDB_IMAGE_BASE_URL } from '../../config';
-import type { MovieDetail } from '../types';
+import { TMDB_IMAGE_BASE_URL } from '../../../config';
+import { MovieDetail } from '@/types/movie';
 
 type Props = {
   movieDetail: MovieDetail;
+  titleImagePath: string | null;
 };
 
-const HeroMetadata = ({ movieDetail }: Props) => {
-  const { titleImagePath } = useMovies();
+const HeroMetadata = ({ movieDetail, titleImagePath }: Props) => {
   const logoUrl = `${TMDB_IMAGE_BASE_URL}w500${titleImagePath}`;
   const companyLogoUrl = `${TMDB_IMAGE_BASE_URL}w185${movieDetail.company_logo}`;
 
@@ -30,7 +29,7 @@ const HeroMetadata = ({ movieDetail }: Props) => {
         )}
         <span className="MovieDetail-overlay">
           <span>
-            {movieDetail.year}・{movieDetail.runtime}分・{movieDetail.genres.join(',')}
+            {movieDetail.year}・{movieDetail.runtime}分・{movieDetail.genres}
           </span>
         </span>
         <p className="MovieDetail-overview">{movieDetail.overview}</p>

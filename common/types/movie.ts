@@ -1,3 +1,4 @@
+//movie-cardに関する型定義
 export type Movie = {
   id: string;
   backdrop_path: string | null;
@@ -23,17 +24,17 @@ export type MovieJson = {
   vote_count: number;
 };
 
+//movie-detailに関する型定義
 export type MovieDetail = {
   id: string;
   backdrop_path: string | null;
   original_title: string;
   overview: string;
   poster_path: string | null;
-  year: number;
-  rating: number;
-  runtime: number;
-  score: number;
-  genres: string[];
+  year: number | null;
+  runtime: number | null;
+  score: number | null;
+  genres: string[] | null;
   company_logo: string | null;
 };
 
@@ -78,6 +79,7 @@ export type MovieDetailJson = {
   vote_count: number;
 };
 
+//movie-detailのlogoパスに関する型定義
 export type ImagesJson = {
   id: string;
   backdrops: {
@@ -107,4 +109,31 @@ export type ImagesJson = {
     vote_count: number;
     width: number;
   }[];
+};
+
+// movie-detailのvideosに関する型定義
+export type VideoItemJson = {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
+};
+
+export type VideosJson = {
+  id: number;
+  results: VideoItemJson[];
+};
+
+// movie-detailのsimilarに関する型定義
+export type SimilarMoviesJson = {
+  page: number;
+  results: MovieJson[];
+  total_pages: number;
+  total_results: number;
 };

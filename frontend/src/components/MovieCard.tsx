@@ -27,9 +27,7 @@ const MovieCard = ({ movie }: Props) => {
         }}
       />
       <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 to-transparent opacity-0 transition-opacity duration-200 ease-in-out pointer-events-none rounded-2xl group-hover:opacity-100">
-        <h3 className="text-white text-base font-bold p-4 w-full">
-          {movie.original_title}
-        </h3>
+        <h3 className="text-white text-base font-bold p-4 w-full">{movie.original_title}</h3>
       </div>
     </Link>
   );

@@ -1,31 +1,14 @@
-import { useEffect, useState } from 'react';
-import type { Movie } from '../types';
+import { useQuery } from '@tanstack/react-query';
 import { fetchPopularMovies } from '../services/movieApi';
 
+const movieKeys = {
+  popular: ['popular-movies'] as const,
+};
+
 export const usePopularMovies = () => {
-  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loadPopularMovies = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const movies = await fetchPopularMovies();
-        setPopularMovies(movies);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('不明なエラーが発生しました。');
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadPopularMovies();
-  }, []);
-
-  return { popularMovies, isLoading, error };
+  return useQuery({
+    queryKey: movieKeys.popular,
+    queryFn: fetchPopularMovies,
+    staleTime: 1000 * 60 * 10, // オプション：キャッシュ時間を設定(10分)
+  });
 };
