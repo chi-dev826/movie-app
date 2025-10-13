@@ -1,3 +1,18 @@
+export type SearchMovieJson = {
+  page: number;
+  results: MovieJson[];
+  total_pages: number;
+  total_results: number;
+};
+
+//popular-movieに関する型定義
+export type PopularMovieJson = {
+  page: number;
+  results: MovieJson[];
+  total_pages: number;
+  total_results: number;
+};
+
 //movie-cardに関する型定義
 export type Movie = {
   id: string;
