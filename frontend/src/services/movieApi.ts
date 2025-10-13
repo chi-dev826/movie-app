@@ -1,16 +1,12 @@
-import { Movie, MovieJson, MovieDetail, VideoItemJson } from '@/types/movie';
+import { Movie, MovieJson, MovieDetail } from '@/types/movie';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
-interface TmdbResponse<T> {
-  results: T;
-}
-
 export interface FullMovieData {
-  details: MovieDetail;
-  videos: VideoItemJson;
+  detail: MovieDetail;
+  video: string | null;
   similar: MovieJson[];
-  images: string | null;
+  image: string | null;
 }
 
 /**
@@ -32,29 +28,15 @@ export const fetchFromApi = async <T>(endpoint: string): Promise<T> => {
 };
 
 export const fetchPopularMovies = async (): Promise<Movie[]> => {
-  const data = await fetchFromApi<TmdbResponse<MovieJson[]>>('/movie/popular?language=ja&page=1');
-  return data.results.map((movie: MovieJson) => ({
-    id: movie.id,
-    backdrop_path: movie.backdrop_path || null,
-    original_title: movie.original_title,
-    poster_path: movie.poster_path || null,
-    overview: movie.overview,
-  }));
+  return fetchFromApi<MovieJson[]>('/movie/popular?language=ja&page=1');
 };
 
 export const fetchFullMovieData = async (movieId: string): Promise<FullMovieData> => {
   return fetchFromApi<FullMovieData>(`/movie/${movieId}/full`);
 };
 
-export const searchMovies = async (query: string): Promise<Movie[]> => {
-  const data = await fetchFromApi<TmdbResponse<MovieJson[]>>(
+export const searchMovies = async (query: string): Promise<MovieJson[]> => {
+  return fetchFromApi<MovieJson[]>(
     `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1&include_adult=false`,
   );
-  return data.results.map((movie: MovieJson) => ({
-    id: movie.id,
-    backdrop_path: movie.backdrop_path || null,
-    original_title: movie.original_title,
-    poster_path: movie.poster_path || null,
-    overview: movie.overview,
-  }));
 };

@@ -9,15 +9,11 @@ import { TMDB_IMAGE_BASE_URL } from '../../config';
 function MovieDetailPage() {
   const { id: movieId } = useParams<{ id: string }>();
   const { data, isLoading, error } = useFullMovieData(movieId);
-  const movieDetail = data?.details;
-  const titleImagePath = data?.images || null;
-  const similarMovies = data?.similar || [];
-  const youtubeKey = data?.videos.key || '';
-  const backdropUrl = `${TMDB_IMAGE_BASE_URL}original${movieDetail?.backdrop_path}`;
+  const backdropUrl = `${TMDB_IMAGE_BASE_URL}original${data?.detail?.backdrop_path}`;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
         <p>読み込み中...</p>
       </div>
     );
@@ -25,7 +21,7 @@ function MovieDetailPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
         <p>エラーが発生しました</p>
       </div>
     );
@@ -33,31 +29,31 @@ function MovieDetailPage() {
 
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center"
+      className="relative min-h-screen bg-center bg-cover"
       style={{
         backgroundImage: `url(${backdropUrl})`,
       }}
     >
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/60 to-black/90" />
 
-      {movieDetail && (
+      {data && (
         <div className="relative z-10 text-white">
-          <section className="flex flex-col md:flex-row items-center gap-8 p-4 sm:p-8 md:p-12">
+          <section className="flex flex-col items-center gap-8 p-4 md:flex-row sm:p-8 md:p-12">
             <div className="w-full md:w-3/5 lg:w-2/5">
-              <HeroMetadata movieDetail={movieDetail} titleImagePath={titleImagePath} />
+              <HeroMetadata movieDetail={data.detail} titleImagePath={data.image} />
             </div>
             <div className="w-full md:w-2/5 lg:w-3/5">
-              <HeroMovie youtubeKey={youtubeKey} />
+              <HeroMovie youtubeKey={data.video} />
             </div>
           </section>
 
-          {similarMovies.length > 0 && (
-            <section className="mx-auto max-w-20xl px-4 py-8 sm:px-6 lg:px-8">
-              <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl mb-6">
+          {data.similar.length > 0 && (
+            <section className="px-4 py-8 mx-auto max-w-20xl sm:px-6 lg:px-8">
+              <h2 className="mb-6 text-2xl font-bold tracking-tight text-white sm:text-3xl">
                 関連作品
               </h2>
-              <div className="flex space-x-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
-                {similarMovies.map((movie) => (
+              <div className="flex pb-4 space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
+                {data.similar.map((movie) => (
                   <MovieCard key={movie.id} movie={movie} />
                 ))}
               </div>

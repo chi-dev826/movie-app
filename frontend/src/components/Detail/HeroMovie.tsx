@@ -8,7 +8,7 @@ const HeroVideo = ({ youtubeKey }: Props) => {
       <div className="video-wrapper">
         {youtubeKey ? (
           <iframe
-            src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=1&mute=0&rel=0&modestbranding=1&showinfo=0&controls=1&modestbranding=1`}
+            src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=0&mute=0&rel=0&modestbranding=1&showinfo=0&controls=1&modestbranding=1`}
             width="1200"
             height="680"
             title="YouTube video player"

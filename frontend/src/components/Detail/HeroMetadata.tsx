@@ -24,14 +24,14 @@ const HeroMetadata = ({ movieDetail, titleImagePath }: Props) => {
               alt={movieDetail.original_title}
               className="MovieDetail-poster"
             />
-            <h1 className="MovieDetail-title">{movieDetail.original_title}</h1>
+            <h1 className="pt-4 text-4xl">{movieDetail.original_title}</h1>
           </div>
         )}
-        <span className="MovieDetail-overlay">
+        <div className="pt-4 text-sm text-gray-300">
           <span>
             {movieDetail.year}・{movieDetail.runtime}分・{movieDetail.genres}
           </span>
-        </span>
+        </div>
         <p className="MovieDetail-overview">{movieDetail.overview}</p>
       </div>
     </div>

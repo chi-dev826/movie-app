@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import HeroSectionComponents from './HeroSection';
+import HeroSection from './HeroSection';
 import { EffectCoverflow, Autoplay } from 'swiper/modules';
-import type { Movie } from '../../types';
+import type { Movie } from '@/types/movie';
 
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -35,7 +35,7 @@ const HeroSwiper = ({ movies }: Props) => {
     <Swiper {...SwiperSettings} className="w-full h-[70vh]">
       {movies.map((movie) => (
         <SwiperSlide key={movie.id} className="flex w-full h-full">
-          <HeroSectionComponents movie={movie} />
+          <HeroSection movie={movie} />
         </SwiperSlide>
       ))}
     </Swiper>
