@@ -1,18 +1,3 @@
-export type SearchMovieJson = {
-  page: number;
-  results: MovieJson[];
-  total_pages: number;
-  total_results: number;
-};
-
-//popular-movieに関する型定義
-export type PopularMovieJson = {
-  page: number;
-  results: MovieJson[];
-  total_pages: number;
-  total_results: number;
-};
-
 //movie-cardに関する型定義
 export type Movie = {
   id: string;
@@ -51,6 +36,7 @@ export type MovieDetail = {
   score: number | null;
   genres: string[] | null;
   company_logo: string | null;
+  homePageUrl: string | null;
 };
 
 export type MovieDetailJson = {
@@ -92,63 +78,4 @@ export type MovieDetailJson = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-};
-
-//movie-detailのlogoパスに関する型定義
-export type ImagesJson = {
-  id: string;
-  backdrops: {
-    aspect_ratio: number;
-    file_path: string;
-    height: number;
-    iso_639_1: string | null;
-    vote_average: number;
-    vote_count: number;
-    width: number;
-  }[];
-  logos: {
-    aspect_ratio: number;
-    height: number;
-    iso_639_1: string | null;
-    file_path: string;
-    vote_average: number;
-    vote_count: number;
-    width: number;
-  }[];
-  posters: {
-    aspect_ratio: number;
-    file_path: string;
-    height: number;
-    iso_639_1: string | null;
-    vote_average: number;
-    vote_count: number;
-    width: number;
-  }[];
-};
-
-// movie-detailのvideosに関する型定義
-export type VideoItemJson = {
-  iso_639_1: string;
-  iso_3166_1: string;
-  name: string;
-  key: string;
-  site: string;
-  size: number;
-  type: string;
-  official: boolean;
-  published_at: string;
-  id: string;
-};
-
-export type VideosJson = {
-  id: number;
-  results: VideoItemJson[];
-};
-
-// movie-detailのsimilarに関する型定義
-export type SimilarMoviesJson = {
-  page: number;
-  results: MovieJson[];
-  total_pages: number;
-  total_results: number;
 };

@@ -3,20 +3,15 @@ import dotenv from "dotenv";
 import path from "path";
 import { Request } from "express";
 
-import {
-  MovieDetailJson,
-  MovieDetail,
-  Movie,
-  MovieJson,
-  VideosJson,
-  SimilarMoviesJson,
-  ImagesJson,
-} from "@/types/movie";
+import { MovieDetailJson, MovieDetail, Movie, MovieJson } from "@/types/movie";
 
-interface TmdbResponse<T> {
-  page: number;
-  results: T[];
-}
+import { PaginatedResponse, DefaultResponse } from "@/types/common";
+import { VideoItemJson } from "@/types/movie/videos";
+import { ImagesJson } from "@/types/movie/images";
+import {
+  RegionalWatchProviders,
+  MovieWatchProvidersResponse,
+} from "@/types/watch";
 
 // .env ファイルから環境変数を読み込む
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
@@ -55,11 +50,12 @@ const formatDetail = (data: MovieDetailJson): MovieDetail => {
       data.production_companies.length > 0
         ? data.production_companies[0].logo_path
         : null,
+    homePageUrl: data.homepage,
   };
 };
 
 // 動画データ整形関数(YouTubeのキーを抽出)
-const formatvideo = (data: VideosJson): string | null => {
+const formatvideo = (data: DefaultResponse<VideoItemJson>): string | null => {
   return (
     data.results.filter(
       (video) => video.site === "YouTube" && video.type === "Trailer",
@@ -70,6 +66,23 @@ const formatvideo = (data: VideosJson): string | null => {
 // 画像データ整形関数(タイトルロゴ画像のパスを抽出)
 const formatImage = (data: ImagesJson): string | null => {
   return data.logos.length > 0 ? data.logos[0].file_path : null;
+};
+
+// 視聴プロバイダー整形関数
+const formatWatchProviders = (data: MovieWatchProvidersResponse) => {
+  const countryCode = "JP"; // 日本のプロバイダー情報を取得
+  const regionalData: RegionalWatchProviders | undefined =
+    data.results[countryCode];
+
+  if (!regionalData) {
+    return [];
+  }
+
+  const providers =
+    regionalData.flatrate
+      ?.filter((data) => data.provider_name !== "Amazon Prime Video with Ads")
+      ?.map((data) => data.logo_path) ?? [];
+  return providers;
 };
 
 // TMDB APIと通信するためのAxiosインスタンスを作成
@@ -83,8 +96,8 @@ const tmdbApi = axios.create({
 });
 
 // 人気映画を取得する関数
-export async function getPopularMovies(req: Request) {
-  const response = await tmdbApi.get<TmdbResponse<MovieJson>>(
+export async function fetchPopularMovies(req: Request) {
+  const response = await tmdbApi.get<PaginatedResponse<MovieJson>>(
     "/movie/popular",
     {
       params: req.query,
@@ -97,40 +110,54 @@ export async function getPopularMovies(req: Request) {
 }
 
 // 検索した映画を取得する関数
-export async function getSearchMovies(req: Request): Promise<Movie[]> {
-  const response = await tmdbApi.get<TmdbResponse<MovieJson>>("/search/movie", {
-    params: req.query,
-  });
+export async function fetchSearchMovies(req: Request): Promise<Movie[]> {
+  const response = await tmdbApi.get<PaginatedResponse<MovieJson>>(
+    "/search/movie",
+    {
+      params: req.query,
+    },
+  );
   const data = response.data.results.map((movie) => formatMovie(movie));
   return data;
 }
 
 // 詳細ページ用のデータ取得関数
-export async function getMovieDetails(req: Request) {
+export async function fetchMovieDetails(req: Request) {
   const { movieId } = req.params;
-  const [detail, video, similar, image] = await Promise.all([
+  const [detail, video, similar, image, watchProviders] = await Promise.all([
     tmdbApi.get<MovieDetailJson>("/movie/" + movieId, {
       params: { language: "ja" },
     }),
-    tmdbApi.get<VideosJson>("/movie/" + movieId + "/videos", {
-      params: { language: "ja" },
-    }),
-    tmdbApi.get<SimilarMoviesJson>("/movie/" + movieId + "/similar", {
-      params: { language: "ja", page: 1 },
-    }),
+    tmdbApi.get<DefaultResponse<VideoItemJson>>(
+      "/movie/" + movieId + "/videos",
+      {
+        params: { language: "ja" },
+      },
+    ),
+    tmdbApi.get<PaginatedResponse<MovieJson>>(
+      "/movie/" + movieId + "/similar",
+      {
+        params: { language: "ja", page: 1 },
+      },
+    ),
     tmdbApi.get<ImagesJson>("/movie/" + movieId + "/images", {
       params: { language: "ja" },
     }),
+    tmdbApi.get<MovieWatchProvidersResponse>(
+      "/movie/" + movieId + "/watch/providers",
+    ),
   ]);
 
   const formattedDetail = formatDetail(detail.data);
   const formattedVideo = formatvideo(video.data);
   const formattedImage = formatImage(image.data);
+  const formattedWatchProviders = formatWatchProviders(watchProviders.data);
 
   return {
     detail: formattedDetail,
     video: formattedVideo,
     similar: similar.data.results,
     image: formattedImage,
+    watchProviders: formattedWatchProviders,
   };
 }

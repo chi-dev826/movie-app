@@ -7,6 +7,7 @@ export interface FullMovieData {
   video: string | null;
   similar: MovieJson[];
   image: string | null;
+  watchProviders: string[];
 }
 
 /**

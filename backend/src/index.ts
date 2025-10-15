@@ -2,9 +2,9 @@ import express, { NextFunction } from "express";
 import cors from "cors";
 import { Request, Response } from "express";
 import {
-  getMovieDetails,
-  getPopularMovies,
-  getSearchMovies,
+  fetchMovieDetails,
+  fetchPopularMovies,
+  fetchSearchMovies,
 } from "./services/apiClient";
 
 const app = express();
@@ -25,7 +25,7 @@ app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
 // ルートURLへのGETリクエストがあった場合に実行
 app.get("/api/movie/popular", async (req: Request, res: Response, next) => {
   try {
-    const movies = await getPopularMovies(req);
+    const movies = await fetchPopularMovies(req);
     res.json(movies);
   } catch (error) {
     next(error);
@@ -36,7 +36,7 @@ app.get(
   "/api/movie/:movieId/full",
   async (req: Request, res: Response, next) => {
     try {
-      const movies = await getMovieDetails(req);
+      const movies = await fetchMovieDetails(req);
       res.json(movies);
     } catch (error) {
       next(error);
@@ -47,7 +47,7 @@ app.get(
 // キーワード検索結果を取得するエンドポイント
 app.get("/api/search/movie", async (req: Request, res: Response, next) => {
   try {
-    const movies = await getSearchMovies(req);
+    const movies = await fetchSearchMovies(req);
     res.json(movies);
   } catch (error) {
     next(error);
