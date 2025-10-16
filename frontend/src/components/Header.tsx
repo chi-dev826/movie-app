@@ -16,19 +16,19 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-80 text-white p-4 shadow-lg backdrop-blur-md z-50">
+      <header className="fixed top-0 left-0 z-50 w-full p-4 text-white bg-gray-900 shadow-lg bg-opacity-80 backdrop-blur-md">
         <div className="flex items-center">
           <nav className="flex items-center space-x-6">
             <Link
               to="/"
-              className="flex items-center space-x-2 text-lg font-bold hover:text-gray-300 transition-colors"
+              className="flex items-center space-x-2 text-lg font-bold transition-colors hover:text-gray-300"
             >
               <Home size={20} />
               <span>ホーム</span>
             </Link>
             <button
               onClick={handleSearchClick}
-              className="flex items-center space-x-2 text-lg font-bold hover:text-gray-300 transition-colors"
+              className="flex items-center space-x-2 text-lg font-bold transition-colors hover:text-gray-300"
             >
               <Search size={20} />
               <span>検索</span>
