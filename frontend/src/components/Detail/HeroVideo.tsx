@@ -1,30 +1,36 @@
-type Props = {
-  youtubeKey: string | null;
-};
+import ReactPlayer from 'react-player';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
-const HeroVideo = ({ youtubeKey }: Props) => {
+interface HeroVideoProps {
+  youtubeKey: string | null;
+  onClose: () => void;
+}
+
+const HeroVideo = ({ youtubeKey, onClose }: HeroVideoProps) => {
   return (
-    <div className="video-container">
-      <div className="video-wrapper">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+      <div className="relative w-3/5 h-4/5 max-h-4xl group/video">
+        <button
+          onClick={onClose}
+          className="absolute z-10 p-0 text-white transition-transform duration-200 bg-gray-800 rounded-full opacity-0 group-hover/video:opacity-100 left-1/2 hover:scale-125"
+          aria-label="閉じる"
+        >
+          <XMarkIcon className="w-20 h-20 opacity-0 group-hover/video:opacity-100" />
+        </button>
         {youtubeKey ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=0&mute=0&rel=0&modestbranding=1&showinfo=0&controls=1&modestbranding=1`}
-            width="1200"
-            height="680"
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+          <ReactPlayer
+            src={`https://www.youtube.com/watch?v=${youtubeKey}`}
+            playing={true}
+            controls={true}
+            muted={true}
+            width="100%"
+            height="100%"
+            onEnded={onClose}
           />
         ) : (
-          <>
-            <iframe
-              width="1280"
-              height="680"
-              title="No video available"
-              style={{ backgroundColor: '#000' }}
-            />
-            <p className="no-video-comment">※ この映画の予告動画は現在利用できません</p>
-          </>
+          <div className="flex items-center justify-center w-full h-full">
+            <p className="text-white">予告編が利用できません</p>
+          </div>
         )}
       </div>
     </div>
