@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, Search } from 'lucide-react';
-import SearchOverlay from './SearchOverlay';
+import SearchOverlay from '@/features/search/components/SearchOverlay';
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);

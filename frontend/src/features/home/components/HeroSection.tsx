@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { TMDB_IMAGE_BASE_URL } from '../../../config';
+import { TMDB_IMAGE_BASE_URL } from '../../../../config';
 import type { Movie } from '@/types/movie';
 
 type Props = {
@@ -19,7 +19,7 @@ const HeroSection = ({ movie }: Props) => {
       }}
     >
       {/* グラデーションオーバーレイ */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black to-black/30 md:bg-gradient-to-t md:from-black md:via-black/80 md:to-black/60" />
 
       {/* コンテンツ */}
       <div className="relative z-10 flex items-end gap-8 p-4 mx-auto md:p-8 lg:p-12 max-w-7xl">

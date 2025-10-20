@@ -3,7 +3,7 @@ import Header from './components/Header';
 
 function App() {
   return (
-    <div className="min-h-screen text-white bg-gray-900">
+    <div className="min-h-screen text-white bg-black">
       <Header />
       <main className="pt-16">
         {/* ヘッダーの高さ分だけコンテンツ開始位置を調整 */}

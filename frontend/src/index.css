@@ -10,3 +10,14 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+
+/* --- Layout Debugging Utilities --- */
+.debug-outline, .debug-outline * {
+  outline: 1px solid rgba(255, 0, 0, 0.5);
+}
+.debug-outline .debug-outline, .debug-outline .debug-outline * {
+  outline: 1px solid rgba(0, 255, 0, 0.5);
+}
+.debug-outline .debug-outline .debug-outline, .debug-outline .debug-outline .debug-outline * {
+  outline: 1px solid rgba(0, 0, 255, 0.5);
+}

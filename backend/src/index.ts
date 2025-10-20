@@ -38,6 +38,7 @@ app.get(
     try {
       const movies = await fetchMovieDetails(req);
       res.json(movies);
+      console.log(movies);
     } catch (error) {
       next(error);
     }

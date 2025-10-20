@@ -1,6 +1,6 @@
-import { usePopularMovies } from '../hooks/usePopularMovies';
-import HeroSwiper from '../components/Home/HeroSwiper';
-import MovieCard from '../components/MovieCard';
+import { usePopularMovies } from '../../hooks/usePopularMovies';
+import HeroSwiper from './components/HeroSwiper';
+import MovieCard from '../../components/MovieCard';
 
 function HomePage() {
   const { data: popularMovies, isLoading, error } = usePopularMovies();
@@ -38,12 +38,12 @@ function HomePage() {
   }
 
   return (
-    <div className="bg-gray-900">
+    <div className="bg-gray-950">
       {heroMovieList.length >= 3 && <HeroSwiper movies={heroMovieList} />}
 
       <div className="px-4 py-8 mx-auto max-w-20xl sm:px-6 lg:px-8">
         <h3 className="mb-6 text-2xl font-bold tracking-tight text-white sm:text-3xl">人気映画</h3>
-        <div className="flex pb-4 space-x-4 overflow-x-auto scrollbar-hide">
+        <div className="flex pb-4 space-x-8 overflow-x-auto scrollbar-hide">
           {popularMovies?.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
