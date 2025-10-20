@@ -1,17 +1,20 @@
 //movie-cardに関する型定義
 export type Movie = {
-  id: string;
+  id: number;
   backdrop_path: string | null;
   original_title: string;
+  title: string;
   overview: string;
   poster_path: string | null;
+  vote_average: number;
+  logo_path?: string | null;
 };
 
 export type MovieJson = {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
-  id: string;
+  id: number;
   original_language: string;
   original_title: string;
   overview: string;
@@ -26,14 +29,16 @@ export type MovieJson = {
 
 //movie-detailに関する型定義
 export type MovieDetail = {
-  id: string;
+  id: number;
   backdrop_path: string | null;
+  belongs_to_collection_id: number | null;
   original_title: string;
+  title: string;
   overview: string;
   poster_path: string | null;
   year: number | null;
   runtime: number | null;
-  score: number | null;
+  vote_average: number | null;
   genres: string[] | null;
   company_logo: string | null;
   homePageUrl: string | null;
@@ -42,11 +47,16 @@ export type MovieDetail = {
 export type MovieDetailJson = {
   adult: boolean;
   backdrop_path: string | null;
-  belongs_to_collection: null;
+  belongs_to_collection: {
+    id: number;
+    name: string;
+    poster_path: string | null;
+    backdrop_path: string | null;
+  } | null;
   budget: number;
   genres: { id: number; name: string }[];
   homepage: string;
-  id: string;
+  id: number;
   imdb_id: string;
   origin_country: string[];
   original_language: string;
