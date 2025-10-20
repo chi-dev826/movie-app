@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Search } from 'lucide-react';
 
@@ -11,14 +11,17 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  // ESCキーでオーバーレイを閉じる
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+  const handleEscape = useCallback(
+    (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
-    };
+    },
+    [onClose],
+  );
 
+  // ESCキーでオーバーレイを閉じる
+  useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
       // オーバーレイが開いた時にフォーカスを検索ボックスに移動
@@ -31,7 +34,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
     return () => {
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, handleEscape]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

@@ -19,7 +19,6 @@ const HeroSwiper = ({ movies }: Props) => {
     effect: 'coverflow',
     grabCursor: true,
     centeredSlides: true,
-    slidesPerView: 2,
     loop: true,
     autoplay: { delay: 10000, disableOnInteraction: false },
     coverflowEffect: {
@@ -29,10 +28,18 @@ const HeroSwiper = ({ movies }: Props) => {
       modifier: 1.5,
       slideShadows: false,
     },
+    // デフォルト (モバイル) は1枚表示
+    slidesPerView: 1,
+    breakpoints: {
+      // 画面幅が1024px以上の場合
+      1024: {
+        slidesPerView: 2, // 2枚表示にする
+      },
+    },
   };
 
   return (
-    <Swiper {...SwiperSettings} className="w-full h-[70vh]">
+    <Swiper {...SwiperSettings} className="w-full h-[70vh] lg:h-[70vh]">
       {movies.map((movie) => (
         <SwiperSlide key={movie.id} className="flex w-full h-full">
           <HeroSection movie={movie} />

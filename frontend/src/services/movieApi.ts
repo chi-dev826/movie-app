@@ -1,4 +1,5 @@
 import { Movie, MovieJson, MovieDetail } from '@/types/movie';
+import { CollectionPart } from '@/types/collection';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -8,6 +9,7 @@ export interface FullMovieData {
   similar: MovieJson[];
   image: string | null;
   watchProviders: string[];
+  collections: CollectionPart[];
 }
 
 /**
