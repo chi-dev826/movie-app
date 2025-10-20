@@ -5,6 +5,7 @@ import MovieCard from '@/components/MovieCard';
 import HeroVideo from './components/HeroVideo';
 import HeroMetadata from './components/HeroMetadata';
 import { useFullMovieData } from '@/hooks/useMovies';
+import MovieCardSkeleton from '@/components/MovieCardSkeleton';
 import { TMDB_IMAGE_BASE_URL } from '../../../config';
 import { PlayCircleIcon } from '@heroicons/react/20/solid';
 
@@ -16,14 +17,6 @@ function MovieDetailPage() {
   const isModalOpen = new URLSearchParams(location.search).get('trailer') === 'open';
 
   const { data, isLoading, error } = useFullMovieData(movieId);
-
-  if (isLoading && !data) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
-        <p>読み込み中...</p>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -85,6 +78,8 @@ function MovieDetailPage() {
       <section className="z-20 px-4 mt-5 sm:px-6 lg:px-12 lg:py-2">
         <h2 className="mb-6 text-2xl font-bold tracking-tight text-white sm:text-3xl">関連作品</h2>
         <div className="flex pb-4 space-x-8 overflow-x-auto overflow-y-hidden scrollbar-hide">
+          {isLoading &&
+            Array.from({ length: 10 }).map((_, index) => <MovieCardSkeleton key={index} />)}
           {(data?.collections?.length ? data.collections : (data?.similar ?? [])).map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
