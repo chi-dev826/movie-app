@@ -1,28 +1,74 @@
 import { TMDB_IMAGE_BASE_URL } from '../../config';
 import { Link } from 'react-router-dom';
 import type { Movie } from '@/types/movie';
+import { Star } from 'lucide-react';
 
 type Props = {
   movie: Movie;
+  layout?: 'responsive' | 'poster';
 };
 
-const MovieCard = ({ movie }: Props) => {
-  const movieImageUrl = `${TMDB_IMAGE_BASE_URL}w300_and_h450_bestv2${movie.poster_path}`;
+const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
+  const posterUrl = `${TMDB_IMAGE_BASE_URL}w500${movie.poster_path}`;
+  const backdropUrl = `${TMDB_IMAGE_BASE_URL}w780${movie.backdrop_path}`;
+
+  const isPosterLayout = layout === 'poster';
 
   return (
-    movie.poster_path && (
+    movie.poster_path &&
+    movie.backdrop_path && (
       <Link
         to={`/movie/${movie.id}`}
         key={movie.id}
-        className="group relative min-w-[200px] h-[300px] rounded-2xl overflow-hidden bg-gray-800 shadow-lg cursor-pointer transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-red-900/50"
+        className={`group relative flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-red-900/50 ${
+          isPosterLayout
+            ? 'w-full aspect-[2/3]'
+            : 'w-36 md:w-48 lg:w-72 aspect-[2/3] lg:aspect-video'
+        }`}
       >
+        {/* ポスター画像 or レスポンシブ時のモバイル用画像 */}
         <img
-          src={movieImageUrl}
+          src={posterUrl}
           alt={movie.original_title}
-          className="absolute block object-cover w-full h-full transition-all duration-200 ease-in-out rounded-2xl"
+          className={`absolute block object-cover w-full h-full transition-all duration-300 ease-in-out ${
+            !isPosterLayout && 'lg:hidden'
+          }`}
         />
-        <div className="absolute inset-0 flex items-end transition-opacity duration-200 ease-in-out opacity-0 pointer-events-none bg-gradient-to-t from-black/80 to-transparent rounded-2xl group-hover:opacity-100">
-          <h3 className="w-full p-4 text-base font-bold text-white">{movie.original_title}</h3>
+        {/* レスポンシブ時のデスクトップ用背景画像 */}
+        {!isPosterLayout && (
+          <img
+            src={backdropUrl}
+            alt={movie.original_title}
+            className="absolute hidden object-cover w-full h-full transition-all duration-300 ease-in-out lg:block"
+          />
+        )}
+
+        {/* オーバーレイ */}
+        <div
+          className={`absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent ${
+            isPosterLayout
+              ? 'opacity-0 group-hover:opacity-100'
+              : 'opacity-0 group-hover:opacity-100 lg:opacity-100 lg:bg-gradient-to-r lg:from-black/90 lg:via-black/50 lg:to-transparent'
+          }`}
+        >
+          <h3 className="text-base font-bold text-white">{movie.title}</h3>
+        </div>
+
+        {/* ロゴ画像 */}
+        <div className="hidden lg:block lg:absolute lg:top-1 lg:max-w-28 lg:max-h-28 lg:left-2">
+          {movie.logo_path && (
+            <img
+              src={TMDB_IMAGE_BASE_URL + 'w92' + movie.logo_path}
+              alt={movie.original_title}
+              className="object-contain w-full h-full"
+            />
+          )}
+        </div>
+
+        {/* 評価スコア */}
+        <div className="absolute flex items-center gap-1 px-2 py-1 text-xs font-bold text-white rounded-full bottom-2 right-2 bg-black/50 backdrop-blur-sm">
+          <Star className="w-3 h-3 text-yellow-400" fill="currentColor" />
+          <span>{movie.vote_average.toFixed(1)}</span>
         </div>
       </Link>
     )
