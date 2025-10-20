@@ -20,7 +20,7 @@ const HeroSwiper = ({ movies }: Props) => {
     grabCursor: true,
     centeredSlides: true,
     loop: true,
-    autoplay: { delay: 10000, disableOnInteraction: false },
+    autoplay: { delay: 15000, disableOnInteraction: false },
     coverflowEffect: {
       rotate: 0,
       stretch: 30,
@@ -28,14 +28,7 @@ const HeroSwiper = ({ movies }: Props) => {
       modifier: 1.5,
       slideShadows: false,
     },
-    // デフォルト (モバイル) は1枚表示
     slidesPerView: 1,
-    breakpoints: {
-      // 画面幅が1024px以上の場合
-      1024: {
-        slidesPerView: 2, // 2枚表示にする
-      },
-    },
   };
 
   return (

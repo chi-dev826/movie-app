@@ -52,9 +52,7 @@ const HeroMetadata = ({ movieDetail, titleImagePath, watchProviders }: Props) =>
               className="absolute right-2 top-16"
             />
           </div>
-        ) : (
-          <h1 className="pt-4 text-4xl">{movieDetail.original_title}</h1>
-        )}
+        ) : null}
       </div>
     </>
   );
@@ -89,13 +87,14 @@ const HeroMetadata = ({ movieDetail, titleImagePath, watchProviders }: Props) =>
           </div>
         </div>
       )}
-      <div className="mt-7">
+      <div className="inline-block transition-all duration-300 ease-in-out mt-7 hover:scale-105">
         {movieDetail.homePageUrl && (
           <a
             href={movieDetail.homePageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 text-sm font-semibold text-white transition-all bg-gray-600 rounded hover:bg-white hover:text-black"
+            aria-label="公式サイトへ"
+            className="inline-flex items-center px-3 py-1 text-xs font-semibold text-white transition-all bg-gray-600 rounded hover:bg-white hover:text-black sm:px-4 sm:py-2 sm:text-sm md:px-5 md:text-base lg:px-6 lg:text-lg"
           >
             公式サイトへ
           </a>

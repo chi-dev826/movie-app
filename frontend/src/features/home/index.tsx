@@ -1,7 +1,6 @@
 import { usePopularMovies } from '../../hooks/usePopularMovies';
 import HeroSwiper from './components/HeroSwiper';
 import MovieCard from '../../components/MovieCard';
-import MovieCardSkeleton from '@/components/MovieCardSkeleton';
 
 function HomePage() {
   const { data: popularMovies, isLoading, error } = usePopularMovies();
@@ -10,6 +9,14 @@ function HomePage() {
   const heroMovieList =
     popularMovies?.filter((movie) => movie.overview && movie.overview.trim() !== '').slice(0, 5) ??
     [];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
+        <p>読み込み中...</p>
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -34,8 +41,6 @@ function HomePage() {
       <div className="px-4 py-8 mx-auto max-w-20xl sm:px-6 lg:px-8">
         <h3 className="mb-6 text-2xl font-bold tracking-tight text-white sm:text-3xl">人気映画</h3>
         <div className="flex pb-4 space-x-8 overflow-x-auto scrollbar-hide">
-          {isLoading &&
-            Array.from({ length: 10 }).map((_, index) => <MovieCardSkeleton key={index} />)}
           {popularMovies?.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
