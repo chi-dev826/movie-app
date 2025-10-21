@@ -34,6 +34,7 @@ dist-ssr/
 
 # Project-specific tools
 .serena/
+.gemini/
 
 # Local files
 *.local
