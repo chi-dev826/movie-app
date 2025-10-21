@@ -41,6 +41,10 @@ function MovieDetailPage() {
     navigate(-1);
   };
 
+  const collections = data?.collections ?? [];
+  const similar = data?.similar ?? [];
+  const relatedMovies = collections.length > 2 ? collections : similar;
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       <section className="relative flex items-center justify-center h-[40vh] sm:h-[50vh] md:h-[60vh] 2xl:h-[70vh]">
@@ -80,12 +84,10 @@ function MovieDetailPage() {
           </div>
         </div>
       )}
-
-      {/* === 関連作品 === */}
       <section className="z-20 px-4 mt-5 sm:px-6 lg:px-8">
         <h2 className="mb-6 text-2xl font-bold tracking-tight text-white sm:text-3xl">関連作品</h2>
         <div className="flex pb-4 space-x-6 overflow-x-auto overflow-y-hidden scrollbar-hide">
-          {(data?.collections?.length ? data.collections : (data?.similar ?? [])).map((movie) => (
+          {relatedMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
