@@ -3,7 +3,7 @@ import { MovieDetailJson, MovieDetail, Movie, MovieJson } from "@/types/movie";
 import { CollectionPart } from "@/types/collection";
 import { DefaultResponse } from "@/types/common";
 import { VideoItemJson } from "@/types/movie/videos";
-import { ImagesJson } from "@/types/movie/images";
+import { ImagesJson } from "@/types/movie/imagesResponse";
 import { MovieWatchProvidersResponse } from "@/types/watch";
 
 // === データ整形関数群 ===
