@@ -3,8 +3,8 @@ import cors from "cors";
 import { Request, Response } from "express";
 import {
   fetchMovieDetails,
-  fetchPopularMovies,
   fetchSearchMovies,
+  fetchMovieList,
 } from "./services/apiClient";
 
 const app = express();
@@ -20,16 +20,6 @@ app.use(
 app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   console.error("Error:", err.message);
   res.status(500).json("Failed to fetch data from TMDB");
-});
-
-// ルートURLへのGETリクエストがあった場合に実行
-app.get("/api/movie/popular", async (req: Request, res: Response, next) => {
-  try {
-    const movies = await fetchPopularMovies(req);
-    res.json(movies);
-  } catch (error) {
-    next(error);
-  }
 });
 
 app.get(
@@ -50,6 +40,15 @@ app.get("/api/search/movie", async (req: Request, res: Response, next) => {
   try {
     const movies = await fetchSearchMovies(req);
     res.json(movies);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/movies/home", async (req: Request, res: Response, next) => {
+  try {
+    const movieList = await fetchMovieList();
+    res.json(movieList);
   } catch (error) {
     next(error);
   }
