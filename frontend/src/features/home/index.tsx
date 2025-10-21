@@ -1,10 +1,11 @@
-import { usePopularMovies } from '../../hooks/usePopularMovies';
+import { useMovieList } from '../../hooks/useMovieList';
 import HeroSwiper from './components/HeroSwiper';
 import MovieCard from '../../components/MovieCard';
 
 function HomePage() {
-  const { data: popularMovies, isLoading, error } = usePopularMovies();
+  const { data, isLoading, error } = useMovieList();
 
+  const popularMovies = data?.now_playing ?? [];
   //ヒーローセクション用データフィルタリング
   const heroMovieList =
     popularMovies?.filter((movie) => movie.overview && movie.overview.trim() !== '').slice(0, 5) ??
