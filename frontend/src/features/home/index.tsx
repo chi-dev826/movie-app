@@ -5,6 +5,8 @@ import MovieCard from '../../components/MovieCard';
 function HomePage() {
   const { data, isLoading, error } = useMovieList();
 
+  const movieList = [data?.popular, data?.now_playing, data?.top_rated, data?.high_rated];
+  const movieListTitles = ['人気映画', '現在上映中', '高評価映画', '話題の映画'];
   const popularMovies = data?.now_playing ?? [];
   //ヒーローセクション用データフィルタリング
   const heroMovieList =
@@ -40,12 +42,16 @@ function HomePage() {
       {heroMovieList.length >= 3 && <HeroSwiper movies={heroMovieList} />}
 
       <div className="px-4 py-8 mx-auto max-w-20xl sm:px-6 lg:px-8">
-        <h3 className="mb-6 text-2xl font-bold tracking-tight text-white sm:text-3xl">人気映画</h3>
-        <div className="flex pb-4 space-x-8 overflow-x-auto scrollbar-hide">
-          {popularMovies?.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
-        </div>
+        {movieList.map((movies, index) => (
+          <div key={index} className="mb-12">
+            <h4 className="mb-4 text-xl font-semibold text-white">{movieListTitles[index]}</h4>
+            <div className="flex pb-4 space-x-8 overflow-x-auto scrollbar-hide">
+              {movies?.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
