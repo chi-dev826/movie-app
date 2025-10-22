@@ -9,10 +9,11 @@ import {
 
 const app = express();
 const port = 3000;
+const HOST = "0.0.0.0";
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // フロントエンドのURLを指定
+    origin: true, // フロントエンドのURLを指定
   }),
 );
 
@@ -55,6 +56,6 @@ app.get("/api/movies/home", async (req: Request, res: Response, next) => {
 });
 
 // サーバーを起動
-app.listen(port, () => {
-  console.log(`サーバーが http://localhost:${port} で起動しました。`);
+app.listen(port, HOST, () => {
+  console.log(`サーバーが http://${HOST}:${port} で起動しました。`);
 });

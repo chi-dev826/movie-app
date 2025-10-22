@@ -1,7 +1,7 @@
 import { MovieJson, MovieDetail } from '@/types/movie';
 import { CollectionPart } from '@/types/collection';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://192.168.0.10:3000/api';
 
 export interface FullMovieData {
   detail: MovieDetail;
