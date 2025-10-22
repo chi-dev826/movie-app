@@ -23,7 +23,7 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
         className={`group relative flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-red-900/50 ${
           isPosterLayout
             ? 'w-full aspect-[2/3]'
-            : 'w-36 md:w-48 lg:w-72 aspect-[2/3] lg:aspect-video'
+            : 'w-36 md:w-48 lg:basis-[24%] 2xl:basis-[15%] aspect-[2/3] lg:[aspect-ratio:auto]'
         }`}
       >
         {/* ポスター画像 or レスポンシブ時のモバイル用画像 */}
@@ -39,7 +39,7 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
           <img
             src={backdropUrl}
             alt={movie.original_title}
-            className="absolute hidden object-cover w-full h-full transition-all duration-300 ease-in-out lg:block"
+            className="hidden lg:object-cover lg:w-full lg:h-full lg:transition-all lg:duration-300 lg:ease-in-out lg:block"
           />
         )}
 
@@ -48,19 +48,19 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
           className={`absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent ${
             isPosterLayout
               ? 'opacity-0 group-hover:opacity-100'
-              : 'opacity-0 group-hover:opacity-100 lg:opacity-100 lg:bg-gradient-to-r lg:from-black/90 lg:via-black/50 lg:to-transparent'
+              : 'opacity-0 group-hover:opacity-100 lg:opacity-100'
           }`}
         >
           <h3 className="text-base font-bold text-white">{movie.title}</h3>
         </div>
 
         {/* ロゴ画像 */}
-        <div className="hidden lg:block lg:absolute lg:top-1 lg:max-w-28 lg:max-h-28 lg:left-2">
+        <div className="hidden lg:block lg:absolute lg:top-2 lg:max-w-48 lg:max-h-48 lg:left-3">
           {movie.logo_path && (
             <img
-              src={TMDB_IMAGE_BASE_URL + 'w92' + movie.logo_path}
+              src={TMDB_IMAGE_BASE_URL + 'w185' + movie.logo_path}
               alt={movie.original_title}
-              className="object-contain w-full h-full"
+              className="object-contain w-full h-full opacity-80"
             />
           )}
         </div>
