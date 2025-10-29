@@ -8,6 +8,7 @@ export type Movie = {
   poster_path: string | null;
   vote_average: number;
   logo_path?: string | null;
+  youtube_key?: string | null;
 };
 
 export type MovieJson = {

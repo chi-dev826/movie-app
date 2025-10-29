@@ -19,5 +19,6 @@ export const tmdbApi = axios.create({
   headers: {
     Authorization: `Bearer ${API_KEY}`,
     Accept: "application/json",
+    "Cache-Control": "no-cache",
   },
 });

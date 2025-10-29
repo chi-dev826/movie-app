@@ -5,6 +5,7 @@ import {
   fetchMovieDetails,
   fetchSearchMovies,
   fetchMovieList,
+  fetchUpcomingMovieList,
 } from "./services/apiClient";
 
 const app = express();
@@ -29,7 +30,6 @@ app.get(
     try {
       const movies = await fetchMovieDetails(req);
       res.json(movies);
-      console.log(movies);
     } catch (error) {
       next(error);
     }
@@ -49,6 +49,15 @@ app.get("/api/search/movie", async (req: Request, res: Response, next) => {
 app.get("/api/movies/home", async (req: Request, res: Response, next) => {
   try {
     const movieList = await fetchMovieList();
+    res.json(movieList);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/movies/upcoming", async (req: Request, res: Response, next) => {
+  try {
+    const movieList = await fetchUpcomingMovieList();
     res.json(movieList);
   } catch (error) {
     next(error);

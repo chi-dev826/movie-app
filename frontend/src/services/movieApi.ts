@@ -1,4 +1,4 @@
-import { MovieJson, MovieDetail } from '@/types/movie';
+import { MovieJson, MovieDetail, Movie } from '@/types/movie';
 import { CollectionPart } from '@/types/collection';
 
 const API_BASE_URL = 'http://192.168.0.10:3000/api';
@@ -8,7 +8,7 @@ export interface FullMovieData {
   video: string | null;
   similar: MovieJson[];
   image: string | null;
-  watchProviders: string[];
+  watchProviders: { logo_path: string | null; name: string }[];
   collections: CollectionPart[] | null;
 }
 export interface MovieListResponse {
@@ -48,4 +48,8 @@ export const searchMovies = async (query: string): Promise<MovieJson[]> => {
 
 export const fetchMovieList = async (): Promise<MovieListResponse> => {
   return fetchFromApi<MovieListResponse>('/movies/home');
+};
+
+export const fetchUpcomingMovies = async (): Promise<Movie[]> => {
+  return fetchFromApi<Movie[]>('/movies/upcoming');
 };

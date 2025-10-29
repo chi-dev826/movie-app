@@ -1,10 +1,24 @@
 import { tmdbApi } from "../lib/tmdbClient";
+import { youtubeApi } from "../lib/youtubeClient";
 import { MovieDetailJson, MovieDetail, Movie, MovieJson } from "@/types/movie";
 import { CollectionPart } from "@/types/collection";
 import { DefaultResponse } from "@/types/common";
 import { VideoItemJson } from "@/types/movie/videos";
 import { ImagesJson } from "@/types/movie/imagesResponse";
 import { MovieWatchProvidersResponse } from "@/types/watch";
+
+// YouTube APIの型定義
+interface YouTubeVideoStatus {
+  id: string;
+  status: {
+    privacyStatus: "public" | "private" | "unlisted";
+    embeddable: boolean;
+  };
+}
+
+interface YouTubeVideosResponse {
+  items: YouTubeVideoStatus[];
+}
 
 // === データ整形関数群 ===
 
@@ -38,14 +52,59 @@ export const formatDetail = (data: MovieDetailJson): MovieDetail => {
   };
 };
 
-export const formatVideo = (
+export const formatVideo = async (
   data: DefaultResponse<VideoItemJson>,
-): string | null => {
-  return (
-    data.results.find(
-      (video) => video.site === "YouTube" && video.type === "Trailer",
-    )?.key ?? null
+): Promise<string | null> => {
+  const { results } = data;
+  if (!results || results.length === 0) {
+    return null;
+  }
+
+  const youtubeVideos = results;
+  const officialTrailer = youtubeVideos.find(
+    (video) => video.official && video.type === "Trailer",
   );
+  const trailer = youtubeVideos.find((video) => video.type === "Trailer");
+  const officialVideo = youtubeVideos.find((video) => video.official);
+
+  const videoItems = [officialTrailer, trailer, officialVideo].filter(
+    (v): v is VideoItemJson => !!v?.key,
+  );
+
+  const uniqueVideos = [...new Set(videoItems)];
+
+  if (uniqueVideos.length === 0) {
+    return null;
+  }
+
+  try {
+    const response = await youtubeApi.get<YouTubeVideosResponse>("/videos", {
+      params: {
+        part: "status",
+        id: uniqueVideos.map((v) => v.key).join(","),
+      },
+    });
+
+    const publicVideos = new Set(
+      response.data.items
+        .filter(
+          (item) =>
+            item.status.privacyStatus === "public" && item.status.embeddable,
+        )
+        .map((item) => item.id),
+    );
+
+    for (const video of uniqueVideos) {
+      if (publicVideos.has(video.key)) {
+        return video.key;
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching from YouTube API:", error);
+    return null;
+  }
+
+  return null;
 };
 
 export const formatImage = (data: ImagesJson): string | null => {
@@ -54,17 +113,26 @@ export const formatImage = (data: ImagesJson): string | null => {
 
 export const formatWatchProviders = (
   data: MovieWatchProvidersResponse,
-): string[] => {
+): { logo_path: string | null; name: string }[] => {
   const regionalData = data.results["JP"];
   if (!regionalData) return [];
   return (
     regionalData.flatrate
-      ?.filter((p) => p.provider_name !== "Amazon Prime Video with Ads")
-      .map((p) => p.logo_path) ?? []
+      ?.filter(
+        (p) =>
+          p.provider_name !== "Amazon Prime Video with Ads" &&
+          p.provider_name !== "Netflix Standard with Ads" &&
+          p.provider_name !== "dAnime Amazon Channel" &&
+          p.provider_name !== "Anime Times Amazon Channel",
+      )
+      .map((p) => ({
+        logo_path: p.logo_path,
+        name: p.provider_name,
+      })) ?? []
   );
 };
 
-// 映画リストにロゴ情報を付与し、スコアを整形する共通関数
+// 映画リストにロゴ情報を付与する共通関数
 export const enrichMovieList = async (
   movies: (MovieJson | CollectionPart)[],
 ): Promise<Movie[]> => {
@@ -88,4 +156,10 @@ export const enrichMovieList = async (
       logo_path: logos?.[0]?.file_path ?? null,
     };
   });
+};
+
+export const isMostlyJapanese = (title: string): boolean => {
+  const jpChars = title.match(/[\u3040-\u30FF\u4E00-\u9FFF]/g) || [];
+  const ratio = jpChars.length / title.length;
+  return ratio > 0.3; // 30%以上が日本語なら日本語タイトルとみなす
 };

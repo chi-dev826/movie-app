@@ -4,20 +4,35 @@
 
 /* スクロールバー非表示ユーティリティ */
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hero-swiper .swiper-button-next,
+.hero-swiper .swiper-button-prev {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.hero-swiper:hover .swiper-button-next,
+.hero-swiper:hover .swiper-button-prev {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* --- Layout Debugging Utilities --- */
-.debug-outline, .debug-outline * {
+.debug-outline,
+.debug-outline * {
   outline: 1px solid rgba(255, 0, 0, 0.5);
 }
-.debug-outline .debug-outline, .debug-outline .debug-outline * {
+.debug-outline .debug-outline,
+.debug-outline .debug-outline * {
   outline: 1px solid rgba(0, 255, 0, 0.5);
 }
-.debug-outline .debug-outline .debug-outline, .debug-outline .debug-outline .debug-outline * {
+.debug-outline .debug-outline .debug-outline,
+.debug-outline .debug-outline .debug-outline * {
   outline: 1px solid rgba(0, 0, 255, 0.5);
 }

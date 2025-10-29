@@ -7,6 +7,7 @@ import {
   formatWatchProviders,
   enrichMovieList,
   formatMovie,
+  isMostlyJapanese,
 } from "./dataFormatter";
 
 import { MovieDetailJson, Movie, MovieJson } from "@/types/movie";
@@ -59,14 +60,15 @@ export async function fetchMovieDetails(req: Request) {
   const similarMovies = similarRes.data.results ?? [];
   const collectionMovies = collectionRes ? collectionRes.data.parts : [];
 
-  const [formattedSimilar, formattedCollections] = await Promise.all([
+  const [formattedSimilar, formattedCollections, video] = await Promise.all([
     enrichMovieList(similarMovies),
     enrichMovieList(collectionMovies),
+    formatVideo(videoRes.data),
   ]);
 
   return {
     detail: formatDetail(detailRes.data),
-    video: formatVideo(videoRes.data),
+    video,
     image: formatImage(imageRes.data),
     watchProviders: formatWatchProviders(watchProvidersRes.data),
     similar: formattedSimilar,
@@ -116,10 +118,73 @@ export async function fetchMovieList() {
     }),
   ]);
 
+  const [popular, now_playing, top_rated, high_rated] = await Promise.all([
+    enrichMovieList(response[0].data.results),
+    enrichMovieList(response[1].data.results),
+    enrichMovieList(response[2].data.results),
+    enrichMovieList(response[3].data.results),
+  ]);
+
   return {
-    popular: response[0].data.results.map(formatMovie),
-    now_playing: response[1].data.results.map(formatMovie),
-    top_rated: response[2].data.results.map(formatMovie),
-    high_rated: response[3].data.results.map(formatMovie),
+    popular,
+    now_playing,
+    top_rated,
+    high_rated,
   };
+}
+
+export async function fetchUpcomingMovieList(): Promise<Movie[]> {
+  const response = await tmdbApi.get<PaginatedResponse<MovieJson>>(
+    "/discover/movie",
+    {
+      params: {
+        language: "ja-JP",
+        region: "JP",
+        watch_region: "JP",
+        sort_by: "popularity.desc",
+        include_adult: false,
+        include_video: false,
+        with_release_type: "2|3",
+        "primary_release_date.gte": "2025-10-22",
+        "primary_release_date.lte": "2025-11-22",
+        with_original_language: "ja|en",
+        page: 1,
+      },
+    },
+  );
+
+  // タイトルに日本語が多く含まれる映画のみをフィルタリング
+  const isJapanese = response.data.results.map((data) => {
+    return isMostlyJapanese(data.title);
+  });
+
+  const filteredMovies = response.data.results.filter((_, index) => {
+    return isJapanese[index];
+  });
+
+  // ロゴ情報と YouTube キーを並列で取得
+  const upComingMovies = await Promise.all(
+    filteredMovies.map(async (movie) => {
+      const [imageResponse, videoResponse] = await Promise.all([
+        tmdbApi.get<ImagesJson>(`/movie/${movie.id}/images`, {
+          params: { language: "ja" },
+        }),
+        tmdbApi.get<DefaultResponse<VideoItemJson>>(
+          `/movie/${movie.id}/videos`,
+          { params: { language: "ja" } },
+        ),
+      ]);
+
+      const logoPath = imageResponse.data.logos?.[0]?.file_path ?? null;
+      const youtubeKey = await formatVideo(videoResponse.data);
+
+      return {
+        ...formatMovie(movie),
+        logo_path: logoPath,
+        youtube_key: youtubeKey,
+      };
+    }),
+  );
+
+  return upComingMovies;
 }
