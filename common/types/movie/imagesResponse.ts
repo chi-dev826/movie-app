@@ -1,5 +1,5 @@
 // 画像レスポンス型定義
-export type ImagesJson = {
+export type ImageJson = {
   backdrops: {
     aspect_ratio: number;
     file_path: string;

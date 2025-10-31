@@ -1,26 +1,10 @@
-import { tmdbApi } from "../lib/tmdbClient";
-import { youtubeApi } from "../lib/youtubeClient";
-import { MovieDetailJson, MovieDetail, Movie, MovieJson } from "@/types/movie";
+import { MovieDetailJson, MovieDetail, MovieJson, Movie } from "@/types/movie";
+import { ImageJson } from "@/types/movie/imagesResponse";
+import { VideoItemJson } from "@/types/movie/videos";
 import { CollectionPart } from "@/types/collection";
 import { DefaultResponse } from "@/types/common";
-import { VideoItemJson } from "@/types/movie/videos";
-import { ImagesJson } from "@/types/movie/imagesResponse";
 import { MovieWatchProvidersResponse } from "@/types/watch";
-
-// YouTube APIの型定義
-interface YouTubeVideoStatus {
-  id: string;
-  status: {
-    privacyStatus: "public" | "private" | "unlisted";
-    embeddable: boolean;
-  };
-}
-
-interface YouTubeVideosResponse {
-  items: YouTubeVideoStatus[];
-}
-
-// === データ整形関数群 ===
+import { fetchVideoStatus } from "../lib/youtubeClient";
 
 export const formatMovie = (movie: MovieJson | CollectionPart): Movie => {
   return {
@@ -60,54 +44,28 @@ export const formatVideo = async (
     return null;
   }
 
-  const youtubeVideos = results;
-  const officialTrailer = youtubeVideos.find(
-    (video) => video.official && video.type === "Trailer",
-  );
-  const trailer = youtubeVideos.find((video) => video.type === "Trailer");
-  const officialVideo = youtubeVideos.find((video) => video.official);
-
-  const videoItems = [officialTrailer, trailer, officialVideo].filter(
-    (v): v is VideoItemJson => !!v?.key,
+  const youtubeTrailers = results.filter(
+    (video) => video.site === "YouTube" && video.type === "Trailer",
   );
 
-  const uniqueVideos = [...new Set(videoItems)];
-
-  if (uniqueVideos.length === 0) {
+  if (youtubeTrailers.length === 0) {
     return null;
   }
 
-  try {
-    const response = await youtubeApi.get<YouTubeVideosResponse>("/videos", {
-      params: {
-        part: "status",
-        id: uniqueVideos.map((v) => v.key).join(","),
-      },
-    });
-
-    const publicVideos = new Set(
-      response.data.items
-        .filter(
-          (item) =>
-            item.status.privacyStatus === "public" && item.status.embeddable,
-        )
-        .map((item) => item.id),
-    );
-
-    for (const video of uniqueVideos) {
-      if (publicVideos.has(video.key)) {
-        return video.key;
+  for (const trailer of youtubeTrailers) {
+    const videoStatus = await fetchVideoStatus(trailer.key);
+    if (videoStatus && videoStatus.items && videoStatus.items.length > 0) {
+      const status = videoStatus.items[0].status;
+      if (status && status.privacyStatus === "public") {
+        return trailer.key;
       }
     }
-  } catch (error) {
-    console.error("Error fetching from YouTube API:", error);
-    return null;
   }
 
   return null;
 };
 
-export const formatImage = (data: ImagesJson): string | null => {
+export const formatImage = (data: ImageJson) => {
   return data.logos?.[0]?.file_path ?? null;
 };
 
@@ -132,34 +90,26 @@ export const formatWatchProviders = (
   );
 };
 
-// 映画リストにロゴ情報を付与する共通関数
-export const enrichMovieList = async (
+export const isMostlyJapanese = (title: string): boolean => {
+  const jpChars = title.match(/[\u3040-\u30FF\u4E00-\u9FFF]/g) || [];
+  const ratio = jpChars.length / title.length;
+  return ratio > 0.3; // 30%以上が日本語なら日本語タイトルとみなす
+};
+
+export const enrichMovieListWithLogos = (
   movies: (MovieJson | CollectionPart)[],
-): Promise<Movie[]> => {
+  imageResponses: ImageJson[],
+): Movie[] => {
   if (!movies || movies.length === 0) {
     return [];
   }
 
-  const imagePromises = movies.map((movie) =>
-    tmdbApi.get<ImagesJson>(`/movie/${movie.id}/images`, {
-      params: { language: "ja" },
-    }),
-  );
-
-  const imageResponses = await Promise.all(imagePromises);
-
   return movies.map((movie, index) => {
     const formattedMovie = formatMovie(movie);
-    const logos = imageResponses[index].data.logos;
+    const logos = imageResponses[index].logos;
     return {
       ...formattedMovie,
       logo_path: logos?.[0]?.file_path ?? null,
     };
   });
-};
-
-export const isMostlyJapanese = (title: string): boolean => {
-  const jpChars = title.match(/[\u3040-\u30FF\u4E00-\u9FFF]/g) || [];
-  const ratio = jpChars.length / title.length;
-  return ratio > 0.3; // 30%以上が日本語なら日本語タイトルとみなす
 };

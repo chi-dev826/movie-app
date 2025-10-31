@@ -1,7 +1,8 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
@@ -22,3 +23,18 @@ youtubeApi.interceptors.request.use((config) => {
   };
   return config;
 });
+
+export const fetchVideoStatus = async (videoId: string) => {
+  try {
+    const response = await youtubeApi.get("/videos", {
+      params: {
+        part: "status",
+        id: videoId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching video status from YouTube:", error);
+    return null;
+  }
+};
