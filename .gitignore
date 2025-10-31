@@ -17,10 +17,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Python virtual environment
-venv/
-.venv/
-
 # Node.js dependencies
 node_modules/
 
@@ -34,9 +30,11 @@ dist-ssr/
 
 # Project-specific tools
 .serena/
+.gemini/
 
 # Local files
 *.local
+.env
 *.suo
 *.ntvs*
 *.njsproj

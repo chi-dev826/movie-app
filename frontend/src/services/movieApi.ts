@@ -1,15 +1,21 @@
-import { Movie, MovieJson, MovieDetail } from '@/types/movie';
+import { MovieJson, MovieDetail, Movie } from '@/types/movie';
 import { CollectionPart } from '@/types/collection';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://192.168.0.10:3000/api';
 
 export interface FullMovieData {
   detail: MovieDetail;
   video: string | null;
   similar: MovieJson[];
   image: string | null;
-  watchProviders: string[];
-  collections: CollectionPart[];
+  watchProviders: { logo_path: string | null; name: string }[];
+  collections: CollectionPart[] | null;
+}
+export interface MovieListResponse {
+  popular: MovieJson[];
+  now_playing: MovieJson[];
+  top_rated: MovieJson[];
+  high_rated: MovieJson[];
 }
 
 /**
@@ -30,10 +36,6 @@ export const fetchFromApi = async <T>(endpoint: string): Promise<T> => {
   return response.json();
 };
 
-export const fetchPopularMovies = async (): Promise<Movie[]> => {
-  return fetchFromApi<MovieJson[]>('/movie/popular?language=ja&page=1');
-};
-
 export const fetchFullMovieData = async (movieId: string): Promise<FullMovieData> => {
   return fetchFromApi<FullMovieData>(`/movie/${movieId}/full`);
 };
@@ -42,4 +44,12 @@ export const searchMovies = async (query: string): Promise<MovieJson[]> => {
   return fetchFromApi<MovieJson[]>(
     `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1&include_adult=false`,
   );
+};
+
+export const fetchMovieList = async (): Promise<MovieListResponse> => {
+  return fetchFromApi<MovieListResponse>('/movies/home');
+};
+
+export const fetchUpcomingMovies = async (): Promise<Movie[]> => {
+  return fetchFromApi<Movie[]>('/movies/upcoming');
 };
