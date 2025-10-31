@@ -53,7 +53,7 @@ function MovieDetailPage() {
         {/* フェードアウトする背景画像 */}
         <AnimatePresence>
           {isBackdropVisible && data?.detail?.backdrop_path && (
-            <div className="absolute inset-0 z-10">
+            <div className="absolute inset-0">
               <motion.img
                 key={data.detail.backdrop_path}
                 initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
