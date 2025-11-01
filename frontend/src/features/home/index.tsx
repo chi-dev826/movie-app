@@ -1,4 +1,4 @@
-import { useMovieList, useUpcomingMovies } from '../../hooks/useMovieList';
+import { useMovieList, useUpcomingMovies } from '../../hooks/useMovies';
 import HeroSwiper from './components/HeroSwiper';
 import MovieCard from '../../components/MovieCard';
 import { ArrowTrendingUpIcon } from '@heroicons/react/20/solid';

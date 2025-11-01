@@ -27,6 +27,9 @@ export const tmdbApi = axios.create({
     Accept: "application/json",
     "Cache-Control": "no-cache",
   },
+  params: {
+    language: "ja-JP",
+  },
 });
 
 export class TmdbRepository {
@@ -36,33 +39,22 @@ export class TmdbRepository {
     this.api = apiInstance;
   }
 
-  async getMovieDetails(
-    movieId: number,
-    language = "ja",
-  ): Promise<MovieDetailJson> {
-    const response = await this.api.get<MovieDetailJson>(`/movie/${movieId}`, {
-      params: { language },
-    });
+  async getMovieDetails(movieId: number): Promise<MovieDetailJson> {
+    const response = await this.api.get<MovieDetailJson>(`/movie/${movieId}`);
     return response.data;
   }
 
   async getMovieVideos(
     movieId: number,
-    language = "ja",
   ): Promise<DefaultResponse<VideoItemJson>> {
     const response = await this.api.get<DefaultResponse<VideoItemJson>>(
       `/movie/${movieId}/videos`,
-      {
-        params: { language },
-      },
     );
     return response.data;
   }
 
-  async getMovieImages(movieId: number, language = "ja"): Promise<ImageJson> {
-    const response = await this.api.get<ImageJson>(`/movie/${movieId}/images`, {
-      params: { language },
-    });
+  async getMovieImages(movieId: number): Promise<ImageJson> {
+    const response = await this.api.get<ImageJson>(`/movie/${movieId}/images`);
     return response.data;
   }
 
@@ -77,27 +69,20 @@ export class TmdbRepository {
 
   async getSimilarMovies(
     movieId: number,
-    language = "ja",
     page = 1,
   ): Promise<PaginatedResponse<MovieJson>> {
     const response = await this.api.get<PaginatedResponse<MovieJson>>(
       `/movie/${movieId}/similar`,
       {
-        params: { language, page },
+        params: { page },
       },
     );
     return response.data;
   }
 
-  async getCollectionDetails(
-    collectionId: number,
-    language = "ja",
-  ): Promise<CollectionJson> {
+  async getCollectionDetails(collectionId: number): Promise<CollectionJson> {
     const response = await this.api.get<CollectionJson>(
       `/collection/${collectionId}`,
-      {
-        params: { language },
-      },
     );
     return response.data;
   }
