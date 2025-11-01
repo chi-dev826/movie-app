@@ -12,6 +12,7 @@ const movieKeys = {
   list: (type: string) => [...movieKeys.lists(), type] as const,
   details: () => [...movieKeys.all, 'detail'] as const,
   detail: (id: string | undefined) => [...movieKeys.details(), id] as const,
+  search: (query: string) => [...movieKeys.all, 'search', query] as const,
 };
 
 export const useFullMovieData = (movieId: string | undefined) => {
@@ -25,7 +26,7 @@ export const useFullMovieData = (movieId: string | undefined) => {
 
 export const useSearchMovies = (query: string) => {
   return useQuery({
-    queryKey: movieKeys.list(query),
+    queryKey: movieKeys.search(query),
     queryFn: () => searchMovies(query),
     enabled: query.length > 0,
     staleTime: 1000 * 60 * 10, // オプション：キャッシュ時間を設定(10分)
