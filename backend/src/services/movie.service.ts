@@ -13,7 +13,7 @@ type MovieDetailTypes = {
 };
 
 type MovieListTypes = Record<
-  "popular" | "now_playing" | "top_rated" | "highRated",
+  "popular" | "now_playing" | "top_rated" | "high_rated",
   Movie[]
 >;
 
@@ -83,21 +83,18 @@ export class MovieService {
     const [popularRes, nowPlayingRes, topRatedRes, highRatedRes] =
       await Promise.all([
         this.tmdbRepository.getDiscoverMovies({
-          language: "ja",
           "vote_count.gte": 20000,
           sort_by: "popularity.desc",
           page: 1,
           region: "JP",
         }),
         this.tmdbRepository.getDiscoverMovies({
-          language: "ja",
           "vote_count.gte": 1000,
           sort_by: "primary_release_date.desc",
           page: 1,
           region: "JP",
         }),
         this.tmdbRepository.getDiscoverMovies({
-          language: "ja",
           "vote_count.gte": 1000,
           primary_release_year: "2022-01-01",
           sort_by: "vote_average.desc",
@@ -105,7 +102,6 @@ export class MovieService {
           region: "JP",
         }),
         this.tmdbRepository.getDiscoverMovies({
-          language: "ja",
           "vote_count.gte": 5000,
           primary_release_year: "2023-01-01",
           sort_by: "vote_count.desc",
@@ -118,13 +114,12 @@ export class MovieService {
       popular: popularRes.results.map(dataFormatter.formatMovie),
       now_playing: nowPlayingRes.results.map(dataFormatter.formatMovie),
       top_rated: topRatedRes.results.map(dataFormatter.formatMovie),
-      highRated: highRatedRes.results.map(dataFormatter.formatMovie),
+      high_rated: highRatedRes.results.map(dataFormatter.formatMovie),
     };
   }
 
   async getUpcomingMovieList(): Promise<Movie[]> {
     const response = await this.tmdbRepository.getDiscoverMovies({
-      language: "ja-JP",
       region: "JP",
       watch_region: "JP",
       sort_by: "popularity.desc",

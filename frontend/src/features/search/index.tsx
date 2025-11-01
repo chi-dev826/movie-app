@@ -46,7 +46,7 @@ const SearchPage = () => {
             <p className="mt-2 text-gray-500">別のキーワードで検索してみてください</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8">
             {searchResults?.map((movie) => (
               <MovieCard key={movie.id} movie={movie} layout="poster" />
             ))}

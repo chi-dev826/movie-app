@@ -42,7 +42,7 @@ export const fetchFullMovieData = async (movieId: string): Promise<FullMovieData
 
 export const searchMovies = async (query: string): Promise<MovieJson[]> => {
   return fetchFromApi<MovieJson[]>(
-    `/search/movie?query=${encodeURIComponent(query)}&language=ja&page=1&include_adult=false`,
+    `/search/movie?q=${encodeURIComponent(query)}&language=ja&page=1&include_adult=false`,
   );
 };
 
