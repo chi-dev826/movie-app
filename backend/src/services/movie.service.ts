@@ -165,7 +165,6 @@ export class MovieService {
 
   async searchMovies(query: string): Promise<Movie[]> {
     const response = await this.tmdbRepository.searchMovies({ query });
-    console.log(response);
     return response.results.map(dataFormatter.formatMovie);
   }
 }
