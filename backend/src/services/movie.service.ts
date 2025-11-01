@@ -13,7 +13,7 @@ type MovieDetailTypes = {
 };
 
 type MovieListTypes = Record<
-  "popular" | "now_playing" | "top_rated" | "highRated",
+  "popular" | "now_playing" | "top_rated" | "high_rated",
   Movie[]
 >;
 
@@ -118,7 +118,7 @@ export class MovieService {
       popular: popularRes.results.map(dataFormatter.formatMovie),
       now_playing: nowPlayingRes.results.map(dataFormatter.formatMovie),
       top_rated: topRatedRes.results.map(dataFormatter.formatMovie),
-      highRated: highRatedRes.results.map(dataFormatter.formatMovie),
+      high_rated: highRatedRes.results.map(dataFormatter.formatMovie),
     };
   }
 
