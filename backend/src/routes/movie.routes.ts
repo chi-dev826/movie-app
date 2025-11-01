@@ -14,7 +14,7 @@ router.get(
   (req: Request, res: Response, next: NextFunction) =>
     movieController.getMovieDetails(req, res, next),
 );
-router.get("/search", (req: Request, res: Response, next: NextFunction) =>
+router.get("/search/movie", (req: Request, res: Response, next: NextFunction) =>
   movieController.searchMovies(req, res, next),
 );
 router.get("/movies/home", (req: Request, res: Response, next: NextFunction) =>
