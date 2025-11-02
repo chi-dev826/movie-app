@@ -23,13 +23,9 @@
     /* Path Aliases */
     "baseUrl": "./src",
     "paths": {
-      "@/types/*": [
-        "../../common/types/*"
-      ],
-      "@/*": [
-        "*"
-      ]
+      "@/types/*": ["../../shared/types/*"],
+      "@/*": ["*"]
     }
   },
-  "include": ["src", "vite.config.ts", "playwright.config.ts", "../../common/**/*.ts"]
+  "include": ["src", "vite.config.ts", "playwright.config.ts", "../../shared/**/*.ts"]
 }

@@ -6,7 +6,7 @@ import { EffectCoverflow, Autoplay, Pagination, Navigation } from 'swiper/module
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactPlayer from 'react-player';
 
-import type { Movie } from '@/types/movie';
+import type { Movie } from '@/types/app';
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
 

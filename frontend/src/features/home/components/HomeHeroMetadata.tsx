@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { TMDB_IMAGE_BASE_URL } from '../../../../config';
-import type { Movie } from '@/types/movie';
+import type { Movie } from '@/types/app';
 
 type Props = {
   movie: Movie;

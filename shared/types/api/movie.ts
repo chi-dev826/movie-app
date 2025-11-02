@@ -1,4 +1,4 @@
-import { Movie, MovieDetail } from "../app/movie";
+import { Movie, MovieDetail } from "../domain";
 
 export type FullMovieData = {
   detail: MovieDetail;
