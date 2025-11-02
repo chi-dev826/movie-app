@@ -1,6 +1,6 @@
 import { TMDB_IMAGE_BASE_URL } from '../../config';
 import { Link } from 'react-router-dom';
-import type { Movie } from '@/types/movie';
+import type { Movie } from '@/types/domain';
 import { Star } from 'lucide-react';
 
 type Props = {

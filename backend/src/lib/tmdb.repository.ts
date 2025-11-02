@@ -2,13 +2,16 @@ import axios from "axios";
 import dotenv from "dotenv";
 import path from "path";
 
-import { MovieDetailJson, MovieJson } from "@/types/movie";
-import { VideoItemJson } from "@/types/movie/videos";
-import { ImageJson } from "@/types/movie/imagesResponse";
-import { CollectionJson } from "@/types/collection";
-import { PaginatedResponse, DefaultResponse } from "@/types/common";
-import { MovieWatchProvidersResponse } from "@/types/watch";
-import { DiscoverMovieParams } from "@/types/discoverQuery";
+import { MovieDetailResponse, MovieResponse } from "@/types/external/tmdb";
+import { VideoItem } from "@/types/external/tmdb";
+import { ImageResponse } from "@/types/external/tmdb";
+import { CollectionResponse } from "@/types/external/tmdb";
+import {
+  PaginatedResponse,
+  DefaultResponse,
+  MovieWatchProvidersResponse,
+} from "@/types/external/tmdb";
+import { DiscoverMovieParams } from "@/types/external/tmdb";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
@@ -39,22 +42,24 @@ export class TmdbRepository {
     this.api = apiInstance;
   }
 
-  async getMovieDetails(movieId: number): Promise<MovieDetailJson> {
-    const response = await this.api.get<MovieDetailJson>(`/movie/${movieId}`);
+  async getMovieDetails(movieId: number): Promise<MovieDetailResponse> {
+    const response = await this.api.get<MovieDetailResponse>(
+      `/movie/${movieId}`,
+    );
     return response.data;
   }
 
-  async getMovieVideos(
-    movieId: number,
-  ): Promise<DefaultResponse<VideoItemJson>> {
-    const response = await this.api.get<DefaultResponse<VideoItemJson>>(
+  async getMovieVideos(movieId: number): Promise<DefaultResponse<VideoItem>> {
+    const response = await this.api.get<DefaultResponse<VideoItem>>(
       `/movie/${movieId}/videos`,
     );
     return response.data;
   }
 
-  async getMovieImages(movieId: number): Promise<ImageJson> {
-    const response = await this.api.get<ImageJson>(`/movie/${movieId}/images`);
+  async getMovieImages(movieId: number): Promise<ImageResponse> {
+    const response = await this.api.get<ImageResponse>(
+      `/movie/${movieId}/images`,
+    );
     return response.data;
   }
 
@@ -70,8 +75,8 @@ export class TmdbRepository {
   async getSimilarMovies(
     movieId: number,
     page = 1,
-  ): Promise<PaginatedResponse<MovieJson>> {
-    const response = await this.api.get<PaginatedResponse<MovieJson>>(
+  ): Promise<PaginatedResponse<MovieResponse>> {
+    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       `/movie/${movieId}/similar`,
       {
         params: { page },
@@ -80,8 +85,10 @@ export class TmdbRepository {
     return response.data;
   }
 
-  async getCollectionDetails(collectionId: number): Promise<CollectionJson> {
-    const response = await this.api.get<CollectionJson>(
+  async getCollectionDetails(
+    collectionId: number,
+  ): Promise<CollectionResponse> {
+    const response = await this.api.get<CollectionResponse>(
       `/collection/${collectionId}`,
     );
     return response.data;
@@ -89,8 +96,8 @@ export class TmdbRepository {
 
   async getDiscoverMovies(
     params: DiscoverMovieParams,
-  ): Promise<PaginatedResponse<MovieJson>> {
-    const response = await this.api.get<PaginatedResponse<MovieJson>>(
+  ): Promise<PaginatedResponse<MovieResponse>> {
+    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       "/discover/movie",
       {
         params,
@@ -101,8 +108,8 @@ export class TmdbRepository {
 
   async searchMovies(params: {
     query: string;
-  }): Promise<PaginatedResponse<MovieJson>> {
-    const response = await this.api.get<PaginatedResponse<MovieJson>>(
+  }): Promise<PaginatedResponse<MovieResponse>> {
+    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       "/search/movie",
       { params },
     );

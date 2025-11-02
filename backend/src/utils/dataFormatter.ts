@@ -1,12 +1,17 @@
-import { MovieDetailJson, MovieDetail, MovieJson, Movie } from "@/types/movie";
-import { ImageJson } from "@/types/movie/imagesResponse";
-import { VideoItemJson } from "@/types/movie/videos";
-import { CollectionPart } from "@/types/collection";
-import { DefaultResponse } from "@/types/common";
-import { MovieWatchProvidersResponse } from "@/types/watch";
+import { MovieDetail, Movie } from "@/types/domain";
+import {
+  MovieDetailResponse,
+  MovieResponse,
+  ImageResponse,
+} from "@/types/external/tmdb";
+import { DefaultResponse, VideoItem } from "@/types/external/tmdb";
+import { MovieWatchProvidersResponse } from "@/types/external/tmdb";
+import { CollectionResponse } from "@/types/external/tmdb";
 import { fetchVideoStatus } from "../lib/youtubeClient";
 
-export const formatMovie = (movie: MovieJson | CollectionPart): Movie => {
+export const formatMovie = (
+  movie: MovieResponse | CollectionResponse["parts"],
+): Movie => {
   return {
     id: movie.id,
     backdrop_path: movie.backdrop_path,
@@ -18,7 +23,7 @@ export const formatMovie = (movie: MovieJson | CollectionPart): Movie => {
   };
 };
 
-export const formatDetail = (data: MovieDetailJson): MovieDetail => {
+export const formatDetail = (data: MovieDetailResponse): MovieDetail => {
   return {
     id: data.id,
     backdrop_path: data.backdrop_path,
@@ -30,14 +35,14 @@ export const formatDetail = (data: MovieDetailJson): MovieDetail => {
     year: data.release_date ? parseInt(data.release_date.slice(0, 4)) : null,
     runtime: data.runtime,
     vote_average: data.vote_average / 2, // 10点満点を5点満点に変換
-    genres: data.genres?.map((genre) => genre.name) ?? null,
+    genres: data.genres?.map((genre: { name: string }) => genre.name) ?? null,
     company_logo: data.production_companies?.[0]?.logo_path ?? null,
     homePageUrl: data.homepage,
   };
 };
 
 export const formatVideo = async (
-  data: DefaultResponse<VideoItemJson>,
+  data: DefaultResponse<VideoItem>,
 ): Promise<string | null> => {
   const { results } = data;
   if (!results || results.length === 0) {
@@ -45,7 +50,7 @@ export const formatVideo = async (
   }
 
   const youtubeTrailers = results.filter(
-    (video) => video.site === "YouTube" && video.type === "Trailer",
+    (video: VideoItem) => video.site === "YouTube" && video.type === "Trailer",
   );
 
   if (youtubeTrailers.length === 0) {
@@ -65,7 +70,7 @@ export const formatVideo = async (
   return null;
 };
 
-export const formatImage = (data: ImageJson) => {
+export const formatImage = (data: ImageResponse) => {
   return data.logos?.[0]?.file_path ?? null;
 };
 
@@ -77,13 +82,13 @@ export const formatWatchProviders = (
   return (
     regionalData.flatrate
       ?.filter(
-        (p) =>
+        (p: { provider_name: string }) =>
           p.provider_name !== "Amazon Prime Video with Ads" &&
           p.provider_name !== "Netflix Standard with Ads" &&
           p.provider_name !== "dAnime Amazon Channel" &&
           p.provider_name !== "Anime Times Amazon Channel",
       )
-      .map((p) => ({
+      .map((p: { logo_path: string | null; provider_name: string }) => ({
         logo_path: p.logo_path,
         name: p.provider_name,
       })) ?? []
@@ -97,8 +102,8 @@ export const isMostlyJapanese = (title: string): boolean => {
 };
 
 export const enrichMovieListWithLogos = (
-  movies: (MovieJson | CollectionPart)[],
-  imageResponses: ImageJson[],
+  movies: (MovieResponse | CollectionResponse["parts"])[],
+  imageResponses: ImageResponse[],
 ): Movie[] => {
   if (!movies || movies.length === 0) {
     return [];
