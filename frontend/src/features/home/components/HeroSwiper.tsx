@@ -6,7 +6,7 @@ import { EffectCoverflow, Autoplay, Pagination, Navigation } from 'swiper/module
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactPlayer from 'react-player';
 
-import type { Movie } from '@/types/app';
+import type { Movie } from '@/types/domain';
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
 
@@ -47,7 +47,7 @@ const HeroSwiper = ({ movies }: Props) => {
     <Swiper
       {...SwiperSettings}
       onSwiper={(swiper) => (swiperRef.current = swiper)}
-      className="hero-swiper w-full aspect-video lg:aspect-[21/9] 3xl:aspect-[27/9] 4xl:aspect-[27/9]"
+      className="hero-swiper w-full aspect-video lg:aspect-[21/9] 3xl:aspect-[24/9] 4xl:aspect-[27/9]"
     >
       {movies.map((movie) => (
         <SwiperSlide

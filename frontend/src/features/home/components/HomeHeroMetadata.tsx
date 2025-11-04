@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { TMDB_IMAGE_BASE_URL } from '../../../../config';
-import type { Movie } from '@/types/app';
+import type { Movie } from '@/types/domain';
 
 type Props = {
   movie: Movie;
@@ -58,7 +58,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
           className="max-w-2xl leading-relaxed text-gray-200 drop-shadow-md"
         >
           {/* 内側に余白を持たせて高さ0時に内容が切れるようにする */}
-          <div className="py-3 text-xs md:text-sm lg:text-md 2xl:text-lg 4xl:text-xl">
+          <div className="text-xs line-clamp-6 md:text-sm lg:text-md 2xl:text-lg 4xl:text-xl">
             {movie.overview}
           </div>
         </motion.div>
