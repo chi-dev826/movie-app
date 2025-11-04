@@ -47,7 +47,7 @@ const HeroSwiper = ({ movies }: Props) => {
     <Swiper
       {...SwiperSettings}
       onSwiper={(swiper) => (swiperRef.current = swiper)}
-      className="hero-swiper w-full aspect-video lg:aspect-[21/9] 3xl:aspect-[24/9] 4xl:aspect-[27/9]"
+      className="hero-swiper w-full aspect-video lg:aspect-[21/9] 3xl:aspect-[24/9] 4xl:aspect-[25/9]"
     >
       {movies.map((movie) => (
         <SwiperSlide

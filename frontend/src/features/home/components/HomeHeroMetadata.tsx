@@ -34,7 +34,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
               className="object-cover max-w-28 md:max-w-52 lg:max-w-64 2xl:max-w-72 3xl:max-w-sm 4xl:max-w-xl drop-shadow-lg"
             />
           ) : (
-            <span className="text-lg font-bold md:text-2xl lg:text-4xl 2xl:text-6xl 4xl:text-9xl drop-shadow-lg">
+            <span className="text-lg font-bold md:text-2xl lg:text-4xl 2xl:text-6xl 4xl:text-8xl drop-shadow-lg">
               {movie.title}
             </span>
           )}
@@ -55,7 +55,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
             marginTop: { duration: 0.28 },
           }}
           style={{ overflow: 'hidden' }}
-          className="max-w-2xl leading-relaxed text-gray-200 drop-shadow-md"
+          className="max-w-[2/5] leading-relaxed text-gray-200 drop-shadow-md"
         >
           {/* 内側に余白を持たせて高さ0時に内容が切れるようにする */}
           <div className="text-xs line-clamp-6 md:text-sm lg:text-md 2xl:text-lg 4xl:text-xl">
