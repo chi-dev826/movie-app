@@ -87,10 +87,10 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
     >
       {/* フェードアウトする背景画像 */}
       <AnimatePresence>
-        {isBackdropVisible && movie.youtube_key && (
+        {isBackdropVisible && movie.video && (
           <div className="absolute inset-0 z-10">
             <motion.img
-              key={`https://image.tmdb.org/t/p/original${movie.youtube_key}`}
+              key={`https://image.tmdb.org/t/p/original${movie.video}`}
               initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
               animate={{ opacity: 1 }}
               exit={{
@@ -109,14 +109,14 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
       </AnimatePresence>
 
       {/* 動画プレイヤー */}
-      {movie.youtube_key && isVideoVisible ? (
+      {movie.video && isVideoVisible ? (
         <div className="absolute top-0 right-0 w-full h-full overflow-hidden">
           <div
             className="absolute w-full h-full top-1/2 left-1/2"
             style={{ transform: 'translate(-50%, -50%) scale(1.35)' }}
           >
             <ReactPlayer
-              src={`https://www.youtube.com/watch?v=${movie.youtube_key}`}
+              src={`https://www.youtube.com/watch?v=${movie.video}`}
               playing
               muted
               controls={false}
