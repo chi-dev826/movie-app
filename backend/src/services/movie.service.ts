@@ -1,21 +1,9 @@
-import { TmdbRepository } from "lib/tmdb.repository";
+import { TmdbRepository } from "../lib/tmdb.repository";
 import * as dataFormatter from "../utils/dataFormatter";
-import { Movie, MovieDetail } from "@/types/movie";
-import { CollectionPart } from "@/types/collection";
-
-type MovieDetailTypes = {
-  detail: MovieDetail;
-  video: string | null;
-  image: string | null;
-  watchProviders: { logo_path: string | null; name: string }[];
-  similar: Movie[];
-  collections: Movie[];
-};
-
-type MovieListTypes = Record<
-  "popular" | "now_playing" | "top_rated" | "high_rated",
-  Movie[]
->;
+import { Movie } from "@/types/domain";
+import { CollectionResponse, ImageResponse } from "@/types/external/tmdb";
+import { FullMovieData, MovieListResponse } from "@/types/api";
+import { fetchVideoStatus } from "../lib/youtubeClient";
 
 export class MovieService {
   private readonly tmdbRepository: TmdbRepository;
@@ -23,41 +11,106 @@ export class MovieService {
   constructor(tmdbRepository: TmdbRepository) {
     this.tmdbRepository = tmdbRepository;
   }
-  async getMovieDetails(movieId: number): Promise<MovieDetailTypes> {
-    const [detailRes, videoRes, similarRes, imageRes, watchProvidersRes] =
-      await Promise.all([
-        this.tmdbRepository.getMovieDetails(movieId),
-        this.tmdbRepository.getMovieVideos(movieId),
-        this.tmdbRepository.getSimilarMovies(movieId),
-        this.tmdbRepository.getMovieImages(movieId),
-        this.tmdbRepository.getMovieWatchProviders(movieId),
-      ]);
 
-    let collectionMovies: CollectionPart[] = [];
+  private getSettledResult<T>(
+    result: PromiseSettledResult<T>,
+    dataType: string,
+    movieId: number,
+  ): T | null {
+    if (result.status === "fulfilled") {
+      return result.value;
+    } else {
+      console.error(
+        `Error fetching ${dataType} for movie ID ${movieId}:`,
+        result.reason,
+      );
+      return null;
+    }
+  }
+
+  private async isPublicKey(key: string | null): Promise<string | null> {
+    if (!key) {
+      return null;
+    }
+    const result = await fetchVideoStatus(key);
+    const status = result?.items?.[0]?.status;
+    return status && status.privacyStatus === "public" ? key : null;
+  }
+
+  async getMovieDetails(movieId: number): Promise<FullMovieData> {
+    const results = await Promise.allSettled([
+      this.tmdbRepository.getMovieDetails(movieId),
+      this.tmdbRepository.getMovieVideos(movieId),
+      this.tmdbRepository.getSimilarMovies(movieId),
+      this.tmdbRepository.getMovieImages(movieId),
+      this.tmdbRepository.getMovieWatchProviders(movieId),
+    ]);
+
+    const detailRes = this.getSettledResult(
+      results[0],
+      "MovieDetails",
+      movieId,
+    );
+    const videoRes = this.getSettledResult(results[1], "MovieVideos", movieId);
+    const similarRes = this.getSettledResult(
+      results[2],
+      "SimilarMovies",
+      movieId,
+    );
+    const imageRes = this.getSettledResult(results[3], "MovieImages", movieId);
+    const watchProvidersRes = this.getSettledResult(
+      results[4],
+      "MovieWatchProviders",
+      movieId,
+    );
+
+    // 必須データのチェック
+    if (!detailRes) {
+      throw new Error(
+        `Essential movie details for ID ${movieId} could not be fetched.`,
+      );
+    }
+
+    // 別のエンドポイントからシリーズ作品、または関連作品を取得
+    let collectionMovies: CollectionResponse["parts"][] = [];
     if (detailRes.belongs_to_collection) {
       const collectionRes = await this.tmdbRepository.getCollectionDetails(
         detailRes.belongs_to_collection.id,
       );
-      collectionMovies = collectionRes.parts;
+      collectionMovies = collectionRes.parts ? [collectionRes.parts] : [];
     }
 
-    const similarMovies = similarRes.results ?? [];
+    const similarMovies = similarRes?.results ?? []; // similarResがnullの場合を考慮
 
-    const [similarImageResponses, collectionImageResponses] = await Promise.all(
-      [
-        Promise.all(
-          similarMovies.map((movie) =>
-            this.tmdbRepository.getMovieImages(movie.id),
-          ),
-        ),
-        Promise.all(
-          collectionMovies.map((movie) =>
-            this.tmdbRepository.getMovieImages(movie.id),
-          ),
-        ),
-      ],
+    const similarImageResults = await Promise.allSettled(
+      similarMovies.map((movie) =>
+        this.tmdbRepository.getMovieImages(movie.id),
+      ),
+    );
+    const collectionImageResults = await Promise.allSettled(
+      collectionMovies.map((movie) =>
+        this.tmdbRepository.getMovieImages(movie.id),
+      ),
     );
 
+    const similarImageResponses: (ImageResponse | null)[] =
+      similarImageResults.map((res) =>
+        res.status === "fulfilled" ? res.value : null,
+      );
+    const collectionImageResponses: (ImageResponse | null)[] =
+      collectionImageResults.map((res) =>
+        res.status === "fulfilled" ? res.value : null,
+      );
+
+    const formattedDetail = dataFormatter.formatDetail(detailRes);
+    const formattedImage = imageRes
+      ? dataFormatter.formatImage(imageRes)
+      : null;
+    const formattedWatchProviders = watchProvidersRes
+      ? dataFormatter.formatWatchProviders(watchProvidersRes)
+      : [];
+
+    // ロゴ付きで映画リストを整形
     const formattedSimilar = dataFormatter.enrichMovieListWithLogos(
       similarMovies,
       similarImageResponses,
@@ -67,19 +120,24 @@ export class MovieService {
       collectionImageResponses,
     );
 
-    const videoKey = await dataFormatter.formatVideo(videoRes);
+    // youtubeApiを叩いて動画の公開状況を確認し、非公開ならnullを返す
+    const key =
+      videoRes?.results.find(
+        (video) => video.site === "YouTube" && video.type === "Trailer",
+      )?.key ?? null;
+    const videoKey: string | null = await this.isPublicKey(key);
 
     return {
-      detail: dataFormatter.formatDetail(detailRes),
+      detail: formattedDetail,
       video: videoKey,
-      image: dataFormatter.formatImage(imageRes),
-      watchProviders: dataFormatter.formatWatchProviders(watchProvidersRes),
+      image: formattedImage,
+      watchProviders: formattedWatchProviders,
       similar: formattedSimilar,
       collections: formattedCollections,
     };
   }
 
-  async getMovieList(): Promise<MovieListTypes> {
+  async getMovieList(): Promise<MovieListResponse> {
     const [popularRes, nowPlayingRes, topRatedRes, highRatedRes] =
       await Promise.all([
         this.tmdbRepository.getDiscoverMovies({
@@ -149,12 +207,18 @@ export class MovieService {
     const upcomingMoviesPromises = filteredMovies.map(async (movie, index) => {
       const { imageResponse, videoResponse } = imageVideoResults[index];
       const logoPath = dataFormatter.formatImage(imageResponse);
-      const youtubeKey = await dataFormatter.formatVideo(videoResponse);
+
+      // youtubeApiを叩いて動画の公開状況を確認し、非公開ならnullを返す
+      const key =
+        videoResponse.results.find(
+          (video) => video.site === "YouTube" && video.type === "Trailer",
+        )?.key ?? null;
+      const youtubeKey: string | null = await this.isPublicKey(key);
 
       return {
         ...dataFormatter.formatMovie(movie),
         logo_path: logoPath,
-        youtube_key: youtubeKey,
+        video: youtubeKey,
       };
     });
 
