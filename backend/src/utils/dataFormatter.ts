@@ -5,11 +5,8 @@ import {
   ImageResponse,
 } from "@/types/external/tmdb";
 import { MovieWatchProvidersResponse } from "@/types/external/tmdb";
-import { CollectionResponse } from "@/types/external/tmdb";
 
-export const formatMovie = (
-  movie: MovieResponse | CollectionResponse["parts"],
-): Movie => {
+export const formatMovie = (movie: MovieResponse): Movie => {
   return {
     id: movie.id,
     backdrop_path: movie.backdrop_path,
@@ -71,7 +68,7 @@ export const isMostlyJapanese = (title: string): boolean => {
 };
 
 export const enrichMovieListWithLogos = (
-  movies: (MovieResponse | CollectionResponse["parts"])[],
+  movies: MovieResponse[],
   imageResponses: (ImageResponse | null)[],
 ): Movie[] => {
   if (!movies || movies.length === 0) {
