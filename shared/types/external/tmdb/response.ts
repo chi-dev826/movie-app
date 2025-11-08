@@ -32,10 +32,10 @@ export type ImageDetails = {
   width: number;
 };
 
-export type ImageResponse = {
-  backdrops: ImageDetails[];
-  posters: ImageDetails[];
-  logos: ImageDetails[];
+export type ImageResponse = Record<
+  "backdrops" | "posters" | "logos",
+  ImageDetails[]
+> & {
   id: number;
 };
 
@@ -61,11 +61,11 @@ export type WatchProvider = {
   provider_name: string;
 };
 
-export type RegionalWatchProviders = {
+export type RegionalWatchProviders = Record<
+  "link" | "flatrate" | "rent" | "buy",
+  WatchProvider[] | string
+> & {
   link: string;
-  flatrate?: WatchProvider[];
-  rent?: WatchProvider[];
-  buy?: WatchProvider[];
 };
 
 export type WatchProvidersByCountry = {
