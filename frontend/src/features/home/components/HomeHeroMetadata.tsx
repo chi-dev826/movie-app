@@ -55,7 +55,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
             marginTop: { duration: 0.28 },
           }}
           style={{ overflow: 'hidden' }}
-          className="max-w-[2/5] leading-relaxed text-gray-200 drop-shadow-md"
+          className="max-w-[40%] leading-relaxed text-gray-200 drop-shadow-md"
         >
           {/* 内側に余白を持たせて高さ0時に内容が切れるようにする */}
           <div className="text-xs line-clamp-6 md:text-sm lg:text-md 2xl:text-lg 4xl:text-xl">
