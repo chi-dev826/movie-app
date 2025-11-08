@@ -8,8 +8,6 @@ export default function NewsAndAnalysisSection({
   movieTitle: string;
 }) {
   const { data: newsItems, isLoading, error } = useMovieNews(movieId, movieTitle);
-  console.log(newsItems);
-
   if (isLoading) {
     return <div>ニュースを読み込み中...</div>;
   }
