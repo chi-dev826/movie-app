@@ -63,7 +63,7 @@ export type WatchProvider = {
 
 export type RegionalWatchProviders = Record<
   "link" | "flatrate" | "rent" | "buy",
-  WatchProvider[] | string
+  WatchProvider[]
 > & {
   link: string;
 };
