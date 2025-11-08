@@ -1,22 +1,8 @@
-import { MovieJson, MovieDetail, Movie } from '@/types/movie';
-import { CollectionPart } from '@/types/collection';
+import { Movie, NewsItem } from '@/types/domain';
+import { FullMovieData, MovieListResponse } from '@/types/api/movie';
+import { MovieResponse } from '@/types/external/tmdb';
 
 const API_BASE_URL = 'http://192.168.0.10:3000/api';
-
-export interface FullMovieData {
-  detail: MovieDetail;
-  video: string | null;
-  similar: MovieJson[];
-  image: string | null;
-  watchProviders: { logo_path: string | null; name: string }[];
-  collections: CollectionPart[] | null;
-}
-export interface MovieListResponse {
-  popular: MovieJson[];
-  now_playing: MovieJson[];
-  top_rated: MovieJson[];
-  high_rated: MovieJson[];
-}
 
 /**
  * 人気映画リスト、映画の詳細、関連映画リスト、映画のyoutubeKeyを取得する
@@ -36,12 +22,16 @@ export const fetchFromApi = async <T>(endpoint: string): Promise<T> => {
   return response.json();
 };
 
-export const fetchFullMovieData = async (movieId: string): Promise<FullMovieData> => {
+export const fetchFullMovieData = async (movieId: number): Promise<FullMovieData> => {
   return fetchFromApi<FullMovieData>(`/movie/${movieId}/full`);
 };
 
-export const searchMovies = async (query: string): Promise<MovieJson[]> => {
-  return fetchFromApi<MovieJson[]>(
+export const fetchEigaComNews = async (movieId: number, movieTitle: string) => {
+  return fetchFromApi<NewsItem[]>(`/movie/${movieId}/eiga-com-news?title=${movieTitle}`);
+};
+
+export const searchMovies = async (query: string): Promise<MovieResponse[]> => {
+  return fetchFromApi<MovieResponse[]>(
     `/search/movie?q=${encodeURIComponent(query)}&language=ja&page=1&include_adult=false`,
   );
 };

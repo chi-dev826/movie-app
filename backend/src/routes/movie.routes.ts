@@ -1,18 +1,18 @@
 import { Router } from "express";
 import { Request, Response, NextFunction } from "express";
-import { MovieController } from "../controllers/movie.controller";
-import { MovieService } from "../services/movie.service";
-import { TmdbRepository } from "../lib/tmdb.repository";
+import { movieController, eigaComController } from "../container";
 
 const router = Router();
-const tmdbRepository = new TmdbRepository();
-const movieService = new MovieService(tmdbRepository);
-const movieController = new MovieController(movieService);
 
 router.get(
   "/movie/:movieId/full",
   (req: Request, res: Response, next: NextFunction) =>
     movieController.getMovieDetails(req, res, next),
+);
+router.get(
+  "/movie/:movieId/eiga-com-news",
+  (req: Request, res: Response, next: NextFunction) =>
+    eigaComController.getEigaComNews(req, res, next),
 );
 router.get("/search/movie", (req: Request, res: Response, next: NextFunction) =>
   movieController.searchMovies(req, res, next),

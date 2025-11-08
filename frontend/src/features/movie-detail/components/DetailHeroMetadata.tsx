@@ -1,5 +1,5 @@
 import { TMDB_IMAGE_BASE_URL } from '../../../../config';
-import { MovieDetail } from '@/types/movie';
+import { MovieDetail } from '@/types/domain';
 import { WindowIcon } from '@heroicons/react/20/solid';
 import { PlayCircleIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';

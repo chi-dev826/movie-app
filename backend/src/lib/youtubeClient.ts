@@ -24,12 +24,12 @@ youtubeApi.interceptors.request.use((config) => {
   return config;
 });
 
-export const fetchVideoStatus = async (videoId: string) => {
+export const fetchVideoStatus = async (key: string) => {
   try {
     const response = await youtubeApi.get("/videos", {
       params: {
         part: "status",
-        id: videoId,
+        id: key,
       },
     });
     return response.data;

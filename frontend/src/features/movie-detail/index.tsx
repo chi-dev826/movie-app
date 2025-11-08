@@ -6,24 +6,26 @@ import { motion } from 'framer-motion';
 
 import MovieCard from '@/components/MovieCard';
 import HeroMetadata from './components/DetailHeroMetadata';
+import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
 import { useFullMovieData } from '@/hooks/useMovies';
 
 function MovieDetailPage() {
   const { id: movieId } = useParams<{ id: string }>();
 
-  const { data, isLoading, error } = useFullMovieData(movieId);
+  const { data, isLoading, error } = useFullMovieData(Number(movieId));
+
   const [isBackdropVisible, setIsBackdropVisible] = useState(true);
 
   useEffect(() => {
-    // 背景が表示状態のときだけタイマーをセットする
-    if (!isBackdropVisible) return;
+    // 背景が表示状態でビデオが存在するときだけタイマーをセットする
+    if (!isBackdropVisible || !data?.video) return;
 
     const timeoutId = window.setTimeout(() => {
       setIsBackdropVisible(false);
     }, 5000);
 
     return () => clearTimeout(timeoutId);
-  }, [isBackdropVisible]);
+  }, [isBackdropVisible, data?.video]);
 
   if (isLoading) {
     return (
@@ -52,7 +54,7 @@ function MovieDetailPage() {
 
         {/* フェードアウトする背景画像 */}
         <AnimatePresence>
-          {isBackdropVisible && data?.detail?.backdrop_path && (
+          {isBackdropVisible && data?.detail?.backdrop_path && data?.video && (
             <div className="absolute inset-0">
               <motion.img
                 key={data.detail.backdrop_path}
@@ -110,17 +112,20 @@ function MovieDetailPage() {
               youtubeKey={data.video ?? null}
             />
           </div>
-          <img
-            src={`https://image.tmdb.org/t/p/original${data.detail.company_logo}`}
-            alt={data.detail.title}
-            style={{ zIndex: 5 }}
-            className="absolute right-0 z-30 flex max-w-16 md:max-w-20 lg:max-w-24 xl:max-w-28 2xl:max-w-32 3xl:max-w-36 4xl:max-w-40 top-16"
-          />
+          {data.detail.company_logo && (
+            <img
+              src={`https://image.tmdb.org/t/p/original${data.detail.company_logo}`}
+              alt={data.detail.title}
+              style={{ zIndex: 5 }}
+              className="absolute right-0 z-30 flex max-w-16 md:max-w-20 lg:max-w-24 xl:max-w-28 2xl:max-w-32 3xl:max-w-36 4xl:max-w-40 top-16"
+            />
+          )}
         </>
       )}
-      <section className="z-20 m-4 lg:m-12 2xl:m-16 3xl:m-20">
-        <h2 className="mb-6 text-2xl font-bold tracking-tight text-white sm:text-3xl">関連作品</h2>
-        <div className="flex flex-shrink-0 p-4 space-x-6 overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide">
+      {data && <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />}
+      <section className="z-20 mt-14 lg:m-12 2xl:m-16 3xl:m-0 3xl:ml-20 3xl:mb-10">
+        <h2 className="mb-6 text-2xl font-bold tracking-tight text-white xl:text-3xl">関連作品</h2>
+        <div className="flex flex-shrink-0 mb-6 space-x-6 overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide">
           {relatedMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}

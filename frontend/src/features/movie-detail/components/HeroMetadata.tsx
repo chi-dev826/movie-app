@@ -1,5 +1,5 @@
 import { TMDB_IMAGE_BASE_URL } from '../../../../config';
-import { MovieDetail } from '@/types/movie';
+import { MovieDetail } from '@/types/domain';
 
 type Props = {
   movieDetail: MovieDetail;
