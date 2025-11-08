@@ -11,16 +11,16 @@ const movieKeys = {
   lists: () => [...movieKeys.all, 'list'] as const,
   list: (type: string) => [...movieKeys.lists(), type] as const,
   details: () => [...movieKeys.all, 'detail'] as const,
-  detail: (id: string | undefined) => [...movieKeys.details(), id] as const,
+  detail: (id: number) => [...movieKeys.details(), id] as const,
   search: (query: string) => [...movieKeys.all, 'search', query] as const,
 };
 
-export const useFullMovieData = (movieId: string | undefined) => {
+export const useFullMovieData = (movieId: number) => {
   return useQuery({
     queryKey: movieKeys.detail(movieId),
-    queryFn: () => fetchFullMovieData(movieId!),
+    queryFn: () => fetchFullMovieData(movieId),
     enabled: !!movieId,
-    staleTime: 1000 * 60 * 10, // オプション：キャッシュ時間を設定(10分)
+    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -29,7 +29,7 @@ export const useSearchMovies = (query: string) => {
     queryKey: movieKeys.search(query),
     queryFn: () => searchMovies(query),
     enabled: query.length > 0,
-    staleTime: 1000 * 60 * 10, // オプション：キャッシュ時間を設定(10分)
+    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
