@@ -4,10 +4,8 @@ import {
   MovieResponse,
   ImageResponse,
 } from "@/types/external/tmdb";
-import { DefaultResponse, VideoItem } from "@/types/external/tmdb";
 import { MovieWatchProvidersResponse } from "@/types/external/tmdb";
 import { CollectionResponse } from "@/types/external/tmdb";
-import { fetchVideoStatus } from "../lib/youtubeClient";
 
 export const formatMovie = (
   movie: MovieResponse | CollectionResponse["parts"],
@@ -39,35 +37,6 @@ export const formatDetail = (data: MovieDetailResponse): MovieDetail => {
     company_logo: data.production_companies?.[0]?.logo_path ?? null,
     homePageUrl: data.homepage,
   };
-};
-
-export const formatVideo = async (
-  data: DefaultResponse<VideoItem>,
-): Promise<string | null> => {
-  const { results } = data;
-  if (!results || results.length === 0) {
-    return null;
-  }
-
-  const youtubeTrailers = results.filter(
-    (video: VideoItem) => video.site === "YouTube" && video.type === "Trailer",
-  );
-
-  if (youtubeTrailers.length === 0) {
-    return null;
-  }
-
-  for (const trailer of youtubeTrailers) {
-    const videoStatus = await fetchVideoStatus(trailer.key);
-    if (videoStatus && videoStatus.items && videoStatus.items.length > 0) {
-      const status = videoStatus.items[0].status;
-      if (status && status.privacyStatus === "public") {
-        return trailer.key;
-      }
-    }
-  }
-
-  return null;
 };
 
 export const formatImage = (data: ImageResponse) => {
@@ -103,7 +72,7 @@ export const isMostlyJapanese = (title: string): boolean => {
 
 export const enrichMovieListWithLogos = (
   movies: (MovieResponse | CollectionResponse["parts"])[],
-  imageResponses: ImageResponse[],
+  imageResponses: (ImageResponse | null)[],
 ): Movie[] => {
   if (!movies || movies.length === 0) {
     return [];
@@ -111,7 +80,8 @@ export const enrichMovieListWithLogos = (
 
   return movies.map((movie, index) => {
     const formattedMovie = formatMovie(movie);
-    const logos = imageResponses[index].logos;
+    const imageResponse = imageResponses[index];
+    const logos = imageResponse?.logos;
     return {
       ...formattedMovie,
       logo_path: logos?.[0]?.file_path ?? null,
