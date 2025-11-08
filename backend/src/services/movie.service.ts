@@ -77,7 +77,7 @@ export class MovieService {
       const collectionRes = await this.tmdbRepository.getCollectionDetails(
         detailRes.belongs_to_collection.id,
       );
-      collectionMovies = collectionRes.parts ? [collectionRes.parts] : [];
+      collectionMovies = collectionRes.parts || [];
     }
 
     const similarMovies = similarRes?.results ?? []; // similarResがnullの場合を考慮
