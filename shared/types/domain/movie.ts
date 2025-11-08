@@ -8,7 +8,7 @@ export type Movie = {
   poster_path: string | null;
   vote_average: number;
   logo_path?: string | null;
-  youtube_key?: string | null;
+  video?: string | null;
 };
 
 // アプリケーション内で使用する整形済みの映画詳細情報
