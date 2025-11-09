@@ -1,5 +1,5 @@
 import { ScrapeEigaComClient } from "../lib/scrapeEigaComClient";
-import { Article } from "@/types/domain/article";
+import { Article } from "@/types/domain";
 
 export class EigaComService {
   private readonly scrapeEigaComClient: ScrapeEigaComClient;

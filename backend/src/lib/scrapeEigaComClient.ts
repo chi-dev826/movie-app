@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { Article } from "@/types/domain/article";
+import { Article } from "@/types/domain";
 
 export class ScrapeEigaComClient {
   private readonly BASE_URL = "https://eiga.com";
