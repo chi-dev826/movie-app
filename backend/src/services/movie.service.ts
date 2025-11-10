@@ -1,7 +1,7 @@
 import { TmdbRepository } from "../lib/tmdb.repository";
 import * as dataFormatter from "../utils/dataFormatter";
 import { Movie } from "@/types/domain";
-import { CollectionResponse, ImageResponse } from "@/types/external/tmdb";
+import { MovieResponse, ImageResponse } from "@/types/external/tmdb";
 import { FullMovieData, MovieListResponse } from "@/types/api";
 import { fetchVideoStatus } from "../lib/youtubeClient";
 
