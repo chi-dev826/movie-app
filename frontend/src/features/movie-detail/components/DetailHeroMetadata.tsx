@@ -24,13 +24,12 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
   };
 
   const providers = {
-    'Disney Plus': (title: string) =>
-      `https://www.disneyplus.com/search/${encodeURIComponent(title)}`,
+    'Disney Plus': () => null, // Disney Plus link disabled as it does not work reliably
     Netflix: (title: string) => `https://www.netflix.com/search?q=${encodeURIComponent(title)}`,
     'Apple TV': (title: string) =>
       `https://tv.apple.com/jp/search?term=${encodeURIComponent(title)}`,
     'Amazon Prime Video': (title: string) =>
-      `https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&url=search-alias%3Dinstant-video&field-keywords=${encodeURIComponent(title)}`,
+      `https://www.amazon.co.jp/s?k=${encodeURIComponent(title)}&i=instant-video`,
     Hulu: (title: string) => `https://www.hulu.jp/search?q=${encodeURIComponent(title)}`,
     'U-NEXT': (title: string) =>
       `https://video.unext.jp/freeword?query=${encodeURIComponent(title)}`,
@@ -64,11 +63,11 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
               {providerList?.map((provider, index) => (
                 <div key={index} className="p-2">
                   <motion.a
-                    href={provider.link ?? ''}
+                    href={provider.link !== null ? provider.link : undefined}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block"
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={provider.link ? { scale: 1.1 } : undefined}
                     whileTap={{ scale: 0.9 }}
                     transition={{ duration: 0.2 }}
                   >
