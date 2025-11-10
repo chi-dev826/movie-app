@@ -11,7 +11,6 @@ export class ScrapeEigaComClient {
     const searchUrl = `${this.BASE_URL}/search/${encodeURIComponent(
       movieTitle,
     )}`;
-    console.log("映画.comでニュースを検索中:", searchUrl);
 
     try {
       const response = await axios.get(searchUrl);
@@ -42,7 +41,6 @@ export class ScrapeEigaComClient {
           });
         }
       });
-      console.log("取得したニュース件数:", articles.length);
       return articles;
     } catch (error) {
       console.error("映画.comのニュース取得エラー:", error);
