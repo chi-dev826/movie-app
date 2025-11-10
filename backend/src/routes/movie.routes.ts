@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { Request, Response, NextFunction } from "express";
-import { movieController, eigaComController } from "../container";
+import {
+  movieController,
+  eigaComController,
+  googleSearchController,
+} from "../container";
 
 const router = Router();
 
@@ -13,6 +17,11 @@ router.get(
   "/movie/:movieId/eiga-com-news",
   (req: Request, res: Response, next: NextFunction) =>
     eigaComController.getEigaComNews(req, res, next),
+);
+router.get(
+  "/movie/:movieId/movie-analysis",
+  (req: Request, res: Response, next: NextFunction) =>
+    googleSearchController.getMovieAnalysis(req, res, next),
 );
 router.get("/search/movie", (req: Request, res: Response, next: NextFunction) =>
   movieController.searchMovies(req, res, next),
