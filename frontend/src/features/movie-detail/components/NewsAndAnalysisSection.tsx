@@ -91,7 +91,10 @@ export default function NewsAndAnalysisSection({
 }
 
 export const ArticleList = ({ articles }: { articles: Article[] | undefined }) => {
-  const itemLinkPrefix = articles?.[0].source === '映画.com' ? 'https://eiga.com' : '';
+  const itemLinkPrefix =
+    articles && articles.length > 0 && articles[0].source === '映画.com'
+      ? 'https://eiga.com'
+      : '';
   return (
     <div className="flex flex-col gap-3 mt-6 xl:gap-8 xl:grid xl:grid-cols-2 xl:hover">
       {articles?.map((article) => (
