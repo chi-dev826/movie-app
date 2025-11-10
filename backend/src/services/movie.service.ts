@@ -72,7 +72,7 @@ export class MovieService {
     }
 
     // 別のエンドポイントからシリーズ作品、または関連作品を取得
-    let collectionMovies: CollectionResponse["parts"] = [];
+    let collectionMovies: MovieResponse[] = [];
     if (detailRes.belongs_to_collection) {
       const collectionRes = await this.tmdbRepository.getCollectionDetails(
         detailRes.belongs_to_collection.id,
