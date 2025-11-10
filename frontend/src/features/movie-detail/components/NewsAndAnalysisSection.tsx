@@ -1,4 +1,8 @@
-import { useMovieNews } from '../hooks/useMovieNews';
+import { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperCore } from 'swiper';
+import 'swiper/css';
+import { useMovieNews, useMovieAnalysis } from '../hooks/useMovieArticles';
 
 export default function NewsAndAnalysisSection({
   movieId,
