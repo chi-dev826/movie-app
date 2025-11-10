@@ -125,7 +125,7 @@ function MovieDetailPage() {
       {data && <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />}
       <section className="z-20 mt-14 lg:m-12 2xl:m-16 3xl:m-0 3xl:ml-20 3xl:mb-10">
         <h2 className="mb-6 text-2xl font-bold tracking-tight text-white xl:text-3xl">関連作品</h2>
-        <div className="flex flex-shrink-0 mb-6 space-x-6 overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide">
+        <div className="flex flex-shrink-0 p-2 mb-6 space-x-6 overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide">
           {relatedMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}

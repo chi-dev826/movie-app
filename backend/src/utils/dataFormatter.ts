@@ -5,11 +5,8 @@ import {
   ImageResponse,
 } from "@/types/external/tmdb";
 import { MovieWatchProvidersResponse } from "@/types/external/tmdb";
-import { CollectionResponse } from "@/types/external/tmdb";
 
-export const formatMovie = (
-  movie: MovieResponse | CollectionResponse["parts"],
-): Movie => {
+export const formatMovie = (movie: MovieResponse): Movie => {
   return {
     id: movie.id,
     backdrop_path: movie.backdrop_path,
@@ -55,7 +52,9 @@ export const formatWatchProviders = (
           p.provider_name !== "Amazon Prime Video with Ads" &&
           p.provider_name !== "Netflix Standard with Ads" &&
           p.provider_name !== "dAnime Amazon Channel" &&
-          p.provider_name !== "Anime Times Amazon Channel",
+          p.provider_name !== "Anime Times Amazon Channel" &&
+          p.provider_name !== "Apple TV Amazon Channel" &&
+          p.provider_name !== "HBO Max on U-Next",
       )
       .map((p: { logo_path: string | null; provider_name: string }) => ({
         logo_path: p.logo_path,
@@ -71,7 +70,7 @@ export const isMostlyJapanese = (title: string): boolean => {
 };
 
 export const enrichMovieListWithLogos = (
-  movies: (MovieResponse | CollectionResponse["parts"])[],
+  movies: MovieResponse[],
   imageResponses: (ImageResponse | null)[],
 ): Movie[] => {
   if (!movies || movies.length === 0) {

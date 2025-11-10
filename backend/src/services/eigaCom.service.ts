@@ -1,5 +1,5 @@
 import { ScrapeEigaComClient } from "../lib/scrapeEigaComClient";
-import { NewsItem } from "@/types/domain";
+import { Article } from "@/types/domain";
 
 export class EigaComService {
   private readonly scrapeEigaComClient: ScrapeEigaComClient;
@@ -8,8 +8,8 @@ export class EigaComService {
     this.scrapeEigaComClient = scrapeEigaComClient;
   }
 
-  async getEigaComNews(movieTitle: string): Promise<NewsItem[]> {
-    const newsItems = await this.scrapeEigaComClient.searchNews(movieTitle);
-    return newsItems;
+  async getEigaComNews(movieTitle: string): Promise<Article[]> {
+    const articles = await this.scrapeEigaComClient.searchNews(movieTitle);
+    return articles;
   }
 }

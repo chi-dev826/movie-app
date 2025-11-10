@@ -1,4 +1,4 @@
-import { Movie, NewsItem } from '@/types/domain';
+import { Movie, Article } from '@/types/domain';
 import { FullMovieData, MovieListResponse } from '@/types/api/movie';
 import { MovieResponse } from '@/types/external/tmdb';
 
@@ -27,7 +27,11 @@ export const fetchFullMovieData = async (movieId: number): Promise<FullMovieData
 };
 
 export const fetchEigaComNews = async (movieId: number, movieTitle: string) => {
-  return fetchFromApi<NewsItem[]>(`/movie/${movieId}/eiga-com-news?title=${movieTitle}`);
+  return fetchFromApi<Article[]>(`/movie/${movieId}/eiga-com-news?title=${movieTitle}`);
+};
+
+export const fetchMovieAnalysis = async (movieId: number, movieTitle: string) => {
+  return fetchFromApi<Article[]>(`/movie/${movieId}/movie-analysis?title=${movieTitle}`);
 };
 
 export const searchMovies = async (query: string): Promise<MovieResponse[]> => {
