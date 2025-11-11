@@ -177,6 +177,27 @@ export class MovieService {
   }
 
   async getUpcomingMovieList(): Promise<Movie[]> {
+    // 今日の日付と2ヶ月後の日付を取得
+    const today: Date = new Date();
+    const year: number = today.getFullYear();
+    const month: string = (today.getMonth() + 1).toString().padStart(2, "0");
+    const day: string = today.getDate().toString().padStart(2, "0");
+
+    const dateGte: string = `${year}-${month}-${day}`;
+
+    const twoMonthsLater = new Date(today);
+    twoMonthsLater.setMonth(today.getMonth() + 2);
+    const twoMonthsLaterYear: number = twoMonthsLater.getFullYear();
+    const twoMonthsLaterMonth: string = (twoMonthsLater.getMonth() + 1)
+      .toString()
+      .padStart(2, "0");
+    const twoMonthsLaterDay: string = twoMonthsLater
+      .getDate()
+      .toString()
+      .padStart(2, "0");
+
+    const dateLte: string = `${twoMonthsLaterYear}-${twoMonthsLaterMonth}-${twoMonthsLaterDay}`;
+
     const response = await this.tmdbRepository.getDiscoverMovies({
       region: "JP",
       watch_region: "JP",
@@ -184,9 +205,8 @@ export class MovieService {
       include_adult: false,
       include_video: false,
       with_release_type: "2|3",
-      "primary_release_date.gte": "2025-10-22",
-      "primary_release_date.lte": "2025-11-22",
-      with_original_language: "ja|en",
+      "primary_release_date.gte": dateGte,
+      "primary_release_date.lte": dateLte,
       page: 1,
     });
 
