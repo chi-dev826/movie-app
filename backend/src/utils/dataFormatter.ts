@@ -54,7 +54,8 @@ export const formatWatchProviders = (
           p.provider_name !== "dAnime Amazon Channel" &&
           p.provider_name !== "Anime Times Amazon Channel" &&
           p.provider_name !== "Apple TV Amazon Channel" &&
-          p.provider_name !== "HBO Max on U-Next",
+          p.provider_name !== "HBO Max on U-Next" &&
+          p.provider_name !== "FOD Channel Amazon Channel",
       )
       .map((p: { logo_path: string | null; provider_name: string }) => ({
         logo_path: p.logo_path,
