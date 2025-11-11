@@ -1,4 +1,3 @@
-import { TMDB_IMAGE_BASE_URL } from '../../config';
 import { Link } from 'react-router-dom';
 import type { Movie } from '@/types/domain';
 import { Star } from 'lucide-react';
@@ -9,8 +8,9 @@ type Props = {
 };
 
 const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
-  const posterUrl = `${TMDB_IMAGE_BASE_URL}w500${movie.poster_path}`;
-  const backdropUrl = `${TMDB_IMAGE_BASE_URL}w780${movie.backdrop_path}`;
+  const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+  const backdropUrl = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`;
+  console.log(movie.logo_path);
 
   const isPosterLayout = layout === 'poster';
 
@@ -20,7 +20,7 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
       <Link
         to={`/movie/${movie.id}`}
         key={movie.id}
-        className={`group relative flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-red-900/50 border-2 border-gray-700 ${
+        className={`group relative flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 ${
           isPosterLayout
             ? 'w-full aspect-[2/3]'
             : 'basis-[30%] md:basis-[18%] xl:basis-[24%] 2xl:basis-[18%] 4xl:basis-[14%] aspect-[2/3] xl:[aspect-ratio:auto]'
@@ -58,7 +58,7 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
         <div className="hidden xl:block xl:absolute xl:top-0 xl:max-w-24 2xl:max-w-28 3xl:max-w-32 4xl:max-w-48">
           {movie.logo_path && (
             <img
-              src={TMDB_IMAGE_BASE_URL + 'w185' + movie.logo_path}
+              src={`https://image.tmdb.org/t/p/w185${movie.logo_path}`}
               alt={movie.original_title}
               className="object-contain w-full h-full opacity-80"
             />
