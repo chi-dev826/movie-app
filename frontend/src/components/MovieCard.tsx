@@ -10,7 +10,6 @@ type Props = {
 const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
   const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
   const backdropUrl = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`;
-  console.log(movie.logo_path);
 
   const isPosterLayout = layout === 'poster';
 
