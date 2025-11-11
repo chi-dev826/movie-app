@@ -44,13 +44,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
   });
 
   return (
-    <motion.div
-      key={movieDetail.id}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="justify-center text-center xl:text-left"
-    >
+    <div className="justify-center text-center xl:text-left">
       <div className="max-w-full xl:flex xl:w-2/5 xl:flex-col xl:mt-5">
         <h1 className="mb-5 font-sans text-xl font-extrabold md:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-6xl">
           {movieDetail?.title}
@@ -115,7 +109,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
       {isModalOpen && youtubeKey !== undefined && (
         <HeroVideo youtubeKey={youtubeKey} onClose={handleCloseModal} />
       )}
-    </motion.div>
+    </div>
   );
 };
 export default HeroMetadata;

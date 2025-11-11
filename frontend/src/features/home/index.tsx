@@ -1,7 +1,9 @@
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
 import { useMovieList, useUpcomingMovies } from '../../hooks/useMovies';
 import HeroSwiper from './components/HeroSwiper';
-import MovieCard from '../../components/MovieCard';
-import { ArrowTrendingUpIcon } from '@heroicons/react/20/solid';
+import MovieCard from '@/components/MovieCard';
+import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 
 /**
  * HomePage
@@ -40,6 +42,7 @@ import { ArrowTrendingUpIcon } from '@heroicons/react/20/solid';
 function HomePage() {
   const { data, isLoading, error } = useMovieList();
   const { data: upcomingData } = useUpcomingMovies();
+  const controls = useAnimation();
 
   const movieList = [data?.popular, data?.now_playing, data?.top_rated, data?.high_rated];
   const movieListTitles = ['人気映画', '現在上映中', '高評価映画', '話題の映画'];
@@ -48,6 +51,32 @@ function HomePage() {
   const heroMovieList =
     upcomingData?.filter((movie) => movie.overview && movie.overview.trim() !== '').slice(0, 5) ??
     [];
+
+  // HeroSwiperが表示されない場合は、すぐにアニメーションを開始する
+  useEffect(() => {
+    if (heroMovieList.length < 3) {
+      setTimeout(() => controls.start('visible'), 0);
+    }
+  }, [heroMovieList.length, controls]);
+
+  // アニメーション設定
+  const containerVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.3,
+      },
+    },
+    hidden: {
+      opacity: 0,
+    },
+  };
+
+  const itemVariants = {
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, y: 20 },
+  };
 
   if (isLoading) {
     return (
@@ -74,25 +103,38 @@ function HomePage() {
   }
 
   return (
-    <div className="bg-black">
-      {heroMovieList.length >= 3 && <HeroSwiper movies={heroMovieList} />}
+    <motion.div
+      className="bg-black"
+      variants={containerVariants}
+      initial="hidden"
+      animate={controls}
+    >
+      {heroMovieList.length >= 3 && (
+        <motion.div variants={itemVariants}>
+          <HeroSwiper
+            movies={heroMovieList}
+            onSwiperReady={() => {
+              setTimeout(() => controls.start('visible'), 0);
+            }}
+          />
+        </motion.div>
+      )}
 
-      <div className="lg:p-6 2xl:p-20">
+      <motion.div className="lg:p-6 2xl:p-20" variants={itemVariants}>
         {movieList.map((movies, index) => (
-          <div key={index} className="pb-6 mb-4 border-b border-gray-800">
-            <h4 className="flex gap-4 mb-2 text-xl font-semibold text-gray-300">
+          <div key={index} className="m-2">
+            <h4 className="flex ml-2 text-xs font-semibold text-gray-500 lg:text-sm 2xl:text-md 3xl:text-lg">
               {movieListTitles[index]}
-              {index === 0 && <ArrowTrendingUpIcon className="text-white w-7 h-7" />}
             </h4>
-            <div className="flex pt-2 space-x-8 overflow-x-auto lg:p-4 scrollbar-hide scroll-smooth">
+            <HorizontalScrollContainer>
               {movies?.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}
-            </div>
+            </HorizontalScrollContainer>
           </div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

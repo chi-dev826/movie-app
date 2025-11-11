@@ -18,9 +18,10 @@ import 'swiper/css';
 
 type Props = {
   movies: Movie[];
+  onSwiperReady?: () => void;
 };
 
-const HeroSwiper = ({ movies }: Props) => {
+const HeroSwiper = ({ movies, onSwiperReady }: Props) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
@@ -46,6 +47,7 @@ const HeroSwiper = ({ movies }: Props) => {
   return (
     <Swiper
       {...SwiperSettings}
+      onInit={onSwiperReady}
       onSwiper={(swiper) => (swiperRef.current = swiper)}
       className="hero-swiper w-full aspect-video lg:aspect-[21/9] 3xl:aspect-[24/9] 4xl:aspect-[25/9]"
     >
