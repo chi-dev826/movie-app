@@ -9,6 +9,7 @@ export type Movie = {
   vote_average: number;
   logo_path?: string | null;
   video?: string | null;
+  release_date?: string | null;
 };
 
 // アプリケーション内で使用する整形済みの映画詳細情報

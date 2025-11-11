@@ -15,6 +15,7 @@ export const formatMovie = (movie: MovieResponse): Movie => {
     poster_path: movie.poster_path,
     overview: movie.overview,
     vote_average: movie.vote_average / 2, // 10点満点を5点満点に変換
+    release_date: movie.release_date ?? null,
   };
 };
 
