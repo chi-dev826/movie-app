@@ -45,7 +45,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
 
   return (
     <div className="justify-center text-center xl:text-left">
-      <div className="max-w-full xl:flex xl:w-2/5 xl:flex-col xl:mt-5">
+      <div className="max-w-full xl:flex xl:min-w-2/5 xl:flex-col xl:mt-5">
         <h1 className="mb-5 font-sans text-xl font-extrabold md:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-6xl">
           {movieDetail?.title}
         </h1>
@@ -55,7 +55,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
             <p className="font-mono text-sm text-gray-400">配信中のサービス</p>
             <div className="flex items-center justify-center flex-shrink-0 mt-4 -mx-2 xl:overflow-x-auto scrollbar-hide scroll-smooth xl:justify-start">
               {providerList?.map((provider, index) => (
-                <div key={index} className="p-2">
+                <div key={index} className="p-2 group">
                   <motion.a
                     href={provider.link !== null ? provider.link : undefined}
                     target="_blank"
@@ -70,6 +70,15 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
                       alt={`Watch Provider ${index + 1}`}
                       className="object-contain w-12 h-12 rounded-full xl:w-16 xl:h-16"
                     />
+                    <p
+                      className={
+                        provider.link
+                          ? 'mt-2 text-xs text-white opacity-0 group-hover:opacity-100'
+                          : 'mt-2 text-xs text-white opacity-0'
+                      }
+                    >
+                      配信サイトへ
+                    </p>
                   </motion.a>
                 </div>
               ))}
