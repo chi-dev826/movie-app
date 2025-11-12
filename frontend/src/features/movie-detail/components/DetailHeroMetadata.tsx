@@ -45,7 +45,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
 
   return (
     <div className="justify-center text-center xl:text-left">
-      <div className="max-w-full xl:flex xl:min-w-2/5 xl:flex-col xl:mt-5">
+      <div className="max-w-full xl:flex xl:max-w-[40%] xl:flex-col xl:mt-5">
         <h1 className="mb-5 font-sans text-xl font-extrabold md:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-6xl">
           {movieDetail?.title}
         </h1>

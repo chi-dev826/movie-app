@@ -19,7 +19,7 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
       <Link
         to={`/movie/${movie.id}`}
         key={movie.id}
-        className={`group relative flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 ${
+        className={`group/card relative flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 ${
           isPosterLayout
             ? 'w-full aspect-[2/3]'
             : 'basis-[30%] md:basis-[18%] xl:basis-[24%] 2xl:basis-[18%] 4xl:basis-[14%] aspect-[2/3] xl:[aspect-ratio:auto]'
@@ -44,11 +44,9 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
 
         {/* オーバーレイ */}
         <div
-          className={`absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent ${
-            isPosterLayout
-              ? 'opacity-0 group-hover:opacity-100'
-              : 'opacity-0 group-hover:opacity-100 xl:opacity-100'
-          }`}
+          className={
+            'hidden xl:absolute inset-0 xl:flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent'
+          }
         >
           <h3 className="text-xs font-bold text-white 3xl:text-sm 4xl:text-base">{movie.title}</h3>
         </div>
