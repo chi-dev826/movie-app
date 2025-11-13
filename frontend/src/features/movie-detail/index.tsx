@@ -161,7 +161,7 @@ function MovieDetailPage() {
       )}
       <motion.section
         variants={itemVariants}
-        className="z-20 mt-10 xl:mt-14 lg:m-12 2xl:m-16 3xl:m-0 3xl:ml-20 3xl:mb-10"
+        className="z-20 mt-20 xl:mt-14 lg:m-12 2xl:m-16 3xl:m-0 3xl:ml-20 3xl:mb-10"
       >
         <h2 className="mb-2 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
           関連作品
