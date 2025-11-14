@@ -64,8 +64,12 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
 
         {/* 評価スコア */}
         <div className="absolute flex items-center gap-1 px-2 py-1 text-xs font-bold text-white rounded-full bottom-2 right-2 bg-black/50 backdrop-blur-sm">
-          <Star className="w-3 h-3 text-yellow-400" fill="currentColor" />
-          <span>{movie.vote_average.toFixed(1)}</span>
+          {movie.vote_average !== null && (
+            <>
+              <Star className="w-3 h-3 text-yellow-400" fill="currentColor" />
+              <span>{movie.vote_average.toFixed(1)}</span>
+            </>
+          )}
         </div>
       </Link>
     )
