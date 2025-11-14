@@ -5,6 +5,8 @@ import App from './App';
 import HomePage from './features/home';
 import SearchPage from './features/search';
 import MovieDetailPage from './features/movie-detail';
+import MovieList from './features/movie-list';
+import UpcomingList from './features/movie-list/upcomingList';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
       {
         path: 'movie/:id',
         element: <MovieDetailPage />,
+      },
+      {
+        path: 'movies/upcoming',
+        element: <UpcomingList />,
+      },
+      {
+        path: 'movies/:type',
+        element: <MovieList />,
       },
     ],
   },
