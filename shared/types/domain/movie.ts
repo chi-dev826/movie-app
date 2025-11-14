@@ -6,7 +6,7 @@ export type Movie = {
   title: string;
   overview: string;
   poster_path: string | null;
-  vote_average: number;
+  vote_average: number | null;
   logo_path?: string | null;
   video?: string | null;
   release_date?: string | null;
