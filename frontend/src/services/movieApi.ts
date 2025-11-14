@@ -35,9 +35,7 @@ export const fetchMovieAnalysis = async (movieId: number, movieTitle: string) =>
 };
 
 export const searchMovies = async (query: string): Promise<MovieResponse[]> => {
-  return fetchFromApi<MovieResponse[]>(
-    `/search/movie?q=${encodeURIComponent(query)}&language=ja&page=1&include_adult=false`,
-  );
+  return fetchFromApi<MovieResponse[]>(`/search/movie?q=${encodeURIComponent(query)}`);
 };
 
 export const fetchMovieList = async (): Promise<MovieListResponse> => {
