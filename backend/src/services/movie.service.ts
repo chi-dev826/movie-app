@@ -193,7 +193,6 @@ export class MovieService {
     );
 
     const resolvedMoviePromises = await Promise.all(moviePromises);
-    console.log(resolvedMoviePromises);
 
     const aggregatedResponses = resolvedMoviePromises.reduce(
       (acc, curr) => {
