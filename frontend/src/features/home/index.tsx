@@ -1,6 +1,8 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 import { useMovieList, useUpcomingMovies } from '../../hooks/useMovies';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { Link } from 'react-router-dom';
 import HeroSwiper from './components/HeroSwiper';
 import MovieCard from '@/components/MovieCard';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
@@ -44,13 +46,17 @@ function HomePage() {
   const { data: upcomingData } = useUpcomingMovies();
   const controls = useAnimation();
 
-  const movieList = [data?.popular, data?.now_playing, data?.top_rated, data?.high_rated];
-  const movieListTitles = ['人気映画', '現在上映中', '高評価映画', '話題の映画'];
-
+  const movieList = [
+    upcomingData,
+    data?.popular,
+    data?.now_playing,
+    data?.top_rated,
+    data?.high_rated,
+  ];
+  const movieListTitles = ['公開予定', '人気映画', '現在上映中', '高評価映画', '話題の映画'];
+  const movieListType = ['upcoming', 'popular', 'now_playing', 'top_rated', 'high_rated'];
   //ヒーローセクション用データフィルタリング
-  const heroMovieList =
-    upcomingData?.filter((movie) => movie.overview && movie.overview.trim() !== '').slice(0, 5) ??
-    [];
+  const heroMovieList = upcomingData?.slice(0, 5) ?? [];
 
   // HeroSwiperが表示されない場合は、すぐにアニメーションを開始する
   useEffect(() => {
@@ -122,13 +128,16 @@ function HomePage() {
 
       <motion.div className="lg:p-6 2xl:p-20" variants={itemVariants}>
         {movieList.map((movies, index) => (
-          <div key={index} className="m-2">
-            <h4 className="flex ml-2 text-xs font-semibold text-gray-500 lg:text-sm 2xl:text-md 3xl:text-lg">
-              {movieListTitles[index]}
-            </h4>
+          <div key={index} className="m-2 mb-4">
+            <Link to={`/movies/${movieListType[index]}`}>
+              <span className="flex items-center gap-1 mb-1 ml-2 text-xs font-semibold text-gray-500 md:text-sm 2xl:text-md 3xl:text-lg hover:text-gray-300">
+                {movieListTitles[index]}
+                <ChevronRightIcon className="relative w-4 h-4 md:w-5 md:h-5 xl:w-6 xl:h-6 -bottom-px" />
+              </span>
+            </Link>
             <HorizontalScrollContainer>
               {movies?.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
+                <MovieCard key={movie.id} movie={movie} layout="responsive" />
               ))}
             </HorizontalScrollContainer>
           </div>
