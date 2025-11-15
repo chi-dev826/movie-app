@@ -45,7 +45,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
 
   return (
     <div className="justify-center text-center xl:text-left">
-      <div className="min-w-full xl:flex xl:max-w-[40%] xl:flex-col xl:mt-5">
+      <div className="w-full xl:flex xl:max-w-[40%] xl:flex-col xl:mt-5">
         <h1 className="mb-5 font-sans text-xl font-extrabold md:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-6xl">
           {movieDetail?.title}
         </h1>
@@ -88,7 +88,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
         <p className="text-sm font-extrabold text-white lg:text-base xl:text-sm 3xl:text-base 4xl:text-lg line-clamp-6 group-hover:line-clamp-none">
           {movieDetail.overview}
         </p>
-        <span className="flex flex-col gap-1 my-5 font-mono text-sm font-bold text-gray-300 xl:flex-row xl:space-x-2">
+        <span className="flex flex-col gap-1 my-5 text-sm font-bold text-gray-300 xl:flex-row xl:space-x-2">
           <span>
             {movieDetail?.year} {movieDetail?.runtime}分
           </span>
