@@ -43,13 +43,17 @@ const MovieCard = ({ movie, layout = 'responsive' }: Props) => {
         )}
 
         {/* オーバーレイ */}
-        <div
-          className={
-            'hidden xl:absolute inset-0 xl:flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent'
-          }
-        >
-          <h3 className="text-xs font-bold text-white 3xl:text-sm 4xl:text-base">{movie.title}</h3>
-        </div>
+        {!isPosterLayout && (
+          <div
+            className={
+              'hidden xl:absolute inset-0 xl:flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent'
+            }
+          >
+            <h3 className="text-xs font-bold text-white 3xl:text-sm 4xl:text-base">
+              {movie.title}
+            </h3>
+          </div>
+        )}
 
         {/* ロゴ画像 */}
         <div className="hidden xl:block xl:absolute xl:top-0 xl:max-w-24 2xl:max-w-28 3xl:max-w-32 4xl:max-w-48">
