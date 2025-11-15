@@ -1,3 +1,5 @@
+import NodeCache from "node-cache";
+
 import { TmdbRepository } from "../lib/tmdb.repository";
 import {
   MovieResponse,
@@ -5,6 +7,7 @@ import {
   CollectionResponse,
   MovieDetailResponse,
   MovieWatchProvidersResponse,
+  PaginatedResponse,
 } from "@/types/external/tmdb";
 import { fetchVideoStatus } from "../lib/youtubeClient";
 
@@ -22,9 +25,11 @@ export type MovieDetailRawData = {
 
 export class MovieService {
   private readonly tmdbRepository: TmdbRepository;
+  private readonly cache: NodeCache;
 
   constructor(tmdbRepository: TmdbRepository) {
     this.tmdbRepository = tmdbRepository;
+    this.cache = new NodeCache({ stdTTL: 86400 }); // キャッシュの有効期限を24時間に設定
   }
 
   private getSettledResult<T>(
@@ -42,6 +47,8 @@ export class MovieService {
       return null;
     }
   }
+
+  private pageToFetch = Array.from({ length: 10 }, (_, i) => i + 1);
 
   private async isPublicKey(key: string | null): Promise<string | null> {
     if (!key) {
@@ -138,36 +145,81 @@ export class MovieService {
   }
 
   async getMovieList() {
-    const [popularRes, nowPlayingRes, topRatedRes, highRatedRes] =
-      await Promise.all([
-        this.tmdbRepository.getDiscoverMovies({
-          "vote_count.gte": 20000,
-          sort_by: "popularity.desc",
-          page: 1,
-          region: "JP",
-        }),
-        this.tmdbRepository.getDiscoverMovies({
-          "vote_count.gte": 1000,
-          sort_by: "primary_release_date.desc",
-          page: 1,
-          region: "JP",
-        }),
-        this.tmdbRepository.getDiscoverMovies({
-          "vote_count.gte": 1000,
-          primary_release_year: "2022-01-01",
-          sort_by: "vote_average.desc",
-          page: 1,
-          region: "JP",
-        }),
-        this.tmdbRepository.getDiscoverMovies({
-          "vote_count.gte": 5000,
-          primary_release_year: "2023-01-01",
-          sort_by: "vote_count.desc",
-          page: 1,
-          region: "JP",
-        }),
-      ]);
+    const categories = {
+      popularRes: {
+        "vote_count.gte": 10000,
+        sort_by: "popularity.desc",
+        region: "JP",
+      },
+      nowPlayingRes: {
+        "vote_count.gte": 1000,
+        sort_by: "primary_release_date.desc",
+        region: "JP",
+      },
+      topRatedRes: {
+        "vote_count.gte": 1000,
+        sort_by: "vote_average.desc",
+        region: "JP",
+      },
+      highRatedRes: {
+        "vote_count.gte": 5000,
+        sort_by: "vote_count.desc",
+        region: "JP",
+      },
+    };
 
+    const cacheKey = "homeMovieList";
+    const cachedResult = this.cache.get<{
+      popularRes: PaginatedResponse<MovieResponse>;
+      nowPlayingRes: PaginatedResponse<MovieResponse>;
+      topRatedRes: PaginatedResponse<MovieResponse>;
+      highRatedRes: PaginatedResponse<MovieResponse>;
+    }>(cacheKey);
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    // それぞれのカテゴリのデータを10ページ分取得
+    const moviePromises = Object.entries(categories).flatMap(
+      ([categoryName, params]) =>
+        this.pageToFetch.map((pg) =>
+          this.tmdbRepository
+            .getDiscoverMovies({
+              ...params,
+              page: pg,
+            })
+            .then((res) => ({ categoryName, res })),
+        ),
+    );
+
+    const resolvedMoviePromises = await Promise.all(moviePromises);
+    console.log(resolvedMoviePromises);
+
+    const aggregatedResponses = resolvedMoviePromises.reduce(
+      (acc, curr) => {
+        const { categoryName, res } = curr;
+        const existingMovies = acc[categoryName]
+          ? acc[categoryName].results
+          : [];
+        const newMovies = res.results;
+        if (!acc[categoryName]) {
+          acc[categoryName] = res;
+        }
+        acc[categoryName].results = [...existingMovies, ...newMovies];
+        return acc;
+      },
+      {} as Record<string, PaginatedResponse<MovieResponse>>,
+    );
+
+    const { popularRes, nowPlayingRes, topRatedRes, highRatedRes } =
+      aggregatedResponses;
+
+    this.cache.set(cacheKey, {
+      popularRes,
+      nowPlayingRes,
+      topRatedRes,
+      highRatedRes,
+    });
     return { popularRes, nowPlayingRes, topRatedRes, highRatedRes };
   }
 
@@ -178,6 +230,18 @@ export class MovieService {
       video: string | null;
     }[];
   }> {
+    const cacheKey = "upcomingMovies";
+    const cachedResult = this.cache.get<{
+      combinedResults: MovieResponse[];
+      imageVideoResults: {
+        imageRes: ImageResponse;
+        video: string | null;
+      }[];
+    }>(cacheKey);
+    if (cachedResult) {
+      return cachedResult;
+    }
+
     // 今日の日付と2ヶ月後の日付を取得
     const today: Date = new Date();
     const year: number = today.getFullYear();
@@ -199,9 +263,7 @@ export class MovieService {
 
     const dateLte: string = `${twoMonthsLaterYear}-${twoMonthsLaterMonth}-${twoMonthsLaterDay}`;
 
-    const pageToFetch = Array.from({ length: 10 }, (_, i) => i + 1);
-
-    const moviePromises = pageToFetch.map((pg) =>
+    const moviePromises = this.pageToFetch.map((pg) =>
       this.tmdbRepository.getDiscoverMovies({
         region: "JP",
         watch_region: "JP",
@@ -238,6 +300,7 @@ export class MovieService {
 
     const imageVideoResults = await Promise.all(imageVideoPromises);
 
+    this.cache.set(cacheKey, { combinedResults, imageVideoResults });
     return { combinedResults, imageVideoResults };
   }
 
