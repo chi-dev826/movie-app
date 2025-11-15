@@ -92,7 +92,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
         {isBackdropVisible && movie.video && (
           <div className="absolute inset-0 z-10">
             <motion.img
-              key={`https://image.tmdb.org/t/p/original${movie.video}`}
+              key={movie.id}
               initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
               animate={{ opacity: 1 }}
               exit={{
@@ -105,7 +105,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full"
               style={{ zIndex: 10 }}
-            />
+            />{' '}
           </div>
         )}
       </AnimatePresence>
