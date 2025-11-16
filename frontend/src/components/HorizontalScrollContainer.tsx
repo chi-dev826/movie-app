@@ -32,7 +32,7 @@ const HorizontalScrollContainer = ({ children }: Props) => {
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [checkScrollability]);
+  }, [checkScrollability, children]);
 
   const handleScroll = (direction: 'left' | 'right') => {
     const el = containerRef.current;
@@ -50,7 +50,7 @@ const HorizontalScrollContainer = ({ children }: Props) => {
       {canScrollLeft && (
         <button
           onClick={() => handleScroll('left')}
-          className="absolute z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -left-12 group-hover:opacity-100 xl:block"
+          className="absolute top-0 z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -left-12 group-hover:opacity-100 xl:block"
         >
           <ChevronLeftIcon className="w-12 h-12 mx-auto text-white" />
         </button>
