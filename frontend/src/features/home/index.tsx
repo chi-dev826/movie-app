@@ -126,9 +126,9 @@ function HomePage() {
         </motion.div>
       )}
 
-      <motion.div className="lg:p-6 2xl:p-20" variants={itemVariants}>
+      <motion.div className="lg:p-6 2xl:p-20 2xl:pb-0" variants={itemVariants}>
         {movieList.map((movies, index) => (
-          <div key={index} className="m-2 mb-4">
+          <div key={index} className="p-2">
             <Link to={`/movies/${movieListType[index]}`}>
               <span className="flex items-center gap-1 mb-1 ml-2 text-xs font-semibold text-gray-500 md:text-sm 2xl:text-md 3xl:text-lg hover:text-gray-300">
                 {movieListTitles[index]}
