@@ -19,6 +19,7 @@
     "lucide-react": "^0.518.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-player": "^3.4.0",
     "react-router": "^7.6.3",
     "react-router-dom": "^7.6.3",
     "swiper": "^11.2.8"
