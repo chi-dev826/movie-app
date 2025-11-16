@@ -23,7 +23,11 @@ const UpcomingList = () => {
     ? data
         .filter((movie) => movie.release_date)
         .slice()
-        .sort((a, b) => new Date(a.release_date!).getTime() - new Date(b.release_date!).getTime())
+        .sort(
+          (a, b) =>
+            new Date(a.release_date ?? '').getTime() -
+            new Date(b.release_date ?? '').getTime()
+        )
     : [];
 
   if (isLoading) {
