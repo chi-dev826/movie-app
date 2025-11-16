@@ -69,7 +69,7 @@ export default function NewsAndAnalysisSection({
           関連ニュース
         </span>
         <span
-          className={`text-lg 3xl:text-2xl text-gray-400 transition-all hover:text-white font-bold xl:mt-0 ${
+          className={`text-base xl:text-lg 3xl:text-2xl text-gray-400 transition-all hover:text-white font-bold xl:mt-0 ${
             isActiveTab === 'analysis'
               ? 'border-b-2 border-blue-500 text-white'
               : 'hover:border-b-2 hover:border-gray-500'
