@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 
 import MovieCard from '@/components/MovieCard';
 import HeroMetadata from './components/DetailHeroMetadata';
+import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
 import { useFullMovieData } from '@/hooks/useMovies';
 
@@ -46,7 +47,7 @@ function MovieDetailPage() {
   // 関連作品の選定：collections（シリーズ作品）が2件以下ならsimilarを使う
   const collections = data?.collections ?? [];
   const similar = data?.similar ?? [];
-  const relatedMovies = collections.length > 2 ? collections : similar;
+  const relatedMovies = collections.length > 1 ? collections : similar;
 
   // アニメーション設定
   const containerVariants = {
@@ -159,18 +160,15 @@ function MovieDetailPage() {
           <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />
         </motion.div>
       )}
-      <motion.section
-        variants={itemVariants}
-        className="z-20 mt-20 xl:m-12 3xl:m-0 3xl:ml-20 3xl:mb-10"
-      >
+      <motion.section variants={itemVariants} className="z-20 mt-20 xl:m-12 3xl:mx-20 3xl:mt-0">
         <h2 className="mb-2 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
           関連作品
         </h2>
-        <div className="flex flex-shrink-0 p-2 mb-6 space-x-6 overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide">
+        <HorizontalScrollContainer>
           {relatedMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
-        </div>
+        </HorizontalScrollContainer>
       </motion.section>
     </motion.div>
   );
