@@ -6,9 +6,10 @@ export type Movie = {
   title: string;
   overview: string;
   poster_path: string | null;
-  vote_average: number;
+  vote_average: number | null;
   logo_path?: string | null;
   video?: string | null;
+  release_date?: string | null;
 };
 
 // アプリケーション内で使用する整形済みの映画詳細情報

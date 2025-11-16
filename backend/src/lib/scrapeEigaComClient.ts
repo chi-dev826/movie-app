@@ -1,11 +1,15 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import NodeCache from "node-cache";
 import { Article } from "@/types/domain";
 
 export class ScrapeEigaComClient {
   private readonly BASE_URL = "https://eiga.com";
+  private cache: NodeCache;
 
-  constructor() {}
+  constructor() {
+    this.cache = new NodeCache({ stdTTL: 86400 }); // キャッシュの有効期限を24時間に設定
+  }
 
   async searchNews(movieTitle: string): Promise<Article[]> {
     const searchUrl = `${this.BASE_URL}/search/${encodeURIComponent(
@@ -13,6 +17,9 @@ export class ScrapeEigaComClient {
     )}`;
 
     try {
+      if (this.cache.has(searchUrl)) {
+        return this.cache.get<Article[]>(searchUrl) || [];
+      }
       const response = await axios.get(searchUrl);
       const $ = cheerio.load(response.data);
 
@@ -41,6 +48,7 @@ export class ScrapeEigaComClient {
           });
         }
       });
+      this.cache.set(searchUrl, articles);
       return articles;
     } catch (error) {
       console.error("映画.comのニュース取得エラー:", error);

@@ -53,11 +53,13 @@ export default function NewsAndAnalysisSection({
   }
 
   return (
-    <section className="z-20 mt-10 lg:m-12 2xl:m-16 3xl:m-20">
+    <section className="z-20 mt-20 xl:m-12 2xl:m-16 3xl:m-20">
       <span className="flex gap-5 text-2xl font-bold 3xl:gap-10 xl:mt-0">
         <span
-          className={`text-lg 3xl:text-2xl text-gray-400 transition-all hover:text-white font-bold xl:mt-0 ${
-            isActiveTab === 'news' ? 'border-b-2 border-blue-500 text-white' : ''
+          className={`text-base ml-2 xl:text-lg 3xl:text-2xl text-gray-400 transition-all hover:text-white font-bold xl:mt-0 ${
+            isActiveTab === 'news'
+              ? 'border-b-2 border-blue-500 text-white'
+              : 'hover:border-b-2 hover:border-gray-500'
           }`}
           onClick={() => {
             setIsActiveTab('news');
@@ -67,8 +69,10 @@ export default function NewsAndAnalysisSection({
           関連ニュース
         </span>
         <span
-          className={`text-lg 3xl:text-2xl text-gray-400 transition-all hover:text-white font-bold xl:mt-0 ${
-            isActiveTab === 'analysis' ? 'border-b-2 border-blue-500 text-white' : ''
+          className={`text-base xl:text-lg 3xl:text-2xl text-gray-400 transition-all hover:text-white font-bold xl:mt-0 ${
+            isActiveTab === 'analysis'
+              ? 'border-b-2 border-blue-500 text-white'
+              : 'hover:border-b-2 hover:border-gray-500'
           }`}
           onClick={() => {
             setIsActiveTab('analysis');
@@ -92,16 +96,14 @@ export default function NewsAndAnalysisSection({
 
 export const ArticleList = ({ articles }: { articles: Article[] | undefined }) => {
   const itemLinkPrefix =
-    articles && articles.length > 0 && articles[0].source === '映画.com'
-      ? 'https://eiga.com'
-      : '';
+    articles && articles.length > 0 && articles[0].source === '映画.com' ? 'https://eiga.com' : '';
   return (
-    <div className="flex flex-col gap-3 mt-6 xl:gap-8 xl:grid xl:grid-cols-2 xl:hover">
+    <div className="flex flex-col gap-3 mt-6 xl:p-4 xl:gap-8 xl:grid xl:grid-cols-2 xl:hover">
       {articles?.map((article) => (
         <a
           key={article.title}
           href={`${itemLinkPrefix}${article.link}`}
-          className="flex p-2 bg-gray-800 border rounded-lg xl:p-4 xl:hover:transition xl:duration-300 border-gray-950 xl:hover:shadow-lg xl:hover:scale-110 xl:hover:bg-gray-700"
+          className="flex p-2 bg-gray-800 border rounded-lg xl:p-4 xl:hover:transition xl:duration-300 border-gray-950 xl:hover:shadow-lg xl:hover:scale-105 xl:hover:bg-gray-700"
         >
           <div className="flex-shrink-0 h-24 w-36 xl:h-48 xl:w-64">
             {article.imageUrl && (
@@ -113,7 +115,7 @@ export const ArticleList = ({ articles }: { articles: Article[] | undefined }) =
             )}
           </div>
           <div className="flex flex-col ml-2 xl:p-2 xl:mx-2">
-            <h3 className="overflow-hidden font-semibold text-md line-clamp-2 xl:p-3 md:text-lg xl:text-xl">
+            <h3 className="overflow-hidden font-semibold text-md line-clamp-2 md:text-lg xl:text-xl">
               {article.title}
             </h3>
             <p className="text-xs text-gray-300 line-clamp-4 xl:text-sm xl:line-clamp-5">

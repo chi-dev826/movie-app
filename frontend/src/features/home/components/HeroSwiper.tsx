@@ -18,9 +18,10 @@ import 'swiper/css';
 
 type Props = {
   movies: Movie[];
+  onSwiperReady?: () => void;
 };
 
-const HeroSwiper = ({ movies }: Props) => {
+const HeroSwiper = ({ movies, onSwiperReady }: Props) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
@@ -46,6 +47,7 @@ const HeroSwiper = ({ movies }: Props) => {
   return (
     <Swiper
       {...SwiperSettings}
+      onInit={onSwiperReady}
       onSwiper={(swiper) => (swiperRef.current = swiper)}
       className="hero-swiper w-full aspect-video lg:aspect-[21/9] 3xl:aspect-[24/9] 4xl:aspect-[25/9]"
     >
@@ -90,7 +92,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
         {isBackdropVisible && movie.video && (
           <div className="absolute inset-0 z-10">
             <motion.img
-              key={`https://image.tmdb.org/t/p/original${movie.video}`}
+              key={movie.id}
               initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
               animate={{ opacity: 1 }}
               exit={{
@@ -127,14 +129,24 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
           </div>
         </div>
       ) : (
-        movie?.backdrop_path && (
-          <img
-            src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-            alt={movie.title}
-            className="absolute inset-0 object-cover w-full h-full"
-            style={{ zIndex: 5 }}
-          />
-        )
+        <AnimatePresence>
+          {movie?.backdrop_path && (
+            <motion.img
+              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+              alt={movie.title}
+              className="absolute inset-0 object-cover w-full h-full"
+              style={{ zIndex: 5 }}
+              initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
+              animate={{ opacity: 1 }}
+              exit={{
+                opacity: 0,
+                scale: 1.1,
+                transition: { duration: 1.5, ease: 'easeInOut' },
+              }}
+              transition={{ duration: 1 }}
+            />
+          )}
+        </AnimatePresence>
       )}
       {/* グラデーションオーバーレイ */}
       <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/20 via-black/60 to-black/95" />

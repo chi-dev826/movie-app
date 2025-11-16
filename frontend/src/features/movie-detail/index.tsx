@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 
 import MovieCard from '@/components/MovieCard';
 import HeroMetadata from './components/DetailHeroMetadata';
+import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
 import { useFullMovieData } from '@/hooks/useMovies';
 
@@ -43,13 +44,41 @@ function MovieDetailPage() {
     );
   }
 
+  // 関連作品の選定：collections（シリーズ作品）が2件以下ならsimilarを使う
   const collections = data?.collections ?? [];
   const similar = data?.similar ?? [];
-  const relatedMovies = collections.length > 2 ? collections : similar;
+  const relatedMovies = collections.length > 1 ? collections : similar;
+
+  // アニメーション設定
+  const containerVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.3,
+      },
+    },
+    hidden: {
+      opacity: 0,
+    },
+  };
+
+  const itemVariants = {
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, y: 20 },
+  };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden bg-black">
-      <section className="relative w-full overflow-hidden aspect-[16/9] 3xl:aspect-[21/9]">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="flex flex-col min-h-screen overflow-hidden bg-black"
+    >
+      <motion.section
+        variants={itemVariants}
+        className="relative w-full overflow-hidden aspect-[16/9] 3xl:aspect-[21/9]"
+      >
         <div className="absolute inset-0 z-20 bg-gradient-to-b from-black/20 to-black/100" />
 
         {/* フェードアウトする背景画像 */}
@@ -101,37 +130,47 @@ function MovieDetailPage() {
             />
           )
         )}
-      </section>
+      </motion.section>
       {/* メタデータ */}
       {data && (
         <>
-          <div className="z-30 px-4 mt-10 text-white xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20">
+          <motion.div
+            className="z-30 px-4 mt-10 text-white xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
+            variants={itemVariants}
+          >
             <HeroMetadata
               movieDetail={data.detail}
               watchProviders={data.watchProviders}
               youtubeKey={data.video ?? null}
             />
-          </div>
+          </motion.div>
           {data.detail.company_logo && (
-            <img
+            <motion.img
               src={`https://image.tmdb.org/t/p/original${data.detail.company_logo}`}
               alt={data.detail.title}
               style={{ zIndex: 5 }}
               className="absolute right-0 z-30 flex max-w-16 md:max-w-20 lg:max-w-24 xl:max-w-28 2xl:max-w-32 3xl:max-w-36 4xl:max-w-40 top-16"
+              variants={itemVariants}
             />
           )}
         </>
       )}
-      {data && <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />}
-      <section className="z-20 mt-14 lg:m-12 2xl:m-16 3xl:m-0 3xl:ml-20 3xl:mb-10">
-        <h2 className="mb-6 text-2xl font-bold tracking-tight text-white xl:text-3xl">関連作品</h2>
-        <div className="flex flex-shrink-0 p-2 mb-6 space-x-6 overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide">
+      {data && (
+        <motion.div variants={itemVariants}>
+          <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />
+        </motion.div>
+      )}
+      <motion.section variants={itemVariants} className="z-20 mt-20 xl:m-12 3xl:mx-20 3xl:mt-0">
+        <h2 className="mb-2 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
+          関連作品
+        </h2>
+        <HorizontalScrollContainer>
           {relatedMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
-        </div>
-      </section>
-    </div>
+        </HorizontalScrollContainer>
+      </motion.section>
+    </motion.div>
   );
 }
 

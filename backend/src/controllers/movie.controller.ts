@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { MovieService } from "../services/movie.service";
+import { MovieAssembler } from "../mappers/movie.assembler";
 
 export class MovieController {
-  private readonly movieService: MovieService;
+  private readonly movieAssembler: MovieAssembler;
 
-  constructor(movieService: MovieService) {
-    this.movieService = movieService;
+  constructor(movieAssembler: MovieAssembler) {
+    this.movieAssembler = movieAssembler;
   }
 
   async getMovieDetails(req: Request, res: Response, next: NextFunction) {
@@ -15,7 +15,7 @@ export class MovieController {
         return res.status(400).json({ message: "Movie ID is required" });
       }
 
-      const movieDetails = await this.movieService.getMovieDetails(
+      const movieDetails = await this.movieAssembler.assembleFullMovieData(
         Number(movieId),
       );
       res.json(movieDetails);
@@ -31,7 +31,8 @@ export class MovieController {
         return res.status(400).json({ message: "Search query is required" });
       }
 
-      const searchResults = await this.movieService.searchMovies(query);
+      const searchResults =
+        await this.movieAssembler.assembleSearchedMovies(query);
       res.json(searchResults);
     } catch (error) {
       next(error);
@@ -40,7 +41,7 @@ export class MovieController {
 
   async getMovieList(req: Request, res: Response, next: NextFunction) {
     try {
-      const movieList = await this.movieService.getMovieList();
+      const movieList = await this.movieAssembler.assembleMovieList();
       res.json(movieList);
     } catch (error) {
       next(error);
@@ -49,7 +50,8 @@ export class MovieController {
 
   async getUpcomingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const upcomingMovies = await this.movieService.getUpcomingMovieList();
+      const upcomingMovies =
+        await this.movieAssembler.assembleUpcomingMovieList();
       res.json(upcomingMovies);
     } catch (error) {
       next(error);
