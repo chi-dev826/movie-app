@@ -58,13 +58,13 @@ export class MovieAssembler {
     const { popularRes, nowPlayingRes, topRatedRes, highRatedRes } =
       await this.movieService.getMovieList();
 
-    const popular = popularRes.results.map(this.movieFormatter.formatMovie);
-    const now_playing = nowPlayingRes.results.map(
-      this.movieFormatter.formatMovie,
+    const popular = popularRes.results.map((movie) => this.movieFormatter.formatMovie(movie));
+    const now_playing = nowPlayingRes.results.map((movie) => 
+      this.movieFormatter.formatMovie(movie),
     );
-    const top_rated = topRatedRes.results.map(this.movieFormatter.formatMovie);
-    const high_rated = highRatedRes.results.map(
-      this.movieFormatter.formatMovie,
+    const top_rated = topRatedRes.results.map((movie) => this.movieFormatter.formatMovie(movie));
+    const high_rated = highRatedRes.results.map((movie) => 
+      this.movieFormatter.formatMovie(movie),
     );
 
     return {
