@@ -105,7 +105,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full"
               style={{ zIndex: 10 }}
-            />{' '}
+            />
           </div>
         )}
       </AnimatePresence>
