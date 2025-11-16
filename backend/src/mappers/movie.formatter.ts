@@ -16,7 +16,7 @@ export class MovieFormatter {
       poster_path: movie.poster_path,
       overview: movie.overview,
       vote_average:
-        movie.vote_average == null || movie.vote_average === 0 ? null : movie.vote_average / 2
+        movie.vote_average == null || movie.vote_average === 0 ? null : movie.vote_average / 2,
       release_date: movie.release_date ?? null,
     };
   }
@@ -33,7 +33,7 @@ export class MovieFormatter {
       year: data.release_date ? parseInt(data.release_date.slice(0, 4)) : null,
       runtime: data.runtime,
       vote_average:
-        movie.vote_average == null || movie.vote_average === 0 ? null : movie.vote_average / 2
+        data.vote_average == null || data.vote_average === 0 ? null : data.vote_average / 2,
       genres: data.genres?.map((genre: { name: string }) => genre.name) ?? null,
       company_logo: data.production_companies?.[0]?.logo_path ?? null,
       homePageUrl: data.homepage,
