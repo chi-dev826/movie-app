@@ -76,23 +76,23 @@ export class MovieAssembler {
   }
 
   public async assembleUpcomingMovieList(): Promise<Movie[]> {
-    const { combinedResults, imageVideoResults } =
-      await this.movieService.getUpcomingMovieList();
+    const { upcomingRes } = await this.movieService.getUpcomingMovieList();
 
-    const filteredMovies = combinedResults.filter((data) =>
-      this.movieFormatter.isMostlyJapanese(data.title, data.original_language),
+    const filteredMovies = upcomingRes.filter((data) =>
+      this.movieFormatter.isMostlyJapanese(
+        data.movie.title,
+        data.movie.original_language,
+      ),
     );
 
-    const upcomingMoviesPromises = filteredMovies.map(async (movie, index) => {
-      const { imageRes, video } = imageVideoResults[index];
-      const logo_path = this.movieFormatter.formatImage(imageRes);
-
-      const movies = this.movieFormatter.formatMovie(movie);
+    const upcomingMoviesPromises = filteredMovies.map(async (data) => {
+      const logo_path = this.movieFormatter.formatImage(data.imageRes);
+      const video = data.video;
+      const movie = this.movieFormatter.formatMovie(data.movie);
+      const movies = { ...movie, logo_path, video };
 
       return {
         ...movies,
-        logo_path,
-        video,
       };
     });
 

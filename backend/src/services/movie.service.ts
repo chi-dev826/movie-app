@@ -223,16 +223,16 @@ export class MovieService {
   }
 
   async getUpcomingMovieList(): Promise<{
-    combinedResults: MovieResponse[];
-    imageVideoResults: {
+    upcomingRes: {
+      movie: MovieResponse;
       imageRes: ImageResponse;
       video: string | null;
     }[];
   }> {
     const cacheKey = "upcomingMovies";
     const cachedResult = this.cache.get<{
-      combinedResults: MovieResponse[];
-      imageVideoResults: {
+      upcomingRes: {
+        movie: MovieResponse;
         imageRes: ImageResponse;
         video: string | null;
       }[];
@@ -294,13 +294,17 @@ export class MovieService {
         )?.key ?? null;
       const video: string | null = await this.isPublicKey(key);
 
-      return { imageRes, video };
+      return {
+        movie,
+        imageRes,
+        video,
+      };
     });
 
-    const imageVideoResults = await Promise.all(imageVideoPromises);
+    const upcomingRes = await Promise.all(imageVideoPromises);
 
-    this.cache.set(cacheKey, { combinedResults, imageVideoResults });
-    return { combinedResults, imageVideoResults };
+    this.cache.set(cacheKey, { upcomingRes });
+    return { upcomingRes };
   }
 
   async searchMovies(query: string) {
