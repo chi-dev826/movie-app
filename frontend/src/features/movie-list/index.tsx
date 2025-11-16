@@ -7,7 +7,7 @@ const MovieList = () => {
   const { data, isLoading, isError, error } = useMovieList();
 
   const movieList = type ? data?.[type] : [];
-  const title = type ? type.replace('_', ' ').toUpperCase() : 'Movies';
+  const title = type ? type.replaceAll('_', ' ').toUpperCase() : 'Movies';
 
   if (isLoading) {
     return <div className="container px-4 py-8 mx-auto text-center">Loading movies...</div>;
