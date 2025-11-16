@@ -102,6 +102,6 @@ export class MovieAssembler {
 
   public async assembleSearchedMovies(query: string): Promise<Movie[]> {
     const response = await this.movieService.searchMovies(query);
-    return response.results.map(this.movieFormatter.formatMovie);
+    return response.results.map((movie) => this.movieFormatter.formatMovie(movie));
   }
 }
