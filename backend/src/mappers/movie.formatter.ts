@@ -33,7 +33,7 @@ export class MovieFormatter {
       year: data.release_date ? parseInt(data.release_date.slice(0, 4)) : null,
       runtime: data.runtime,
       vote_average:
-        data.vote_average / 2 === 0.0 ? null : data.vote_average / 2, // 10点満点を5点満点に変換
+        data.vote_average === 0 ? nul : data.vote_average / 2, // 10点満点を5点満点に変換
       genres: data.genres?.map((genre: { name: string }) => genre.name) ?? null,
       company_logo: data.production_companies?.[0]?.logo_path ?? null,
       homePageUrl: data.homepage,
