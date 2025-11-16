@@ -13,9 +13,9 @@ const HorizontalScrollContainer = ({ children }: Props) => {
   const checkScrollability = useCallback(() => {
     const el = containerRef.current;
     if (el) {
-      const isScrollabe = el.scrollWidth > el.clientWidth;
-      setCanScrollLeft(isScrollabe && el.scrollLeft > 0);
-      setCanScrollRight(isScrollabe && el.scrollLeft + el.clientWidth < el.scrollWidth);
+      const isScrollable = el.scrollWidth > el.clientWidth;
+      setCanScrollLeft(isScrollable && el.scrollLeft > 0);
+      setCanScrollRight(isScrollable && el.scrollLeft + el.clientWidth < el.scrollWidth);
     }
   }, []);
 
