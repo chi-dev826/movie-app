@@ -50,7 +50,7 @@ const HorizontalScrollContainer = ({ children }: Props) => {
       {canScrollLeft && (
         <button
           onClick={() => handleScroll('left')}
-          className="absolute top-0 z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -left-12 group-hover:opacity-100 xl:block"
+          className="absolute top-0 z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -left-10 group-hover:opacity-100 xl:block"
         >
           <ChevronLeftIcon className="w-12 h-12 mx-auto text-white" />
         </button>
@@ -64,7 +64,7 @@ const HorizontalScrollContainer = ({ children }: Props) => {
       {canScrollRight && (
         <button
           onClick={() => handleScroll('right')}
-          className="absolute top-0 z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -right-12 group-hover:opacity-100 xl:block"
+          className="absolute top-0 z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -right-10 group-hover:opacity-100 xl:block"
         >
           <ChevronRightIcon className="w-12 h-12 mx-auto text-white" />
         </button>
