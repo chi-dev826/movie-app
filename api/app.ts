@@ -7,24 +7,22 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = [
-  'http://localhost:5173', // Local Vite dev server
-];
-
-if (process.env.FRONTEND_URL) {
-  allowedOrigins.push(process.env.FRONTEND_URL);
-}
+// Allow requests from the local Vite dev server and any Vercel deployment of the frontend.
+const allowedOriginPattern = /^https:\/\/movie-app-frontend-.*\.vercel\.app$/;
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (like mobile apps or curl requests)
+      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-        return callback(new Error(msg), false);
+
+      // Allow local dev server and frontend deployments matching the pattern
+      if (origin === 'http://localhost:5173' || allowedOriginPattern.test(origin)) {
+        return callback(null, true);
       }
-      return callback(null, true);
+      
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
     },
   }),
 );
