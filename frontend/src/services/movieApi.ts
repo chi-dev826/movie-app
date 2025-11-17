@@ -2,7 +2,7 @@ import { Movie, Article } from '@/types/domain';
 import { FullMovieData, MovieListResponse } from '@/types/api/movie';
 import { MovieResponse } from '@/types/external/tmdb';
 
-const API_BASE_URL = 'http://192.168.0.10:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 /**
  * 人気映画リスト、映画の詳細、関連映画リスト、映画のyoutubeKeyを取得する
