@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3001;
 
 // すべてのオリジンからのアクセスを許可
 app.use(cors());
@@ -19,6 +20,10 @@ app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   res
     .status(500)
     .json({ message: "Failed to process request", error: err.message });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 export default app;

@@ -23,7 +23,8 @@
     /* Path Aliases */
     "baseUrl": "./src",
     "paths": {
-      "@/types/*": ["../../shared/types/*"]
+      "@/types/*": ["../../shared/types/*"],
+      "@/*": ["./*"]
     }
   },
   "include": ["src", "vite.config.ts", "playwright.config.ts", "../../shared/**/*.ts"],
