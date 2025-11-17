@@ -151,7 +151,7 @@ export class MovieService {
         sort_by: "popularity.desc",
         region: "JP",
       },
-      nowPlayingRes: {
+      recentllyAddedRes: {
         "vote_count.gte": 1000,
         sort_by: "primary_release_date.desc",
         region: "JP",
@@ -171,7 +171,7 @@ export class MovieService {
     const cacheKey = "homeMovieList";
     const cachedResult = this.cache.get<{
       popularRes: PaginatedResponse<MovieResponse>;
-      nowPlayingRes: PaginatedResponse<MovieResponse>;
+      recentllyAddedRes: PaginatedResponse<MovieResponse>;
       topRatedRes: PaginatedResponse<MovieResponse>;
       highRatedRes: PaginatedResponse<MovieResponse>;
     }>(cacheKey);
@@ -210,16 +210,16 @@ export class MovieService {
       {} as Record<string, PaginatedResponse<MovieResponse>>,
     );
 
-    const { popularRes, nowPlayingRes, topRatedRes, highRatedRes } =
+    const { popularRes, recentllyAddedRes, topRatedRes, highRatedRes } =
       aggregatedResponses;
 
     this.cache.set(cacheKey, {
       popularRes,
-      nowPlayingRes,
+      recentllyAddedRes,
       topRatedRes,
       highRatedRes,
     });
-    return { popularRes, nowPlayingRes, topRatedRes, highRatedRes };
+    return { popularRes, recentllyAddedRes, topRatedRes, highRatedRes };
   }
 
   async getUpcomingMovieList(): Promise<{

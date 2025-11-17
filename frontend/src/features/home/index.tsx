@@ -49,12 +49,18 @@ function HomePage() {
   const movieList = [
     upcomingData,
     data?.popular,
-    data?.now_playing,
+    data?.recently_added,
     data?.top_rated,
     data?.high_rated,
   ];
-  const movieListTitles = ['公開予定', '人気映画', '現在上映中', '高評価映画', '話題の映画'];
-  const movieListType = ['upcoming', 'popular', 'now_playing', 'top_rated', 'high_rated'];
+  const movieListTitles = [
+    '公開予定',
+    '人気映画',
+    '最近追加された映画',
+    '高評価映画',
+    '話題の映画',
+  ];
+  const movieListType = ['upcoming', 'popular', 'recently_added', 'top_rated', 'high_rated'];
   //ヒーローセクション用データフィルタリング
   const heroMovieList = upcomingData?.slice(0, 5) ?? [];
 

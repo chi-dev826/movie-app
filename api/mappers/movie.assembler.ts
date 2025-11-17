@@ -55,21 +55,25 @@ export class MovieAssembler {
   }
 
   public async assembleMovieList(): Promise<MovieListResponse> {
-    const { popularRes, nowPlayingRes, topRatedRes, highRatedRes } =
+    const { popularRes, recentllyAddedRes, topRatedRes, highRatedRes } =
       await this.movieService.getMovieList();
 
-    const popular = popularRes.results.map((movie) => this.movieFormatter.formatMovie(movie));
-    const now_playing = nowPlayingRes.results.map((movie) => 
+    const popular = popularRes.results.map((movie) =>
       this.movieFormatter.formatMovie(movie),
     );
-    const top_rated = topRatedRes.results.map((movie) => this.movieFormatter.formatMovie(movie));
-    const high_rated = highRatedRes.results.map((movie) => 
+    const recently_added = recentllyAddedRes.results.map((movie) =>
+      this.movieFormatter.formatMovie(movie),
+    );
+    const top_rated = topRatedRes.results.map((movie) =>
+      this.movieFormatter.formatMovie(movie),
+    );
+    const high_rated = highRatedRes.results.map((movie) =>
       this.movieFormatter.formatMovie(movie),
     );
 
     return {
       popular,
-      now_playing,
+      recently_added,
       top_rated,
       high_rated,
     };
@@ -102,6 +106,8 @@ export class MovieAssembler {
 
   public async assembleSearchedMovies(query: string): Promise<Movie[]> {
     const response = await this.movieService.searchMovies(query);
-    return response.results.map((movie) => this.movieFormatter.formatMovie(movie));
+    return response.results.map((movie) =>
+      this.movieFormatter.formatMovie(movie),
+    );
   }
 }
