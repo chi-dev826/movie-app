@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
-import apiRoutes from "./routes/movie.routes";
+import apiRoutes from "./routes";
 
 const app = express();
 
