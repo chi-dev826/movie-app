@@ -1,20 +1,15 @@
 {
   "version": 2,
-  "projects": [
+  "builds": [
     {
-      "rootDirectory": "frontend",
-      "buildCommand": "npm run build",
-      "outputDirectory": "dist",
-      "framework": "vite"
+      "src": "backend/dist/server.js",
+      "use": "@vercel/node"
     },
     {
-      "rootDirectory": "backend",
-      "buildCommand": "npm run build",
-      "outputDirectory": "dist",
-      "functions": {
-        "api/index.js": {
-          "runtime": "@vercel/node"
-        }
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "frontend/dist"
       }
     }
   ],
@@ -25,7 +20,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/dist/index.html"
+      "dest": "frontend/dist/$1"
     }
   ]
 }
