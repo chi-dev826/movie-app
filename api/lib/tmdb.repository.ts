@@ -32,6 +32,7 @@ export const tmdbApi = axios.create({
   },
   params: {
     language: "ja-JP",
+    include_adult: false,
   },
 });
 
@@ -112,6 +113,20 @@ export class TmdbRepository {
     const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       "/search/movie",
       { params },
+    );
+    return response.data;
+  }
+
+  async getNowPlayingMovies(params: {
+    page: number;
+    language: string;
+    region: string;
+  }): Promise<PaginatedResponse<MovieResponse>> {
+    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+      "/movie/now_playing",
+      {
+        params: params,
+      },
     );
     return response.data;
   }

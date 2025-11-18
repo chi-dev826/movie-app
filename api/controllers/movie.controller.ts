@@ -57,4 +57,14 @@ export class MovieController {
       next(error);
     }
   }
+
+  async getNowPlayingMovies(req: Request, res: Response, next: NextFunction) {
+    try {
+      const nowPlayingMovies =
+        await this.movieAssembler.assembleNowPlayingMovieList();
+      res.json(nowPlayingMovies);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

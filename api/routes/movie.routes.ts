@@ -35,4 +35,10 @@ router.get(
     movieController.getUpcomingMovies(req, res, next),
 );
 
+router.get(
+  "/movies/now-playing",
+  (req: Request, res: Response, next: NextFunction) =>
+    movieController.getNowPlayingMovies(req, res, next),
+);
+
 export default router;

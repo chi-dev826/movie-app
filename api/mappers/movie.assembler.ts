@@ -110,4 +110,11 @@ export class MovieAssembler {
       this.movieFormatter.formatMovie(movie),
     );
   }
+
+  public async assembleNowPlayingMovieList(): Promise<Movie[]> {
+    const response = await this.movieService.getNowPlayingMovies();
+    return response.results.map((movie) =>
+      this.movieFormatter.formatMovie(movie),
+    );
+  }
 }

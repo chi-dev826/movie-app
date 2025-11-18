@@ -48,7 +48,9 @@ export class MovieService {
     }
   }
 
-  private pageToFetch = Array.from({ length: 10 }, (_, i) => i + 1);
+  private createPageArray(totalPages: number): number[] {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
 
   private async isPublicKey(key: string | null): Promise<string | null> {
     if (!key) {
@@ -180,9 +182,10 @@ export class MovieService {
     }
 
     // それぞれのカテゴリのデータを10ページ分取得
+    const pagesToFetch = this.createPageArray(10);
     const moviePromises = Object.entries(categories).flatMap(
       ([categoryName, params]) =>
-        this.pageToFetch.map((pg) =>
+        pagesToFetch.map((pg) =>
           this.tmdbRepository
             .getDiscoverMovies({
               ...params,
@@ -213,13 +216,36 @@ export class MovieService {
     const { popularRes, recentllyAddedRes, topRatedRes, highRatedRes } =
       aggregatedResponses;
 
+    // 各カテゴリの映画リストから重複を排除
+    const uniquePopularRes = {
+      ...popularRes,
+      results: Array.from(new Map(popularRes.results.map(movie => [movie.id, movie])).values())
+    };
+    const uniqueRecentllyAddedRes = {
+      ...recentllyAddedRes,
+      results: Array.from(new Map(recentllyAddedRes.results.map(movie => [movie.id, movie])).values())
+    };
+    const uniqueTopRatedRes = {
+      ...topRatedRes,
+      results: Array.from(new Map(topRatedRes.results.map(movie => [movie.id, movie])).values())
+    };
+    const uniqueHighRatedRes = {
+      ...highRatedRes,
+      results: Array.from(new Map(highRatedRes.results.map(movie => [movie.id, movie])).values())
+    };
+
     this.cache.set(cacheKey, {
-      popularRes,
-      recentllyAddedRes,
-      topRatedRes,
-      highRatedRes,
+      popularRes: uniquePopularRes,
+      recentllyAddedRes: uniqueRecentllyAddedRes,
+      topRatedRes: uniqueTopRatedRes,
+      highRatedRes: uniqueHighRatedRes,
     });
-    return { popularRes, recentllyAddedRes, topRatedRes, highRatedRes };
+    return {
+      popularRes: uniquePopularRes,
+      recentllyAddedRes: uniqueRecentllyAddedRes,
+      topRatedRes: uniqueTopRatedRes,
+      highRatedRes: uniqueHighRatedRes,
+    };
   }
 
   async getUpcomingMovieList(): Promise<{
@@ -262,7 +288,8 @@ export class MovieService {
 
     const dateLte: string = `${twoMonthsLaterYear}-${twoMonthsLaterMonth}-${twoMonthsLaterDay}`;
 
-    const moviePromises = this.pageToFetch.map((pg) =>
+    const pagesToFetch = this.createPageArray(10);
+    const moviePromises = pagesToFetch.map((pg) =>
       this.tmdbRepository.getDiscoverMovies({
         region: "JP",
         watch_region: "JP",
@@ -309,5 +336,44 @@ export class MovieService {
 
   async searchMovies(query: string) {
     return await this.tmdbRepository.searchMovies({ query });
+  }
+
+  async getNowPlayingMovies(): Promise<PaginatedResponse<MovieResponse>> {
+    const cacheKey = "nowPlayingMovies";
+    const cachedResult =
+      this.cache.get<PaginatedResponse<MovieResponse>>(cacheKey);
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    const pagesToFetch = this.createPageArray(3);
+    const moviePromises = pagesToFetch.map((page) =>
+      this.tmdbRepository.getNowPlayingMovies({
+        page,
+        language: "ja",
+        region: "JP",
+      }),
+    );
+
+    const movieResponses = await Promise.all(moviePromises);
+
+    const combinedResults: MovieResponse[] = movieResponses.flatMap(
+      (response) => response.results,
+    );
+
+    // 重複を排除
+    const uniqueMovies = Array.from(
+      new Map(combinedResults.map((movie) => [movie.id, movie])).values(),
+    );
+
+    const result: PaginatedResponse<MovieResponse> = {
+      page: 1, // 複数ページを結合しているので、便宜上1とする
+      results: uniqueMovies,
+      total_pages: movieResponses[0].total_pages, // 最初のレスポンスから取得
+      total_results: movieResponses[0].total_results, // 最初のレスポンスから取得
+    };
+
+    this.cache.set(cacheKey, result);
+    return result;
   }
 }
