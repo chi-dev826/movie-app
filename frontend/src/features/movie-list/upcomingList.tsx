@@ -25,8 +25,7 @@ const UpcomingList = () => {
         .slice()
         .sort(
           (a, b) =>
-            new Date(a.release_date ?? '').getTime() -
-            new Date(b.release_date ?? '').getTime()
+            new Date(a.release_date ?? '').getTime() - new Date(b.release_date ?? '').getTime(),
         )
     : [];
 
