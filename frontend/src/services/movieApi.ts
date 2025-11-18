@@ -1,6 +1,5 @@
 import { Movie, Article } from '@/types/domain';
 import { FullMovieData, MovieListResponse } from '@/types/api/movie';
-import { MovieResponse } from '@/types/external/tmdb';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -34,8 +33,8 @@ export const fetchMovieAnalysis = async (movieId: number, movieTitle: string) =>
   return fetchFromApi<Article[]>(`/movie/${movieId}/movie-analysis?title=${movieTitle}`);
 };
 
-export const searchMovies = async (query: string): Promise<MovieResponse[]> => {
-  return fetchFromApi<MovieResponse[]>(`/search/movie?q=${encodeURIComponent(query)}`);
+export const searchMovies = async (query: string): Promise<Movie[]> => {
+  return fetchFromApi<Movie[]>(`/search/movie?q=${encodeURIComponent(query)}`);
 };
 
 export const fetchMovieList = async (): Promise<MovieListResponse> => {
@@ -44,4 +43,8 @@ export const fetchMovieList = async (): Promise<MovieListResponse> => {
 
 export const fetchUpcomingMovies = async (): Promise<Movie[]> => {
   return fetchFromApi<Movie[]>('/movies/upcoming');
+};
+
+export const fetchNowPlayingMovies = async (): Promise<Movie[]> => {
+  return fetchFromApi<Movie[]>('/movies/now-playing');
 };
