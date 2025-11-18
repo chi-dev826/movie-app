@@ -48,6 +48,7 @@ function HomePage() {
 
   const movieList = [
     upcomingData,
+    data?.now_playing,
     data?.popular,
     data?.recently_added,
     data?.top_rated,
@@ -55,13 +56,21 @@ function HomePage() {
   ];
   const movieListTitles = [
     '公開予定',
+    '公開中の映画',
     '人気映画',
     '最近追加された映画',
     '高評価映画',
     '話題の映画',
   ];
-  const movieListType = ['upcoming', 'popular', 'recently_added', 'top_rated', 'high_rated'];
-  //ヒーローセクション用データフィルタリング
+  const movieListType = [
+    'upcoming',
+    'now_playing',
+    'popular',
+    'recently_added',
+    'top_rated',
+    'high_rated',
+  ];
+  // 上位五件のデータをヒーロースワイパー用に抽出
   const heroMovieList = upcomingData?.slice(0, 5) ?? [];
 
   // HeroSwiperが表示されない場合は、すぐにアニメーションを開始する

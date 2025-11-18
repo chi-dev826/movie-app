@@ -3,11 +3,13 @@ import { useMovieList } from '../../hooks/useMovies';
 import MovieCard from '../../components/MovieCard';
 
 const MovieList = () => {
-  const { type } = useParams<{ type: 'popular' | 'now_playing' | 'top_rated' | 'high_rated' }>();
+  const { type } = useParams<{
+    type: 'popular' | 'recently_added' | 'top_rated' | 'high_rated' | 'now_playing';
+  }>();
   const { data, isLoading, isError, error } = useMovieList();
 
   const movieList = type ? data?.[type] : [];
-  const title = type ? type.replaceAll('_', ' ').toUpperCase() : 'Movies';
+  const title = type ? type.replace(/_/g, ' ').toUpperCase() : 'Movies';
 
   if (isLoading) {
     return <div className="container px-4 py-8 mx-auto text-center">Loading movies...</div>;
