@@ -135,7 +135,7 @@ function MovieDetailPage() {
       {data && (
         <>
           <motion.div
-            className="z-30 px-4 mt-10 text-white xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
+            className="z-30 w-full px-4 mt-10 text-white xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
             variants={itemVariants}
           >
             <HeroMetadata
