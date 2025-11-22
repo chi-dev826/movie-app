@@ -1,6 +1,6 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
-import { useMovieList, useUpcomingMovies } from '../../hooks/useMovies';
+import { useMovieList, useUpcomingMovies, useNowPlayingMovies } from '../../hooks/useMovies';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import HeroSwiper from './components/HeroSwiper';
@@ -44,11 +44,12 @@ import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 function HomePage() {
   const { data, isLoading, error } = useMovieList();
   const { data: upcomingData } = useUpcomingMovies();
+  const { data: nowPlayingData } = useNowPlayingMovies();
   const controls = useAnimation();
 
   const movieList = [
     upcomingData,
-    data?.now_playing,
+    nowPlayingData,
     data?.popular,
     data?.recently_added,
     data?.top_rated,

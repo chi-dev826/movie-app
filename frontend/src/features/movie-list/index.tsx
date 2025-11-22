@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useMovieList } from '../../hooks/useMovies';
+import { useMovieList, useNowPlayingMovies } from '../../hooks/useMovies';
 import MovieCard from '../../components/MovieCard';
 
 const MovieList = () => {
@@ -7,8 +7,10 @@ const MovieList = () => {
     type: 'popular' | 'recently_added' | 'top_rated' | 'high_rated' | 'now_playing';
   }>();
   const { data, isLoading, isError, error } = useMovieList();
+  const { data: NowPlayingData } = useNowPlayingMovies();
 
-  const movieList = type ? data?.[type] : [];
+  // 映画リストの種類に応じてデータを選択
+  const movieList = type === 'now_playing' ? NowPlayingData : type ? data?.[type] : [];
   const title = type ? type.replace(/_/g, ' ').toUpperCase() : 'Movies';
 
   if (isLoading) {

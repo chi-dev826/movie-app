@@ -7,6 +7,7 @@ import {
   searchMovies,
 } from '../services/movieApi';
 import { MovieListResponse } from '@/types/api';
+import { Movie } from '@/types/domain';
 
 const movieKeys = {
   all: ['movies'] as const,
@@ -37,17 +38,16 @@ export const useSearchMovies = (query: string) => {
 
 export const useMovieList = () => {
   return useQuery<MovieListResponse>({
-    queryKey: movieKeys.list('home'),
-    queryFn: async () => {
-      const [movieListData, nowPlayingData] = await Promise.all([
-        fetchMovieList(),
-        fetchNowPlayingMovies(),
-      ]);
-      return {
-        ...movieListData,
-        now_playing: nowPlayingData,
-      };
-    },
+    queryKey: movieKeys.list('movies'),
+    queryFn: fetchMovieList,
+    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+  });
+};
+
+export const useNowPlayingMovies = () => {
+  return useQuery<Movie[]>({
+    queryKey: movieKeys.list('now_playing'),
+    queryFn: fetchNowPlayingMovies,
     staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
   });
 };
