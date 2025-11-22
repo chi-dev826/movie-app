@@ -88,7 +88,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
         <p className="text-sm font-extrabold text-white lg:text-base xl:text-sm 3xl:text-base 4xl:text-lg line-clamp-6 group-hover:line-clamp-none">
           {movieDetail.overview}
         </p>
-        <span className="flex justify-center gap-1 my-5 text-sm font-bold text-gray-300 xl:space-x-2">
+        <span className="flex justify-center gap-1 my-5 text-sm font-bold text-gray-300 xl:justify-start xl:space-x-2">
           <span className="flex gap-3">
             <span>{movieDetail?.year}</span> <span>{movieDetail?.runtime}分</span>
           </span>
