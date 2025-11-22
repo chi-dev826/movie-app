@@ -44,15 +44,15 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
   });
 
   return (
-    <div className="justify-center w-full xl:text-left">
+    <div className="w-full text-center xl:text-left">
       <div className="xl:flex xl:max-w-[40%] xl:flex-col xl:mt-5">
-        <h1 className="mb-5 font-sans text-xl font-extrabold md:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-6xl">
+        <h1 className="mb-5 text-xl font-extrabold md:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-6xl">
           {movieDetail?.title}
         </h1>
 
         {watchProviders.length > 0 && (
-          <div className="p-4 flex-column xl:justify-start">
-            <p className="font-mono text-sm text-gray-400">配信中のサービス</p>
+          <div className="p-4 xl:justify-start">
+            <p className="text-sm text-gray-400">配信中のサービス</p>
             <div className="flex items-center justify-center flex-shrink-0 mt-4 -mx-2 xl:overflow-x-auto scrollbar-hide scroll-smooth xl:justify-start">
               {providerList?.map((provider, index) => (
                 <div key={index} className="p-2 group">
@@ -88,7 +88,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
         <p className="text-sm font-extrabold text-white lg:text-base xl:text-sm 3xl:text-base 4xl:text-lg line-clamp-6 group-hover:line-clamp-none">
           {movieDetail.overview}
         </p>
-        <span className="flex flex-col gap-1 my-5 text-sm font-bold text-gray-300 xl:flex-row xl:space-x-2">
+        <span className="flex gap-1 my-5 text-sm font-bold text-gray-300 xl:space-x-2">
           <span className="flex justify-center gap-3">
             <span>{movieDetail?.year}</span> <span>{movieDetail?.runtime}分</span>
           </span>
