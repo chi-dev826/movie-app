@@ -1,13 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
-import apiRoutes from "./src/routes"; // 修正
+import apiRoutes from "./src/routes";
 import dotenv from "dotenv";
 import { HTTP_STATUS } from "@shared/constants/httpStatus";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // すべてのオリジンからのアクセスを許可
 app.use(cors());
@@ -21,10 +20,6 @@ app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   res
     .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
     .json({ message: "Failed to process request", error: err.message });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
 
 export default app;
