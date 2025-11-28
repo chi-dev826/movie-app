@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { MovieAssembler } from "@/mappers/movie.assembler";
-import { HTTP_STATUS } from "@shared/constants/httpStatus";
+import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { ERROR_MESSAGES } from "@/constants/messages";
 
 export class MovieController {

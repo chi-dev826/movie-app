@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import apiRoutes from "./src/routes";
 import dotenv from "dotenv";
-import { HTTP_STATUS } from "@shared/constants/httpStatus";
+import { HTTP_STATUS } from "../shared/constants/httpStatus";
 
 dotenv.config();
 

@@ -5,7 +5,7 @@ import {
   eigaComController,
   googleSearchController,
 } from "@/container";
-import { API_PATHS } from "@shared/constants/routes";
+import { API_PATHS } from "../../../shared/constants/routes";
 
 const router = Router();
 
