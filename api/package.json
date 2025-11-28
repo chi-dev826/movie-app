@@ -1,10 +1,8 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "dist/api/server.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node dist/api/server.js",
     "dev": "npx ts-node-dev -r tsconfig-paths/register --respawn --transpile-only server.ts"
   },
   "dependencies": {
