@@ -5,38 +5,39 @@ import {
   eigaComController,
   googleSearchController,
 } from "../container";
+import { API_PATHS } from "../../shared/constants/routes";
 
 const router = Router();
 
 router.get(
-  "/movie/:movieId/full",
+  API_PATHS.MOVIE.FULL,
   (req: Request, res: Response, next: NextFunction) =>
     movieController.getMovieDetails(req, res, next),
 );
 router.get(
-  "/movie/:movieId/eiga-com-news",
+  API_PATHS.MOVIE.EIGA_COM_NEWS,
   (req: Request, res: Response, next: NextFunction) =>
     eigaComController.getEigaComNews(req, res, next),
 );
 router.get(
-  "/movie/:movieId/movie-analysis",
+  API_PATHS.MOVIE.ANALYSIS,
   (req: Request, res: Response, next: NextFunction) =>
     googleSearchController.getMovieAnalysis(req, res, next),
 );
-router.get("/search/movie", (req: Request, res: Response, next: NextFunction) =>
+router.get(API_PATHS.SEARCH.MOVIE, (req: Request, res: Response, next: NextFunction) =>
   movieController.searchMovies(req, res, next),
 );
-router.get("/movies/home", (req: Request, res: Response, next: NextFunction) =>
+router.get(API_PATHS.MOVIES.HOME, (req: Request, res: Response, next: NextFunction) =>
   movieController.getMovieList(req, res, next),
 );
 router.get(
-  "/movies/upcoming",
+  API_PATHS.MOVIES.UPCOMING,
   (req: Request, res: Response, next: NextFunction) =>
     movieController.getUpcomingMovies(req, res, next),
 );
 
 router.get(
-  "/movies/now-playing",
+  API_PATHS.MOVIES.NOW_PLAYING,
   (req: Request, res: Response, next: NextFunction) =>
     movieController.getNowPlayingMovies(req, res, next),
 );

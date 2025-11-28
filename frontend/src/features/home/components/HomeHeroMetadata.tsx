@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-import { TMDB_IMAGE_BASE_URL } from '../../../../config';
+import { TMDB_CONFIG } from '@/constants/config';
 import type { Movie } from '@/types/domain';
 
 type Props = {
@@ -29,7 +29,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
         >
           {movie.logo_path ? (
             <img
-              src={`${TMDB_IMAGE_BASE_URL}w1280${movie.logo_path}`}
+              src={`${TMDB_CONFIG.IMAGE_BASE_URL}w1280${movie.logo_path}`}
               alt={`${movie.title} logo`}
               className="object-cover max-w-28 md:max-w-52 lg:max-w-64 2xl:max-w-72 3xl:max-w-sm 4xl:max-w-xl drop-shadow-lg"
             />

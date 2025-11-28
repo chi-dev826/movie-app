@@ -1,4 +1,4 @@
-import { TMDB_IMAGE_BASE_URL } from '../../../../config';
+import { TMDB_CONFIG } from '@/constants/config';
 import { MovieDetail } from '@/types/domain';
 import { WindowIcon } from '@heroicons/react/20/solid';
 import { PlayCircleIcon } from '@heroicons/react/20/solid';
@@ -36,7 +36,7 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
   };
 
   const providerList = watchProviders.map((provider) => {
-    const logo_path = `${TMDB_IMAGE_BASE_URL}w185${provider.logo_path}`;
+    const logo_path = `${TMDB_CONFIG.IMAGE_BASE_URL}w185${provider.logo_path}`;
     const link = providers[provider.name as keyof typeof providers]
       ? providers[provider.name as keyof typeof providers](movieDetail.title)
       : null;

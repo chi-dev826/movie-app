@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { googleCustomSearchResponse } from "@/types/external/googleCustomSearch/response";
 import { Article } from "@/types/domain";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
@@ -22,7 +23,7 @@ if (!cx) {
 }
 
 export class googleSearchClient {
-  private readonly baseUrl = "https://www.googleapis.com/customsearch/v1";
+  private readonly baseUrl = EXTERNAL_API_URLS.GOOGLE_SEARCH;
   private readonly apiKey = key;
   private readonly searchEngineId = cx;
 

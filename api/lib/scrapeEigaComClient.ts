@@ -2,9 +2,10 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import NodeCache from "node-cache";
 import { Article } from "@/types/domain";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 export class ScrapeEigaComClient {
-  private readonly BASE_URL = "https://eiga.com";
+  private readonly BASE_URL = EXTERNAL_API_URLS.EIGA_COM;
   private cache: NodeCache;
 
   constructor() {

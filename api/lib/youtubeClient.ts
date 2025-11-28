@@ -1,6 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import path from "path";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
@@ -13,7 +14,7 @@ if (!YOUTUBE_API_KEY) {
 }
 
 export const youtubeApi = axios.create({
-  baseURL: "https://www.googleapis.com/youtube/v3",
+  baseURL: EXTERNAL_API_URLS.YOUTUBE,
 });
 
 youtubeApi.interceptors.request.use((config) => {

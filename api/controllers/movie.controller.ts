@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { MovieAssembler } from "../mappers/movie.assembler";
+import { HTTP_STATUS } from "../../shared/constants/httpStatus";
+import { ERROR_MESSAGES } from "../constants/messages";
 
 export class MovieController {
   private readonly movieAssembler: MovieAssembler;
@@ -12,7 +14,7 @@ export class MovieController {
     try {
       const { movieId } = req.params;
       if (!movieId) {
-        return res.status(400).json({ message: "Movie ID is required" });
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
       }
 
       const movieDetails = await this.movieAssembler.assembleFullMovieData(
@@ -28,7 +30,7 @@ export class MovieController {
     try {
       const query = req.query.q as string;
       if (!query) {
-        return res.status(400).json({ message: "Search query is required" });
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.SEARCH_QUERY_REQUIRED });
       }
 
       const searchResults =

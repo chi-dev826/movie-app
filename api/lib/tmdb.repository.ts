@@ -12,6 +12,7 @@ import {
   MovieWatchProvidersResponse,
 } from "@/types/external/tmdb";
 import { DiscoverMovieParams } from "@/types/external/tmdb";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
@@ -21,7 +22,7 @@ if (!API_KEY) {
     "TMDB APIキーが設定されていません。.envファイルを確認してください。",
   );
 }
-const API_BASE_URL = "https://api.themoviedb.org/3";
+const API_BASE_URL = EXTERNAL_API_URLS.TMDB;
 
 export const tmdbApi = axios.create({
   baseURL: API_BASE_URL,

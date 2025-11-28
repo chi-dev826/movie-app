@@ -1,5 +1,6 @@
 import { Movie, Article } from '@/types/domain';
 import { FullMovieData, MovieListResponse } from '@/types/api/movie';
+import { API_PATHS } from '../../../shared/constants/routes';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -22,29 +23,31 @@ export const fetchFromApi = async <T>(endpoint: string): Promise<T> => {
 };
 
 export const fetchFullMovieData = async (movieId: number): Promise<FullMovieData> => {
-  return fetchFromApi<FullMovieData>(`/movie/${movieId}/full`);
+  return fetchFromApi<FullMovieData>(API_PATHS.MOVIE.FULL.replace(':movieId', movieId.toString()));
 };
 
 export const fetchEigaComNews = async (movieId: number, movieTitle: string) => {
-  return fetchFromApi<Article[]>(`/movie/${movieId}/eiga-com-news?title=${movieTitle}`);
+  const path = API_PATHS.MOVIE.EIGA_COM_NEWS.replace(':movieId', movieId.toString());
+  return fetchFromApi<Article[]>(`${path}?title=${movieTitle}`);
 };
 
 export const fetchMovieAnalysis = async (movieId: number, movieTitle: string) => {
-  return fetchFromApi<Article[]>(`/movie/${movieId}/movie-analysis?title=${movieTitle}`);
+  const path = API_PATHS.MOVIE.ANALYSIS.replace(':movieId', movieId.toString());
+  return fetchFromApi<Article[]>(`${path}?title=${movieTitle}`);
 };
 
 export const searchMovies = async (query: string): Promise<Movie[]> => {
-  return fetchFromApi<Movie[]>(`/search/movie?q=${encodeURIComponent(query)}`);
+  return fetchFromApi<Movie[]>(`${API_PATHS.SEARCH.MOVIE}?q=${encodeURIComponent(query)}`);
 };
 
 export const fetchMovieList = async (): Promise<MovieListResponse> => {
-  return fetchFromApi<MovieListResponse>('/movies/home');
+  return fetchFromApi<MovieListResponse>(API_PATHS.MOVIES.HOME);
 };
 
 export const fetchUpcomingMovies = async (): Promise<Movie[]> => {
-  return fetchFromApi<Movie[]>('/movies/upcoming');
+  return fetchFromApi<Movie[]>(API_PATHS.MOVIES.UPCOMING);
 };
 
 export const fetchNowPlayingMovies = async (): Promise<Movie[]> => {
-  return fetchFromApi<Movie[]>('/movies/now-playing');
+  return fetchFromApi<Movie[]>(API_PATHS.MOVIES.NOW_PLAYING);
 };
