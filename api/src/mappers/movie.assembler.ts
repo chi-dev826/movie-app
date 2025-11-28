@@ -1,7 +1,7 @@
 import { MovieFormatter } from "./movie.formatter";
 import { MovieService } from "../services/movie.service";
-import { Movie } from "@/types/domain";
-import { FullMovieData, MovieListResponse } from "@/types/api";
+import { Movie } from "../../../shared/types/domain";
+import { FullMovieData, MovieListResponse } from "../../../shared/types/api";
 
 export class MovieAssembler {
   private readonly movieService: MovieService;

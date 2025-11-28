@@ -2,17 +2,17 @@ import axios from "axios";
 import dotenv from "dotenv";
 import path from "path";
 
-import { MovieDetailResponse, MovieResponse } from "@/types/external/tmdb";
-import { VideoItem } from "@/types/external/tmdb";
-import { ImageResponse } from "@/types/external/tmdb";
-import { CollectionResponse } from "@/types/external/tmdb";
+import { MovieDetailResponse, MovieResponse } from "../../../shared/types/external/tmdb";
+import { VideoItem } from "../../../shared/types/external/tmdb";
+import { ImageResponse } from "../../../shared/types/external/tmdb";
+import { CollectionResponse } from "../../../shared/types/external/tmdb";
 import {
   PaginatedResponse,
   DefaultResponse,
   MovieWatchProvidersResponse,
-} from "@/types/external/tmdb";
-import { DiscoverMovieParams } from "@/types/external/tmdb";
-import { EXTERNAL_API_URLS } from "@/constants/external";
+} from "../../../shared/types/external/tmdb";
+import { DiscoverMovieParams } from "../../../shared/types/external/tmdb";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 

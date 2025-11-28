@@ -8,7 +8,7 @@ import {
   MovieDetailResponse,
   MovieWatchProvidersResponse,
   PaginatedResponse,
-} from "@/types/external/tmdb";
+} from "../../../shared/types/external/tmdb";
 import { fetchVideoStatus } from "../lib/youtubeClient";
 
 // Assemblerに渡すためのデータ型を定義

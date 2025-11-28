@@ -2,9 +2,9 @@ import axios from "axios";
 // import * as cheerio from "cheerio";
 import dotenv from "dotenv";
 import path from "path";
-import { googleCustomSearchResponse } from "@/types/external/googleCustomSearch/response";
-import { Article } from "@/types/domain";
-import { EXTERNAL_API_URLS } from "@/constants/external";
+import { googleCustomSearchResponse } from "../../../shared/types/external/googleCustomSearch/response";
+import { Article } from "../../../shared/types/domain";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 

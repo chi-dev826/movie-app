@@ -1,5 +1,5 @@
 import { googleSearchClient } from "../lib/googleSearchClient";
-import { Article } from "@/types/domain";
+import { Article } from "../../../shared/types/domain";
 import Nodecache from "node-cache";
 
 const cache = new Nodecache({ stdTTL: 86400 }); // キャッシュの有効期限を24時間に設定

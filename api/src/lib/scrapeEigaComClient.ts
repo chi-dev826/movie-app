@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import NodeCache from "node-cache";
-import { Article } from "@/types/domain";
-import { EXTERNAL_API_URLS } from "@/constants/external";
+import { Article } from "../../../shared/types/domain";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 export class ScrapeEigaComClient {
   private readonly BASE_URL = EXTERNAL_API_URLS.EIGA_COM;

@@ -1,10 +1,10 @@
-import { MovieDetail, Movie } from "@/types/domain";
+import { MovieDetail, Movie } from "../../../shared/types/domain";
 import {
   MovieDetailResponse,
   MovieResponse,
   ImageResponse,
-} from "@/types/external/tmdb";
-import { MovieWatchProvidersResponse } from "@/types/external/tmdb";
+} from "../../../shared/types/external/tmdb";
+import { MovieWatchProvidersResponse } from "../../../shared/types/external/tmdb";
 
 export class MovieFormatter {
   public formatMovie(movie: MovieResponse): Movie {

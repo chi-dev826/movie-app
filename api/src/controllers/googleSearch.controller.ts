@@ -1,4 +1,4 @@
-import GoogleSearchService from "@/services/googleSearch.service";
+import GoogleSearchService from "../services/googleSearch.service";
 import { Request, Response, NextFunction } from "express";
 
 export class GoogleSearchController {
