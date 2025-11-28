@@ -4,8 +4,8 @@ import {
   movieController,
   eigaComController,
   googleSearchController,
-} from "../../container";
-import { API_PATHS } from "../../../shared/constants/routes";
+} from "@/container";
+import { API_PATHS } from "@shared/constants/routes";
 
 const router = Router();
 

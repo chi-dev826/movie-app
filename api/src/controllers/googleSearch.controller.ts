@@ -1,8 +1,10 @@
+import GoogleSearchService from "@/services/googleSearch.service";
 import { Request, Response, NextFunction } from "express";
-import GoogleSearchService from "../services/googleSearch.service";
 
 export class GoogleSearchController {
-  private googleSearchService: GoogleSearchService;
+  private readonly googleSearchService: GoogleSearchService;
+// ... rest of file unchanged
+
 
   constructor(googleSearchService: GoogleSearchService) {
     this.googleSearchService = googleSearchService;

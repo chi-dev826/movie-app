@@ -12,7 +12,7 @@ import {
   MovieWatchProvidersResponse,
 } from "@/types/external/tmdb";
 import { DiscoverMovieParams } from "@/types/external/tmdb";
-import { EXTERNAL_API_URLS } from "../../constants/external";
+import { EXTERNAL_API_URLS } from "@/constants/external";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 

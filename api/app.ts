@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
-import apiRoutes from "./routes";
+import apiRoutes from "./src/routes"; // 修正
 import dotenv from "dotenv";
-import { HTTP_STATUS } from "../shared/constants/httpStatus";
+import { HTTP_STATUS } from "@shared/constants/httpStatus";
 
 dotenv.config();
 

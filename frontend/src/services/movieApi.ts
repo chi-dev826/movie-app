@@ -1,6 +1,6 @@
 import { Movie, Article } from '@/types/domain';
 import { FullMovieData, MovieListResponse } from '@/types/api/movie';
-import { API_PATHS } from '../../../shared/constants/routes';
+import { API_PATHS } from '@shared/constants/routes';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
