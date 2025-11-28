@@ -1,5 +1,7 @@
-import { Request, Response } from "express";
+import { IncomingMessage, ServerResponse } from 'http';
 
-export default (req: Request, res: Response) => {
-  res.status(200).json({ message: "Hello World from Vercel Debug" });
+export default (req: IncomingMessage, res: ServerResponse) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end("Pure Node Hello World");
 };
