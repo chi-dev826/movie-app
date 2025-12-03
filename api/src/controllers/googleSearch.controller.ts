@@ -3,8 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 export class GoogleSearchController {
   private readonly googleSearchService: GoogleSearchService;
-// ... rest of file unchanged
-
+  // ... rest of file unchanged
 
   constructor(googleSearchService: GoogleSearchService) {
     this.googleSearchService = googleSearchService;

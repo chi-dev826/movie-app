@@ -22,7 +22,7 @@ if (!cx) {
   );
 }
 
-export class googleSearchClient {
+export class GoogleSearchClient {
   private readonly baseUrl = EXTERNAL_API_URLS.GOOGLE_SEARCH;
   private readonly apiKey = key;
   private readonly searchEngineId = cx;
