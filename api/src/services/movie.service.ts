@@ -219,19 +219,31 @@ export class MovieService {
     // 各カテゴリの映画リストから重複を排除
     const uniquePopularRes = {
       ...popularRes,
-      results: Array.from(new Map(popularRes.results.map(movie => [movie.id, movie])).values())
+      results: Array.from(
+        new Map(popularRes.results.map((movie) => [movie.id, movie])).values(),
+      ),
     };
     const uniqueRecentllyAddedRes = {
       ...recentllyAddedRes,
-      results: Array.from(new Map(recentllyAddedRes.results.map(movie => [movie.id, movie])).values())
+      results: Array.from(
+        new Map(
+          recentllyAddedRes.results.map((movie) => [movie.id, movie]),
+        ).values(),
+      ),
     };
     const uniqueTopRatedRes = {
       ...topRatedRes,
-      results: Array.from(new Map(topRatedRes.results.map(movie => [movie.id, movie])).values())
+      results: Array.from(
+        new Map(topRatedRes.results.map((movie) => [movie.id, movie])).values(),
+      ),
     };
     const uniqueHighRatedRes = {
       ...highRatedRes,
-      results: Array.from(new Map(highRatedRes.results.map(movie => [movie.id, movie])).values())
+      results: Array.from(
+        new Map(
+          highRatedRes.results.map((movie) => [movie.id, movie]),
+        ).values(),
+      ),
     };
 
     this.cache.set(cacheKey, {
