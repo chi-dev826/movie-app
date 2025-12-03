@@ -40,6 +40,10 @@ export default tseslint.config(
           selector: 'typeLike',
           format: ['PascalCase'], // クラス、インターフェース、型エイリアスはPascalCase
         },
+        {
+          selector: 'objectLiteralProperty',
+          format: null, // オブジェクトリテラルのプロパティは任意の形式を許可
+        },
       ],
 
       // --- ファイル名の命名規則 ---
