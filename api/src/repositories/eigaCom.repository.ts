@@ -1,27 +1,19 @@
-import axios from "axios";
-import * as cheerio from "cheerio";
-import NodeCache from "node-cache";
+import { eigaComClient } from "../lib/eigaComClient";
 import { Article } from "../../../shared/types/domain";
-import { EXTERNAL_API_URLS } from "../constants/external";
+import * as cheerio from "cheerio";
 
-export class ScrapeEigaComClient {
-  private readonly BASE_URL = EXTERNAL_API_URLS.EIGA_COM;
-  private cache: NodeCache;
+export class EigaComRepository {
+  private readonly client: typeof eigaComClient;
 
-  constructor() {
-    this.cache = new NodeCache({ stdTTL: 86400 }); // キャッシュの有効期限を24時間に設定
+  constructor(client: typeof eigaComClient = eigaComClient) {
+    this.client = client;
   }
 
   async searchNews(movieTitle: string): Promise<Article[]> {
-    const searchUrl = `${this.BASE_URL}/search/${encodeURIComponent(
-      movieTitle,
-    )}`;
+    const searchUrl = `/search/${encodeURIComponent(movieTitle)}`;
 
     try {
-      if (this.cache.has(searchUrl)) {
-        return this.cache.get<Article[]>(searchUrl) || [];
-      }
-      const response = await axios.get(searchUrl);
+      const response = await this.client.get(searchUrl);
       const $ = cheerio.load(response.data);
 
       const articles: Article[] = [];
@@ -49,7 +41,6 @@ export class ScrapeEigaComClient {
           });
         }
       });
-      this.cache.set(searchUrl, articles);
       return articles;
     } catch (error) {
       console.error("映画.comのニュース取得エラー:", error);

@@ -1,5 +1,4 @@
 import axios from "axios";
-// import * as cheerio from "cheerio";
 import dotenv from "dotenv";
 import path from "path";
 import { googleCustomSearchResponse } from "../../../shared/types/external/googleCustomSearch/response";
@@ -22,7 +21,7 @@ if (!cx) {
   );
 }
 
-export class GoogleSearchClient {
+export class GoogleSearchRepository {
   private readonly baseUrl = EXTERNAL_API_URLS.GOOGLE_SEARCH;
   private readonly apiKey = key;
   private readonly searchEngineId = cx;

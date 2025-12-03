@@ -24,18 +24,3 @@ youtubeApi.interceptors.request.use((config) => {
   };
   return config;
 });
-
-export const fetchVideoStatus = async (key: string) => {
-  try {
-    const response = await youtubeApi.get("/videos", {
-      params: {
-        part: "status",
-        id: key,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching video status from YouTube:", error);
-    return null;
-  }
-};

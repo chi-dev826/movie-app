@@ -1,20 +1,25 @@
 import NodeCache from "node-cache";
 import { TmdbRepository } from "../repositories/tmdb.repository";
+import { YoutubeRepository } from "../repositories/youtube.repository"; // Import YoutubeRepository
 import { MovieFormatter } from "../repositories/tmdb.formatter";
 import { Movie } from "../../../shared/types/domain";
 import { FullMovieData, MovieListResponse } from "../../../shared/types/api";
 import { DiscoverMovieParams } from "../../../shared/types/external/tmdb";
-import { fetchVideoStatus } from "../lib/youtubeClient";
 
 export class MovieService {
   private readonly tmdbRepository: TmdbRepository;
+  private readonly youtubeRepository: YoutubeRepository; // Add YoutubeRepository
   private readonly cache: NodeCache;
   // Collectionのパーツなど、Repositoryメソッドが生データを返してくるケースや
   // Service内で追加の整形が必要なケースのために、Formatterを内部で保持する
   private readonly formatter: MovieFormatter;
 
-  constructor(tmdbRepository: TmdbRepository) {
+  constructor(
+    tmdbRepository: TmdbRepository,
+    youtubeRepository: YoutubeRepository, // Add YoutubeRepository to constructor
+  ) {
     this.tmdbRepository = tmdbRepository;
+    this.youtubeRepository = youtubeRepository;
     this.cache = new NodeCache({ stdTTL: 86400 }); // キャッシュ有効期限: 24時間
     this.formatter = new MovieFormatter();
   }
@@ -27,7 +32,7 @@ export class MovieService {
     if (!key) {
       return null;
     }
-    const result = await fetchVideoStatus(key);
+    const result = await this.youtubeRepository.getVideoStatus(key); // Use YoutubeRepository
     const status = result?.items?.[0]?.status;
     return status && status.privacyStatus === "public" ? key : null;
   }
