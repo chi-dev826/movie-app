@@ -1,14 +1,14 @@
-import { googleSearchClient } from "../lib/googleSearchClient";
+import { GoogleSearchClient } from "../lib/googleSearchClient";
 import { Article } from "../../../shared/types/domain";
 import Nodecache from "node-cache";
 
 const cache = new Nodecache({ stdTTL: 86400 }); // キャッシュの有効期限を24時間に設定
 
 export class GoogleSearchService {
-  private googleSearchClient: googleSearchClient;
+  private googleSearchClient: GoogleSearchClient;
 
   constructor() {
-    this.googleSearchClient = new googleSearchClient();
+    this.googleSearchClient = new GoogleSearchClient();
   }
   async getMovieAnalysis(movieTitle: string) {
     const query = `${movieTitle} 映画 考察`;
