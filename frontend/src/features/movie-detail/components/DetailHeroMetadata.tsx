@@ -1,7 +1,7 @@
 import { TMDB_CONFIG } from '@/constants/config';
 import { MovieDetail } from '@/types/domain';
-import { WindowIcon } from '@heroicons/react/20/solid';
-import { PlayCircleIcon } from '@heroicons/react/20/solid';
+import { useWatchList } from '@/hooks/useWatchLIst';
+import { WindowIcon, PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import HeroVideo from './HeroVideo';
@@ -14,6 +14,9 @@ type Props = {
 
 const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isInWatchList, toggleWatchList } = useWatchList();
+
+  const isInList = isInWatchList(movieDetail.id);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -114,6 +117,18 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
             予告編を見る
           </button>
         )}
+        <button
+          onClick={() => toggleWatchList(movieDetail.id)}
+          className={
+            `flex flex-col items-center gap-3 text-sm font-bold ` +
+            (isInList
+              ? `text-gray-500 duration-300 ease-in-out hover:scale-110 hover:text-gray-300`
+              : `text-white duration-300 ease-in-out hover:scale-110 hover:text-blue-500`)
+          }
+        >
+          <PlusIcon className="w-8 h-8" />
+          {isInList ? 'リストから削除' : 'リストへ追加'}
+        </button>
       </div>
       {isModalOpen && youtubeKey !== undefined && (
         <HeroVideo youtubeKey={youtubeKey} onClose={handleCloseModal} />
