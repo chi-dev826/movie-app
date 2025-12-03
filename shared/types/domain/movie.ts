@@ -3,6 +3,7 @@ export type Movie = {
   id: number;
   backdrop_path: string | null;
   original_title: string;
+  original_language: string;
   title: string;
   overview: string;
   poster_path: string | null;
