@@ -34,7 +34,15 @@ export default tseslint.config(
         },
         {
           selector: 'variable',
-          format: ['camelCase', 'UPPER_CASE'], // 定数用のUPPER_CASEを許可
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase', 'snake_case'], // 定数用のUPPER_CASE、クラス等のPascalCase、snake_caseを許可
+        },
+        {
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'], // 関数コンポーネントやクラスコンストラクタのためにPascalCaseを許可
+        },
+        {
+          selector: 'import',
+          format: ['camelCase', 'PascalCase'], // インポートされた変数（クラスなど）のPascalCaseを許可
         },
         {
           selector: 'typeLike',
