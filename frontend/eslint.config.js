@@ -49,6 +49,10 @@ export default tseslint.config(
           format: ['camelCase', 'PascalCase'], // Reactコンポーネント(Pascal)を許可
         },
         {
+          selector: 'import',
+          format: ['camelCase', 'PascalCase'], // インポートされた変数（クラスなど）のPascalCaseを許可
+        },
+        {
           selector: 'typeLike',
           format: ['PascalCase'], // クラス、インターフェース、型エイリアスはPascalCase
         },
