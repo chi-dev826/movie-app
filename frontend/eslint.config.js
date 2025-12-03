@@ -42,7 +42,7 @@ export default tseslint.config(
         },
         {
           selector: 'variable',
-          format: ['camelCase', 'UPPER_CASE', 'PascalCase'], // Reactコンポーネント(Pascal)と定数(UPPER)を許可
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase', 'snake_case'], // Reactコンポーネント(Pascal)と定数(UPPER)を許可
         },
         {
           selector: 'function',
@@ -53,8 +53,20 @@ export default tseslint.config(
           format: ['camelCase', 'PascalCase'], // インポートされた変数（クラスなど）のPascalCaseを許可
         },
         {
+          selector: 'typeProperty', // 型のプロパティ（インターフェース、型エイリアス）
+          format: ['camelCase', 'snake_case'], // snake_caseも許可
+        },
+        {
           selector: 'typeLike',
           format: ['PascalCase'], // クラス、インターフェース、型エイリアスはPascalCase
+        },
+        {
+          selector: 'objectLiteralMethod',
+          format: null, // オブジェクトリテラルのプロパティは任意の形式を許可
+        },
+        {
+          selector: 'objectLiteralProperty',
+          format: null, // オブジェクトリテラルのプロパティは任意の形式を許可
         },
       ],
 
