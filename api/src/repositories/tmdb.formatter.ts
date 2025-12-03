@@ -12,6 +12,7 @@ export class MovieFormatter {
       id: movie.id,
       backdrop_path: movie.backdrop_path,
       original_title: movie.original_title,
+      original_language: movie.original_language,
       title: movie.title,
       poster_path: movie.poster_path,
       overview: movie.overview,

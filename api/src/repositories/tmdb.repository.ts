@@ -1,93 +1,76 @@
-import axios from "axios";
-import dotenv from "dotenv";
-import path from "path";
-
+import { Movie, MovieDetail } from "../../../shared/types/domain";
 import {
   MovieDetailResponse,
   MovieResponse,
-} from "../../../shared/types/external/tmdb";
-import { VideoItem } from "../../../shared/types/external/tmdb";
-import { ImageResponse } from "../../../shared/types/external/tmdb";
-import { CollectionResponse } from "../../../shared/types/external/tmdb";
-import {
+  ImageResponse,
   PaginatedResponse,
-  DefaultResponse,
+  CollectionResponse,
   MovieWatchProvidersResponse,
+  DefaultResponse,
+  VideoItem,
+  DiscoverMovieParams,
 } from "../../../shared/types/external/tmdb";
-import { DiscoverMovieParams } from "../../../shared/types/external/tmdb";
-import { EXTERNAL_API_URLS } from "../constants/external";
-
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
-
-const API_KEY = process.env.VITE_TMDB_API_KEY;
-if (!API_KEY) {
-  console.error(
-    "TMDB APIキーが設定されていません。.envファイルを確認してください。",
-  );
-}
-const API_BASE_URL = EXTERNAL_API_URLS.TMDB;
-
-export const tmdbApi = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    Authorization: `Bearer ${API_KEY}`,
-    Accept: "application/json",
-    "Cache-Control": "no-cache",
-  },
-  params: {
-    language: "ja-JP",
-    include_adult: false,
-  },
-});
+import { tmdbApi } from "../lib/tmdb.client";
+import { MovieFormatter } from "./tmdb.formatter";
 
 export class TmdbRepository {
   private readonly api: typeof tmdbApi;
+  private readonly formatter: MovieFormatter;
 
-  constructor(apiInstance: typeof tmdbApi = tmdbApi) {
+  constructor(
+    apiInstance: typeof tmdbApi = tmdbApi,
+    formatter: MovieFormatter = new MovieFormatter(),
+  ) {
     this.api = apiInstance;
+    this.formatter = formatter;
   }
 
-  async getMovieDetails(movieId: number): Promise<MovieDetailResponse> {
+  async getMovieDetails(movieId: number): Promise<MovieDetail> {
     const response = await this.api.get<MovieDetailResponse>(
       `/movie/${movieId}`,
     );
-    return response.data;
+    return this.formatter.formatDetail(response.data);
   }
 
-  async getMovieVideos(movieId: number): Promise<DefaultResponse<VideoItem>> {
+  async getMovieVideos(movieId: number): Promise<VideoItem[]> {
     const response = await this.api.get<DefaultResponse<VideoItem>>(
       `/movie/${movieId}/videos`,
     );
-    return response.data;
+    return response.data.results;
   }
 
-  async getMovieImages(movieId: number): Promise<ImageResponse> {
+  async getMovieImages(movieId: number): Promise<string | null> {
     const response = await this.api.get<ImageResponse>(
       `/movie/${movieId}/images`,
     );
-    return response.data;
+    return this.formatter.formatImage(response.data);
   }
 
   async getMovieWatchProviders(
     movieId: number,
-  ): Promise<MovieWatchProvidersResponse> {
+  ): Promise<{ logo_path: string | null; name: string }[]> {
     const response = await this.api.get<MovieWatchProvidersResponse>(
       `/movie/${movieId}/watch/providers`,
     );
-    return response.data;
+    return this.formatter.formatWatchProviders(response.data);
   }
 
   async getSimilarMovies(
     movieId: number,
     page = 1,
-  ): Promise<PaginatedResponse<MovieResponse>> {
+  ): Promise<PaginatedResponse<Movie>> {
     const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       `/movie/${movieId}/similar`,
       {
         params: { page },
       },
     );
-    return response.data;
+    return {
+      ...response.data,
+      results: response.data.results.map((movie) =>
+        this.formatter.formatMovie(movie),
+      ),
+    };
   }
 
   async getCollectionDetails(
@@ -101,37 +84,52 @@ export class TmdbRepository {
 
   async getDiscoverMovies(
     params: DiscoverMovieParams,
-  ): Promise<PaginatedResponse<MovieResponse>> {
+  ): Promise<PaginatedResponse<Movie>> {
     const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       "/discover/movie",
       {
         params,
       },
     );
-    return response.data;
+    return {
+      ...response.data,
+      results: response.data.results.map((movie) =>
+        this.formatter.formatMovie(movie),
+      ),
+    };
   }
 
   async searchMovies(params: {
     query: string;
-  }): Promise<PaginatedResponse<MovieResponse>> {
+  }): Promise<PaginatedResponse<Movie>> {
     const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       "/search/movie",
       { params },
     );
-    return response.data;
+    return {
+      ...response.data,
+      results: response.data.results.map((movie) =>
+        this.formatter.formatMovie(movie),
+      ),
+    };
   }
 
   async getNowPlayingMovies(params: {
     page: number;
     language: string;
     region: string;
-  }): Promise<PaginatedResponse<MovieResponse>> {
+  }): Promise<PaginatedResponse<Movie>> {
     const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       "/movie/now_playing",
       {
         params: params,
       },
     );
-    return response.data;
+    return {
+      ...response.data,
+      results: response.data.results.map((movie) =>
+        this.formatter.formatMovie(movie),
+      ),
+    };
   }
 }

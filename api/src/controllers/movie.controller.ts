@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { MovieAssembler } from "../mappers/movie.assembler";
+import { MovieService } from "../services/movie.service";
 import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { ERROR_MESSAGES } from "../constants/messages";
 
 export class MovieController {
-  private readonly movieAssembler: MovieAssembler;
+  private readonly movieService: MovieService;
 
-  constructor(movieAssembler: MovieAssembler) {
-    this.movieAssembler = movieAssembler;
+  constructor(movieService: MovieService) {
+    this.movieService = movieService;
   }
 
   async getMovieDetails(req: Request, res: Response, next: NextFunction) {
@@ -19,7 +19,7 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
       }
 
-      const movieDetails = await this.movieAssembler.assembleFullMovieData(
+      const movieDetails = await this.movieService.getFullMovieData(
         Number(movieId),
       );
       res.json(movieDetails);
@@ -37,8 +37,7 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.SEARCH_QUERY_REQUIRED });
       }
 
-      const searchResults =
-        await this.movieAssembler.assembleSearchedMovies(query);
+      const searchResults = await this.movieService.searchMovies(query);
       res.json(searchResults);
     } catch (error) {
       next(error);
@@ -47,7 +46,7 @@ export class MovieController {
 
   async getMovieList(req: Request, res: Response, next: NextFunction) {
     try {
-      const movieList = await this.movieAssembler.assembleMovieList();
+      const movieList = await this.movieService.getHomePageMovieList();
       res.json(movieList);
     } catch (error) {
       next(error);
@@ -56,8 +55,7 @@ export class MovieController {
 
   async getUpcomingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const upcomingMovies =
-        await this.movieAssembler.assembleUpcomingMovieList();
+      const upcomingMovies = await this.movieService.getUpcomingMovieList();
       res.json(upcomingMovies);
     } catch (error) {
       next(error);
@@ -66,8 +64,7 @@ export class MovieController {
 
   async getNowPlayingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const nowPlayingMovies =
-        await this.movieAssembler.assembleNowPlayingMovieList();
+      const nowPlayingMovies = await this.movieService.getNowPlayingMovies();
       res.json(nowPlayingMovies);
     } catch (error) {
       next(error);
