@@ -41,6 +41,23 @@ export default tseslint.config(
           format: ['camelCase', 'PascalCase'], // 関数コンポーネントやクラスコンストラクタのためにPascalCaseを許可
         },
         {
+          selector: 'parameter', // パラメータ
+          format: ['camelCase', 'snake_case'], // snake_caseも許可
+          leadingUnderscore: 'allow', // アンダースコア始まりを許可
+        },
+        {
+          selector: 'class', // クラス
+          format: ['PascalCase'],
+        },
+        {
+          selector: 'classProperty', // クラスのプロパティ
+          format: ['camelCase', 'UPPER_CASE'], // UPPER_CASEも許可
+        },
+        {
+          selector: 'typeProperty', // 型のプロパティ（インターフェース、型エイリアス）
+          format: ['camelCase', 'snake_case'], // snake_caseも許可
+        },
+        {
           selector: 'import',
           format: ['camelCase', 'PascalCase'], // インポートされた変数（クラスなど）のPascalCaseを許可
         },
@@ -54,20 +71,12 @@ export default tseslint.config(
         },
       ],
 
-      // --- ファイル名の命名規則 ---
-      'check-file/filename-naming-convention': [
+      // --- 未使用変数の設定 ---
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
-          'src/**/*.{ts,js}': 'CAMEL_CASE', // ソースファイルは基本的にcamelCase
-        },
-        {
-          ignoreMiddleExtensions: true,
-        },
-      ],
-      'check-file/folder-naming-convention': [
-        'error',
-        {
-          'src/**/': 'KEBAB_CASE', // フォルダ名はkebab-case
+          argsIgnorePattern: '^_|.+_', // アンダースコアで始まる引数と、アンダースコアで終わる引数を無視
+          varsIgnorePattern: '^_|.+_', // アンダースコアで始まる変数と、アンダースコアで終わる変数を無視
         },
       ],
     },
