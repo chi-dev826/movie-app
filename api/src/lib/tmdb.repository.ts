@@ -2,7 +2,10 @@ import axios from "axios";
 import dotenv from "dotenv";
 import path from "path";
 
-import { MovieDetailResponse, MovieResponse } from "../../../shared/types/external/tmdb";
+import {
+  MovieDetailResponse,
+  MovieResponse,
+} from "../../../shared/types/external/tmdb";
 import { VideoItem } from "../../../shared/types/external/tmdb";
 import { ImageResponse } from "../../../shared/types/external/tmdb";
 import { CollectionResponse } from "../../../shared/types/external/tmdb";
