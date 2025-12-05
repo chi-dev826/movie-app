@@ -51,3 +51,11 @@ export const fetchUpcomingMovies = async (): Promise<Movie[]> => {
 export const fetchNowPlayingMovies = async (): Promise<Movie[]> => {
   return fetchFromApi<Movie[]>(API_PATHS.MOVIES.NOW_PLAYING);
 };
+
+export const fetchMovieListByIds = async (ids: number[]): Promise<Movie[]> => {
+  if (!ids || ids.length === 0) {
+    return [];
+  }
+  const idsParam = ids.join(',');
+  return fetchFromApi<Movie[]>(`${API_PATHS.MOVIES.LIST}?ids=${idsParam}`);
+};
