@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 目の輪郭 -->
+  <path d="M5 50C5 50 25 15 50 15C75 15 95 50 95 50C95 50 75 85 50 85C25 85 5 50 5 50Z" stroke="#2563EB" fill="none"/>
+  <!-- 瞳の部分を再生ボタンに -->
+  <path d="M45 35L65 50L45 65V35Z" fill="#2563EB" stroke="none"/>
+</svg>

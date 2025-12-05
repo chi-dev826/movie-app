@@ -7,6 +7,7 @@ import SearchPage from './features/search';
 import MovieDetailPage from './features/movie-detail';
 import MovieList from './features/movie-list';
 import UpcomingList from './features/movie-list/upcomingList';
+import WatchListPage from './features/watch-list'; // インポートを追加
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: 'search',
         element: <SearchPage />,
+      },
+      {
+        path: 'watch-list', // ウォッチリストのルートを追加
+        element: <WatchListPage />,
       },
       {
         path: 'movie/:id',
