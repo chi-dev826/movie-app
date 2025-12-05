@@ -4,7 +4,7 @@ import ReactPlayer from 'react-player';
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion';
 
-import MovieCard from '@/components/MovieCard';
+import { ResponsiveMovieTile } from '@/components/movie-card';
 import HeroMetadata from './components/DetailHeroMetadata';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
@@ -166,7 +166,7 @@ function MovieDetailPage() {
         </h2>
         <HorizontalScrollContainer>
           {relatedMovies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
+            <ResponsiveMovieTile key={movie.id} movie={movie} />
           ))}
         </HorizontalScrollContainer>
       </motion.section>

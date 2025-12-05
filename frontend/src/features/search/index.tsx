@@ -1,6 +1,6 @@
 import { useSearchParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import MovieCard from '@/components/MovieCard';
+import { MoviePoster } from '@/components/movie-card';
 import { useSearchMovies } from '@/hooks/useMovies';
 
 const SearchPage = () => {
@@ -48,7 +48,7 @@ const SearchPage = () => {
         ) : (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8">
             {searchResults?.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} layout="poster" />
+              <MoviePoster key={movie.id} movie={movie} />
             ))}
           </div>
         )}

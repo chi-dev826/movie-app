@@ -4,7 +4,7 @@ import { useMovieList, useUpcomingMovies, useNowPlayingMovies } from '../../hook
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import HeroSwiper from './components/HeroSwiper';
-import MovieCard from '@/components/MovieCard';
+import { ResponsiveMovieTile } from '@/components/movie-card';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 
 /**
@@ -34,7 +34,7 @@ import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
  *
  * アクセシビリティ
  * - セクション見出しによりセマンティックな構造を提供している。
- * - `MovieCard` と `HeroSwiper` が適切なフォーカス管理やコントロールを公開していることを確認すること。
+ * - `ResponsiveMovieTile` と `HeroSwiper` が適切なフォーカス管理やコントロールを公開していることを確認すること。
  *
  * @returns JSX.Element - 読み込み中、エラー、またはメインコンテンツのいずれかをレンダリングする。
  *
@@ -153,7 +153,7 @@ function HomePage() {
             </Link>
             <HorizontalScrollContainer>
               {movies?.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} layout="responsive" />
+                <ResponsiveMovieTile key={movie.id} movie={movie} />
               ))}
             </HorizontalScrollContainer>
           </div>
