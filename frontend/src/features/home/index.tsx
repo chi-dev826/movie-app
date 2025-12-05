@@ -1,6 +1,6 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
-import { useMovieList, useUpcomingMovies, useNowPlayingMovies } from '../../hooks/useMovies';
+import { useMovieList, useUpcomingMovies, useNowPlayingMovies } from '@/hooks/useMovies';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import HeroSwiper from './components/HeroSwiper';

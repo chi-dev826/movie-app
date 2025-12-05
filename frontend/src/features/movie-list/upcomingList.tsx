@@ -2,7 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useUpcomingMovies } from '@/hooks/useMovies';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
-import HeroVideo from '../movie-detail/components/HeroVideo';
+import HeroVideo from '@/features/movie-detail/components/HeroVideo';
 
 const UpcomingList = () => {
   const { data, isLoading, error } = useUpcomingMovies();

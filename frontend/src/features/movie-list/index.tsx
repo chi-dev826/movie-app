@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useMovieList, useNowPlayingMovies } from '../../hooks/useMovies';
+import { useMovieList, useNowPlayingMovies } from '@/hooks/useMovies';
 import { MoviePoster } from '@/components/movie-card';
 
 const MovieList = () => {

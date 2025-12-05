@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchEigaComNews, fetchMovieAnalysis } from '../../../services/movieApi';
+import { fetchEigaComNews, fetchMovieAnalysis } from '@/services/movieApi';
 import { Article } from '@/types/domain'; // 共通の型定義からインポート
 
 export const useMovieNews = (movieId: number, movieTitle: string) => {

@@ -1,4 +1,4 @@
-import { useWatchList } from '../../hooks/useWatchList';
+import { useWatchList } from '@/hooks/useWatchList';
 import { useMoviesByIds } from '@/hooks/useMovies';
 import { ResponsiveMovieTile } from '@/components/movie-card';
 

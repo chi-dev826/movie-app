@@ -6,7 +6,7 @@ import {
   fetchNowPlayingMovies,
   searchMovies,
   fetchMovieListByIds,
-} from '../services/movieApi';
+} from '@/services/movieApi';
 import { MovieListResponse } from '@/types/api';
 import { Movie } from '@/types/domain';
 
