@@ -100,4 +100,25 @@ export class MovieFormatter {
       };
     });
   }
+
+  public formatMovieFromDetail(
+    detail: MovieDetail,
+    logoPath: string | null,
+  ): Movie {
+    return {
+      id: detail.id,
+      backdrop_path: detail.backdrop_path,
+      original_title: detail.original_title,
+      // 注: 現在のMovieDetailにはoriginal_languageが含まれていません。
+      // カード表示用としてはクリティカルではないため、一旦 'en' をデフォルトとして設定します。
+      original_language: "en",
+      title: detail.title,
+      poster_path: detail.poster_path,
+      overview: detail.overview,
+      vote_average: detail.vote_average,
+      // 注: MovieDetailは 'year' (数値) を持ちますが、Movieは 'release_date' (文字列) を持ちます。
+      release_date: detail.year ? `${detail.year}-01-01` : null,
+      logo_path: logoPath,
+    };
+  }
 }

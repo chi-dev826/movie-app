@@ -46,4 +46,10 @@ router.get(
     movieController.getNowPlayingMovies(req, res, next),
 );
 
+router.get(
+  API_PATHS.MOVIES.LIST,
+  (req: Request, res: Response, next: NextFunction) =>
+    movieController.getMovieListByIds(req, res, next),
+);
+
 export default router;

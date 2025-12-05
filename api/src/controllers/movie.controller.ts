@@ -70,4 +70,27 @@ export class MovieController {
       next(error);
     }
   }
+
+  async getMovieListByIds(req: Request, res: Response, next: NextFunction) {
+    try {
+      const idsParam = req.query.ids as string;
+      if (!idsParam) {
+        return res.json([]);
+      }
+
+      const movieIds = idsParam
+        .split(",")
+        .map((id) => parseInt(id, 10))
+        .filter((id) => !isNaN(id));
+
+      if (movieIds.length === 0) {
+        return res.json([]);
+      }
+
+      const movies = await this.movieService.getMovieListByIds(movieIds);
+      res.json(movies);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

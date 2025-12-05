@@ -280,4 +280,27 @@ export class MovieService {
     this.cache.set(cacheKey, result);
     return result;
   }
+
+  async getMovieListByIds(movieIds: number[]): Promise<Movie[]> {
+    if (!movieIds || movieIds.length === 0) {
+      return [];
+    }
+
+    const promises = movieIds.map(async (id) => {
+      try {
+        const [detail, image] = await Promise.all([
+          this.tmdbRepository.getMovieDetails(id),
+          this.tmdbRepository.getMovieImages(id),
+        ]);
+        return this.formatter.formatMovieFromDetail(detail, image);
+      } catch (error) {
+        console.error(`映画ID ${id} の取得に失敗しました:`, error);
+        return null;
+      }
+    });
+
+    const results = await Promise.all(promises);
+    // 取得に成功したものだけを返す
+    return results.filter((movie): movie is Movie => movie !== null);
+  }
 }
