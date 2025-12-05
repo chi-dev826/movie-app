@@ -1,6 +1,6 @@
 import { TMDB_CONFIG } from '@/constants/config';
 import { MovieDetail } from '@/types/domain';
-import { useWatchList } from '@/hooks/useWatchLIst';
+import { useWatchList } from '@/hooks/useWatchList';
 import { WindowIcon, PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { motion } from 'framer-motion';

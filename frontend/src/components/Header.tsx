@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, Search } from 'lucide-react';
+import { BookmarkIcon } from '@heroicons/react/20/solid';
 import SearchOverlay from '@/features/search/components/SearchOverlay';
 
 const Header = () => {
@@ -33,6 +34,13 @@ const Header = () => {
               <Search size={20} />
               <span>検索</span>
             </button>
+            <Link
+              to="/watch-list"
+              className="flex items-center space-x-2 text-lg font-bold transition-colors hover:text-gray-300"
+            >
+              <BookmarkIcon className="w-5 h-5" />
+              <span>ウォッチリスト</span>
+            </Link>
           </nav>
         </div>
       </header>

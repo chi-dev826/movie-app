@@ -5,6 +5,7 @@ import {
   fetchUpcomingMovies,
   fetchNowPlayingMovies,
   searchMovies,
+  fetchMovieListByIds,
 } from '../services/movieApi';
 import { MovieListResponse } from '@/types/api';
 import { Movie } from '@/types/domain';
@@ -16,6 +17,7 @@ const movieKeys = {
   details: () => [...movieKeys.all, 'detail'] as const,
   detail: (id: number) => [...movieKeys.details(), id] as const,
   search: (query: string) => [...movieKeys.all, 'search', query] as const,
+  ids: (ids: number[]) => [...movieKeys.all, 'ids', ids.join(',')] as const,
 };
 
 export const useFullMovieData = (movieId: number) => {
@@ -32,6 +34,15 @@ export const useSearchMovies = (query: string) => {
     queryKey: movieKeys.search(query),
     queryFn: () => searchMovies(query),
     enabled: query.length > 0,
+    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+  });
+};
+
+export const useMoviesByIds = (ids: number[]) => {
+  return useQuery({
+    queryKey: movieKeys.ids(ids),
+    queryFn: () => fetchMovieListByIds(ids),
+    enabled: ids.length > 0,
     staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
   });
 };
