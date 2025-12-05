@@ -11,5 +11,6 @@ export const API_PATHS = {
     HOME: "/movies/home",
     UPCOMING: "/movies/upcoming",
     NOW_PLAYING: "/movies/now-playing",
+    LIST: "/movies/list",
   }
 } as const;
