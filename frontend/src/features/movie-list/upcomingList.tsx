@@ -3,6 +3,8 @@ import { useUpcomingMovies } from '@/hooks/useMovies';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import HeroVideo from '@/features/movie-detail/components/HeroVideo';
+import { getTmdbImage } from '@/utils/imageUtils';
+import { TMDB_CONFIG } from '@/constants/config';
 
 const UpcomingList = () => {
   const { data, isLoading, error } = useUpcomingMovies();
@@ -48,9 +50,7 @@ const UpcomingList = () => {
                   <Link to={`/movie/${movie.id}`} className="p-4">
                     <img
                       src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-                          : ''
+                        getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.LARGE) ?? ''
                       }
                       alt={movie.title}
                       className="w-32 h-48 rounded-md xl:w-48 xl:h-72 "

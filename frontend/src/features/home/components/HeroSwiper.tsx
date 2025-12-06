@@ -9,6 +9,8 @@ import ReactPlayer from 'react-player';
 import type { Movie } from '@/types/domain';
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
+import { getTmdbImage } from '@/utils/imageUtils';
+import { TMDB_CONFIG } from '@/constants/config';
 
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -101,7 +103,9 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
                 transition: { duration: 1.5, ease: 'easeInOut' },
               }}
               transition={{ duration: 1 }}
-              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+              src={
+                getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+              }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full"
               style={{ zIndex: 10 }}
@@ -132,7 +136,9 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
         <AnimatePresence>
           {movie?.backdrop_path && (
             <motion.img
-              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+              src={
+                getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+              }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full"
               style={{ zIndex: 5 }}

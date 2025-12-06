@@ -9,6 +9,8 @@ import HeroMetadata from './components/DetailHeroMetadata';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
 import { useFullMovieData } from '@/hooks/useMovies';
+import { getTmdbImage } from '@/utils/imageUtils';
+import { TMDB_CONFIG } from '@/constants/config';
 
 function MovieDetailPage() {
   const { id: movieId } = useParams<{ id: string }>();
@@ -89,9 +91,16 @@ function MovieDetailPage() {
                 key={data.detail.backdrop_path}
                 initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0, scale: 1.1, transition: { duration: 1.5, ease: 'easeInOut' } }}
+                exit={{
+                  opacity: 0,
+                  scale: 1.1,
+                  transition: { duration: 1.5, ease: 'easeInOut' },
+                }}
                 transition={{ duration: 1 }}
-                src={`https://image.tmdb.org/t/p/original${data.detail.backdrop_path}`}
+                src={
+                  getTmdbImage(data.detail.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ??
+                  ''
+                }
                 alt={data.detail.title}
                 className="absolute inset-0 object-cover w-full h-full"
                 style={{ zIndex: 10 }}
@@ -123,7 +132,10 @@ function MovieDetailPage() {
         ) : (
           data?.detail?.backdrop_path && (
             <img
-              src={`https://image.tmdb.org/t/p/original${data.detail.backdrop_path}`}
+              src={
+                getTmdbImage(data.detail.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ??
+                ''
+              }
               alt={data.detail.title}
               className="absolute inset-0 object-cover w-full h-full"
               style={{ zIndex: 5 }}
@@ -146,7 +158,7 @@ function MovieDetailPage() {
           </motion.div>
           {data.detail.company_logo && (
             <motion.img
-              src={`https://image.tmdb.org/t/p/original${data.detail.company_logo}`}
+              src={getTmdbImage(data.detail.company_logo, TMDB_CONFIG.IMAGE_SIZES.LOGO.LARGE) ?? ''}
               alt={data.detail.title}
               style={{ zIndex: 5 }}
               className="absolute right-0 z-30 flex max-w-16 md:max-w-20 lg:max-w-24 xl:max-w-28 2xl:max-w-32 3xl:max-w-36 4xl:max-w-40 top-16"

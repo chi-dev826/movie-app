@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import type { Movie } from '@/types/domain';
 import { Star } from 'lucide-react';
+import { getTmdbImage } from '@/utils/imageUtils';
+import { TMDB_CONFIG } from '@/constants/config';
 
 type Props = {
   movie: Movie;
@@ -8,10 +10,11 @@ type Props = {
 };
 
 const MovieBackdrop = ({ movie, className = '' }: Props) => {
-  const backdropUrl = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`;
+  const backdropUrl = getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.MEDIUM);
+  const logoUrl = getTmdbImage(movie.logo_path, TMDB_CONFIG.IMAGE_SIZES.LOGO.MEDIUM);
 
   return (
-    movie.backdrop_path && (
+    backdropUrl && (
       <Link
         to={`/movie/${movie.id}`}
         className={`group/card relative block flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 aspect-[2/3] xl:[aspect-ratio:auto] ${className}`}
@@ -34,9 +37,9 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
 
         {/* ロゴ画像 */}
         <div className="hidden xl:block xl:absolute xl:top-0 xl:max-w-24 2xl:max-w-28 3xl:max-w-32 4xl:max-w-48">
-          {movie.logo_path && (
+          {logoUrl && (
             <img
-              src={`https://image.tmdb.org/t/p/w185${movie.logo_path}`}
+              src={logoUrl}
               alt={movie.original_title}
               className="object-contain w-full h-full opacity-80"
               loading="lazy"
