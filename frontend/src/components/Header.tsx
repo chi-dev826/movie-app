@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, Search } from 'lucide-react';
-import { BookmarkIcon } from '@heroicons/react/20/solid';
+import { BookmarkIcon } from '@heroicons/react/24/outline';
 import SearchOverlay from '@/features/search/components/SearchOverlay';
 
 const Header = () => {
