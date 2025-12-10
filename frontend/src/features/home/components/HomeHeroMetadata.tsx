@@ -12,7 +12,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
   const [isHoveredLogo, setIsHoveredLogo] = useState(false);
 
   return (
-    <div className="relative z-10 gap-8 px-5 max-w-7xl">
+    <div className="relative gap-8 px-5 z-overlay max-w-7xl">
       <div
         className="p-4 md:p-14 lg:p-32 3xl:p-36 4xl:p-48"
         onMouseEnter={() => setIsHoveredLogo(true)}

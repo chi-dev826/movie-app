@@ -19,6 +19,8 @@ function MovieDetailPage() {
 
   const [isBackdropVisible, setIsBackdropVisible] = useState(true);
 
+  console.log(isBackdropVisible);
+
   useEffect(() => {
     // 背景が表示状態でビデオが存在するときだけタイマーをセットする
     if (!isBackdropVisible || !data?.video) return;
@@ -79,9 +81,9 @@ function MovieDetailPage() {
     >
       <motion.section
         variants={itemVariants}
-        className="relative w-full overflow-hidden aspect-[16/9] 3xl:aspect-[21/9]"
+        className="relative w-full overflow-hidden aspect-video 2xl:aspect-cinema"
       >
-        <div className="absolute inset-0 z-20 bg-gradient-to-b from-black/20 to-black/100" />
+        <div className="absolute inset-0 z-gradient bg-gradient-to-b from-black/20 to-black/100" />
 
         {/* フェードアウトする背景画像 */}
         <AnimatePresence>
@@ -102,8 +104,7 @@ function MovieDetailPage() {
                   ''
                 }
                 alt={data.detail.title}
-                className="absolute inset-0 object-cover w-full h-full"
-                style={{ zIndex: 10 }}
+                className="absolute inset-0 object-cover w-full h-full z-backdrop"
               />
             </div>
           )}
@@ -138,7 +139,6 @@ function MovieDetailPage() {
               }
               alt={data.detail.title}
               className="absolute inset-0 object-cover w-full h-full"
-              style={{ zIndex: 5 }}
             />
           )
         )}
@@ -147,7 +147,7 @@ function MovieDetailPage() {
       {data && (
         <>
           <motion.div
-            className="z-30 w-full px-4 mt-10 text-white xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
+            className="w-full px-4 mt-10 text-white z-overlay xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
             variants={itemVariants}
           >
             <HeroMetadata
@@ -160,8 +160,7 @@ function MovieDetailPage() {
             <motion.img
               src={getTmdbImage(data.detail.company_logo, TMDB_CONFIG.IMAGE_SIZES.LOGO.LARGE) ?? ''}
               alt={data.detail.title}
-              style={{ zIndex: 5 }}
-              className="absolute right-0 z-30 flex max-w-16 md:max-w-20 lg:max-w-24 xl:max-w-28 2xl:max-w-32 3xl:max-w-36 4xl:max-w-40 top-16"
+              className="absolute right-0 flex z-overlay max-w-16 md:max-w-20 lg:max-w-24 xl:max-w-28 2xl:max-w-32 3xl:max-w-36 4xl:max-w-40 top-16"
               variants={itemVariants}
             />
           )}
@@ -172,7 +171,8 @@ function MovieDetailPage() {
           <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />
         </motion.div>
       )}
-      <motion.section variants={itemVariants} className="z-20 mt-20 xl:m-12 3xl:mx-20 3xl:mt-0">
+      <motion.section variants={itemVariants} className="mt-20 xl:m-12 3xl:mx-20 3xl:mt-0">
+        {' '}
         <h2 className="mb-2 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
           関連作品
         </h2>

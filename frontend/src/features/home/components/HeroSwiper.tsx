@@ -51,7 +51,7 @@ const HeroSwiper = ({ movies, onSwiperReady }: Props) => {
       {...SwiperSettings}
       onInit={onSwiperReady}
       onSwiper={(swiper) => (swiperRef.current = swiper)}
-      className="hero-swiper w-full aspect-video lg:aspect-[21/9] 3xl:aspect-[24/9] 4xl:aspect-[25/9]"
+      className="w-full hero-swiper aspect-video lg:aspect-cinema 3xl:aspect-ultra-wide 4xl:aspect-super-wide"
     >
       {movies.map((movie) => (
         <SwiperSlide
@@ -92,7 +92,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
       {/* フェードアウトする背景画像 */}
       <AnimatePresence>
         {isBackdropVisible && movie.video && (
-          <div className="absolute inset-0 z-10">
+          <div className="absolute inset-0 z-backdrop">
             <motion.img
               key={movie.id}
               initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
@@ -107,8 +107,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
                 getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
               }
               alt={movie.title}
-              className="absolute inset-0 object-cover w-full h-full"
-              style={{ zIndex: 10 }}
+              className="absolute inset-0 object-cover w-full h-full z-backdrop"
             />
           </div>
         )}
@@ -140,8 +139,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
                 getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
               }
               alt={movie.title}
-              className="absolute inset-0 object-cover w-full h-full"
-              style={{ zIndex: 5 }}
+              className="absolute inset-0 object-cover w-full h-full z-backdrop"
               initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
               animate={{ opacity: 1 }}
               exit={{
@@ -155,7 +153,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
         </AnimatePresence>
       )}
       {/* グラデーションオーバーレイ */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/20 via-black/60 to-black/95" />
+      <div className="absolute inset-0 z-gradient bg-gradient-to-b from-black/20 via-black/60 to-black/95" />
       {/* コンテンツ */}
       <HomeHeroMetadata movie={movie} />
     </Link>

@@ -47,30 +47,15 @@ function HomePage() {
   const { data: nowPlayingData } = useNowPlayingMovies();
   const controls = useAnimation();
 
-  const movieList = [
-    upcomingData,
-    nowPlayingData,
-    data?.popular,
-    data?.recently_added,
-    data?.top_rated,
-    data?.high_rated,
+  const sections = [
+    { title: '公開予定', type: 'upcoming', movies: upcomingData },
+    { title: '公開中の映画', type: 'now_playing', movies: nowPlayingData },
+    { title: '人気映画', type: 'popular', movies: data?.popular },
+    { title: '最近追加された映画', type: 'recently_added', movies: data?.recently_added },
+    { title: '高評価映画', type: 'top_rated', movies: data?.top_rated },
+    { title: '話題の映画', type: 'high_rated', movies: data?.high_rated },
   ];
-  const movieListTitles = [
-    '公開予定',
-    '公開中の映画',
-    '人気映画',
-    '最近追加された映画',
-    '高評価映画',
-    '話題の映画',
-  ];
-  const movieListType = [
-    'upcoming',
-    'now_playing',
-    'popular',
-    'recently_added',
-    'top_rated',
-    'high_rated',
-  ];
+
   // 上位五件のデータをヒーロースワイパー用に抽出
   const heroMovieList = upcomingData?.slice(0, 5) ?? [];
 
@@ -143,16 +128,16 @@ function HomePage() {
       )}
 
       <motion.div className="lg:p-6 2xl:p-20 2xl:pb-0" variants={itemVariants}>
-        {movieList.map((movies, index) => (
-          <div key={index} className="p-2">
-            <Link to={`/movies/${movieListType[index]}`}>
+        {sections.map((section) => (
+          <div key={section.type} className="p-2">
+            <Link to={`/movies/${section.type}`}>
               <span className="flex items-center gap-1 mb-1 ml-2 text-xs font-semibold text-gray-500 md:text-sm 2xl:text-md 3xl:text-lg hover:text-gray-300">
-                {movieListTitles[index]}
+                {section.title}
                 <ChevronRightIcon className="relative w-4 h-4 md:w-5 md:h-5 xl:w-6 xl:h-6 -bottom-px" />
               </span>
             </Link>
             <HorizontalScrollContainer>
-              {movies?.map((movie) => (
+              {section.movies?.map((movie) => (
                 <ResponsiveMovieTile key={movie.id} movie={movie} />
               ))}
             </HorizontalScrollContainer>

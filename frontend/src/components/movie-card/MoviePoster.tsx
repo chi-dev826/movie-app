@@ -15,12 +15,12 @@ const MoviePoster = ({ movie, className = '' }: Props) => {
     posterUrl && (
       <Link
         to={`/movie/${movie.id}`}
-        className={`group/card relative block flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 w-full aspect-[2/3] ${className}`}
+        className={`group/card relative block flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 w-full aspect-poster ${className}`}
       >
         <img
           src={posterUrl}
-          alt={movie.original_title}
-          className="block object-cover w-full h-full transition-all duration-300 ease-in-out"
+          alt={movie.title}
+          className="object-cover w-full h-full"
           loading="lazy"
         />
       </Link>
