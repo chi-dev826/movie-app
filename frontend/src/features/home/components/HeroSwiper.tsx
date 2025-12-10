@@ -10,7 +10,7 @@ import type { Movie } from '@/types/domain';
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
 
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -122,7 +122,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
             style={{ transform: 'translate(-50%, -50%) scale(1.35)' }}
           >
             <ReactPlayer
-              src={`https://www.youtube.com/watch?v=${movie.video}`}
+              src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${movie.video}`}
               playing
               muted
               controls={false}

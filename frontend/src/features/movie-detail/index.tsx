@@ -10,7 +10,7 @@ import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
 import { useFullMovieData } from '@/hooks/useMovies';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
 
 function MovieDetailPage() {
   const { id: movieId } = useParams<{ id: string }>();
@@ -117,7 +117,7 @@ function MovieDetailPage() {
               style={{ transform: 'translate(-50%, -50%) scale(1.35)' }}
             >
               <ReactPlayer
-                src={`https://www.youtube.com/watch?v=${data.video}`}
+                src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${data.video}`}
                 playing
                 muted
                 onEnded={() => setIsBackdropVisible(true)}

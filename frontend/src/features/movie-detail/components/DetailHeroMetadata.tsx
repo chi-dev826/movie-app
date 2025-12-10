@@ -1,4 +1,4 @@
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
 import { MovieDetail } from '@/types/domain';
 import { useWatchList } from '@/hooks/useWatchList';
 import { WindowIcon, PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
@@ -28,14 +28,16 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
 
   const providers = {
     'Disney Plus': () => null, // Disney Plus link disabled as it does not work reliably
-    Netflix: (title: string) => `https://www.netflix.com/search?q=${encodeURIComponent(title)}`,
+    Netflix: (title: string) =>
+      `${EXTERNAL_URLS.NETFLIX_SEARCH}${encodeURIComponent(title)}`,
     'Apple TV': (title: string) =>
-      `https://tv.apple.com/jp/search?term=${encodeURIComponent(title)}`,
+      `${EXTERNAL_URLS.APPLE_TV_SEARCH}${encodeURIComponent(title)}`,
     'Amazon Prime Video': (title: string) =>
-      `https://www.amazon.co.jp/s?k=${encodeURIComponent(title)}&i=instant-video`,
-    Hulu: (title: string) => `https://www.hulu.jp/search?q=${encodeURIComponent(title)}`,
+      `${EXTERNAL_URLS.AMAZON_SEARCH}${encodeURIComponent(title)}${EXTERNAL_URLS.AMAZON_SEARCH_PARAMS}`,
+    Hulu: (title: string) =>
+      `${EXTERNAL_URLS.HULU_SEARCH}${encodeURIComponent(title)}`,
     'U-NEXT': (title: string) =>
-      `https://video.unext.jp/freeword?query=${encodeURIComponent(title)}`,
+      `${EXTERNAL_URLS.UNEXT_SEARCH}${encodeURIComponent(title)}`,
   };
 
   const providerList = watchProviders.map((provider) => {

@@ -2,6 +2,7 @@ import ReactPlayer from 'react-player';
 import { motion } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { useCallback, useEffect } from 'react';
+import { EXTERNAL_URLS } from '@/constants/config';
 
 interface HeroVideoProps {
   youtubeKey: string | null;
@@ -49,7 +50,7 @@ const HeroVideo = ({ youtubeKey, onClose }: HeroVideoProps) => {
         </button>
         {youtubeKey ? (
           <ReactPlayer
-            src={`https://www.youtube.com/watch?v=${youtubeKey}`}
+            src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${youtubeKey}`}
             playing={true}
             controls={true}
             muted={true}

@@ -5,6 +5,7 @@ import 'swiper/css';
 
 import { useMovieNews, useMovieAnalysis } from '../hooks/useMovieArticles';
 import type { Article } from '@/types/domain';
+import { EXTERNAL_URLS } from '@/constants/config';
 
 export default function NewsAndAnalysisSection({
   movieId,
@@ -96,7 +97,9 @@ export default function NewsAndAnalysisSection({
 
 export const ArticleList = ({ articles }: { articles: Article[] | undefined }) => {
   const itemLinkPrefix =
-    articles && articles.length > 0 && articles[0].source === '映画.com' ? 'https://eiga.com' : '';
+    articles && articles.length > 0 && articles[0].source === '映画.com'
+      ? EXTERNAL_URLS.EIGA_COM
+      : '';
   return (
     <div className="flex flex-col gap-3 mt-6 xl:p-4 xl:gap-8 xl:grid xl:grid-cols-2 xl:hover">
       {articles?.map((article) => (
