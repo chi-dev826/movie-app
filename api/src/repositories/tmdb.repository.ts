@@ -28,6 +28,11 @@ export class TmdbRepository {
   async getMovieDetails(movieId: number): Promise<MovieDetail> {
     const response = await this.api.get<MovieDetailResponse>(
       `/movie/${movieId}`,
+      {
+        params: {
+          append_to_response: "credits",
+        },
+      },
     );
     return this.formatter.formatDetail(response.data);
   }

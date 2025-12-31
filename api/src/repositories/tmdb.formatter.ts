@@ -42,6 +42,33 @@ export class MovieFormatter {
       genres: data.genres?.map((genre: { name: string }) => genre.name) ?? null,
       company_logo: data.production_companies?.[0]?.logo_path ?? null,
       homePageUrl: data.homepage,
+      cast:
+        data.credits?.cast
+          ?.slice(0, 20)
+          .map((c) => ({
+            id: c.id,
+            name: c.name,
+            character: c.character,
+            profile_path: c.profile_path,
+          })) ?? [],
+      crew:
+        data.credits?.crew
+          ?.filter(
+            (c) =>
+              c.job === "Director" ||
+              c.job === "Screenplay" ||
+              c.job === "Original Music Composer",
+          )
+          .map((c) => ({
+            id: c.id,
+            name: c.name,
+            job: c.job,
+            profile_path: c.profile_path,
+          })) ?? [],
+      revenue: data.revenue,
+      budget: data.budget,
+      production_countries:
+        data.production_countries?.map((c) => c.name) ?? [],
     };
   }
 

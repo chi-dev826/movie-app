@@ -13,6 +13,20 @@ export type Movie = {
   release_date?: string | null;
 };
 
+export type Cast = {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+};
+
+export type Crew = {
+  id: number;
+  name: string;
+  job: string;
+  profile_path: string | null;
+};
+
 // アプリケーション内で使用する整形済みの映画詳細情報
 export type MovieDetail = {
   id: number;
@@ -28,4 +42,9 @@ export type MovieDetail = {
   genres: string[] | null;
   company_logo: string | null;
   homePageUrl: string | null;
+  cast: Cast[];
+  crew: Crew[];
+  revenue: number;
+  budget: number;
+  production_countries: string[];
 };

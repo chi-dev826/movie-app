@@ -8,6 +8,8 @@ import { ResponsiveMovieTile } from '@/components/movie-card';
 import HeroMetadata from './components/DetailHeroMetadata';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
+import CastList from './components/CastList';
+import MovieStats from './components/MovieStats';
 import { useFullMovieData } from '@/hooks/useMovies';
 import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
@@ -166,6 +168,15 @@ function MovieDetailPage() {
           )}
         </>
       )}
+
+      {/* キャストと統計情報 */}
+      {data?.detail && (
+        <motion.div variants={itemVariants}>
+          <CastList cast={data.detail.cast} />
+          <MovieStats detail={data.detail} />
+        </motion.div>
+      )}
+
       {data && (
         <motion.div variants={itemVariants}>
           <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />

@@ -16,6 +16,40 @@ export type MovieResponse = {
   vote_count: number;
 };
 
+export type Cast = {
+  adult: boolean;
+  gender: number | null;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
+};
+
+export type Crew = {
+  adult: boolean;
+  gender: number | null;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  credit_id: string;
+  department: string;
+  job: string;
+};
+
+export type CreditsResponse = {
+  cast: Cast[];
+  crew: Crew[];
+};
+
 // TMDB APIのMovie Detailオブジェクトの生データ型
 export type MovieDetailResponse = {
   adult: boolean;
@@ -27,6 +61,7 @@ export type MovieDetailResponse = {
     backdrop_path: string | null;
   } | null;
   budget: number;
+  credits?: CreditsResponse;
   genres: { id: number; name: string }[];
   homepage: string | null; // null許容に変更
   id: number;
