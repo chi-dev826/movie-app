@@ -9,6 +9,7 @@ import {
   DefaultResponse,
   VideoItem,
   DiscoverMovieParams,
+  PersonResponse,
 } from "../../../shared/types/external/tmdb";
 import { tmdbApi } from "../lib/tmdb.client";
 import { MovieFormatter } from "./tmdb.formatter";
@@ -23,6 +24,14 @@ export class TmdbRepository {
   ) {
     this.api = apiInstance;
     this.formatter = formatter;
+  }
+
+  async searchPerson(query: string): Promise<PaginatedResponse<PersonResponse>> {
+    const response = await this.api.get<PaginatedResponse<PersonResponse>>(
+      "/search/person",
+      { params: { query } },
+    );
+    return response.data;
   }
 
   async getMovieDetails(movieId: number): Promise<MovieDetail> {

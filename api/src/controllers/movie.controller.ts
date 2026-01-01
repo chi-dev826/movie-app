@@ -44,6 +44,22 @@ export class MovieController {
     }
   }
 
+  async searchMoviesByPerson(req: Request, res: Response, next: NextFunction) {
+    try {
+      const name = req.query.name as string;
+      if (!name) {
+        return res
+          .status(HTTP_STATUS.BAD_REQUEST)
+          .json({ message: "Person name is required" });
+      }
+
+      const movies = await this.movieService.searchMoviesByPersonName(name);
+      res.json(movies);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getMovieList(req: Request, res: Response, next: NextFunction) {
     try {
       const movieList = await this.movieService.getHomePageMovieList();

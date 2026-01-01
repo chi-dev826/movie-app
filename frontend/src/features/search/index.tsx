@@ -1,12 +1,17 @@
 import { useSearchParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { MoviePoster } from '@/components/movie-card';
-import { useSearchMovies } from '@/hooks/useMovies';
+import { useSearchMovies, useSearchMoviesByPerson } from '@/hooks/useMovies';
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
-  const { data: searchResults, isLoading, error } = useSearchMovies(query);
+  const type = searchParams.get('type') || 'movie'; // 'movie' or 'person'
+
+  const movieSearch = useSearchMovies(query);
+  const personSearch = useSearchMoviesByPerson(type === 'person' ? query : '');
+
+  const { data: searchResults, isLoading, error } = type === 'person' ? personSearch : movieSearch;
 
   if (error) {
     return (

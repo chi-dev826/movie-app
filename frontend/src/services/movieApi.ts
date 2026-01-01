@@ -40,6 +40,12 @@ export const searchMovies = async (query: string): Promise<Movie[]> => {
   return fetchFromApi<Movie[]>(`${API_PATHS.SEARCH.MOVIE}?q=${encodeURIComponent(query)}`);
 };
 
+export const searchMoviesByPerson = async (name: string): Promise<Movie[]> => {
+  return fetchFromApi<Movie[]>(
+    `/movies/search-by-person?name=${encodeURIComponent(name)}`
+  );
+};
+
 export const fetchMovieList = async (): Promise<MovieListResponse> => {
   return fetchFromApi<MovieListResponse>(API_PATHS.MOVIES.HOME);
 };

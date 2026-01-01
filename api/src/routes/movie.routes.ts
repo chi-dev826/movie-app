@@ -30,6 +30,11 @@ router.get(
     movieController.searchMovies(req, res, next),
 );
 router.get(
+  "/movies/search-by-person",
+  (req: Request, res: Response, next: NextFunction) =>
+    movieController.searchMoviesByPerson(req, res, next),
+);
+router.get(
   API_PATHS.MOVIES.HOME,
   (req: Request, res: Response, next: NextFunction) =>
     movieController.getMovieList(req, res, next),
