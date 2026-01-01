@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import HeroVideo from '@/features/movie-detail/components/HeroVideo';
 import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG } from '@/constants/config';
+import { APP_PATHS } from '@shared/constants/routes';
 
 const UpcomingList = () => {
   const { data, isLoading, error } = useUpcomingMovies();
@@ -47,7 +48,7 @@ const UpcomingList = () => {
             upcomingMovies.map((movie) => (
               <div key={movie.id} className="w-full bg-gray-800 rounded-lg shadow-lg">
                 <div className="flex">
-                  <Link to={`/movie/${movie.id}`} className="p-4">
+                  <Link to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())} className="p-4">
                     <img
                       src={
                         getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.LARGE) ?? ''

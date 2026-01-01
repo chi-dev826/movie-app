@@ -42,7 +42,7 @@ export const searchMovies = async (query: string): Promise<Movie[]> => {
 
 export const searchMoviesByPerson = async (name: string): Promise<Movie[]> => {
   return fetchFromApi<Movie[]>(
-    `/movies/search-by-person?name=${encodeURIComponent(name)}`
+    `${API_PATHS.SEARCH.PERSON}?name=${encodeURIComponent(name)}`
   );
 };
 

@@ -7,15 +7,16 @@ import SearchPage from './features/search';
 import MovieDetailPage from './features/movie-detail';
 import MovieList from './features/movie-list';
 import UpcomingList from './features/movie-list/upcomingList';
-import WatchListPage from './features/watch-list'; // インポートを追加
+import WatchListPage from './features/watch-list';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { APP_PATHS } from '@shared/constants/routes';
 
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: APP_PATHS.HOME,
     element: <App />,
     children: [
       {
@@ -23,23 +24,23 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: 'search',
+        path: APP_PATHS.SEARCH.replace('/', ''),
         element: <SearchPage />,
       },
       {
-        path: 'watch-list', // ウォッチリストのルートを追加
+        path: APP_PATHS.WATCH_LIST.replace('/', ''),
         element: <WatchListPage />,
       },
       {
-        path: 'movie/:id',
+        path: APP_PATHS.MOVIE_DETAIL.replace('/', ''),
         element: <MovieDetailPage />,
       },
       {
-        path: 'movies/upcoming',
+        path: APP_PATHS.MOVIES.UPCOMING.replace('/', ''),
         element: <UpcomingList />,
       },
       {
-        path: 'movies/:type',
+        path: APP_PATHS.MOVIES.BY_TYPE.replace('/', ''),
         element: <MovieList />,
       },
     ],

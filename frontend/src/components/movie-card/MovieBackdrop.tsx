@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import type { Movie } from '@/types/domain';
-import { Star } from 'lucide-react';
+import { StarIcon } from '@heroicons/react/24/solid';
 import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG } from '@/constants/config';
+import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
   movie: Movie;
@@ -16,7 +17,7 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
   return (
     backdropUrl && (
       <Link
-        to={`/movie/${movie.id}`}
+        to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
         className={`group/card relative block flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 aspect-poster xl:aspect-auto ${className}`}
       >
         <img
@@ -51,7 +52,7 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
         <div className="absolute flex items-center gap-1 px-2 py-1 text-xs font-bold text-white rounded-full bottom-2 right-2 bg-black/50 backdrop-blur-sm">
           {movie.vote_average !== null && (
             <>
-              <Star className="w-3 h-3 text-yellow-400" fill="currentColor" />
+              <StarIcon className="w-3 h-3 text-yellow-400" />
               <span>{movie.vote_average.toFixed(1)}</span>
             </>
           )}

@@ -11,6 +11,7 @@ import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
 import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
+import { APP_PATHS } from '@shared/constants/routes';
 
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -86,7 +87,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
 
   return (
     <Link
-      to={`/movie/${movie.id}`}
+      to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
       className="relative flex items-end justify-start w-full h-full overflow-hidden text-white"
     >
       {/* フェードアウトする背景画像 */}

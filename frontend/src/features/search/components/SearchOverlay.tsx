@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Search } from 'lucide-react';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { APP_PATHS } from '@shared/constants/routes';
 
-interface SearchOverlayProps {
+type SearchOverlayProps = {
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,11 +21,9 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
     [onClose],
   );
 
-  // ESCキーでオーバーレイを閉じる
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      // オーバーレイが開いた時にフォーカスを検索ボックスに移動
       const searchInput = document.getElementById('search-input');
       if (searchInput) {
         searchInput.focus();
@@ -39,7 +38,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`${APP_PATHS.SEARCH}?q=${encodeURIComponent(searchQuery.trim())}`);
       onClose();
       setSearchQuery('');
     }
@@ -58,11 +57,11 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
       onClick={handleOverlayClick}
     >
-      <div className="w-full max-w-md p-6 mx-4 bg-gray-900 rounded-lg">
+      <div className="w-full max-w-md p-6 mx-4 bg-gray-900 rounded-lg border border-gray-800">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-white">映画を検索</h2>
           <button onClick={onClose} className="text-gray-400 transition-colors hover:text-white">
-            <X size={24} />
+            <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
         <form onSubmit={handleSearch} className="space-y-4">
@@ -75,9 +74,8 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
               placeholder="映画のタイトルを入力..."
               className="w-full px-4 py-3 pl-12 text-white bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none"
             />
-            <Search
-              className="absolute text-gray-400 transform -translate-y-1/2 left-4 top-1/2"
-              size={20}
+            <MagnifyingGlassIcon
+              className="absolute text-gray-400 transform -translate-y-1/2 left-4 top-1/2 w-5 h-5"
             />
           </div>
           <div className="flex space-x-3">

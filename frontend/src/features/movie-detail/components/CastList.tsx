@@ -3,6 +3,7 @@ import { Cast } from '@/types/domain';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import { UserCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
+import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
   cast: Cast[];
@@ -22,7 +23,7 @@ const CastList = ({ cast }: Props) => {
         {cast.map((actor) => (
           <Link
             key={actor.id}
-            to={`/search?q=${encodeURIComponent(actor.name)}&type=person`}
+            to={`${APP_PATHS.SEARCH}?q=${encodeURIComponent(actor.name)}&type=person`}
             className="flex-shrink-0 w-32 xl:w-40 group/cast"
           >
             <div className="relative overflow-hidden rounded-lg aspect-[2/3] bg-gray-800">

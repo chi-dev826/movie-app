@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import HeroSwiper from './components/HeroSwiper';
 import { ResponsiveMovieTile } from '@/components/movie-card';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
+import { APP_PATHS } from '@shared/constants/routes';
 
 /**
  * HomePage
@@ -130,7 +131,7 @@ function HomePage() {
       <motion.div className="lg:p-6 2xl:p-20 2xl:pb-0" variants={itemVariants}>
         {sections.map((section) => (
           <div key={section.type} className="p-2">
-            <Link to={`/movies/${section.type}`}>
+            <Link to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', section.type)}>
               <span className="flex items-center gap-1 mb-1 ml-2 text-xs font-semibold text-gray-500 md:text-sm 2xl:text-md 3xl:text-lg hover:text-gray-300">
                 {section.title}
                 <ChevronRightIcon className="relative w-4 h-4 md:w-5 md:h-5 xl:w-6 xl:h-6 -bottom-px" />
