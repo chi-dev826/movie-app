@@ -128,7 +128,7 @@ function HomePage() {
         </motion.div>
       )}
 
-      <motion.div className="lg:p-6 2xl:p-20 2xl:pb-0" variants={itemVariants}>
+      <motion.div className="lg:p-6 xl:p-12 2xl:p-20 2xl:pb-0" variants={itemVariants}>
         {sections.map((section) => (
           <div key={section.type} className="p-2">
             <Link to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', section.type)}>
