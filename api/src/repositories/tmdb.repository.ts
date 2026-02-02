@@ -26,7 +26,9 @@ export class TmdbRepository {
     this.formatter = formatter;
   }
 
-  async searchPerson(query: string): Promise<PaginatedResponse<PersonResponse>> {
+  async searchPerson(
+    query: string,
+  ): Promise<PaginatedResponse<PersonResponse>> {
     const response = await this.api.get<PaginatedResponse<PersonResponse>>(
       "/search/person",
       { params: { query } },
