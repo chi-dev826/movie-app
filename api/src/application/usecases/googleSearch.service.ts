@@ -1,5 +1,5 @@
-import { GoogleSearchRepository } from "../repositories/googleSearch.repository";
-import { Article } from "../../../shared/types/domain";
+import { GoogleSearchRepository } from "@/infrastructure/repositories/googleSearch.repository";
+import { Article } from "@shared/types/domain";
 import Nodecache from "node-cache";
 
 export class GoogleSearchService {

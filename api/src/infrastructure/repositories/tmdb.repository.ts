@@ -1,4 +1,4 @@
-import { Movie, MovieDetail } from "../../../shared/types/domain";
+import { Movie, MovieDetail } from "@shared/types/domain";
 import {
   MovieDetailResponse,
   MovieResponse,
@@ -10,8 +10,8 @@ import {
   VideoItem,
   DiscoverMovieParams,
   PersonResponse,
-} from "../../../shared/types/external/tmdb";
-import { tmdbApi } from "../lib/tmdb.client";
+} from "@shared/types/external/tmdb";
+import { tmdbApi } from "@/infrastructure/lib/tmdb.client";
 import { MovieFormatter } from "./tmdb.formatter";
 
 export class TmdbRepository {

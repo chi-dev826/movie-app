@@ -1,13 +1,13 @@
-import { MovieController } from "./controllers/movie.controller";
-import { MovieService } from "./services/movie.service";
-import { TmdbRepository } from "./repositories/tmdb.repository";
-import { EigaComController } from "./controllers/eigaCom.controller";
-import { EigaComService } from "./services/eigaCom.service";
-import { EigaComRepository } from "./repositories/eigaCom.repository";
-import { GoogleSearchController } from "./controllers/googleSearch.controller";
-import { GoogleSearchService } from "./services/googleSearch.service";
-import { GoogleSearchRepository } from "./repositories/googleSearch.repository";
-import { YoutubeRepository } from "./repositories/youtube.repository";
+import { MovieController } from "@/presentation/controllers/movie.controller";
+import { MovieService } from "@/application/usecases/movie.service";
+import { TmdbRepository } from "@/infrastructure/repositories/tmdb.repository";
+import { EigaComController } from "@/presentation/controllers/eigaCom.controller";
+import { EigaComService } from "@/application/usecases/eigaCom.service";
+import { EigaComRepository } from "@/infrastructure/repositories/eigaCom.repository";
+import { GoogleSearchController } from "@/presentation/controllers/googleSearch.controller";
+import { GoogleSearchService } from "@/application/usecases/googleSearch.service";
+import { GoogleSearchRepository } from "@/infrastructure/repositories/googleSearch.repository";
+import { YoutubeRepository } from "@/infrastructure/repositories/youtube.repository";
 
 // リポジトリのインスタンス化
 export const tmdbRepository = new TmdbRepository();

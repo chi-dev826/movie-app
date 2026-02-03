@@ -1,4 +1,4 @@
-import { youtubeApi } from "../lib/youtubeClient";
+import { youtubeApi } from "@/infrastructure/lib/youtubeClient";
 
 export class YoutubeRepository {
   private readonly api: typeof youtubeApi;

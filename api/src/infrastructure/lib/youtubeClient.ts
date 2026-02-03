@@ -1,9 +1,5 @@
 import axios from "axios";
-import dotenv from "dotenv";
-import path from "path";
-import { EXTERNAL_API_URLS } from "../constants/external";
-
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+import { EXTERNAL_API_URLS } from "@/infrastructure/constants/external";
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 

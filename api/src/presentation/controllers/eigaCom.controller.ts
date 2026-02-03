@@ -1,7 +1,7 @@
-import { EigaComService } from "../services/eigaCom.service";
+import { EigaComService } from "@/application/usecases/eigaCom.service";
 import { Request, Response, NextFunction } from "express";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
-import { ERROR_MESSAGES } from "../constants/messages";
+import { HTTP_STATUS } from "@shared/constants/httpStatus";
+import { ERROR_MESSAGES } from "@/presentation/constants/messages";
 
 export class EigaComController {
   private readonly eigaComService: EigaComService;

@@ -1,11 +1,7 @@
 import axios from "axios";
-import dotenv from "dotenv";
-import path from "path";
-import { googleCustomSearchResponse } from "../../../shared/types/external/googleCustomSearch/response";
-import { Article } from "../../../shared/types/domain";
-import { EXTERNAL_API_URLS } from "../constants/external";
-
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+import { googleCustomSearchResponse } from "@shared/types/external/googleCustomSearch/response";
+import { Article } from "@shared/types/domain";
+import { EXTERNAL_API_URLS } from "@/infrastructure/constants/external";
 
 const key = process.env.GOOGLE_CUSTOM_SEARCH_KEY;
 const cx = process.env.GOOGLE_CUSTOM_SEARCH_CX;

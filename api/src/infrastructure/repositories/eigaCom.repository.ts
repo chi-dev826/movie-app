@@ -1,5 +1,5 @@
-import { eigaComClient } from "../lib/eigaComClient";
-import { Article } from "../../../shared/types/domain";
+import { eigaComClient } from "@/infrastructure/lib/eigaComClient";
+import { Article } from "@shared/types/domain";
 import * as cheerio from "cheerio";
 
 export class EigaComRepository {

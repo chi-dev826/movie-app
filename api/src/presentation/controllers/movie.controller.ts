@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { MovieService } from "../services/movie.service";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
-import { ERROR_MESSAGES } from "../constants/messages";
+import { MovieService } from "@/application/usecases/movie.service";
+import { HTTP_STATUS } from "@shared/constants/httpStatus";
+import { ERROR_MESSAGES } from "@/presentation/constants/messages";
 
 export class MovieController {
   private readonly movieService: MovieService;

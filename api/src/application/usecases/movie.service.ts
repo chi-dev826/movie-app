@@ -1,10 +1,10 @@
 import NodeCache from "node-cache";
-import { TmdbRepository } from "../repositories/tmdb.repository";
-import { YoutubeRepository } from "../repositories/youtube.repository"; // Import YoutubeRepository
-import { MovieFormatter } from "../repositories/tmdb.formatter";
-import { Movie } from "../../../shared/types/domain";
-import { FullMovieData, MovieListResponse } from "../../../shared/types/api";
-import { DiscoverMovieParams } from "../../../shared/types/external/tmdb";
+import { TmdbRepository } from "@/infrastructure/repositories/tmdb.repository";
+import { YoutubeRepository } from "@/infrastructure/repositories/youtube.repository"; // Import YoutubeRepository
+import { MovieFormatter } from "@/infrastructure/repositories/tmdb.formatter";
+import { Movie } from "@shared/types/domain";
+import { FullMovieData, MovieListResponse } from "@shared/types/api";
+import { DiscoverMovieParams } from "@shared/types/external/tmdb";
 
 export class MovieService {
   private readonly tmdbRepository: TmdbRepository;
@@ -326,6 +326,8 @@ export class MovieService {
 
     const results = await Promise.all(promises);
     // 取得に成功したものだけを返す
-    return results.filter((movie): movie is Movie => movie !== null);
+    return results.filter(
+      (movie: Movie | null): movie is Movie => movie !== null,
+    );
   }
 }
