@@ -1,16 +1,17 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
+  preset: "ts-jest",
+  testEnvironment: "node",
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
-  testMatch: [
-    "<rootDir>/tests/**/*.test.ts"
-  ],
+  testMatch: ["<rootDir>/tests/**/*.test.ts"],
   transform: {
-    '^.+\.tsx?$': ['ts-jest', {
-      isolatedModules: true,
-    }],
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        isolatedModules: true,
+      },
+    ],
   },
 };
