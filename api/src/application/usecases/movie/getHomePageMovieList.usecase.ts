@@ -1,80 +1,53 @@
 import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
 import { MovieListResponse } from "@shared/types/api";
-import { DiscoverMovieParams } from "@shared/types/external/tmdb";
-import { MovieEntity } from "@/domain/models/movie";
+import { HOME_CATEGORIES } from "@/domain/constants/homeCategories";
+import { MovieList } from "@/domain/models/movieList";
+
+import { ArrayUtils } from "@/utils/array";
 
 export class GetHomePageMovieListUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
-  private createPageArray(totalPages: number): number[] {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-
   async execute(): Promise<MovieListResponse> {
-    const categories: Record<string, DiscoverMovieParams> = {
-      popular: {
-        "vote_count.gte": 10000,
-        sort_by: "popularity.desc",
-        region: "JP",
-      },
-      recently_added: {
-        "vote_count.gte": 1000,
-        sort_by: "primary_release_date.desc",
-        region: "JP",
-      },
-      top_rated: {
-        "vote_count.gte": 1000,
-        sort_by: "vote_average.desc",
-        region: "JP",
-      },
-      high_rated: {
-        "vote_count.gte": 5000,
-        sort_by: "vote_count.desc",
-        region: "JP",
-      },
-    };
+    const pagesToFetch = ArrayUtils.range(10); // ひとまず10ページ分取得
 
-    const pagesToFetch = this.createPageArray(10);
+    // カテゴリごとに並行処理
+    const categoryPromises = Object.entries(HOME_CATEGORIES).map(
+      async ([key, params]) => {
+        // 各ページ並行処理
+        const pagePromises = pagesToFetch.map((page) =>
+          this.tmdbRepo.getDiscoverMovies({ ...params, page }),
+        );
+        const results = await Promise.all(pagePromises);
 
-    // 全てのカテゴリとページを並行して取得
-    const promises = Object.entries(categories).flatMap(
-      ([categoryKey, params]) =>
-        pagesToFetch.map(async (page) => {
-          const results = await this.tmdbRepo.getDiscoverMovies({
-            ...params,
-            page,
-          });
-          return { categoryKey, results };
-        }),
+        // 全ページのリストを結合してMovieList化 (Entityの配列をフラット化)
+        const flatList = results.flat();
+        const movieList = new MovieList(flatList);
+
+        // 重複排除してDTO化
+        return {
+          key,
+          movies: movieList.deduplicate().toDtoArray(),
+        };
+      },
     );
 
-    const results = await Promise.all(promises);
+    const categoryResults = await Promise.all(categoryPromises);
 
-    // 結果をカテゴリごとに集約
-    const aggregated: Record<string, MovieEntity[]> = {
+    const response: MovieListResponse = {
       popular: [],
       recently_added: [],
       top_rated: [],
       high_rated: [],
     };
 
-    results.forEach(({ categoryKey, results }) => {
-      aggregated[categoryKey].push(...results);
+    categoryResults.forEach((res) => {
+      // 型安全に代入
+      if (Object.prototype.hasOwnProperty.call(response, res.key)) {
+        response[res.key as keyof MovieListResponse] = res.movies;
+      }
     });
 
-    // 重複排除
-    const deduplicated: Record<string, MovieEntity[]> = {};
-    for (const key of Object.keys(aggregated)) {
-      const uniqueMovies = new Map<number, MovieEntity>();
-      aggregated[key].forEach((movie) => uniqueMovies.set(movie.id, movie));
-      deduplicated[key] = Array.from(uniqueMovies.values());
-    }
-
-    return {
-      popular: deduplicated.popular.map((m) => m.toDto()),
-      recently_added: deduplicated.recently_added.map((m) => m.toDto()),
-      top_rated: deduplicated.top_rated.map((m) => m.toDto()),
-      high_rated: deduplicated.high_rated.map((m) => m.toDto()),
-    };
+    return response;
   }
 }

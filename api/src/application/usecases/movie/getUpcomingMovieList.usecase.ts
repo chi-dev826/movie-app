@@ -3,15 +3,13 @@ import { YoutubeRepository } from "@/infrastructure/repositories/youtube.reposit
 import { Movie as MovieDTO } from "@shared/types/domain";
 import { DiscoverMovieParams } from "@shared/types/external/tmdb";
 
+import { ArrayUtils } from "@/utils/array";
+
 export class GetUpcomingMovieListUseCase {
   constructor(
     private readonly tmdbRepo: ITmdbRepository,
     private readonly youtubeRepo: YoutubeRepository,
   ) {}
-
-  private createPageArray(totalPages: number): number[] {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
 
   async execute(): Promise<MovieDTO[]> {
     const today = new Date();
@@ -31,7 +29,7 @@ export class GetUpcomingMovieListUseCase {
       "primary_release_date.lte": formatDate(twoMonthsLater),
     };
 
-    const pagesToFetch = this.createPageArray(10);
+    const pagesToFetch = ArrayUtils.range(10);
     const promises = pagesToFetch.map((page) =>
       this.tmdbRepo.getDiscoverMovies({ ...params, page }),
     );
