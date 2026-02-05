@@ -74,9 +74,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
               placeholder="映画のタイトルを入力..."
               className="w-full px-4 py-3 pl-12 text-white bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none"
             />
-            <MagnifyingGlassIcon
-              className="absolute text-gray-400 transform -translate-y-1/2 left-4 top-1/2 w-5 h-5"
-            />
+            <MagnifyingGlassIcon className="absolute text-gray-400 transform -translate-y-1/2 left-4 top-1/2 w-5 h-5" />
           </div>
           <div className="flex space-x-3">
             <button
