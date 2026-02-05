@@ -1,9 +1,9 @@
 import { MovieController } from "@/presentation/controllers/movie.controller";
 import { EigaComController } from "@/presentation/controllers/eigaCom.controller";
-import { EigaComService } from "@/application/usecases/eigaCom.service";
+import { GetEigaComNewsUseCase } from "@/application/usecases/news/getEigaComNews.usecase";
 import { EigaComRepository } from "@/infrastructure/repositories/eigaCom.repository";
 import { GoogleSearchController } from "@/presentation/controllers/googleSearch.controller";
-import { GoogleSearchService } from "@/application/usecases/googleSearch.service";
+import { GetMovieAnalysisUseCase } from "@/application/usecases/analysis/getMovieAnalysis.usecase";
 import { GoogleSearchRepository } from "@/infrastructure/repositories/googleSearch.repository";
 import { YoutubeRepository } from "@/infrastructure/repositories/youtube.repository";
 
@@ -23,8 +23,10 @@ import { MovieEnricher } from "@/domain/services/movie.enricher";
 // リポジトリのインスタンス化
 export const cacheRepository = new NodeCacheRepository();
 export const tmdbRepository = new TmdbRepository(cacheRepository);
-export const eigaComRepository = new EigaComRepository();
-export const googleSearchRepository = new GoogleSearchRepository();
+export const eigaComRepository = new EigaComRepository(cacheRepository);
+export const googleSearchRepository = new GoogleSearchRepository(
+  cacheRepository,
+);
 export const youtubeRepository = new YoutubeRepository();
 
 // Domain Services
@@ -54,9 +56,11 @@ export const getMovieListByIdsUseCase = new GetMovieListByIdsUseCase(
   tmdbRepository,
 );
 
-// Services (Existing)
-export const eigaComService = new EigaComService(eigaComRepository);
-export const googleSearchService = new GoogleSearchService(
+// New UseCases (Replaced Services)
+export const getEigaComNewsUseCase = new GetEigaComNewsUseCase(
+  eigaComRepository,
+);
+export const getMovieAnalysisUseCase = new GetMovieAnalysisUseCase(
   googleSearchRepository,
 );
 
@@ -70,7 +74,7 @@ export const movieController = new MovieController(
   searchMoviesByPersonUseCase,
   getMovieListByIdsUseCase,
 );
-export const eigaComController = new EigaComController(eigaComService);
+export const eigaComController = new EigaComController(getEigaComNewsUseCase);
 export const googleSearchController = new GoogleSearchController(
-  googleSearchService,
+  getMovieAnalysisUseCase,
 );

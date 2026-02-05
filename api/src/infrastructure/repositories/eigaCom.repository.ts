@@ -1,15 +1,21 @@
 import { eigaComClient } from "@/infrastructure/lib/eigaComClient";
 import { Article } from "@shared/types/domain";
+import { ICacheRepository } from "@/domain/repositories/cache.repository.interface";
 import * as cheerio from "cheerio";
 
 export class EigaComRepository {
-  private readonly client: typeof eigaComClient;
-
-  constructor(client: typeof eigaComClient = eigaComClient) {
-    this.client = client;
-  }
+  constructor(
+    private readonly cache: ICacheRepository,
+    private readonly client: typeof eigaComClient = eigaComClient,
+  ) {}
 
   async searchNews(movieTitle: string): Promise<Article[]> {
+    const cacheKey = `eigaComNews:${movieTitle}`;
+    const cachedResult = this.cache.get<Article[]>(cacheKey);
+    if (cachedResult) {
+      return cachedResult;
+    }
+
     const searchUrl = `/search/${encodeURIComponent(movieTitle)}`;
 
     try {
@@ -41,6 +47,8 @@ export class EigaComRepository {
           });
         }
       });
+
+      this.cache.set(cacheKey, articles, 86400); // 24時間キャッシュ
       return articles;
     } catch (error) {
       console.error("映画.comのニュース取得エラー:", error);

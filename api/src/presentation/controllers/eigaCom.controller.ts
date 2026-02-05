@@ -1,14 +1,10 @@
-import { EigaComService } from "@/application/usecases/eigaCom.service";
+import { GetEigaComNewsUseCase } from "@/application/usecases/news/getEigaComNews.usecase";
 import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS } from "@shared/constants/httpStatus";
 import { ERROR_MESSAGES } from "@/presentation/constants/messages";
 
 export class EigaComController {
-  private readonly eigaComService: EigaComService;
-
-  constructor(eigaComService: EigaComService) {
-    this.eigaComService = eigaComService;
-  }
+  constructor(private readonly getEigaComNewsUseCase: GetEigaComNewsUseCase) {}
 
   async getEigaComNews(req: Request, res: Response, next: NextFunction) {
     try {
@@ -19,7 +15,8 @@ export class EigaComController {
           .json({ message: ERROR_MESSAGES.MOVIE_TITLE_REQUIRED });
       }
 
-      const newsItems = await this.eigaComService.getEigaComNews(movieTitle);
+      const newsItems =
+        await this.getEigaComNewsUseCase.execute(movieTitle);
       res.json(newsItems);
     } catch (error) {
       next(error);

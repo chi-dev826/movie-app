@@ -1,19 +1,14 @@
-import GoogleSearchService from "@/application/usecases/googleSearch.service";
+import { GetMovieAnalysisUseCase } from "@/application/usecases/analysis/getMovieAnalysis.usecase";
 import { Request, Response, NextFunction } from "express";
 
 export class GoogleSearchController {
-  private readonly googleSearchService: GoogleSearchService;
-  // ... rest of file unchanged
-
-  constructor(googleSearchService: GoogleSearchService) {
-    this.googleSearchService = googleSearchService;
-  }
+  constructor(private readonly getMovieAnalysisUseCase: GetMovieAnalysisUseCase) {}
 
   async getMovieAnalysis(req: Request, res: Response, next: NextFunction) {
     try {
       const movieTitle = req.query.title as string;
       const results =
-        await this.googleSearchService.getMovieAnalysis(movieTitle);
+        await this.getMovieAnalysisUseCase.execute(movieTitle);
       res.json(results);
     } catch (error) {
       next(error);
