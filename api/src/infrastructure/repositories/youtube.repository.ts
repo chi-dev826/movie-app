@@ -1,6 +1,7 @@
 import { youtubeApi } from "@/infrastructure/lib/youtubeClient";
+import { YoutubeRepositoryInterface } from "@/domain/repositories/youtube.repository.interface";
 
-export class YoutubeRepository {
+export class YoutubeRepository implements YoutubeRepositoryInterface {
   private readonly api: typeof youtubeApi;
 
   constructor(api: typeof youtubeApi = youtubeApi) {
@@ -15,7 +16,8 @@ export class YoutubeRepository {
           id: key,
         },
       });
-      return response.data;
+      const status = response.data?.items?.[0]?.status;
+      return status ? response.data : null;
     } catch (error) {
       console.error("Error fetching video status from YouTube:", error);
       return null;
