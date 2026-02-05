@@ -23,6 +23,10 @@ export class MovieEntity {
     this._videoKey = key;
   }
 
+  public get videoKey(): string | null {
+    return this._videoKey;
+  }
+
   public isMostlyJapanese(): boolean {
     if (this.originalLanguage !== "ja" && this.originalLanguage !== "en")
       return false;

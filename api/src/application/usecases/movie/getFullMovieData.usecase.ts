@@ -1,5 +1,4 @@
 import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { YoutubeRepository } from "@/infrastructure/repositories/youtube.repository";
 import { MovieEnricher } from "@/domain/services/movie.enricher";
 import { FullMovieData } from "@shared/types/api";
 import { MovieEntity } from "@/domain/models/movie";
@@ -7,16 +6,14 @@ import { MovieEntity } from "@/domain/models/movie";
 export class GetFullMovieDataUseCase {
   constructor(
     private readonly tmdbRepo: ITmdbRepository,
-    private readonly youtubeRepo: YoutubeRepository,
     private readonly enricher: MovieEnricher,
   ) {}
 
   async execute(movieId: number): Promise<FullMovieData> {
     // 1. 主要データの取得
-    const [detailEntity, videos, similarEntities, imagePath, watchProviders] =
+    const [detailEntity, similarEntities, imagePath, watchProviders] =
       await Promise.all([
         this.tmdbRepo.getMovieDetails(movieId),
-        this.tmdbRepo.getMovieVideos(movieId),
         this.tmdbRepo.getSimilarMovies(movieId),
         this.tmdbRepo.getMovieImages(movieId),
         this.tmdbRepo.getMovieWatchProviders(movieId),
@@ -39,27 +36,18 @@ export class GetFullMovieDataUseCase {
       }
     }
 
-    // 3. 関連映画とシリーズ映画にロゴ情報を付与
+    // 3. エンリッチメント（ロゴ、予告編）
     await Promise.all([
       this.enricher.enrichWithLogos(similarEntities),
       this.enricher.enrichWithLogos(collectionEntities),
+      this.enricher.enrichWithTrailers([detailEntity]), // メイン映画の予告編付与
     ]);
-
-    // 4. 動画（予告編）のキー特定と公開状態の確認
-    const trailer = videos.find((v) => v.isTrailer());
-    let videoKey: string | null = null;
-    if (trailer) {
-      const isPublic = await this.youtubeRepo.getVideoStatus(trailer.key);
-      if (isPublic) {
-        videoKey = trailer.key;
-      }
-    }
 
     // 5. レスポンス構築
     return {
       detail: detailEntity.toDetailDto(),
       image: imagePath,
-      video: videoKey,
+      video: detailEntity.videoKey, // Enricherによってセットされているはず
       similar: similarEntities.map((e) => e.toDto()),
       collections: collectionEntities.map((e) => e.toDto()),
       watchProviders,

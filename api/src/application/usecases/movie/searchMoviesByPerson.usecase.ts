@@ -1,6 +1,7 @@
 import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
 import { Movie as MovieDTO } from "@shared/types/domain";
 import { DiscoverMovieParams } from "@shared/types/external/tmdb";
+import { MOVIE_RULES } from "@/domain/constants/movieRules";
 
 export class SearchMoviesByPersonUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
@@ -18,12 +19,9 @@ export class SearchMoviesByPersonUseCase {
     const personId = personResponse.results[0].id;
 
     // 3. その人物が出演している映画を取得 (Discover APIを使用)
-    // sort_by: 'popularity.desc' で人気順に取得
     const params: DiscoverMovieParams = {
+      ...MOVIE_RULES.SEARCH_BY_PERSON,
       with_cast: String(personId),
-      sort_by: "popularity.desc",
-      region: "JP",
-      "vote_count.gte": 10,
     };
 
     const movies = await this.tmdbRepo.getDiscoverMovies(params);

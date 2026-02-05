@@ -2,6 +2,7 @@ import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface
 import { MovieListResponse } from "@shared/types/api";
 import { HOME_CATEGORIES } from "@/domain/constants/homeCategories";
 import { MovieList } from "@/domain/models/movieList";
+import { TMDB_CONFIG } from "@/domain/constants/tmdbConfig";
 
 import { ArrayUtils } from "@/utils/array";
 
@@ -9,7 +10,7 @@ export class GetHomePageMovieListUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   async execute(): Promise<MovieListResponse> {
-    const pagesToFetch = ArrayUtils.range(10); // ひとまず10ページ分取得
+    const pagesToFetch = ArrayUtils.range(TMDB_CONFIG.FETCH_PAGES.HOME);
 
     // カテゴリごとに並行処理
     const categoryPromises = Object.entries(HOME_CATEGORIES).map(

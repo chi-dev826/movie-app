@@ -30,12 +30,11 @@ export const googleSearchRepository = new GoogleSearchRepository(
 export const youtubeRepository = new YoutubeRepository();
 
 // Domain Services
-export const movieEnricher = new MovieEnricher(tmdbRepository);
+export const movieEnricher = new MovieEnricher(tmdbRepository, youtubeRepository);
 
 // UseCases
 export const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
   tmdbRepository,
-  youtubeRepository,
   movieEnricher,
 );
 export const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
@@ -43,7 +42,7 @@ export const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
 );
 export const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
   tmdbRepository,
-  youtubeRepository,
+  movieEnricher,
 );
 export const searchMoviesUseCase = new SearchMoviesUseCase(tmdbRepository);
 export const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
