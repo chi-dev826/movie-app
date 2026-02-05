@@ -14,6 +14,7 @@ export class GetUpcomingMovieListUseCase {
   ) {}
 
   async execute(): Promise<MovieDTO[]> {
+    // データ取得期間の計算
     const today = new Date();
     const twoMonthsLater = new Date(today);
     twoMonthsLater.setMonth(
