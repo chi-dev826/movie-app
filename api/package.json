@@ -12,6 +12,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "module-alias": "^2.3.4",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
@@ -26,5 +27,9 @@
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
+  },
+  "_moduleAliases": {
+    "@": "dist/src",
+    "@shared": "../shared"
   }
 }
