@@ -29,7 +29,8 @@
     "typescript": "^5.9.3"
   },
   "_moduleAliases": {
-    "@": "../dist/src",
-    "@shared": "../shared"
-  }
+    "@": "dist/api/src",
+    "@shared": "dist/shared"
+  },
+  "main": "dist/api/server.js"
 }
