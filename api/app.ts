@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
-import apiRoutes from "@/presentation/routes";
+import apiRoutes from "./src/presentation/routes";
 import { HTTP_STATUS } from "../shared/constants/httpStatus";
 
 const app = express();
