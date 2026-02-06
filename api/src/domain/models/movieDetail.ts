@@ -1,8 +1,8 @@
 import { MovieEntity } from "./movie";
 import {
   MovieDetail as MovieDetailDTO,
-  Cast,
   Crew,
+  Cast,
 } from "@shared/types/domain";
 
 export class MovieDetailEntity extends MovieEntity {
@@ -52,7 +52,17 @@ export class MovieDetailEntity extends MovieEntity {
       company_logo: this.companyLogo,
       homePageUrl: this.homePageUrl,
       cast: this.cast,
-      crew: this.crew,
+      keyStaff: {
+        directors: this.crew
+          .filter((member) => member.job === "Director")
+          .map((d) => ({ id: d.id, name: d.name })),
+        writers: this.crew
+          .filter((member) => member.job === "Screenplay")
+          .map((w) => ({ id: w.id, name: w.name })),
+        composers: this.crew
+          .filter((member) => member.job === "Original Music Composer")
+          .map((c) => ({ id: c.id, name: c.name })),
+      },
       revenue: this.revenue,
       budget: this.budget,
       production_countries: this.productionCountries,

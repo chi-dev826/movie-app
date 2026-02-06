@@ -27,6 +27,17 @@ export type Crew = {
   profile_path: string | null;
 };
 
+export type Staff = {
+  id: number;
+  name: string;
+};
+
+export type keyStaff = {
+  directors: Staff[];
+  writers: Staff[];
+  composers: Staff[];
+};
+
 // アプリケーション内で使用する整形済みの映画詳細情報
 export type MovieDetail = {
   id: number;
@@ -42,8 +53,8 @@ export type MovieDetail = {
   genres: string[] | null;
   company_logo: string | null;
   homePageUrl: string | null;
+  keyStaff: keyStaff;
   cast: Cast[];
-  crew: Crew[];
   revenue: number;
   budget: number;
   production_countries: string[];

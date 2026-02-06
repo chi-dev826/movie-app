@@ -11,8 +11,8 @@ export class MovieEntity {
     public readonly backdropPath: string | null,
     public readonly releaseDate: string | null, // YYYY-MM-DD
     public readonly voteAverage: number | null,
-    protected _logoPath: string | null = null,
-    protected _videoKey: string | null = null,
+    private _logoPath: string | null = null,
+    private _videoKey: string | null = null,
   ) {}
 
   public setLogo(path: string | null): void {

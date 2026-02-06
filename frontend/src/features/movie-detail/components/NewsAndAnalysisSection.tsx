@@ -6,6 +6,7 @@ import 'swiper/css';
 import { useMovieNews, useMovieAnalysis } from '../hooks/useMovieArticles';
 import type { Article } from '@/types/domain';
 import { EXTERNAL_URLS } from '@/constants/config';
+import { SectionContainer } from './SectionContainer';
 
 export default function NewsAndAnalysisSection({
   movieId,
@@ -54,7 +55,7 @@ export default function NewsAndAnalysisSection({
   }
 
   return (
-    <section className="z-20 mt-20 xl:m-12 2xl:m-16 3xl:m-20">
+    <SectionContainer className="z-20">
       <span className="flex gap-5 text-2xl font-bold 3xl:gap-10 xl:mt-0">
         <span
           className={`text-base ml-2 xl:text-lg 3xl:text-2xl text-gray-400 transition-all hover:text-white font-bold xl:mt-0 ${
@@ -91,7 +92,7 @@ export default function NewsAndAnalysisSection({
           <ArticleList articles={analysisItems} />
         </SwiperSlide>
       </Swiper>
-    </section>
+    </SectionContainer>
   );
 }
 

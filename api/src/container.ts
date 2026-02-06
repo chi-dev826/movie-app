@@ -19,6 +19,7 @@ import { GetMovieListByIdsUseCase } from "@/application/usecases/movie/getMovieL
 import { TmdbRepository } from "@/infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "@/infrastructure/repositories/cache/nodeCache.repository";
 import { MovieEnricher } from "@/domain/services/movie.enricher";
+import { MovieRecommendationService } from "@/domain/services/movie.recommendation.service";
 
 // リポジトリのインスタンス化
 export const cacheRepository = new NodeCacheRepository();
@@ -31,11 +32,15 @@ export const youtubeRepository = new YoutubeRepository();
 
 // Domain Services
 export const movieEnricher = new MovieEnricher(tmdbRepository, youtubeRepository);
+export const movieRecommendationService = new MovieRecommendationService(
+  tmdbRepository,
+);
 
 // UseCases
 export const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
   tmdbRepository,
   movieEnricher,
+  movieRecommendationService,
 );
 export const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
   tmdbRepository,

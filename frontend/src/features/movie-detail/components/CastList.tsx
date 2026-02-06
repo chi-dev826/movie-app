@@ -4,6 +4,7 @@ import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import { UserCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { APP_PATHS } from '@shared/constants/routes';
+import { SectionContainer } from './SectionContainer';
 
 type Props = {
   cast: Cast[];
@@ -15,7 +16,7 @@ const CastList = ({ cast }: Props) => {
   }
 
   return (
-    <section className="mt-10 xl:mx-12 3xl:mx-20">
+    <SectionContainer>
       <h2 className="mb-4 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
         キャスト
       </h2>
@@ -46,7 +47,7 @@ const CastList = ({ cast }: Props) => {
               )}
             </div>
             <div className="mt-2 text-center">
-              <p className="text-sm font-bold text-white transition-colors duration-300 truncate group-hover/cast:text-yellow-400">
+              <p className="text-sm font-bold text-white truncate transition-colors duration-300 group-hover/cast:text-yellow-400">
                 {actor.name}
               </p>
               <p className="text-xs text-gray-400 truncate">{actor.character}</p>
@@ -54,7 +55,7 @@ const CastList = ({ cast }: Props) => {
           </Link>
         ))}
       </HorizontalScrollContainer>
-    </section>
+    </SectionContainer>
   );
 };
 

@@ -1,4 +1,5 @@
 import { MovieDetail } from '@/types/domain';
+import { SectionContainer } from './SectionContainer';
 
 type Props = {
   detail: MovieDetail;
@@ -21,13 +22,10 @@ const MovieStats = ({ detail }: Props) => {
     { label: '興行収入', value: formatCurrency(detail.revenue) },
   ];
 
-  // 主要スタッフ（監督、脚本、音楽）を抽出
-  const directors = detail.crew.filter((c) => c.job === 'Director');
-  const writers = detail.crew.filter((c) => c.job === 'Screenplay');
-  const composers = detail.crew.filter((c) => c.job === 'Original Music Composer');
+  const { directors, writers, composers } = detail.keyStaff;
 
   return (
-    <section className="mt-10 text-white xl:mx-12 3xl:mx-20">
+    <SectionContainer className="text-white">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {/* スタッフ情報 */}
         <div className="space-y-4">
@@ -67,7 +65,7 @@ const MovieStats = ({ detail }: Props) => {
           </dl>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 };
 
