@@ -41,9 +41,7 @@ export const searchMovies = async (query: string): Promise<Movie[]> => {
 };
 
 export const searchMoviesByPerson = async (name: string): Promise<Movie[]> => {
-  return fetchFromApi<Movie[]>(
-    `${API_PATHS.SEARCH.PERSON}?name=${encodeURIComponent(name)}`
-  );
+  return fetchFromApi<Movie[]>(`${API_PATHS.SEARCH.PERSON}?name=${encodeURIComponent(name)}`);
 };
 
 export const fetchMovieList = async (): Promise<MovieListResponse> => {

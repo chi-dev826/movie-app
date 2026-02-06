@@ -48,7 +48,10 @@ const UpcomingList = () => {
             upcomingMovies.map((movie) => (
               <div key={movie.id} className="w-full bg-gray-800 rounded-lg shadow-lg">
                 <div className="flex">
-                  <Link to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())} className="p-4">
+                  <Link
+                    to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+                    className="p-4"
+                  >
                     <img
                       src={
                         getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.LARGE) ?? ''

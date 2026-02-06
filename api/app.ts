@@ -1,10 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
-import apiRoutes from "./src/routes";
-import dotenv from "dotenv";
+import apiRoutes from "@/presentation/routes";
 import { HTTP_STATUS } from "../shared/constants/httpStatus";
-
-dotenv.config();
 
 const app = express();
 

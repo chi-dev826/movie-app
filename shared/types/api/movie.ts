@@ -5,8 +5,10 @@ export type FullMovieData = {
   video: string | null;
   image: string | null;
   watchProviders: { logo_path: string | null; name: string }[];
-  similar: Movie[];
-  collections: Movie[];
+  recommendations: {
+    title: string;
+    movies: Movie[];
+  };
 };
 
 export type MovieListResponse = Record<

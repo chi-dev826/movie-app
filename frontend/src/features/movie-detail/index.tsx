@@ -10,6 +10,7 @@ import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
 import CastList from './components/CastList';
 import MovieStats from './components/MovieStats';
+import { SectionContainer } from './components/SectionContainer';
 import { useFullMovieData } from '@/hooks/useMovies';
 import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
@@ -49,11 +50,6 @@ function MovieDetailPage() {
       </div>
     );
   }
-
-  // 関連作品の選定：collections（シリーズ作品）が2件以下ならsimilarを使う
-  const collections = data?.collections ?? [];
-  const similar = data?.similar ?? [];
-  const relatedMovies = collections.length > 1 ? collections : similar;
 
   // アニメーション設定
   const containerVariants = {
@@ -149,7 +145,7 @@ function MovieDetailPage() {
       {data && (
         <>
           <motion.div
-            className="w-full px-4 mt-10 text-white z-overlay xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
+            className="w-full px-4 pt-10 text-white z-overlay xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
             variants={itemVariants}
           >
             <HeroMetadata
@@ -182,17 +178,18 @@ function MovieDetailPage() {
           <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />
         </motion.div>
       )}
-      <motion.section variants={itemVariants} className="mt-20 xl:m-12 3xl:mx-20 3xl:mt-0">
-        {' '}
-        <h2 className="mb-2 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
-          関連作品
-        </h2>
-        <HorizontalScrollContainer>
-          {relatedMovies.map((movie) => (
-            <ResponsiveMovieTile key={movie.id} movie={movie} />
-          ))}
-        </HorizontalScrollContainer>
-      </motion.section>
+      <motion.div variants={itemVariants}>
+        <SectionContainer>
+          <h2 className="mb-2 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
+            {data?.recommendations.title}
+          </h2>
+          <HorizontalScrollContainer>
+            {data?.recommendations.movies.map((movie) => (
+              <ResponsiveMovieTile key={movie.id} movie={movie} />
+            ))}
+          </HorizontalScrollContainer>
+        </SectionContainer>
+      </motion.div>
     </motion.div>
   );
 }

@@ -28,16 +28,12 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
 
   const providers = {
     'Disney Plus': () => null, // Disney Plus link disabled as it does not work reliably
-    Netflix: (title: string) =>
-      `${EXTERNAL_URLS.NETFLIX_SEARCH}${encodeURIComponent(title)}`,
-    'Apple TV': (title: string) =>
-      `${EXTERNAL_URLS.APPLE_TV_SEARCH}${encodeURIComponent(title)}`,
+    Netflix: (title: string) => `${EXTERNAL_URLS.NETFLIX_SEARCH}${encodeURIComponent(title)}`,
+    'Apple TV': (title: string) => `${EXTERNAL_URLS.APPLE_TV_SEARCH}${encodeURIComponent(title)}`,
     'Amazon Prime Video': (title: string) =>
       `${EXTERNAL_URLS.AMAZON_SEARCH}${encodeURIComponent(title)}${EXTERNAL_URLS.AMAZON_SEARCH_PARAMS}`,
-    Hulu: (title: string) =>
-      `${EXTERNAL_URLS.HULU_SEARCH}${encodeURIComponent(title)}`,
-    'U-NEXT': (title: string) =>
-      `${EXTERNAL_URLS.UNEXT_SEARCH}${encodeURIComponent(title)}`,
+    Hulu: (title: string) => `${EXTERNAL_URLS.HULU_SEARCH}${encodeURIComponent(title)}`,
+    'U-NEXT': (title: string) => `${EXTERNAL_URLS.UNEXT_SEARCH}${encodeURIComponent(title)}`,
   };
 
   const providerList = watchProviders.map((provider) => {

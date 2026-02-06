@@ -3,11 +3,27 @@
  * 参考: https://developer.themoviedb.org/reference/discover-movie
  */
 
+export type SortOption =
+  | "original_title.asc"
+  | "original_title.desc"
+  | "popularity.asc"
+  | "popularity.desc"
+  | "revenue.asc"
+  | "revenue.desc"
+  | "primary_release_date.asc"
+  | "primary_release_date.desc"
+  | "title.asc"
+  | "title.desc"
+  | "vote_average.asc"
+  | "vote_average.desc"
+  | "vote_count.asc"
+  | "vote_count.desc";
+
 export interface DiscoverMovieParams {
   // 共通パラメータ
   language?: string; // 言語 (例: "ja-JP")
   region?: string; // リージョン (例: "JP")
-  sort_by?: string; // 並び順 (例: "popularity.desc")
+  sort_by?: SortOption; // 並び順
   page?: number; // ページ番号
   include_adult?: boolean; // アダルト作品を含むか
   include_video?: boolean; // ビデオ作品を含むか
