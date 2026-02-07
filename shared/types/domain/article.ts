@@ -9,5 +9,4 @@ export type Article = {
   snippet: string;
   source: string; // 'eiga.com', 'Google Search' などの出所
   imageUrl?: string | null;
-  publishedAt?: string | null;
 };
