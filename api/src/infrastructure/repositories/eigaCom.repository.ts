@@ -33,7 +33,6 @@ export class EigaComRepository {
           .text()
           .replace(/\s+/g, " ")
           .trim();
-        const publishedAt = element.find("small.time").text().trim();
 
         if (title && url) {
           articles.push({
@@ -42,7 +41,6 @@ export class EigaComRepository {
             link: url,
             snippet,
             imageUrl,
-            publishedAt,
             source: "映画.com", // ソースを明記
           });
         }
