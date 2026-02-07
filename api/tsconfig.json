@@ -9,12 +9,7 @@
 
     "strict": true,
 
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@shared/*": ["../shared/*"],
-      "@/types/*": ["../shared/types/*"]
-    }
+    "baseUrl": "."
   },
   "include": ["**/*.ts", "../shared/**/*.ts"],
   "exclude": ["node_modules"]

@@ -1,7 +1,7 @@
-import { DiscoverMovieParams } from "@shared/types/external/tmdb";
-import { TMDB_CONFIG } from "@/domain/constants/tmdbConfig";
-import { SORT_OPTIONS } from "@shared/types/external/tmdb/sortOptions";
-import { RELEASE_TYPE } from "@shared/types/external/tmdb/releaseType";
+import { DiscoverMovieParams } from "../../../../shared/types/external/tmdb";
+import { TMDB_CONFIG } from "../constants/tmdbConfig";
+import { SORT_OPTIONS } from "../../../../shared/types/external/tmdb/sortOptions";
+import { RELEASE_TYPE } from "../../../../shared/types/external/tmdb/releaseType";
 
 export const MOVIE_RULES = {
   UPCOMING: {

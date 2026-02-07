@@ -1,7 +1,7 @@
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { MovieEnricher } from "@/domain/services/movie.enricher";
-import { MovieRecommendationService } from "@/domain/services/movie.recommendation.service";
-import { FullMovieData } from "@shared/types/api";
+import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { MovieEnricher } from "../../../domain/services/movie.enricher";
+import { MovieRecommendationService } from "../../../domain/services/movie.recommendation.service";
+import { FullMovieData } from "../../../../../shared/types/api";
 
 export class GetFullMovieDataUseCase {
   constructor(

@@ -1,4 +1,4 @@
-import { GetMovieAnalysisUseCase } from "@/application/usecases/analysis/getMovieAnalysis.usecase";
+import { GetMovieAnalysisUseCase } from "../../application/usecases/analysis/getMovieAnalysis.usecase";
 import { Request, Response, NextFunction } from "express";
 
 export class GoogleSearchController {

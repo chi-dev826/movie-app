@@ -1,7 +1,7 @@
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { Movie as MovieDTO } from "@shared/types/domain";
-import { DiscoverMovieParams } from "@shared/types/external/tmdb";
-import { MOVIE_RULES } from "@/domain/constants/movieRules";
+import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { Movie as MovieDTO } from "../../../../../shared/types/domain";
+import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
+import { MOVIE_RULES } from "../../../domain/constants/movieRules";
 
 export class SearchMoviesByPersonUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}

@@ -1,4 +1,4 @@
-import { Video } from "@/domain/models/video";
+import { Video } from "../models/video";
 import { YoutubeRepositoryInterface } from "../repositories/youtube.repository.interface";
 
 export class VideoDomainService {

@@ -1,6 +1,6 @@
-import { eigaComClient } from "@/infrastructure/lib/eigaComClient";
-import { Article } from "@shared/types/domain";
-import { ICacheRepository } from "@/domain/repositories/cache.repository.interface";
+import { eigaComClient } from "../lib/eigaComClient";
+import { Article } from "../../../../shared/types/domain";
+import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
 import * as cheerio from "cheerio";
 
 export class EigaComRepository {

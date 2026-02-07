@@ -1,4 +1,4 @@
-import { Movie as MovieDTO } from "@shared/types/domain";
+import { Movie as MovieDTO } from "../../../../shared/types/domain";
 
 export class MovieEntity {
   constructor(

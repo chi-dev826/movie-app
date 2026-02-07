@@ -1,5 +1,5 @@
-import { GoogleSearchRepository } from "@/infrastructure/repositories/googleSearch.repository";
-import { Article } from "@shared/types/domain";
+import { GoogleSearchRepository } from "../../../infrastructure/repositories/googleSearch.repository";
+import { Article } from "../../../../../shared/types/domain";
 
 export class GetMovieAnalysisUseCase {
   constructor(private readonly googleSearchRepository: GoogleSearchRepository) {}

@@ -1,6 +1,6 @@
-import { MovieEntity } from "@/domain/models/movie";
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { YoutubeRepository } from "@/infrastructure/repositories/youtube.repository";
+import { MovieEntity } from "../models/movie";
+import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
+import { YoutubeRepository } from "../../infrastructure/repositories/youtube.repository";
 
 export class MovieEnricher {
   constructor(

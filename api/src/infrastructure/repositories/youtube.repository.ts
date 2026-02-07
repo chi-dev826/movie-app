@@ -1,5 +1,5 @@
-import { youtubeApi } from "@/infrastructure/lib/youtubeClient";
-import { YoutubeRepositoryInterface } from "@/domain/repositories/youtube.repository.interface";
+import { youtubeApi } from "../lib/youtubeClient";
+import { YoutubeRepositoryInterface } from "../../domain/repositories/youtube.repository.interface";
 
 export class YoutubeRepository implements YoutubeRepositoryInterface {
   private readonly api: typeof youtubeApi;

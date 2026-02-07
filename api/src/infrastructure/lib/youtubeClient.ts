@@ -1,5 +1,5 @@
 import axios from "axios";
-import { EXTERNAL_API_URLS } from "@/infrastructure/constants/external";
+import { EXTERNAL_API_URLS } from "../constants/external";
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 

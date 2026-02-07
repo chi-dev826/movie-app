@@ -1,5 +1,5 @@
-import { MovieEntity } from "@/domain/models/movie";
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
+import { MovieEntity } from "../models/movie";
+import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
 
 export class MovieRecommendationService {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}

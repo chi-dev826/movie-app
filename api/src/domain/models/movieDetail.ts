@@ -3,7 +3,7 @@ import {
   MovieDetail as MovieDetailDTO,
   Crew,
   Cast,
-} from "@shared/types/domain";
+} from "../../../../shared/types/domain";
 
 export class MovieDetailEntity extends MovieEntity {
   constructor(

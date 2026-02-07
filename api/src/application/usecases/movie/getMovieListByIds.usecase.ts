@@ -1,6 +1,6 @@
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { Movie as MovieDTO } from "@shared/types/domain";
-import { MovieDetailEntity } from "@/domain/models/movieDetail";
+import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { Movie as MovieDTO } from "../../../../../shared/types/domain";
+import { MovieDetailEntity } from "../../../domain/models/movieDetail";
 
 export class GetMovieListByIdsUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}

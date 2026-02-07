@@ -1,5 +1,5 @@
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { Movie as MovieDTO } from "@shared/types/domain";
+import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 
 export class SearchMoviesUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}

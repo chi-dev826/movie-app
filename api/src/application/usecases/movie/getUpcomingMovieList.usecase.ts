@@ -1,11 +1,11 @@
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { MovieEnricher } from "@/domain/services/movie.enricher";
-import { Movie as MovieDTO } from "@shared/types/domain";
-import { DiscoverMovieParams } from "@shared/types/external/tmdb";
-import { TMDB_CONFIG } from "@/domain/constants/tmdbConfig";
-import { MOVIE_RULES } from "@/domain/constants/movieRules";
+import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { MovieEnricher } from "../../../domain/services/movie.enricher";
+import { Movie as MovieDTO } from "../../../../../shared/types/domain";
+import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
+import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
+import { MOVIE_RULES } from "../../../domain/constants/movieRules";
 
-import { ArrayUtils } from "@/utils/array";
+import { ArrayUtils } from "../../../utils/array";
 
 export class GetUpcomingMovieListUseCase {
   constructor(

@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { HTTP_STATUS } from "@shared/constants/httpStatus";
-import { ERROR_MESSAGES } from "@/presentation/constants/messages";
-import { GetFullMovieDataUseCase } from "@/application/usecases/movie/getFullMovieData.usecase";
-import { GetHomePageMovieListUseCase } from "@/application/usecases/movie/getHomePageMovieList.usecase";
-import { GetUpcomingMovieListUseCase } from "@/application/usecases/movie/getUpcomingMovieList.usecase";
-import { SearchMoviesUseCase } from "@/application/usecases/movie/searchMovies.usecase";
-import { GetNowPlayingMoviesUseCase } from "@/application/usecases/movie/getNowPlayingMovies.usecase";
-import { SearchMoviesByPersonUseCase } from "@/application/usecases/movie/searchMoviesByPerson.usecase";
-import { GetMovieListByIdsUseCase } from "@/application/usecases/movie/getMovieListByIds.usecase";
+import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
+import { ERROR_MESSAGES } from "../constants/messages";
+import { GetFullMovieDataUseCase } from "../../application/usecases/movie/getFullMovieData.usecase";
+import { GetHomePageMovieListUseCase } from "../../application/usecases/movie/getHomePageMovieList.usecase";
+import { GetUpcomingMovieListUseCase } from "../../application/usecases/movie/getUpcomingMovieList.usecase";
+import { SearchMoviesUseCase } from "../../application/usecases/movie/searchMovies.usecase";
+import { GetNowPlayingMoviesUseCase } from "../../application/usecases/movie/getNowPlayingMovies.usecase";
+import { SearchMoviesByPersonUseCase } from "../../application/usecases/movie/searchMoviesByPerson.usecase";
+import { GetMovieListByIdsUseCase } from "../../application/usecases/movie/getMovieListByIds.usecase";
 
 export class MovieController {
   constructor(

@@ -2,8 +2,8 @@
   "name": "peek-api",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "npx ts-node-dev -r tsconfig-paths/register --respawn --transpile-only server.ts",
+    "build": "tsc",
+    "dev": "npx ts-node-dev --respawn --transpile-only server.ts",
     "test": "jest"
   },
   "dependencies": {
@@ -12,7 +12,6 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "module-alias": "^2.3.4",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
@@ -27,10 +26,5 @@
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
-  },
-  "_moduleAliases": {
-    "@": "dist/api/src",
-    "@shared": "dist/shared"
-  },
-  "main": "dist/api/server.js"
+  }
 }

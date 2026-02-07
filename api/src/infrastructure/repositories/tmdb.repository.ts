@@ -1,11 +1,11 @@
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { ICacheRepository } from "@/domain/repositories/cache.repository.interface";
-import { MovieFactory } from "@/domain/factories/movie.factory";
-import { MovieEntity } from "@/domain/models/movie";
-import { MovieDetailEntity } from "@/domain/models/movieDetail";
-import { CollectionEntity } from "@/domain/models/collection";
-import { Video } from "@/domain/models/video";
-import { tmdbApi } from "@/infrastructure/lib/tmdb.client";
+import { ITmdbRepository } from "../../domain/repositories/tmdb.repository.interface";
+import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
+import { MovieFactory } from "../../domain/factories/movie.factory";
+import { MovieEntity } from "../../domain/models/movie";
+import { MovieDetailEntity } from "../../domain/models/movieDetail";
+import { CollectionEntity } from "../../domain/models/collection";
+import { Video } from "../../domain/models/video";
+import { tmdbApi } from "../lib/tmdb.client";
 import {
   MovieDetailResponse,
   MovieResponse,
@@ -17,7 +17,7 @@ import {
   VideoItem,
   DiscoverMovieParams,
   PersonResponse,
-} from "@shared/types/external/tmdb";
+} from "../../../../shared/types/external/tmdb";
 
 export class TmdbRepository implements ITmdbRepository {
   constructor(

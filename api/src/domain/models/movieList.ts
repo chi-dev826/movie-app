@@ -1,5 +1,5 @@
 import { MovieEntity } from "./movie";
-import { Movie as MovieDTO } from "@shared/types/domain";
+import { Movie as MovieDTO } from "../../../../shared/types/domain";
 
 export class MovieList {
   constructor(private readonly movies: MovieEntity[]) {}

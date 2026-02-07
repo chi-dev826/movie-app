@@ -1,7 +1,7 @@
-import { GetEigaComNewsUseCase } from "@/application/usecases/news/getEigaComNews.usecase";
+import { GetEigaComNewsUseCase } from "../../application/usecases/news/getEigaComNews.usecase";
 import { Request, Response, NextFunction } from "express";
-import { HTTP_STATUS } from "@shared/constants/httpStatus";
-import { ERROR_MESSAGES } from "@/presentation/constants/messages";
+import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
+import { ERROR_MESSAGES } from "../constants/messages";
 
 export class EigaComController {
   constructor(private readonly getEigaComNewsUseCase: GetEigaComNewsUseCase) {}

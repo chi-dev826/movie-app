@@ -1,6 +1,6 @@
-import { DiscoverMovieParams } from "@shared/types/external/tmdb";
-import { TMDB_CONFIG } from "@/domain/constants/tmdbConfig";
-import { SORT_OPTIONS } from "@shared/types/external/tmdb/sortOptions";
+import { DiscoverMovieParams } from "../../../../shared/types/external/tmdb";
+import { TMDB_CONFIG } from "../constants/tmdbConfig";
+import { SORT_OPTIONS } from "../../../../shared/types/external/tmdb/sortOptions";
 
 export const HOME_CATEGORIES: Record<string, DiscoverMovieParams> = {
   popular: {

@@ -1,8 +1,8 @@
 import axios from "axios";
-import { googleCustomSearchResponse } from "@shared/types/external/googleCustomSearch/response";
-import { Article } from "@shared/types/domain";
-import { EXTERNAL_API_URLS } from "@/infrastructure/constants/external";
-import { ICacheRepository } from "@/domain/repositories/cache.repository.interface";
+import { googleCustomSearchResponse } from "../../../../shared/types/external/googleCustomSearch/response";
+import { Article } from "../../../../shared/types/domain";
+import { EXTERNAL_API_URLS } from "../constants/external";
+import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
 
 const key = process.env.GOOGLE_CUSTOM_SEARCH_KEY;
 const cx = process.env.GOOGLE_CUSTOM_SEARCH_CX;

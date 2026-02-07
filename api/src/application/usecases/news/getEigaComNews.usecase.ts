@@ -1,5 +1,5 @@
-import { EigaComRepository } from "@/infrastructure/repositories/eigaCom.repository";
-import { Article } from "@shared/types/domain";
+import { EigaComRepository } from "../../../infrastructure/repositories/eigaCom.repository";
+import { Article } from "../../../../../shared/types/domain";
 
 export class GetEigaComNewsUseCase {
   constructor(private readonly eigaComRepository: EigaComRepository) {}

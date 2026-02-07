@@ -1,12 +1,12 @@
-import { MovieEntity } from "@/domain/models/movie";
-import { MovieDetailEntity } from "@/domain/models/movieDetail";
-import { Video } from "@/domain/models/video";
+import { MovieEntity } from "../models/movie";
+import { MovieDetailEntity } from "../models/movieDetail";
+import { Video } from "../models/video";
 import {
   MovieResponse,
   MovieDetailResponse,
   VideoItem,
   MovieWatchProvidersResponse,
-} from "@shared/types/external/tmdb";
+} from "../../../../shared/types/external/tmdb";
 
 export class MovieFactory {
   static createFromApiResponse(data: MovieResponse): MovieEntity {

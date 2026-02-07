@@ -1,5 +1,5 @@
 import NodeCache from "node-cache";
-import { ICacheRepository } from "@/domain/repositories/cache.repository.interface";
+import { ICacheRepository } from "../../../domain/repositories/cache.repository.interface";
 
 export class NodeCacheRepository implements ICacheRepository {
   private cache: NodeCache;

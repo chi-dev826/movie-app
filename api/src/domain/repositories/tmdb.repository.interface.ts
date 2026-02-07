@@ -1,12 +1,12 @@
-import { MovieEntity } from "@/domain/models/movie";
-import { MovieDetailEntity } from "@/domain/models/movieDetail";
-import { CollectionEntity } from "@/domain/models/collection";
-import { Video } from "@/domain/models/video";
+import { MovieEntity } from "../models/movie";
+import { MovieDetailEntity } from "../models/movieDetail";
+import { CollectionEntity } from "../models/collection";
+import { Video } from "../models/video";
 import {
   DiscoverMovieParams,
   PaginatedResponse,
   PersonResponse,
-} from "@shared/types/external/tmdb";
+} from "../../../../shared/types/external/tmdb";
 
 export interface ITmdbRepository {
   getMovieDetails(movieId: number): Promise<MovieDetailEntity>;

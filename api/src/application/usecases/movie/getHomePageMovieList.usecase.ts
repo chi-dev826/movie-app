@@ -1,10 +1,10 @@
-import { ITmdbRepository } from "@/domain/repositories/tmdb.repository.interface";
-import { MovieListResponse } from "@shared/types/api";
-import { HOME_CATEGORIES } from "@/domain/constants/homeCategories";
-import { MovieList } from "@/domain/models/movieList";
-import { TMDB_CONFIG } from "@/domain/constants/tmdbConfig";
+import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { MovieListResponse } from "../../../../../shared/types/api";
+import { HOME_CATEGORIES } from "../../../domain/constants/homeCategories";
+import { MovieList } from "../../../domain/models/movieList";
+import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
 
-import { ArrayUtils } from "@/utils/array";
+import { ArrayUtils } from "../../../utils/array";
 
 export class GetHomePageMovieListUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
