@@ -1,6 +1,7 @@
 {
   "name": "peek-api",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "npx ts-node-dev --respawn --transpile-only server.ts",

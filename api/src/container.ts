@@ -31,7 +31,10 @@ export const googleSearchRepository = new GoogleSearchRepository(
 export const youtubeRepository = new YoutubeRepository();
 
 // Domain Services
-export const movieEnricher = new MovieEnricher(tmdbRepository, youtubeRepository);
+export const movieEnricher = new MovieEnricher(
+  tmdbRepository,
+  youtubeRepository,
+);
 export const movieRecommendationService = new MovieRecommendationService(
   tmdbRepository,
 );

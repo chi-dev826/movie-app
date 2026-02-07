@@ -15,8 +15,7 @@ export class EigaComController {
           .json({ message: ERROR_MESSAGES.MOVIE_TITLE_REQUIRED });
       }
 
-      const newsItems =
-        await this.getEigaComNewsUseCase.execute(movieTitle);
+      const newsItems = await this.getEigaComNewsUseCase.execute(movieTitle);
       res.json(newsItems);
     } catch (error) {
       next(error);

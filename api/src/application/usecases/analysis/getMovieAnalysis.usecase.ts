@@ -2,7 +2,9 @@ import { GoogleSearchRepository } from "../../../infrastructure/repositories/goo
 import { Article } from "../../../../../shared/types/domain";
 
 export class GetMovieAnalysisUseCase {
-  constructor(private readonly googleSearchRepository: GoogleSearchRepository) {}
+  constructor(
+    private readonly googleSearchRepository: GoogleSearchRepository,
+  ) {}
 
   async execute(movieTitle: string): Promise<Article[]> {
     const query = `${movieTitle} 映画 考察`;
