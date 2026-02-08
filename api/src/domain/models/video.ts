@@ -3,7 +3,9 @@ export class Video {
     public readonly key: string,
     public readonly site: string,
     public readonly type: string,
-  ) {}
+  ) {
+    Object.freeze(this);
+  }
 
   getKey(): string {
     return this.key;

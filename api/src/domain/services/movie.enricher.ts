@@ -1,4 +1,5 @@
 import { MovieEntity } from "../models/movie";
+import { MovieList } from "../models/movieList";
 import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
 import { YoutubeRepository } from "../../infrastructure/repositories/youtube.repository";
 
@@ -9,26 +10,31 @@ export class MovieEnricher {
   ) {}
 
   /**
-   * リスト内の映画に対して並行してロゴ画像を取得・設定する
+   * リスト内の映画に対して並行してロゴ画像を取得・設定し、新しいリストを返す
    */
-  async enrichWithLogos(movies: MovieEntity[]): Promise<void> {
+  async enrichWithLogos(movieList: MovieList): Promise<MovieList> {
+    const movies = movieList.items;
     const results = await Promise.allSettled(
       movies.map((movie) => this.tmdbRepo.getMovieImages(movie.id)),
     );
 
-    movies.forEach((movie, index) => {
+    const enrichedMovies = movies.map((movie, index) => {
       const result = results[index];
-      if (result.status === "fulfilled") {
-        movie.setLogo(result.value);
+      if (result.status === "fulfilled" && result.value) {
+        return movie.withLogo(result.value);
       }
+      return movie;
     });
+
+    return new MovieList(enrichedMovies);
   }
 
   /**
-   * リスト内の映画に対して並行して予告編（公開中のもの）を取得・設定する
+   * リスト内の映画に対して並行して予告編を取得・設定し、新しいリストを返す
    */
-  async enrichWithTrailers(movies: MovieEntity[]): Promise<void> {
-    await Promise.all(
+  async enrichWithTrailers(movieList: MovieList): Promise<MovieList> {
+    const movies = movieList.items;
+    const enrichedMovies = await Promise.all(
       movies.map(async (movie) => {
         try {
           const videos = await this.tmdbRepo.getMovieVideos(movie.id);
@@ -37,16 +43,20 @@ export class MovieEnricher {
           if (trailer) {
             const isPublic = await this.youtubeRepo.getVideoStatus(trailer.key);
             if (isPublic) {
-              movie.setVideo(trailer.key);
+              return movie.withVideo(trailer.key);
             }
           }
+          return movie;
         } catch (error) {
           console.error(
             `予告編の取得に失敗しました (movieId: ${movie.id}):`,
             error,
           );
+          return movie;
         }
       }),
     );
+
+    return new MovieList(enrichedMovies);
   }
 }

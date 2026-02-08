@@ -17,8 +17,7 @@ export class GetMovieListByIdsUseCase {
           this.tmdbRepo.getMovieImages(id),
         ]);
 
-        detailEntity.setLogo(image);
-        return detailEntity;
+        return detailEntity.withLogo(image);
       } catch (error) {
         console.error(`映画ID ${id} の取得に失敗しました:`, error);
         return null;

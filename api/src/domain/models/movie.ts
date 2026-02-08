@@ -11,20 +11,52 @@ export class MovieEntity {
     public readonly backdropPath: string | null,
     public readonly releaseDate: string | null, // YYYY-MM-DD
     public readonly voteAverage: number | null,
-    private _logoPath: string | null = null,
-    private _videoKey: string | null = null,
-  ) {}
-
-  public setLogo(path: string | null): void {
-    this._logoPath = path;
+    private readonly _logoPath: string | null = null,
+    private readonly _videoKey: string | null = null,
+  ) {
+    if (new.target === MovieEntity) {
+      Object.freeze(this);
+    }
   }
 
-  public setVideo(key: string | null): void {
-    this._videoKey = key;
+  public withLogo(path: string | null): MovieEntity {
+    return new MovieEntity(
+      this.id,
+      this.title,
+      this.originalTitle,
+      this.originalLanguage,
+      this.overview,
+      this.posterPath,
+      this.backdropPath,
+      this.releaseDate,
+      this.voteAverage,
+      path,
+      this._videoKey,
+    );
+  }
+
+  public withVideo(key: string | null): MovieEntity {
+    return new MovieEntity(
+      this.id,
+      this.title,
+      this.originalTitle,
+      this.originalLanguage,
+      this.overview,
+      this.posterPath,
+      this.backdropPath,
+      this.releaseDate,
+      this.voteAverage,
+      this._logoPath,
+      key,
+    );
   }
 
   public get videoKey(): string | null {
     return this._videoKey;
+  }
+
+  public get logoPathValue(): string | null {
+    return this._logoPath;
   }
 
   public isMostlyJapanese(): boolean {

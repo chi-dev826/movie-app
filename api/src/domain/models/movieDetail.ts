@@ -28,6 +28,8 @@ export class MovieDetailEntity extends MovieEntity {
     public readonly budget: number,
     public readonly productionCountries: string[],
     public readonly companyLogo: string | null,
+    logoPath: string | null = null,
+    videoKey: string | null = null,
   ) {
     super(
       id,
@@ -39,6 +41,67 @@ export class MovieDetailEntity extends MovieEntity {
       backdropPath,
       releaseDate,
       voteAverage,
+      logoPath,
+      videoKey,
+    );
+    Object.freeze(this);
+  }
+
+  /**
+   * ロゴパスを更新した新しいインスタンスを返す（MovieEntityのオーバーライド）
+   */
+  public override withLogo(path: string | null): MovieDetailEntity {
+    return new MovieDetailEntity(
+      this.id,
+      this.title,
+      this.originalTitle,
+      this.originalLanguage,
+      this.overview,
+      this.posterPath,
+      this.backdropPath,
+      this.releaseDate,
+      this.voteAverage,
+      this.belongsToCollectionId,
+      this.runtime,
+      this.genres,
+      this.homePageUrl,
+      this.cast,
+      this.crew,
+      this.revenue,
+      this.budget,
+      this.productionCountries,
+      this.companyLogo,
+      path, // logoPath
+      this.videoKey,
+    );
+  }
+
+  /**
+   * 動画キーを更新した新しいインスタンスを返す（MovieEntityのオーバーライド）
+   */
+  public override withVideo(key: string | null): MovieDetailEntity {
+    return new MovieDetailEntity(
+      this.id,
+      this.title,
+      this.originalTitle,
+      this.originalLanguage,
+      this.overview,
+      this.posterPath,
+      this.backdropPath,
+      this.releaseDate,
+      this.voteAverage,
+      this.belongsToCollectionId,
+      this.runtime,
+      this.genres,
+      this.homePageUrl,
+      this.cast,
+      this.crew,
+      this.revenue,
+      this.budget,
+      this.productionCountries,
+      this.companyLogo,
+      this.logoPathValue,
+      key,
     );
   }
 

@@ -2,6 +2,7 @@ import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.in
 import { MovieEnricher } from "../../../domain/services/movie.enricher";
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
+import { MovieList } from "../../../domain/models/movieList";
 import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
 import { MOVIE_RULES } from "../../../domain/constants/movieRules";
 
@@ -43,11 +44,10 @@ export class GetUpcomingMovieListUseCase {
     );
 
     // エンリッチメント（ロゴと予告編）を一括適用
-    await Promise.all([
-      this.enricher.enrichWithLogos(filteredMovies),
-      this.enricher.enrichWithTrailers(filteredMovies),
-    ]);
+    let movieList = new MovieList(filteredMovies);
+    movieList = await this.enricher.enrichWithLogos(movieList);
+    movieList = await this.enricher.enrichWithTrailers(movieList);
 
-    return filteredMovies.map((movie) => movie.toDto());
+    return movieList.toDtoArray();
   }
 }

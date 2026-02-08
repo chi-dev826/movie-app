@@ -8,7 +8,7 @@ export class CollectionEntity {
   constructor(
     public readonly id: number,
     public readonly name: string,
-    public readonly parts: MovieEntity[],
+    public readonly parts: readonly MovieEntity[],
   ) {
     // ランタイムでの不変性を確保
     Object.freeze(this);

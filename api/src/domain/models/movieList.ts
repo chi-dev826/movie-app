@@ -2,10 +2,13 @@ import { MovieEntity } from "./movie";
 import { Movie as MovieDTO } from "../../../../shared/types/domain";
 
 export class MovieList {
-  constructor(private readonly movies: MovieEntity[]) {}
+  constructor(private readonly movies: readonly MovieEntity[]) {
+    Object.freeze(this);
+    Object.freeze(this.movies);
+  }
 
-  public get items(): MovieEntity[] {
-    return [...this.movies];
+  public get items(): readonly MovieEntity[] {
+    return this.movies;
   }
 
   /**

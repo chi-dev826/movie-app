@@ -1,6 +1,8 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
 import { MovieEnricher } from "../../../domain/services/movie.enricher";
 import { MovieRecommendationService } from "../../../domain/services/movie.recommendation.service";
+import { MovieList } from "../../../domain/models/movieList";
+import { MovieDetailEntity } from "../../../domain/models/movieDetail";
 import { FullMovieData } from "../../../../../shared/types/api";
 
 export class GetFullMovieDataUseCase {
@@ -25,19 +27,25 @@ export class GetFullMovieDataUseCase {
     );
 
     // 3. エンリッチメント（ロゴ、予告編）
-    await Promise.all([
-      this.enricher.enrichWithLogos(recommendation.movies), // おすすめ映画のロゴ付与
-      this.enricher.enrichWithTrailers([detailEntity]), // メイン映画の予告編付与
-    ]);
+    // おすすめ映画のロゴ付与
+    const enrichedRecList = await this.enricher.enrichWithLogos(
+      new MovieList(recommendation.movies),
+    );
+
+    // メイン映画の予告編付与
+    const enrichedDetailList = await this.enricher.enrichWithTrailers(
+      new MovieList([detailEntity]),
+    );
+    const enrichedDetail = enrichedDetailList.items[0] as MovieDetailEntity;
 
     // 5. レスポンス構築
     return {
-      detail: detailEntity.toDetailDto(),
+      detail: enrichedDetail.toDetailDto(),
       image: imagePath,
-      video: detailEntity.videoKey, // Enricherによってセットされているはず
+      video: enrichedDetail.videoKey,
       recommendations: {
         title: recommendation.title,
-        movies: recommendation.movies.map((movie) => movie.toDto()),
+        movies: enrichedRecList.toDtoArray(),
       },
       watchProviders,
     };
