@@ -1,6 +1,7 @@
 import { ITmdbRepository } from "../../domain/repositories/tmdb.repository.interface";
 import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
 import { MovieFactory } from "../../domain/factories/movie.factory";
+import { CollectionFactory } from "../../domain/factories/collection.factory";
 import { MovieEntity } from "../../domain/models/movie";
 import { MovieDetailEntity } from "../../domain/models/movieDetail";
 import { CollectionEntity } from "../../domain/models/collection";
@@ -86,10 +87,7 @@ export class TmdbRepository implements ITmdbRepository {
     const response = await this.api.get<CollectionResponse>(
       `/collection/${collectionId}`,
     );
-    const parts = response.data.parts.map((part) =>
-      MovieFactory.createFromApiResponse(part),
-    );
-    return new CollectionEntity(response.data.id, response.data.name, parts);
+    return CollectionFactory.createFromApiResponse(response.data);
   }
 
   async getDiscoverMovies(params: DiscoverMovieParams): Promise<MovieEntity[]> {

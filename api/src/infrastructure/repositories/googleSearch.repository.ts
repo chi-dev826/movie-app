@@ -3,8 +3,10 @@ import {
   SerpApiResponse,
   SerpApiOrganicResult,
 } from "../../../../shared/types/external/serpApi/response";
-import { Article } from "../../../../shared/types/domain";
 import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
+import { ArticleEntity } from "../../domain/models/article.entity";
+import { ArticleFactory } from "../../domain/factories/article.factory";
+import { Article } from "../../../../shared/types/domain";
 
 export class GoogleSearchRepository {
   constructor(private readonly cache: ICacheRepository) {}
@@ -18,11 +20,24 @@ export class GoogleSearchRepository {
       num?: number;
       filter?: number;
     };
-  }): Promise<Article[]> {
+  }): Promise<ArticleEntity[]> {
     const cacheKey = `movieAnalysis:${query}`;
-    const cachedResult = this.cache.get<Article[]>(cacheKey);
+    const cachedResult = this.cache.get<Article[]>(cacheKey); // キャッシュはプレーンなオブジェクトとして保存されている想定
+
     if (cachedResult) {
-      return cachedResult;
+      // キャッシュから復元する際もバリデーションを通すためEntity化する
+      // ※簡易化のためDTO的なオブジェクトが保存されていると仮定
+      return cachedResult.map(
+        (item) =>
+          new ArticleEntity(
+            item.id,
+            item.title,
+            item.link,
+            item.snippet,
+            item.source,
+            item.imageUrl,
+          ),
+      );
     }
 
     try {
@@ -35,17 +50,18 @@ export class GoogleSearchRepository {
       });
 
       const items = response.data.organic_results || [];
-      const result: Article[] = items.map((item: SerpApiOrganicResult) => ({
-        id: item.link,
-        title: item.title,
-        link: item.link,
-        snippet: item.snippet || "",
-        source: "Google Search",
-        imageUrl: item.thumbnail || null,
-      }));
+      const entities = items.map((item: SerpApiOrganicResult) =>
+        ArticleFactory.createFromSerpApi(item),
+      );
 
-      this.cache.set(cacheKey, result, 86400); // 24時間キャッシュ
-      return result;
+      // キャッシュにはDTO形式で保存
+      this.cache.set(
+        cacheKey,
+        entities.map((e) => e.toDto()),
+        86400,
+      ); // 24時間キャッシュ
+
+      return entities;
     } catch (error) {
       console.error("SerpApi search error:", error);
       return [];

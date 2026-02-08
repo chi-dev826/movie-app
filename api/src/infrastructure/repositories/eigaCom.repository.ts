@@ -1,6 +1,8 @@
 import { eigaComClient } from "../lib/eigaComClient";
-import { Article } from "../../../../shared/types/domain";
 import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
+import { ArticleEntity } from "../../domain/models/article.entity";
+import { ArticleFactory } from "../../domain/factories/article.factory";
+import { Article } from "../../../../shared/types/domain";
 import * as cheerio from "cheerio";
 
 export class EigaComRepository {
@@ -9,11 +11,22 @@ export class EigaComRepository {
     private readonly client: typeof eigaComClient = eigaComClient,
   ) {}
 
-  async searchNews(movieTitle: string): Promise<Article[]> {
+  async searchNews(movieTitle: string): Promise<ArticleEntity[]> {
     const cacheKey = `eigaComNews:${movieTitle}`;
     const cachedResult = this.cache.get<Article[]>(cacheKey);
+
     if (cachedResult) {
-      return cachedResult;
+      return cachedResult.map(
+        (item) =>
+          new ArticleEntity(
+            item.id,
+            item.title,
+            item.link,
+            item.snippet,
+            item.source,
+            item.imageUrl,
+          ),
+      );
     }
 
     const searchUrl = `/search/${encodeURIComponent(movieTitle)}`;
@@ -22,7 +35,7 @@ export class EigaComRepository {
       const response = await this.client.get(searchUrl);
       const $ = cheerio.load(response.data);
 
-      const articles: Article[] = [];
+      const entities: ArticleEntity[] = [];
       $("#rslt-news .list-block").each((_, el) => {
         const element = $(el);
         const title = element.find("h3.title a").text().trim();
@@ -35,19 +48,25 @@ export class EigaComRepository {
           .trim();
 
         if (title && url) {
-          articles.push({
-            id: url, // URLをIDとして使用
-            title,
-            link: url,
-            snippet,
-            imageUrl,
-            source: "映画.com", // ソースを明記
-          });
+          entities.push(
+            ArticleFactory.createFromScraping({
+              title,
+              url,
+              imageUrl,
+              snippet,
+              source: "映画.com",
+            }),
+          );
         }
       });
 
-      this.cache.set(cacheKey, articles, 86400); // 24時間キャッシュ
-      return articles;
+      this.cache.set(
+        cacheKey,
+        entities.map((e) => e.toDto()),
+        86400,
+      ); // 24時間キャッシュ
+
+      return entities;
     } catch (error) {
       console.error("映画.comのニュース取得エラー:", error);
       return [];
