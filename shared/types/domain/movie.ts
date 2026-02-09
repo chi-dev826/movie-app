@@ -11,6 +11,9 @@ export type Movie = {
   readonly logo_path?: string | null;
   readonly video?: string | null;
   readonly release_date?: string | null;
+  readonly release_date_display?: string | null;
+  readonly days_until_release?: number | null;
+  readonly upcoming_badge_label?: string | null;
 };
 
 export type Cast = {

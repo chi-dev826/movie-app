@@ -1,17 +1,19 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
 import { MovieEnricher } from "../../../domain/services/movie.enricher";
+import { UpcomingMovieService } from "../../../domain/services/upcomingMovie.service";
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
 import { MovieList } from "../../../domain/models/movieList";
 import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
 import { MOVIE_RULES } from "../../../domain/constants/movieRules";
-
 import { ArrayUtils } from "../../../utils/array";
+import { DateUtils } from "../../../utils/date";
 
 export class GetUpcomingMovieListUseCase {
   constructor(
     private readonly tmdbRepo: ITmdbRepository,
     private readonly enricher: MovieEnricher,
+    private readonly upcomingService: UpcomingMovieService,
   ) {}
 
   async execute(): Promise<MovieDTO[]> {
@@ -38,16 +40,35 @@ export class GetUpcomingMovieListUseCase {
     const responses = await Promise.all(promises);
     const allMovies = responses.flatMap((res) => res);
 
-    // 日本語コンテンツのフィルタリングを適用
+    // 日本語コンテンツのフィルタリング
     const filteredMovies = allMovies.filter((movie) =>
       movie.isMostlyJapanese(),
     );
 
+    // 公開日順にソート
+    const sortedMovies = this.upcomingService.sort(filteredMovies);
+
     // エンリッチメント（ロゴと予告編）を一括適用
-    let movieList = new MovieList(filteredMovies);
+    let movieList = new MovieList(sortedMovies);
     movieList = await this.enricher.enrichWithLogos(movieList);
     movieList = await this.enricher.enrichWithTrailers(movieList);
 
-    return movieList.toDtoArray();
+    // Upcoming専用の表示用データを付与
+    const jstToday = DateUtils.getJstToday();
+
+    return movieList.items.map((movie) => {
+      const dto = movie.toDto();
+      const daysUntil = this.upcomingService.calculateDaysUntilRelease(
+        movie,
+        jstToday,
+      );
+
+      return {
+        ...dto,
+        release_date_display: this.upcomingService.getDisplayDate(movie),
+        days_until_release: daysUntil,
+        upcoming_badge_label: this.upcomingService.getBadgeLabel(daysUntil),
+      };
+    });
   }
 }

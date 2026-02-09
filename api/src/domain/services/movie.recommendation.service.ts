@@ -11,7 +11,7 @@ export class MovieRecommendationService {
   async getRecommendations(
     movieId: number,
     collectionId: number | null,
-  ): Promise<{ title: string; movies: MovieEntity[] }> {
+  ): Promise<{ title: string; movies: readonly MovieEntity[] }> {
     // 1. シリーズ作品の確認
     if (collectionId) {
       try {

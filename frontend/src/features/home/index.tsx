@@ -5,6 +5,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import HeroSwiper from './components/HeroSwiper';
 import { ResponsiveMovieTile } from '@/components/movie-card';
+import UpcomingMovieCard from './components/UpcomingMovieCard';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -138,9 +139,17 @@ function HomePage() {
               </span>
             </Link>
             <HorizontalScrollContainer>
-              {section.movies?.map((movie) => (
-                <ResponsiveMovieTile key={movie.id} movie={movie} />
-              ))}
+              {section.movies?.map((movie) =>
+                section.type === 'upcoming' ? (
+                  <UpcomingMovieCard
+                    key={movie.id}
+                    movie={movie}
+                    className="basis-[36%] xl:basis-[22%] 2xl:basis-[12%]"
+                  />
+                ) : (
+                  <ResponsiveMovieTile key={movie.id} movie={movie} />
+                ),
+              )}
             </HorizontalScrollContainer>
           </div>
         ))}

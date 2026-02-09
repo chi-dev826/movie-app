@@ -31,6 +31,7 @@ export const googleSearchRepository = new GoogleSearchRepository(
 export const youtubeRepository = new YoutubeRepository();
 
 // Domain Services
+import { UpcomingMovieService } from "./domain/services/upcomingMovie.service";
 export const movieEnricher = new MovieEnricher(
   tmdbRepository,
   youtubeRepository,
@@ -38,6 +39,7 @@ export const movieEnricher = new MovieEnricher(
 export const movieRecommendationService = new MovieRecommendationService(
   tmdbRepository,
 );
+export const upcomingMovieService = new UpcomingMovieService();
 
 // UseCases
 export const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
@@ -51,6 +53,7 @@ export const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
 export const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
   tmdbRepository,
   movieEnricher,
+  upcomingMovieService,
 );
 export const searchMoviesUseCase = new SearchMoviesUseCase(tmdbRepository);
 export const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(

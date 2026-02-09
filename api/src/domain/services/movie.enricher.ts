@@ -1,4 +1,3 @@
-import { MovieEntity } from "../models/movie";
 import { MovieList } from "../models/movieList";
 import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
 import { YoutubeRepository } from "../../infrastructure/repositories/youtube.repository";
