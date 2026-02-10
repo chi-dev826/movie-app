@@ -22,8 +22,6 @@ function MovieDetailPage() {
 
   const [isBackdropVisible, setIsBackdropVisible] = useState(true);
 
-  console.log(isBackdropVisible);
-
   useEffect(() => {
     // 背景が表示状態でビデオが存在するときだけタイマーをセットする
     if (!isBackdropVisible || !data?.video) return;
