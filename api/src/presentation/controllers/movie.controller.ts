@@ -29,10 +29,7 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
       }
 
-      const movieDetails = await this.getFullMovieDataUseCase.execute(
-        Number(movieId),
-      );
-      res.json(movieDetails);
+      res.json(await this.getFullMovieDataUseCase.execute(Number(movieId)));
     } catch (error) {
       next(error);
     }
@@ -47,8 +44,7 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.SEARCH_QUERY_REQUIRED });
       }
 
-      const searchResults = await this.searchMoviesUseCase.execute(query);
-      res.json(searchResults);
+      res.json(await this.searchMoviesUseCase.execute(query));
     } catch (error) {
       next(error);
     }
@@ -63,8 +59,7 @@ export class MovieController {
           .json({ message: "Person name is required" });
       }
 
-      const movies = await this.searchMoviesByPersonUseCase.execute(name);
-      res.json(movies);
+      res.json(await this.searchMoviesByPersonUseCase.execute(name));
     } catch (error) {
       next(error);
     }
@@ -72,8 +67,7 @@ export class MovieController {
 
   async getMovieList(req: Request, res: Response, next: NextFunction) {
     try {
-      const movieList = await this.getHomePageMovieListUseCase.execute();
-      res.json(movieList);
+      res.json(await this.getHomePageMovieListUseCase.execute());
     } catch (error) {
       next(error);
     }
@@ -81,8 +75,7 @@ export class MovieController {
 
   async getUpcomingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const upcomingMovies = await this.getUpcomingMovieListUseCase.execute();
-      res.json(upcomingMovies);
+      res.json(await this.getUpcomingMovieListUseCase.execute());
     } catch (error) {
       next(error);
     }
@@ -90,8 +83,7 @@ export class MovieController {
 
   async getNowPlayingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const nowPlayingMovies = await this.getNowPlayingMoviesUseCase.execute();
-      res.json(nowPlayingMovies);
+      res.json(await this.getNowPlayingMoviesUseCase.execute());
     } catch (error) {
       next(error);
     }
@@ -113,8 +105,7 @@ export class MovieController {
         return res.json([]);
       }
 
-      const movies = await this.getMovieListByIdsUseCase.execute(movieIds);
-      res.json(movies);
+      res.json(await this.getMovieListByIdsUseCase.execute(movieIds));
     } catch (error) {
       next(error);
     }
