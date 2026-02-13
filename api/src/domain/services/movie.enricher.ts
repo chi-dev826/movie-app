@@ -1,4 +1,4 @@
-import { MovieList } from "../models/movieList";
+import { MovieEntity } from "../models/movie";
 import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
 import { YoutubeRepository } from "../../infrastructure/repositories/youtube.repository";
 
@@ -11,8 +11,9 @@ export class MovieEnricher {
   /**
    * リスト内の映画に対して並行してロゴ画像を取得・設定し、新しいリストを返す
    */
-  async enrichWithLogos(movieList: MovieList): Promise<MovieList> {
-    const movies = movieList.items;
+  async enrichWithLogos(
+    movies: readonly MovieEntity[],
+  ): Promise<MovieEntity[]> {
     const results = await Promise.allSettled(
       movies.map((movie) => this.tmdbRepo.getMovieImages(movie.id)),
     );
@@ -25,14 +26,15 @@ export class MovieEnricher {
       return movie;
     });
 
-    return new MovieList(enrichedMovies);
+    return enrichedMovies;
   }
 
   /**
    * リスト内の映画に対して並行して予告編を取得・設定し、新しいリストを返す
    */
-  async enrichWithTrailers(movieList: MovieList): Promise<MovieList> {
-    const movies = movieList.items;
+  async enrichWithTrailers(
+    movies: readonly MovieEntity[],
+  ): Promise<MovieEntity[]> {
     const enrichedMovies = await Promise.all(
       movies.map(async (movie) => {
         try {
@@ -56,6 +58,6 @@ export class MovieEnricher {
       }),
     );
 
-    return new MovieList(enrichedMovies);
+    return enrichedMovies;
   }
 }

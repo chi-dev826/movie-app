@@ -1,8 +1,12 @@
 import { MovieEntity } from "../models/movie";
 import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
+import { MovieFilterOutService } from "./movie.filterOut.service";
 
 export class MovieRecommendationService {
-  constructor(private readonly tmdbRepo: ITmdbRepository) {}
+  constructor(
+    private readonly tmdbRepo: ITmdbRepository,
+    private readonly movieFilterService: MovieFilterOutService,
+  ) {}
 
   /**
    * 指定された映画に対する最適な「おすすめリスト」を決定して取得する
@@ -17,7 +21,7 @@ export class MovieRecommendationService {
       try {
         const collection = await this.tmdbRepo.getCollection(collectionId);
         // 現在表示中の映画を除外し、残りを取得
-        const parts = collection.filterOutMovie(movieId).parts;
+        const parts = this.movieFilterService.filter(collection.parts, movieId);
 
         if (parts.length > 0) {
           return {

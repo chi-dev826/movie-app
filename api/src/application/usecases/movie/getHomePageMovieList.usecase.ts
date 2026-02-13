@@ -1,13 +1,17 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
 import { MovieListResponse } from "../../../../../shared/types/api";
 import { HOME_CATEGORIES } from "../../../domain/constants/homeCategories";
-import { MovieList } from "../../../domain/models/movieList";
+import { MovieEntity } from "../../../domain/models/movie";
+import { MovieFilterOutService } from "../../../domain/services/movie.filterOut.service";
 import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
 
 import { ArrayUtils } from "../../../utils/array";
 
 export class GetHomePageMovieListUseCase {
-  constructor(private readonly tmdbRepo: ITmdbRepository) {}
+  constructor(
+    private readonly tmdbRepo: ITmdbRepository,
+    private readonly movieFilterService: MovieFilterOutService,
+  ) {}
 
   async execute(): Promise<MovieListResponse> {
     const pagesToFetch = ArrayUtils.range(TMDB_CONFIG.FETCH_PAGES.HOME);
@@ -19,16 +23,18 @@ export class GetHomePageMovieListUseCase {
         const pagePromises = pagesToFetch.map((page) =>
           this.tmdbRepo.getDiscoverMovies({ ...params, page }),
         );
-        const results = await Promise.all(pagePromises);
+        const results: MovieEntity[][] = await Promise.all(pagePromises);
 
-        // 全ページのリストを結合してMovieList化 (Entityの配列をフラット化)
-        const flatList = results.flat();
-        const movieList = new MovieList(flatList);
+        // 全ページのリストを結合 (Entityの配列をフラット化)
+        const flatList: MovieEntity[] = results.flat();
 
-        // 重複排除してDTO化
+        // サービスを使用して重複排除
+        const uniqueMovies = this.movieFilterService.deduplicate(flatList);
+
+        // DTO化
         return {
           key,
-          movies: movieList.deduplicate().toDtoArray(),
+          movies: uniqueMovies.map((m) => m.toDto()),
         };
       },
     );

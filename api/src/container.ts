@@ -20,6 +20,7 @@ import { TmdbRepository } from "./infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCache.repository";
 import { MovieEnricher } from "./domain/services/movie.enricher";
 import { MovieRecommendationService } from "./domain/services/movie.recommendation.service";
+import { MovieFilterOutService } from "./domain/services/movie.filterOut.service";
 
 // リポジトリのインスタンス化
 export const cacheRepository = new NodeCacheRepository();
@@ -36,8 +37,11 @@ export const movieEnricher = new MovieEnricher(
   tmdbRepository,
   youtubeRepository,
 );
+
+export const movieFilterOutService = new MovieFilterOutService();
 export const movieRecommendationService = new MovieRecommendationService(
   tmdbRepository,
+  movieFilterOutService,
 );
 export const upcomingMovieService = new UpcomingMovieService();
 
@@ -49,6 +53,7 @@ export const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
 );
 export const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
   tmdbRepository,
+  movieFilterOutService,
 );
 export const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
   tmdbRepository,
@@ -58,6 +63,7 @@ export const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
 export const searchMoviesUseCase = new SearchMoviesUseCase(tmdbRepository);
 export const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
   tmdbRepository,
+  movieFilterOutService,
 );
 export const searchMoviesByPersonUseCase = new SearchMoviesByPersonUseCase(
   tmdbRepository,
