@@ -39,12 +39,12 @@ export class MovieEnricher {
       movies.map(async (movie) => {
         try {
           const videos = await this.tmdbRepo.getMovieVideos(movie.id);
-          const trailer = videos.find((v) => v.isTrailer());
+          const videoKey = videos.find((v) => v.isTrailer())?.getKey();
 
-          if (trailer) {
-            const isPublic = await this.youtubeRepo.getVideoStatus(trailer.key);
+          if (videoKey) {
+            const isPublic = await this.youtubeRepo.getVideoStatus(videoKey);
             if (isPublic) {
-              return movie.withVideo(trailer.key);
+              return movie.withVideo(videoKey);
             }
           }
           return movie;

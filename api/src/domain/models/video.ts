@@ -1,9 +1,14 @@
+import { VIDEO_SITE, VIDEO_TYPE } from "../constants/video";
 export class Video {
   constructor(
-    public readonly key: string,
-    public readonly site: string,
-    public readonly type: string,
+    private readonly key: string,
+    private readonly site: string,
+    private readonly type: string,
   ) {
+    if (this.site !== VIDEO_SITE.YOUTUBE) {
+      throw new Error(`Unsupported video site: ${this.site}`);
+    }
+
     Object.freeze(this);
   }
 
@@ -20,9 +25,10 @@ export class Video {
   }
 
   /**
-   * この動画がYouTubeの予告編であるかを判定する
+   * この動画がYouTubeの（TrailerまたはTeaser）であるかを判定する
+   * どちらも予告編として扱う
    */
   isTrailer(): boolean {
-    return this.site === "YouTube" && this.type === "Trailer";
+    return this.type === VIDEO_TYPE.TRAILER || this.type === VIDEO_TYPE.TEASER;
   }
 }

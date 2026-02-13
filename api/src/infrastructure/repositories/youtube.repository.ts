@@ -16,11 +16,12 @@ export class YoutubeRepository implements YoutubeRepositoryInterface {
           id: key,
         },
       });
+
       const status = response.data?.items?.[0]?.status;
-      return status ? response.data : null;
+      return status?.privacyStatus === "public";
     } catch (error) {
       console.error("Error fetching video status from YouTube:", error);
-      return null;
+      return false;
     }
   }
 }
