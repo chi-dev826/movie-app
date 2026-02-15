@@ -7,7 +7,7 @@ import { GetUpcomingMovieListUseCase } from "../../application/usecases/movie/ge
 import { SearchMoviesUseCase } from "../../application/usecases/movie/searchMovies.usecase";
 import { GetNowPlayingMoviesUseCase } from "../../application/usecases/movie/getNowPlayingMovies.usecase";
 import { SearchMoviesByPersonUseCase } from "../../application/usecases/movie/searchMoviesByPerson.usecase";
-import { GetMovieListByIdsUseCase } from "../../application/usecases/movie/getMovieListByIds.usecase";
+import { GetMovieWatchListUseCase } from "../../application/usecases/movie/getMovieWatchList.usecase";
 
 export class MovieController {
   constructor(
@@ -17,7 +17,7 @@ export class MovieController {
     private readonly searchMoviesUseCase: SearchMoviesUseCase,
     private readonly getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
     private readonly searchMoviesByPersonUseCase: SearchMoviesByPersonUseCase,
-    private readonly getMovieListByIdsUseCase: GetMovieListByIdsUseCase,
+    private readonly getMovieWatchListUseCase: GetMovieWatchListUseCase,
   ) {}
 
   async getMovieDetails(req: Request, res: Response, next: NextFunction) {
@@ -89,7 +89,7 @@ export class MovieController {
     }
   }
 
-  async getMovieListByIds(req: Request, res: Response, next: NextFunction) {
+  async getMovieWatchList(req: Request, res: Response, next: NextFunction) {
     try {
       const idsParam = req.query.ids as string;
       if (!idsParam) {
@@ -105,7 +105,7 @@ export class MovieController {
         return res.json([]);
       }
 
-      res.json(await this.getMovieListByIdsUseCase.execute(movieIds));
+      res.json(await this.getMovieWatchListUseCase.execute(movieIds));
     } catch (error) {
       next(error);
     }

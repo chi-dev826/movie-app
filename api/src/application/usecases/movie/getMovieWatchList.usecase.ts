@@ -2,7 +2,7 @@ import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.in
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { MovieDetailEntity } from "../../../domain/models/movieDetail";
 
-export class GetMovieListByIdsUseCase {
+export class GetMovieWatchListUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   async execute(movieIds: number[]): Promise<MovieDTO[]> {

@@ -54,7 +54,7 @@ router.get(
 router.get(
   API_PATHS.MOVIES.LIST,
   (req: Request, res: Response, next: NextFunction) =>
-    movieController.getMovieListByIds(req, res, next),
+    movieController.getMovieWatchList(req, res, next),
 );
 
 export default router;

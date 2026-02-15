@@ -6,7 +6,7 @@ import {
   fetchNowPlayingMovies,
   searchMovies,
   searchMoviesByPerson,
-  fetchMovieListByIds,
+  fetchMovieWatchList,
 } from '@/services/movieApi';
 import { MovieListResponse } from '@/types/api';
 import { Movie } from '@/types/domain';
@@ -52,7 +52,7 @@ export const useSearchMoviesByPerson = (name: string) => {
 export const useMoviesByIds = (ids: number[]) => {
   return useQuery({
     queryKey: movieKeys.ids(ids),
-    queryFn: () => fetchMovieListByIds(ids),
+    queryFn: () => fetchMovieWatchList(ids),
     enabled: ids.length > 0,
     staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
   });

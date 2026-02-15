@@ -56,7 +56,7 @@ export const fetchNowPlayingMovies = async (): Promise<Movie[]> => {
   return fetchFromApi<Movie[]>(API_PATHS.MOVIES.NOW_PLAYING);
 };
 
-export const fetchMovieListByIds = async (ids: number[]): Promise<Movie[]> => {
+export const fetchMovieWatchList = async (ids: number[]): Promise<Movie[]> => {
   if (!ids || ids.length === 0) {
     return [];
   }
