@@ -14,7 +14,7 @@ import { GetUpcomingMovieListUseCase } from "./application/usecases/movie/getUpc
 import { SearchMoviesUseCase } from "./application/usecases/movie/searchMovies.usecase";
 import { GetNowPlayingMoviesUseCase } from "./application/usecases/movie/getNowPlayingMovies.usecase";
 import { SearchMoviesByPersonUseCase } from "./application/usecases/movie/searchMoviesByPerson.usecase";
-import { GetMovieListByIdsUseCase } from "./application/usecases/movie/getMovieListByIds.usecase";
+import { GetMovieWatchListUseCase } from "./application/usecases/movie/getMovieWatchList.usecase";
 
 import { TmdbRepository } from "./infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCache.repository";
@@ -59,8 +59,12 @@ export const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
   tmdbRepository,
   movieEnricher,
   upcomingMovieService,
+  movieFilterOutService,
 );
-export const searchMoviesUseCase = new SearchMoviesUseCase(tmdbRepository);
+export const searchMoviesUseCase = new SearchMoviesUseCase(
+  tmdbRepository,
+  movieFilterOutService,
+);
 export const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
   tmdbRepository,
   movieFilterOutService,
@@ -68,7 +72,7 @@ export const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
 export const searchMoviesByPersonUseCase = new SearchMoviesByPersonUseCase(
   tmdbRepository,
 );
-export const getMovieListByIdsUseCase = new GetMovieListByIdsUseCase(
+export const getMovieWatchListUseCase = new GetMovieWatchListUseCase(
   tmdbRepository,
 );
 
@@ -88,7 +92,7 @@ export const movieController = new MovieController(
   searchMoviesUseCase,
   getNowPlayingMoviesUseCase,
   searchMoviesByPersonUseCase,
-  getMovieListByIdsUseCase,
+  getMovieWatchListUseCase,
 );
 export const eigaComController = new EigaComController(getEigaComNewsUseCase);
 export const googleSearchController = new GoogleSearchController(

@@ -19,4 +19,13 @@ export class MovieFilterOutService {
     movies.forEach((movie) => uniqueMovies.set(movie.id, movie));
     return Array.from(uniqueMovies.values());
   }
+
+  /**
+   * 画像を持たない要素はコンテンツとして認めない
+   */
+  public filterMovieWithoutImages(
+    movies: readonly MovieEntity[],
+  ): readonly MovieEntity[] {
+    return movies.filter((movie) => movie.posterPath && movie.backdropPath);
+  }
 }

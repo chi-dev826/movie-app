@@ -1,6 +1,7 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
 import { MovieEnricher } from "../../../domain/services/movie.enricher";
 import { UpcomingMovieService } from "../../../domain/services/upcomingMovie.service";
+import { MovieFilterOutService } from "../../../domain/services/movie.filterOut.service";
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
 import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
@@ -13,6 +14,7 @@ export class GetUpcomingMovieListUseCase {
     private readonly tmdbRepo: ITmdbRepository,
     private readonly enricher: MovieEnricher,
     private readonly upcomingService: UpcomingMovieService,
+    private readonly movieFilterService: MovieFilterOutService,
   ) {}
 
   async execute(): Promise<MovieDTO[]> {
@@ -44,8 +46,14 @@ export class GetUpcomingMovieListUseCase {
       movie.isMostlyJapanese(),
     );
 
+    // 画像のない映画をフィルタリング
+    // さらに重複排除も適用
+    const filteredAndUniqueMovies = this.movieFilterService.deduplicate(
+      this.movieFilterService.filterMovieWithoutImages(filteredMovies),
+    );
+
     // 公開日順にソート
-    const sortedMovies = this.upcomingService.sort(filteredMovies);
+    const sortedMovies = this.upcomingService.sort(filteredAndUniqueMovies);
 
     // エンリッチメント（ロゴと予告編）を一括適用
     let enrichedMovies = await this.enricher.enrichWithLogos(sortedMovies);

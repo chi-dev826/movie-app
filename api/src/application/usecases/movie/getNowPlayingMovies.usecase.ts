@@ -24,8 +24,12 @@ export class GetNowPlayingMoviesUseCase {
     const responses = await Promise.all(promises);
     const allMovies = responses.flatMap((res) => res);
 
+    // 画像のない映画をフィルタリング
+    const filteredMovies =
+      this.movieFilterService.filterMovieWithoutImages(allMovies);
+
     // サービスを使用して重複排除
-    const uniqueMovies = this.movieFilterService.deduplicate(allMovies);
+    const uniqueMovies = this.movieFilterService.deduplicate(filteredMovies);
 
     return uniqueMovies.map((m) => m.toDto());
   }

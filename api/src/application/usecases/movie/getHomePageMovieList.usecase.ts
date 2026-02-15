@@ -28,13 +28,15 @@ export class GetHomePageMovieListUseCase {
         // 全ページのリストを結合 (Entityの配列をフラット化)
         const flatList: MovieEntity[] = results.flat();
 
-        // サービスを使用して重複排除
-        const uniqueMovies = this.movieFilterService.deduplicate(flatList);
+        // 画像のない映画のフィルタリングと重複排除
+        const filteredList = this.movieFilterService.filterMovieWithoutImages(
+          this.movieFilterService.deduplicate(flatList),
+        );
 
         // DTO化
         return {
           key,
-          movies: uniqueMovies.map((m) => m.toDto()),
+          movies: filteredList.map((m) => m.toDto()),
         };
       },
     );
