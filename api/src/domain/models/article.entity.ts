@@ -17,6 +17,10 @@ export class ArticleEntity {
       throw new Error("Article title is required and cannot be empty.");
     }
 
+    if (!link || link.trim() === "") {
+      throw new Error("Article link is required and cannot be empty.");
+    }
+
     // ランタイムでの不変性を強制
     Object.freeze(this);
   }
