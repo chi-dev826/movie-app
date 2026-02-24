@@ -1,8 +1,11 @@
 import { Router } from "express";
-import movieRoutes from "./movie.routes";
+import { createMovieRoutes } from "./movie.routes";
+import { Dependencies } from "../../container";
 
-const router = Router();
+export const createApiRoutes = (dependencies: Dependencies): Router => {
+  const router = Router();
 
-router.use(movieRoutes);
+  router.use(createMovieRoutes(dependencies));
 
-export default router;
+  return router;
+};
