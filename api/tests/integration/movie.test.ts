@@ -1,8 +1,16 @@
 import request from "supertest";
-import app from "../../app";
+import { createApp } from "../../app";
+import { createContainer } from "../../src/container";
 import { API_PATHS } from "../../../shared/constants/routes";
 
+// YoutubeRepository をモック化して、APIキーのチェックを無効にする
+jest.mock("../../src/infrastructure/repositories/youtube.repository");
+
 describe("アプリケーション統合", () => {
+  // コンテナとアプリを作成
+  const container = createContainer();
+  const app = createApp(container);
+
   it("ホームの映画リストを取得できること", async () => {
     // 1. リクエストの実行
     const res = await request(app).get(`/api${API_PATHS.MOVIES.HOME}`); // 'API_PATHS.MOVIES.HOME' は '/movies/home' に対応

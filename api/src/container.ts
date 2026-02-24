@@ -21,80 +21,87 @@ import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCac
 import { MovieEnricher } from "./domain/services/movie.enricher";
 import { MovieRecommendationService } from "./domain/services/movie.recommendation.service";
 import { MovieFilterOutService } from "./domain/services/movie.filterOut.service";
-
-// リポジトリのインスタンス化
-export const cacheRepository = new NodeCacheRepository();
-export const tmdbRepository = new TmdbRepository(cacheRepository);
-export const eigaComRepository = new EigaComRepository(cacheRepository);
-export const googleSearchRepository = new GoogleSearchRepository(
-  cacheRepository,
-);
-export const youtubeRepository = new YoutubeRepository();
-
-// Domain Services
 import { UpcomingMovieService } from "./domain/services/upcomingMovie.service";
-export const movieEnricher = new MovieEnricher(
-  tmdbRepository,
-  youtubeRepository,
-);
+import { SystemClock } from "./infrastructure/services/systemClock.service"; // SystemClockのインポート
 
-export const movieFilterOutService = new MovieFilterOutService();
-export const movieRecommendationService = new MovieRecommendationService(
-  tmdbRepository,
-  movieFilterOutService,
-);
-export const upcomingMovieService = new UpcomingMovieService();
+export interface Dependencies {
+  movieController: MovieController;
+  eigaComController: EigaComController;
+  googleSearchController: GoogleSearchController;
+}
 
-// UseCases
-export const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
-  tmdbRepository,
-  movieEnricher,
-  movieRecommendationService,
-);
-export const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
-  tmdbRepository,
-  movieFilterOutService,
-);
-export const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
-  tmdbRepository,
-  movieEnricher,
-  upcomingMovieService,
-  movieFilterOutService,
-);
-export const searchMoviesUseCase = new SearchMoviesUseCase(
-  tmdbRepository,
-  movieFilterOutService,
-);
-export const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
-  tmdbRepository,
-  movieFilterOutService,
-);
-export const searchMoviesByPersonUseCase = new SearchMoviesByPersonUseCase(
-  tmdbRepository,
-);
-export const getMovieWatchListUseCase = new GetMovieWatchListUseCase(
-  tmdbRepository,
-);
+export const createContainer = (): Dependencies => {
+  // リポジトリのインスタンス化
+  const cacheRepository = new NodeCacheRepository();
+  const tmdbRepository = new TmdbRepository(cacheRepository);
+  const eigaComRepository = new EigaComRepository(cacheRepository);
+  const googleSearchRepository = new GoogleSearchRepository(cacheRepository);
+  const youtubeRepository = new YoutubeRepository();
 
-// New UseCases (Replaced Services)
-export const getEigaComNewsUseCase = new GetEigaComNewsUseCase(
-  eigaComRepository,
-);
-export const getMovieAnalysisUseCase = new GetMovieAnalysisUseCase(
-  googleSearchRepository,
-);
+  // Domain Services
+  const movieEnricher = new MovieEnricher(tmdbRepository, youtubeRepository);
 
-// コントローラのインスタンス化
-export const movieController = new MovieController(
-  getFullMovieDataUseCase,
-  getHomePageMovieListUseCase,
-  getUpcomingMovieListUseCase,
-  searchMoviesUseCase,
-  getNowPlayingMoviesUseCase,
-  searchMoviesByPersonUseCase,
-  getMovieWatchListUseCase,
-);
-export const eigaComController = new EigaComController(getEigaComNewsUseCase);
-export const googleSearchController = new GoogleSearchController(
-  getMovieAnalysisUseCase,
-);
+  const movieFilterOutService = new MovieFilterOutService();
+  const movieRecommendationService = new MovieRecommendationService(
+    tmdbRepository,
+    movieFilterOutService,
+  );
+  const systemClock = new SystemClock(); // SystemClockのインスタンス化
+  const upcomingMovieService = new UpcomingMovieService(systemClock); // 修正: systemClockを注入
+
+  // UseCases
+  const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
+    tmdbRepository,
+    movieEnricher,
+    movieRecommendationService,
+  );
+  const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
+    tmdbRepository,
+    movieFilterOutService,
+  );
+  const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
+    tmdbRepository,
+    movieEnricher,
+    upcomingMovieService,
+    movieFilterOutService,
+  );
+  const searchMoviesUseCase = new SearchMoviesUseCase(
+    tmdbRepository,
+    movieFilterOutService,
+  );
+  const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
+    tmdbRepository,
+    movieFilterOutService,
+  );
+  const searchMoviesByPersonUseCase = new SearchMoviesByPersonUseCase(
+    tmdbRepository,
+  );
+  const getMovieWatchListUseCase = new GetMovieWatchListUseCase(tmdbRepository);
+
+  // New UseCases (Replaced Services)
+  const getEigaComNewsUseCase = new GetEigaComNewsUseCase(eigaComRepository);
+  const getMovieAnalysisUseCase = new GetMovieAnalysisUseCase(
+    googleSearchRepository,
+  );
+
+  // コントローラのインスタンス化
+  const movieController = new MovieController(
+    getFullMovieDataUseCase,
+    getHomePageMovieListUseCase,
+    getUpcomingMovieListUseCase,
+    searchMoviesUseCase,
+    getNowPlayingMoviesUseCase,
+    searchMoviesByPersonUseCase,
+    getMovieWatchListUseCase,
+  );
+  const eigaComController = new EigaComController(getEigaComNewsUseCase);
+  const googleSearchController = new GoogleSearchController(
+    getMovieAnalysisUseCase,
+  );
+
+  return {
+    movieController,
+    eigaComController,
+    googleSearchController,
+  };
+};
