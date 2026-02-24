@@ -35,28 +35,32 @@ export class MovieEnricher {
   async enrichWithTrailers(
     movies: readonly MovieEntity[],
   ): Promise<MovieEntity[]> {
-    const enrichedMovies = await Promise.all(
+    const results = await Promise.allSettled(
       movies.map(async (movie) => {
-        try {
-          const videos = await this.tmdbRepo.getMovieVideos(movie.id);
-          const videoKey = videos.find((v) => v.isTrailer())?.getKey();
+        const videos = await this.tmdbRepo.getMovieVideos(movie.id);
+        const videoKey = videos.find((v) => v.isTrailer())?.getKey();
 
-          if (videoKey) {
-            const isPublic = await this.youtubeRepo.getVideoStatus(videoKey);
-            if (isPublic) {
-              return movie.withVideo(videoKey);
-            }
+        if (videoKey) {
+          const isPublic = await this.youtubeRepo.getVideoStatus(videoKey);
+          if (isPublic) {
+            return movie.withVideo(videoKey);
           }
-          return movie;
-        } catch (error) {
-          console.error(
-            `予告編の取得に失敗しました (movieId: ${movie.id}):`,
-            error,
-          );
-          return movie;
         }
+        return movie;
       }),
     );
+
+    const enrichedMovies = movies.map((movie, index) => {
+      const result = results[index];
+      if (result.status === "fulfilled") {
+        return result.value;
+      }
+      console.error(
+        `予告編の取得に失敗しました (movieId: ${movie.id}):`,
+        result.reason,
+      );
+      return movie;
+    });
 
     return enrichedMovies;
   }
