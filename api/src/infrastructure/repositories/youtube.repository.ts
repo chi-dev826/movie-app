@@ -1,10 +1,11 @@
-import { youtubeApi } from "../lib/youtubeClient";
+import { getYoutubeApi } from "../lib/youtubeClient";
 import { YoutubeRepositoryInterface } from "../../domain/repositories/youtube.repository.interface";
+import { AxiosInstance } from "axios";
 
 export class YoutubeRepository implements YoutubeRepositoryInterface {
-  private readonly api: typeof youtubeApi;
+  private readonly api: AxiosInstance;
 
-  constructor(api: typeof youtubeApi = youtubeApi) {
+  constructor(api: AxiosInstance = getYoutubeApi()) {
     this.api = api;
   }
 
