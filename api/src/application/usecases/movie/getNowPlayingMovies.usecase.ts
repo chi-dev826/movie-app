@@ -6,27 +6,10 @@ import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
 import { ArrayUtils } from "../../../utils/array";
 
 /**
- * TMDBから現在上映中の映画を取得するユースケース
- *
- * @description
- * TMDBから複数ページ（デフォルト3ページ）にわたって現在上映中の映画を取得し、
- * 画像がない映画を除外、重複排除を行ったうえで返却する。
- *
- * @returns {Promise<MovieDTO[]>} 現在上映中の映画のリスト（重複なし、画像あり）
- *
- * @example
- * const useCase = new GetNowPlayingMoviesUseCase(tmdbRepo, movieFilterService);
- * const movies = await useCase.execute();
- * console.log(movies);
- * // 出力例: [{ id: 1, title: "Movie A", posterPath: "/path.jpg", ... }, ...]
- *
- * @process
- * 1.TMDB_CONFIG.FETCH_PAGES.NOW_PLAYING（3ページ）の範囲を生成
- * 2.各ページに対してtmdbRepo.getNowPlayingMovies()を並行実行
- * 3.APIレスポンスを配列に統合（flatMap）
- * 4.MovieFilterOutService.filterMovieWithoutImages()で画像のない映画を除外
- * 5.MovieFilterOutService.deduplicate()で重複排除
- * 6.各映画をtoDto()でDTOに変換して返却
+ * 現在上映中の映画リストを取得・加工するユースケース。
+ * * @description
+ * TMDBから複数ページ分の「現在上映中」映画を取得し、画像必須フィルタと
+ * 重複排除を適用して返却する。
  */
 export class GetNowPlayingMoviesUseCase {
   constructor(
@@ -34,8 +17,13 @@ export class GetNowPlayingMoviesUseCase {
     private readonly movieFilterService: MovieFilterOutService,
   ) {}
 
+  /**
+   * @returns 現在上映中の映画リスト
+   */
   async execute(): Promise<MovieDTO[]> {
     const pagesToFetch = ArrayUtils.range(TMDB_CONFIG.FETCH_PAGES.NOW_PLAYING);
+
+    // 1. 指定されたページ数分のデータを並行取得
     const promises = pagesToFetch.map((page) =>
       this.tmdbRepo.getNowPlayingMovies({
         page,
@@ -47,13 +35,13 @@ export class GetNowPlayingMoviesUseCase {
     const responses = await Promise.all(promises);
     const allMovies = responses.flatMap((res) => res);
 
-    // 画像のない映画をフィルタリング
+    // 2. ビジネスルールに基づくフィルタリング（画像必須）と重複排除
     const filteredMovies =
       this.movieFilterService.filterMovieWithoutImages(allMovies);
 
-    // サービスを使用して重複排除
     const uniqueMovies = this.movieFilterService.deduplicate(filteredMovies);
 
+    // 3. ドメインモデルからDTOへの変換
     return uniqueMovies.map((m) => m.toDto());
   }
 }

@@ -4,57 +4,38 @@ import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
 import { MOVIE_RULES } from "../../../domain/constants/movieRules";
 
 /**
- * 俳優・監督の名前を元に映画を検索するユースケース
- *
- * @description
- * ユーザーが入力した名前でTMDBの人物検索APIを呼び出し、最も関連性の高い人物のIDを取得。
- * そのIDを使用してDiscover APIで映画を検索し、結果をDTOに変換して返却する。
- * 例: "Leonardo DiCaprio" → 俳優ID → その俳優が出演している映画リスト
- *
- * @param {string} name - 検索する人物の名前（例: "Leonardo DiCaprio"）
- * @returns {Promise<MovieDTO[]>} 検索結果の映画リスト
- *
- * @example
- * const useCase = new SearchMoviesByPersonUseCase(tmdbRepo);
- * const movies = await useCase.execute("Leonardo DiCaprio");
- * console.log(movies);
- * // 出力例: [{ id: 1, title: "Inception", ... }, { id: 2, title: "The Revenant", ... }, ...]
- *
- * @process
- * 1. TMDBの人物検索APIに名前を送信して人物を検索
- * 2. 最も関連性の高い人物のIDを取得
- * 3. Discover APIにwith_castパラメータを使用して、その人物が出演している映画を検索
- * 4. 映画リストをDTOに変換して返却
- *
- * @dependencies
- * - ITmdbRepository: TMDB APIとの通信を担当
- *
- * @error
- * - 人物が見つからない場合は空の配列を返却する
- * - TMDB APIからのデータ取得に失敗した場合は、エラーをキャッチしてログ出力し、空の配列を返却する
+ * 俳優・監督などの人物名を軸に映画を検索するユースケース。
+ * * @description
+ * 人物名から最も関連性の高い人物IDを特定し、その人物が関わった映画
+ * をDiscover APIを用いて抽出・変換して返却する。
  */
 export class SearchMoviesByPersonUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
+  /**
+   * @param name - 検索対象の人物名
+   * @returns 該当人物に関連する映画リスト
+   */
   async execute(name: string): Promise<MovieDTO[]> {
-    // 1. 名前で人物を検索
+    // 1. 名前から対象人物を特定
     const personResponse = await this.tmdbRepo.searchPerson(name);
 
-    // ヒットしなかった場合
     if (!personResponse.results || personResponse.results.length === 0) {
       return [];
     }
 
-    // 2. 最も関連性が高い（先頭の）人物IDを取得
+    // 2. 最も関連性が高い人物のIDを取得
     const personId = personResponse.results[0].id;
 
-    // 3. その人物が出演している映画を取得 (Discover APIを使用)
+    // 3. 特定した人物IDを用いて映画リストを取得
     const params: DiscoverMovieParams = {
       ...MOVIE_RULES.SEARCH_BY_PERSON,
       with_cast: String(personId),
     };
 
     const movies = await this.tmdbRepo.getDiscoverMovies(params);
+
+    // 4. ドメインモデルからDTOへの変換
     return movies.map((m) => m.toDto());
   }
 }

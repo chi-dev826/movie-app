@@ -3,26 +3,10 @@ import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { MovieFilterOutService } from "../../../domain/services/movie.filterOut.service";
 
 /**
- * 映画タイトルでキーワード検索するユースケース
- *
- * @description
- * ユーザーが入力したキーワードをTMDBの検索APIに送信し、
- * マッチした映画を画像がない映画を除いて返却する。
- * 日本語と英語の両方で検索できるようにする。
- *
- * @param {string} query - ユーザーが入力した検索キーワード（例："Inception"、"インセプション"）
- * @returns {Promise<MovieDTO[]>} 検索結果の映画リスト（画像あり）
- *
- * @example
- * const useCase = new SearchMoviesUseCase(tmdbRepo, movieFilterService);
- * const results = await useCase.execute("Inception");
- * console.log(results);
- * // 出力例: [{ id: 1, title: "Inception", posterPath: "/path.jpg", ... }, ...]
- *
- * @process
- * 1. TMDBの検索APIにクエリを送信して映画を取得
- * 2. MovieFilterOutServiceで画像のない映画を除外
- * 3. 各映画をtoDto()でDTOに変換して返却
+ * 映画タイトルキーワードによる検索を実行するユースケース。
+ * * @description
+ * ユーザーの入力したクエリに基づき映画を検索し、UI表示に適さない
+ * 画像欠損データを除外して返却する。
  */
 export class SearchMoviesUseCase {
   constructor(
@@ -30,12 +14,19 @@ export class SearchMoviesUseCase {
     private readonly movieFilterService: MovieFilterOutService,
   ) {}
 
+  /**
+   * @param query - 検索キーワード
+   * @returns 検索結果の映画リスト
+   */
   async execute(query: string): Promise<MovieDTO[]> {
+    // 1. TMDB APIを使用してキーワード検索を実行
     const movies = await this.tmdbRepo.searchMovies(query);
 
-    // 画像を持たない映画はフィルタリング
+    // 2. ビジネスルールに基づくフィルタリング（画像必須）
     const filteredMovies =
       this.movieFilterService.filterMovieWithoutImages(movies);
+
+    // 3. ドメインモデルからDTOへの変換
     return filteredMovies.map((movie) => movie.toDto());
   }
 }
