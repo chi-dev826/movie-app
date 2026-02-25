@@ -22,14 +22,14 @@ export class MovieController {
 
   async getMovieDetails(req: Request, res: Response, next: NextFunction) {
     try {
-      const { movieId } = req.params;
-      if (!movieId) {
+      const id = Number(req.params.movieId);
+      if (!req.params.movieId || isNaN(id)) {
         return res
           .status(HTTP_STATUS.BAD_REQUEST)
           .json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
       }
 
-      res.json(await this.getFullMovieDataUseCase.execute(Number(movieId)));
+      res.json(await this.getFullMovieDataUseCase.execute(id));
     } catch (error) {
       next(error);
     }
@@ -56,7 +56,7 @@ export class MovieController {
       if (!name) {
         return res
           .status(HTTP_STATUS.BAD_REQUEST)
-          .json({ message: "Person name is required" });
+          .json({ message: ERROR_MESSAGES.PERSON_NAME_REQUIRED });
       }
 
       res.json(await this.searchMoviesByPersonUseCase.execute(name));
