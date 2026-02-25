@@ -13,11 +13,16 @@ export class UpcomingMovieService {
    */
   public getJstToday(): Date {
     const now = this.clock.now();
-    const jstNow = new Date(
-      now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }),
-    );
-    jstNow.setHours(0, 0, 0, 0);
-    return jstNow;
+    // UTC時刻に9時間（JSTオフセット）を加えてJST時刻のDateオブジェクトを擬似的に作成
+    const jstTime = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+
+    // JSTの年月日をUTCメソッドで取得
+    const year = jstTime.getUTCFullYear();
+    const month = jstTime.getUTCMonth();
+    const day = jstTime.getUTCDate();
+
+    // JSTの「今日」の始まり（00:00:00）を表すDateオブジェクトをUTCで作成
+    return new Date(Date.UTC(year, month, day, 0, 0, 0));
   }
 
   /**
