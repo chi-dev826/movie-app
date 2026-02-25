@@ -1,7 +1,7 @@
 import axios from "axios";
 import { EXTERNAL_API_URLS } from "../constants/external";
 
-const API_KEY = process.env.VITE_TMDB_API_KEY;
+const API_KEY = process.env.TMDB_API_KEY;
 if (!API_KEY) {
   console.error(
     "TMDB APIキーが設定されていません。.envファイルを確認してください。",
