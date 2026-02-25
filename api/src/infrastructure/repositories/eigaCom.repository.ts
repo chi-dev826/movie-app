@@ -1,11 +1,12 @@
 import { eigaComClient } from "../lib/eigaComClient";
 import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
+import { IEigaComRepository } from "../../domain/repositories/eigaCom.repository.interface";
 import { ArticleEntity } from "../../domain/models/article.entity";
 import { ArticleFactory } from "../../domain/factories/article.factory";
 import { Article } from "../../../../shared/types/domain";
 import * as cheerio from "cheerio";
 
-export class EigaComRepository {
+export class EigaComRepository implements IEigaComRepository {
   constructor(
     private readonly cache: ICacheRepository,
     private readonly client: typeof eigaComClient = eigaComClient,

@@ -1,11 +1,11 @@
 import { MovieEntity } from "../models/movie";
 import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
-import { YoutubeRepository } from "../../infrastructure/repositories/youtube.repository";
+import { IYoutubeRepository } from "../repositories/youtube.repository.interface";
 
 export class MovieEnricher {
   constructor(
     private readonly tmdbRepo: ITmdbRepository,
-    private readonly youtubeRepo: YoutubeRepository,
+    private readonly youtubeRepo: IYoutubeRepository,
   ) {}
 
   /**

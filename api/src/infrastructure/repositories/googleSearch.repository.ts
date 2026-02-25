@@ -4,11 +4,12 @@ import {
   SerpApiOrganicResult,
 } from "../../../../shared/types/external/serpApi/response";
 import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
+import { IGoogleSearchRepository } from "../../domain/repositories/googleSearch.repository.interface";
 import { ArticleEntity } from "../../domain/models/article.entity";
 import { ArticleFactory } from "../../domain/factories/article.factory";
 import { Article } from "../../../../shared/types/domain";
 
-export class GoogleSearchRepository {
+export class GoogleSearchRepository implements IGoogleSearchRepository {
   constructor(private readonly cache: ICacheRepository) {}
 
   async searchMovieAnalysis({

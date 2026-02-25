@@ -1,9 +1,9 @@
-import { GoogleSearchRepository } from "../../../infrastructure/repositories/googleSearch.repository";
+import { IGoogleSearchRepository } from "../../../domain/repositories/googleSearch.repository.interface";
 import { Article } from "../../../../../shared/types/domain";
 
 export class GetMovieAnalysisUseCase {
   constructor(
-    private readonly googleSearchRepository: GoogleSearchRepository,
+    private readonly googleSearchRepository: IGoogleSearchRepository,
   ) {}
 
   async execute(movieTitle: string): Promise<Article[]> {
