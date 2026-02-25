@@ -7,8 +7,12 @@ import { Dependencies } from "./src/container";
 export const createApp = (dependencies: Dependencies) => {
   const app = express();
 
-  // すべてのオリジンからのアクセスを許可
-  app.use(cors());
+  // 許可するオリジンを環境変数で制御
+  app.use(
+    cors({
+      origin: process.env.ALLOWED_ORIGIN || "http://localhost:5173",
+    }),
+  );
 
   app.use(express.json());
 
