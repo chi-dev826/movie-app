@@ -60,6 +60,7 @@ export class MovieEntity {
   }
 
   public isMostlyJapanese(): boolean {
+    if (this.title.length === 0) return false;
     if (this.originalLanguage !== "ja" && this.originalLanguage !== "en")
       return false;
     const jpChars = this.title.match(/[\u3040-\u30FF\u4E00-\u9FFF]/g) || [];
