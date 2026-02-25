@@ -7,6 +7,9 @@ import {
   VideoItem,
   MovieWatchProvidersResponse,
 } from "../../../../shared/types/external/tmdb";
+import { EXCLUDED_PROVIDERS } from "../constants/watchProviders";
+
+const excludedProviderSet = new Set<string>(EXCLUDED_PROVIDERS);
 
 export class MovieFactory {
   static createFromApiResponse(data: MovieResponse): MovieEntity {
@@ -81,13 +84,7 @@ export class MovieFactory {
       regionalData.flatrate
         ?.filter(
           (p: { provider_name: string }) =>
-            p.provider_name !== "Amazon Prime Video with Ads" &&
-            p.provider_name !== "Netflix Standard with Ads" &&
-            p.provider_name !== "dAnime Amazon Channel" &&
-            p.provider_name !== "Anime Times Amazon Channel" &&
-            p.provider_name !== "Apple TV Amazon Channel" &&
-            p.provider_name !== "HBO Max on U-Next" &&
-            p.provider_name !== "FOD Channel Amazon Channel",
+            !excludedProviderSet.has(p.provider_name),
         )
         .map((p: { logo_path: string | null; provider_name: string }) => ({
           logo_path: p.logo_path,
