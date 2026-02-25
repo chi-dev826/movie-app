@@ -31,16 +31,14 @@ export class UpcomingMovieService {
   public getSearchPeriodParams(): DiscoverMovieParams {
     const today = this.getJstToday();
     const twoMonthsLater = new Date(today);
-    twoMonthsLater.setMonth(
-      today.getMonth() + TMDB_CONFIG.DATE.UPCOMING_MONTHS,
+    twoMonthsLater.setUTCMonth(
+      today.getUTCMonth() + TMDB_CONFIG.DATE.UPCOMING_MONTHS,
     );
 
-    // JSTの日付を YYYY-MM-DD 形式に変換
-    // 注意: toISOString() はUTCになるため、JSTのDateオブジェクトのメソッドを使って手動構築する
     const formatDate = (d: Date) => {
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
+      const year = d.getUTCFullYear();
+      const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+      const day = String(d.getUTCDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     };
 
