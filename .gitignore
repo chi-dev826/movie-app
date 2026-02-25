@@ -3,6 +3,7 @@
 !.vscode/extensions.json
 !.vscode/settings.json
 .idea/
+.agents/
 
 # OS generated files
 .DS_Store
