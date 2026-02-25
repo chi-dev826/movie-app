@@ -1,5 +1,5 @@
 import request from "supertest";
-import { createApp } from "../../app";
+import { createApp } from "../../src/app";
 import { createContainer } from "../../src/container";
 import { API_PATHS } from "../../../shared/constants/routes";
 

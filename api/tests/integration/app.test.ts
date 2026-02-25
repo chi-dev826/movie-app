@@ -1,5 +1,5 @@
 import request from "supertest";
-import { createApp } from "../../app";
+import { createApp } from "../../src/app";
 import { createContainer } from "../../src/container";
 
 // YoutubeRepository をモック化して、APIキーのチェックを無効にする
