@@ -144,7 +144,7 @@ describe("UpcomingMovieService", () => {
 
   describe("calculateDaysUntilRelease", () => {
     it("公開までの残り日数を計算する", () => {
-      const today = new Date("2024-06-01T00:00:00+09:00"); // JST
+      const today = new Date(Date.UTC(2024, 5, 1)); // JST 2024-06-01 を表す
       const movie: MovieEntity = {
         id: 1,
         title: "テスト映画",
@@ -155,7 +155,7 @@ describe("UpcomingMovieService", () => {
     });
 
     it("releaseDate が null の場合、null を返す", () => {
-      const today = new Date("2024-06-01T00:00:00+09:00");
+      const today = new Date(Date.UTC(2024, 5, 1));
       const movie: MovieEntity = {
         id: 1,
         title: "テスト映画",

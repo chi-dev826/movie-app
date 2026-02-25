@@ -1,5 +1,4 @@
 import { MovieEntity } from "../models/movie";
-import { DateUtils } from "../../utils/date";
 import { IClock } from "../repositories/clock.service.interface";
 import { TMDB_CONFIG } from "../constants/tmdbConfig";
 import { DiscoverMovieParams } from "../../../../shared/types/external/tmdb";
@@ -63,13 +62,15 @@ export class UpcomingMovieService {
 
   /**
    * 公開までの残り日数を計算する (JST基準)
+   * today と releaseDate を同じ Date.UTC 座標系で比較する
    */
   public calculateDaysUntilRelease(
     movie: MovieEntity,
     today: Date,
   ): number | null {
     if (!movie.releaseDate) return null;
-    const releaseDate = new Date(`${movie.releaseDate}T00:00:00+09:00`);
+    const [year, month, day] = movie.releaseDate.split("-").map(Number);
+    const releaseDate = new Date(Date.UTC(year, month - 1, day));
     const diffTime = releaseDate.getTime() - today.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
@@ -85,12 +86,27 @@ export class UpcomingMovieService {
     return null;
   }
 
+  private static readonly DAY_OF_WEEK = [
+    "日",
+    "月",
+    "火",
+    "水",
+    "木",
+    "金",
+    "土",
+  ] as const;
+
   /**
-   * 表示用日付文字列を取得する
+   * 表示用日付文字列を取得する (例: 2月26日(木))
+   * 文字列パース + Date.UTC で TZ 非依存
    */
   public getDisplayDate(movie: MovieEntity): string | null {
-    return movie.releaseDate
-      ? DateUtils.formatReleaseDateToJa(movie.releaseDate)
-      : null;
+    if (!movie.releaseDate) return null;
+    const [year, month, day] = movie.releaseDate.split("-").map(Number);
+    const dayOfWeek =
+      UpcomingMovieService.DAY_OF_WEEK[
+        new Date(Date.UTC(year, month - 1, day)).getUTCDay()
+      ];
+    return `${month}月${day}日(${dayOfWeek})`;
   }
 }
