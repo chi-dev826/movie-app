@@ -6,6 +6,7 @@ import { MovieEntity } from "../../domain/models/movie";
 import { MovieDetailEntity } from "../../domain/models/movieDetail";
 import { CollectionEntity } from "../../domain/models/collection";
 import { Video } from "../../domain/models/video";
+import { CACHE_TTL } from "../../domain/constants/cacheTtl";
 import { tmdbApi } from "../lib/tmdb.client";
 import {
   MovieDetailResponse,
@@ -26,6 +27,9 @@ export class TmdbRepository implements ITmdbRepository {
     private readonly api: typeof tmdbApi = tmdbApi,
   ) {}
 
+  /**
+   * 人物名検索はユーザー入力に依存し揮発性が高いため、キャッシュ対象外とする
+   */
   async searchPerson(
     query: string,
   ): Promise<PaginatedResponse<PersonResponse>> {
@@ -37,81 +41,110 @@ export class TmdbRepository implements ITmdbRepository {
   }
 
   async getMovieDetails(movieId: number): Promise<MovieDetailEntity> {
-    const response = await this.api.get<MovieDetailResponse>(
-      `/movie/${movieId}`,
-      {
-        params: {
-          append_to_response: "credits",
-        },
+    return this.cache.getOrSet(
+      `tmdb:movie:${movieId}:details`,
+      async () => {
+        const response = await this.api.get<MovieDetailResponse>(
+          `/movie/${movieId}`,
+          { params: { append_to_response: "credits" } },
+        );
+        return MovieFactory.createFromDetailResponse(response.data);
       },
+      CACHE_TTL.STANDARD,
     );
-    return MovieFactory.createFromDetailResponse(response.data);
   }
 
   async getMovieVideos(movieId: number): Promise<Video[]> {
-    const response = await this.api.get<DefaultResponse<VideoItem>>(
-      `/movie/${movieId}/videos`,
+    return this.cache.getOrSet(
+      `tmdb:movie:${movieId}:videos`,
+      async () => {
+        const response = await this.api.get<DefaultResponse<VideoItem>>(
+          `/movie/${movieId}/videos`,
+        );
+        return response.data.results.map((item) =>
+          MovieFactory.createVideo(item),
+        );
+      },
+      CACHE_TTL.STANDARD,
     );
-    return response.data.results.map((item) => MovieFactory.createVideo(item));
   }
 
   async getMovieImages(movieId: number): Promise<string | null> {
-    const response = await this.api.get<ImageResponse>(
-      `/movie/${movieId}/images`,
+    return this.cache.getOrSet(
+      `tmdb:movie:${movieId}:images`,
+      async () => {
+        const response = await this.api.get<ImageResponse>(
+          `/movie/${movieId}/images`,
+        );
+        return response.data.logos?.[0]?.file_path ?? null;
+      },
+      CACHE_TTL.STANDARD,
     );
-    return response.data.logos?.[0]?.file_path ?? null;
   }
 
   async getMovieWatchProviders(
     movieId: number,
   ): Promise<{ logo_path: string | null; name: string }[]> {
-    const response = await this.api.get<MovieWatchProvidersResponse>(
-      `/movie/${movieId}/watch/providers`,
+    return this.cache.getOrSet(
+      `tmdb:movie:${movieId}:watch_providers`,
+      async () => {
+        const response = await this.api.get<MovieWatchProvidersResponse>(
+          `/movie/${movieId}/watch/providers`,
+        );
+        return MovieFactory.createWatchProviders(response.data);
+      },
+      CACHE_TTL.STANDARD,
     );
-    return MovieFactory.createWatchProviders(response.data);
   }
 
   async getSimilarMovies(movieId: number, page = 1): Promise<MovieEntity[]> {
-    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
-      `/movie/${movieId}/similar`,
-      {
-        params: { page },
+    return this.cache.getOrSet(
+      `tmdb:movie:${movieId}:similar:${page}`,
+      async () => {
+        const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+          `/movie/${movieId}/similar`,
+          { params: { page } },
+        );
+        return response.data.results.map((movie) =>
+          MovieFactory.createFromApiResponse(movie),
+        );
       },
-    );
-    return response.data.results.map((movie) =>
-      MovieFactory.createFromApiResponse(movie),
+      CACHE_TTL.STANDARD,
     );
   }
 
   async getCollection(collectionId: number): Promise<CollectionEntity> {
-    const response = await this.api.get<CollectionResponse>(
-      `/collection/${collectionId}`,
+    return this.cache.getOrSet(
+      `tmdb:collection:${collectionId}`,
+      async () => {
+        const response = await this.api.get<CollectionResponse>(
+          `/collection/${collectionId}`,
+        );
+        return CollectionFactory.createFromApiResponse(response.data);
+      },
+      CACHE_TTL.STANDARD,
     );
-    return CollectionFactory.createFromApiResponse(response.data);
   }
 
   async getDiscoverMovies(params: DiscoverMovieParams): Promise<MovieEntity[]> {
-    const cacheKey = `discover:${JSON.stringify(params)}`;
-    const cached = this.cache.get<MovieResponse[]>(cacheKey);
-
-    if (cached) {
-      return cached.map((movie) => MovieFactory.createFromApiResponse(movie));
-    }
-
-    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
-      "/discover/movie",
-      {
-        params,
+    return this.cache.getOrSet(
+      `tmdb:discover:${JSON.stringify(params)}`,
+      async () => {
+        const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+          "/discover/movie",
+          { params },
+        );
+        return response.data.results.map((movie) =>
+          MovieFactory.createFromApiResponse(movie),
+        );
       },
-    );
-
-    this.cache.set(cacheKey, response.data.results, 3600); // 1時間キャッシュ
-
-    return response.data.results.map((movie) =>
-      MovieFactory.createFromApiResponse(movie),
+      CACHE_TTL.SHORT,
     );
   }
 
+  /**
+   * キーワード検索はユーザー入力に依存し揮発性が高いため、キャッシュ対象外とする
+   */
   async searchMovies(query: string): Promise<MovieEntity[]> {
     const response = await this.api.get<PaginatedResponse<MovieResponse>>(
       "/search/movie",
@@ -127,24 +160,18 @@ export class TmdbRepository implements ITmdbRepository {
     language: string;
     region: string;
   }): Promise<MovieEntity[]> {
-    const cacheKey = `now_playing:${JSON.stringify(params)}`;
-    const cached = this.cache.get<MovieResponse[]>(cacheKey);
-
-    if (cached) {
-      return cached.map((movie) => MovieFactory.createFromApiResponse(movie));
-    }
-
-    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
-      "/movie/now_playing",
-      {
-        params: params,
+    return this.cache.getOrSet(
+      `tmdb:now_playing:${JSON.stringify(params)}`,
+      async () => {
+        const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+          "/movie/now_playing",
+          { params },
+        );
+        return response.data.results.map((movie) =>
+          MovieFactory.createFromApiResponse(movie),
+        );
       },
-    );
-
-    this.cache.set(cacheKey, response.data.results, 3600);
-
-    return response.data.results.map((movie) =>
-      MovieFactory.createFromApiResponse(movie),
+      CACHE_TTL.SHORT,
     );
   }
 }

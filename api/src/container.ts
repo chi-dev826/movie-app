@@ -36,7 +36,7 @@ export const createContainer = (): Dependencies => {
   const tmdbRepository = new TmdbRepository(cacheRepository);
   const eigaComRepository = new EigaComRepository(cacheRepository);
   const googleSearchRepository = new GoogleSearchRepository(cacheRepository);
-  const youtubeRepository = new YoutubeRepository();
+  const youtubeRepository = new YoutubeRepository(cacheRepository);
 
   // Domain Services
   const movieEnricher = new MovieEnricher(tmdbRepository, youtubeRepository);

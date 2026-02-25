@@ -4,7 +4,11 @@ import { createContainer } from "../../src/container";
 import { API_PATHS } from "../../../shared/constants/routes";
 
 // YoutubeRepository をモック化して、APIキーのチェックを無効にする
-jest.mock("../../src/infrastructure/repositories/youtube.repository");
+jest.mock("../../src/infrastructure/repositories/youtube.repository", () => ({
+  YoutubeRepository: jest.fn().mockImplementation(() => ({
+    getVideoStatus: jest.fn().mockResolvedValue(false),
+  })),
+}));
 
 describe("アプリケーション統合", () => {
   // コンテナとアプリを作成
