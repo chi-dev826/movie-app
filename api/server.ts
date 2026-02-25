@@ -4,7 +4,7 @@ import path from "path";
 // Load environment variables from the root .env file
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
-import { createApp } from "./app";
+import { createApp } from "./src/app";
 import { createContainer } from "./src/container";
 
 const PORT = process.env.PORT || 3001;
