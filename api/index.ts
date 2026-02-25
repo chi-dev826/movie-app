@@ -1,7 +1,7 @@
-import { IncomingMessage, ServerResponse } from "http";
+import { createApp } from "./src/app";
+import { createContainer } from "./src/container";
 
-export default (req: IncomingMessage, res: ServerResponse) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("Pure Node Hello World");
-};
+const container = createContainer();
+const app = createApp(container);
+
+export default app;
