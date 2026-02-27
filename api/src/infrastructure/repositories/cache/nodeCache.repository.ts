@@ -24,6 +24,8 @@ export class NodeCacheRepository implements ICacheRepository {
     fetcher: () => Promise<T>,
     ttl?: number,
   ): Promise<T> {
+    // null は「データが存在しないという確定結果」であり、正当なキャッシュ値として扱う
+    // undefined のみが「キャッシュミス（未取得）」を意味する
     const cached = this.get<T>(key);
     if (cached !== undefined) return cached;
 

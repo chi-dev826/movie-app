@@ -24,7 +24,7 @@ export class SearchMoviesByPersonUseCase {
       return [];
     }
 
-    // 2. 最も関連性が高い人物のIDを取得
+    // 2. TMDB の searchPerson は関連度順で返却されるため、先頭を最適な候補として採用
     const personId = personResponse.results[0].id;
 
     // 3. 特定した人物IDを用いて映画リストを取得
