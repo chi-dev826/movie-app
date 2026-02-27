@@ -54,63 +54,95 @@ export class TmdbRepository implements ITmdbRepository {
     );
   }
 
+  /**
+   * 補助データ: 取得失敗時は空配列を返し、上位層の処理を中断させない
+   */
   async getMovieVideos(movieId: number): Promise<Video[]> {
-    return this.cache.getOrSet(
-      `tmdb:movie:${movieId}:videos`,
-      async () => {
-        const response = await this.api.get<DefaultResponse<VideoItem>>(
-          `/movie/${movieId}/videos`,
-        );
-        return response.data.results.map((item) =>
-          MovieFactory.createVideo(item),
-        );
-      },
-      CACHE_TTL.STANDARD,
-    );
+    try {
+      return await this.cache.getOrSet(
+        `tmdb:movie:${movieId}:videos`,
+        async () => {
+          const response = await this.api.get<DefaultResponse<VideoItem>>(
+            `/movie/${movieId}/videos`,
+          );
+          return response.data.results.map((item) =>
+            MovieFactory.createVideo(item),
+          );
+        },
+        CACHE_TTL.STANDARD,
+      );
+    } catch (error) {
+      console.error(`動画情報の取得に失敗しました (movieId: ${movieId}):`, error);
+      return [];
+    }
   }
 
+  /**
+   * 補助データ: 取得失敗時は null を返し、上位層の処理を中断させない
+   */
   async getMovieImages(movieId: number): Promise<string | null> {
-    return this.cache.getOrSet(
-      `tmdb:movie:${movieId}:images`,
-      async () => {
-        const response = await this.api.get<ImageResponse>(
-          `/movie/${movieId}/images`,
-        );
-        return response.data.logos?.[0]?.file_path ?? null;
-      },
-      CACHE_TTL.STANDARD,
-    );
+    try {
+      return await this.cache.getOrSet(
+        `tmdb:movie:${movieId}:images`,
+        async () => {
+          const response = await this.api.get<ImageResponse>(
+            `/movie/${movieId}/images`,
+          );
+          return response.data.logos?.[0]?.file_path ?? null;
+        },
+        CACHE_TTL.STANDARD,
+      );
+    } catch (error) {
+      console.error(`画像情報の取得に失敗しました (movieId: ${movieId}):`, error);
+      return null;
+    }
   }
 
+  /**
+   * 補助データ: 取得失敗時は空配列を返し、上位層の処理を中断させない
+   */
   async getMovieWatchProviders(
     movieId: number,
   ): Promise<{ logo_path: string | null; name: string }[]> {
-    return this.cache.getOrSet(
-      `tmdb:movie:${movieId}:watch_providers`,
-      async () => {
-        const response = await this.api.get<MovieWatchProvidersResponse>(
-          `/movie/${movieId}/watch/providers`,
-        );
-        return MovieFactory.createWatchProviders(response.data);
-      },
-      CACHE_TTL.STANDARD,
-    );
+    try {
+      return await this.cache.getOrSet(
+        `tmdb:movie:${movieId}:watch_providers`,
+        async () => {
+          const response = await this.api.get<MovieWatchProvidersResponse>(
+            `/movie/${movieId}/watch/providers`,
+          );
+          return MovieFactory.createWatchProviders(response.data);
+        },
+        CACHE_TTL.STANDARD,
+      );
+    } catch (error) {
+      console.error(`配信情報の取得に失敗しました (movieId: ${movieId}):`, error);
+      return [];
+    }
   }
 
+  /**
+   * 補助データ: 取得失敗時は空配列を返し、上位層の処理を中断させない
+   */
   async getSimilarMovies(movieId: number, page = 1): Promise<MovieEntity[]> {
-    return this.cache.getOrSet(
-      `tmdb:movie:${movieId}:similar:${page}`,
-      async () => {
-        const response = await this.api.get<PaginatedResponse<MovieResponse>>(
-          `/movie/${movieId}/similar`,
-          { params: { page } },
-        );
-        return response.data.results.map((movie) =>
-          MovieFactory.createFromApiResponse(movie),
-        );
-      },
-      CACHE_TTL.STANDARD,
-    );
+    try {
+      return await this.cache.getOrSet(
+        `tmdb:movie:${movieId}:similar:${page}`,
+        async () => {
+          const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+            `/movie/${movieId}/similar`,
+            { params: { page } },
+          );
+          return response.data.results.map((movie) =>
+            MovieFactory.createFromApiResponse(movie),
+          );
+        },
+        CACHE_TTL.STANDARD,
+      );
+    } catch (error) {
+      console.error(`類似映画の取得に失敗しました (movieId: ${movieId}):`, error);
+      return [];
+    }
   }
 
   async getCollection(collectionId: number): Promise<CollectionEntity> {
