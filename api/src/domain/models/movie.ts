@@ -77,7 +77,8 @@ export class MovieEntity {
       poster_path: this.posterPath,
       backdrop_path: this.backdropPath,
       release_date: this.releaseDate,
-      vote_average: this.voteAverage,
+      // TMDB の 10 段階評価を星 5 段階（UI 表示用）に変換
+      vote_average: this.voteAverage ? this.voteAverage / 2 : null,
       logo_path: this._logoPath,
       video: this._videoKey,
     };

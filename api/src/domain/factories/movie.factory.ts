@@ -22,7 +22,7 @@ export class MovieFactory {
       data.poster_path,
       data.backdrop_path,
       data.release_date ?? null,
-      data.vote_average ? data.vote_average / 2 : null,
+      data.vote_average ?? null,
     );
   }
 
@@ -39,7 +39,7 @@ export class MovieFactory {
       data.poster_path,
       data.backdrop_path,
       data.release_date ?? null,
-      data.vote_average ? data.vote_average / 2 : null,
+      data.vote_average ?? null,
       // Extended properties
       data.belongs_to_collection?.id ?? null,
       data.runtime,
