@@ -24,6 +24,8 @@ export class GetFullMovieDataUseCase {
    */
   async execute(movieId: number): Promise<FullMovieData> {
     // 1. 並行実行によるレイテンシの最小化（I/O待ちをまとめる）
+    // 補助データ（画像・配信情報）は取得失敗時もフォールバック値（null / []）を返す
+    // リポジトリ契約により reject されないため、Promise.all で安全に並行取得できる
     const [detailEntity, imagePath, watchProviders] = await Promise.all([
       this.tmdbRepo.getMovieDetails(movieId),
       this.tmdbRepo.getMovieImages(movieId),
