@@ -3,6 +3,7 @@ import { EXTERNAL_API_URLS } from "../constants/external";
 
 const API_KEY = process.env.SERP_API_KEY;
 
+// TMDB と同様、開発環境での部分テストを許容するため起動は停止しない
 if (!API_KEY) {
   console.warn(
     "SerpApi API Key is not defined. Please set SERP_API_KEY in your .env file.",
