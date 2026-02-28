@@ -26,8 +26,10 @@ export class GetHomePageMovieListUseCase {
     const pagesToFetch = ArrayUtils.range(TMDB_CONFIG.FETCH_PAGES.HOME);
 
     // 1. カテゴリごとに並行処理でデータを取得
-    const categoryPromises = Object.entries(HOME_CATEGORIES).map(
-      async ([key, params]) => {
+    const categoryKeys = Object.keys(HOME_CATEGORIES) as (keyof MovieListResponse)[];
+    const categoryPromises = categoryKeys.map(
+      async (key) => {
+        const params = HOME_CATEGORIES[key];
         // 各ページ並行処理
         const pagePromises = pagesToFetch.map((page) =>
           this.tmdbRepo.getDiscoverMovies({ ...params, page }),
@@ -52,18 +54,12 @@ export class GetHomePageMovieListUseCase {
 
     const categoryResults = await Promise.all(categoryPromises);
 
-    const response: MovieListResponse = {
-      popular: [],
-      recently_added: [],
-      top_rated: [],
-      high_rated: [],
-    };
-
     // 4. レスポンスオブジェクトの構築
+    // HOME_CATEGORIES のキーは keyof MovieListResponse と型同期されているため、
+    // ランタイムの hasOwnProperty チェックや as keyof キャストは不要
+    const response = {} as MovieListResponse;
     categoryResults.forEach((res) => {
-      if (Object.prototype.hasOwnProperty.call(response, res.key)) {
-        response[res.key as keyof MovieListResponse] = res.movies;
-      }
+      response[res.key] = res.movies;
     });
 
     return response;
