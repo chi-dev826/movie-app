@@ -5,6 +5,8 @@ export class Video {
     private readonly site: string,
     private readonly type: string,
   ) {
+    // TMDB は YouTube 以外の動画サイト（Vimeo 等）を返すことがあるが、
+    // 本アプリでは YouTube 埋め込みのみサポートするため不正な入力として扱う
     if (this.site !== VIDEO_SITE.YOUTUBE) {
       throw new Error(`Unsupported video site: ${this.site}`);
     }

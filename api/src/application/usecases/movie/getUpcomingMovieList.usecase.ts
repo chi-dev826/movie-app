@@ -39,7 +39,8 @@ export class GetUpcomingMovieListUseCase {
     const allMovies = responses.flatMap((res) => res);
 
     // 3. ビジネスルールに基づくフィルタリングとソート
-    // 日本語コンテンツ優先、画像必須、重複排除、公開日順ソート
+    // 適用順序: 日本語フィルタ → 画像フィルタ → 重複排除 → 公開日ソート
+    // 日本語フィルタを先に適用することで、後続処理の対象件数を削減する
     const filteredMovies = allMovies.filter((movie) =>
       movie.isMostlyJapanese(),
     );

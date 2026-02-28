@@ -10,7 +10,10 @@ export class GetMovieAnalysisUseCase {
     const query = `${movieTitle} 映画 考察`;
     const articles = await this.googleSearchRepository.searchMovieAnalysis({
       query,
-      params: { num: 4, filter: 1 },
+      params: {
+        num: 4, // 考察記事の取得件数
+        filter: 1, // SerpAPI: 類似結果の重複排除を有効化
+      },
     });
     return articles.map((article) => article.toDto());
   }
