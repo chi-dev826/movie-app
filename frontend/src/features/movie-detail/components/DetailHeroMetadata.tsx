@@ -2,6 +2,8 @@ import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
 import { MovieDetail } from '@/types/domain';
 import { useWatchList } from '@/hooks/useWatchList';
 import { WindowIcon, PlayCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { StarIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import HeroVideo from './HeroVideo';
@@ -51,6 +53,33 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
           {movieDetail?.title}
         </h1>
 
+        {/* ✦ メタ情報バッジ群エリア ✦ */}
+        <div className="flex flex-wrap items-center gap-2 mb-5 justify-center xl:justify-start">
+          {/* 星評価バッジ (存在する場合のみ) */}
+          {movieDetail.vote_average !== null && movieDetail.vote_average > 0 && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-yellow-500/20 backdrop-blur-sm px-3 py-1 text-xs font-bold text-yellow-300 border border-yellow-500/20">
+              <StarIcon className="w-3.5 h-3.5 text-yellow-400" />
+              {movieDetail.vote_average.toFixed(1)}
+            </span>
+          )}
+
+          {/* カレンダーアイコン (日付表示) */}
+          {movieDetail.release_date_display && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-200 border border-white/5">
+              <CalendarDaysIcon className="w-3.5 h-3.5 text-red-400" />
+              {movieDetail.release_date_display}
+            </span>
+          )}
+
+          {/* 公開予定カウントダウン (公開前の場合のみ) */}
+          {movieDetail.upcoming_badge_label && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600/80 backdrop-blur-sm px-3 py-1 text-xs font-bold text-white shadow-lg shadow-red-900/30">
+              <ClockIcon className="w-3.5 h-3.5" />
+              {movieDetail.upcoming_badge_label}
+            </span>
+          )}
+        </div>
+
         {watchProviders.length > 0 && (
           <div className="p-4 xl:justify-start">
             <p className="text-sm text-gray-400">配信中のサービス</p>
@@ -89,12 +118,11 @@ const HeroMetadata = ({ movieDetail, watchProviders, youtubeKey }: Props) => {
         <p className="text-sm font-extrabold text-white lg:text-base xl:text-sm 3xl:text-base 4xl:text-lg line-clamp-6 group-hover:line-clamp-none">
           {movieDetail.overview}
         </p>
-        <span className="flex justify-center gap-1 my-5 text-sm font-bold text-gray-300 xl:justify-start xl:space-x-2">
-          <span className="flex gap-3">
-            <span>{movieDetail?.year}</span> <span>{movieDetail?.runtime}分</span>
-          </span>
-          <span>{movieDetail.genres ? movieDetail.genres.join('・') : ''}</span>
-        </span>
+        <div className="flex flex-col justify-center gap-1 my-5 text-sm font-bold text-gray-300 xl:justify-start xl:space-x-2">
+          <p>{movieDetail?.year}・{movieDetail?.runtime}分</p>
+          <p>{movieDetail.genres ? movieDetail.genres.join('・') : ''}</p>
+        </div>
+        
       </div>
       <div className="flex justify-center gap-5 transition-all xl:justify-start">
         {movieDetail.homePageUrl && (

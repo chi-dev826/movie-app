@@ -1,18 +1,12 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
-import { MovieFilterOutService } from "../../../domain/services/movie.filterOut.service";
 
 /**
  * 映画タイトルキーワードによる検索を実行するユースケース。
- * * @description
- * ユーザーの入力したクエリに基づき映画を検索し、UI表示に適さない
- * 画像欠損データを除外して返却する。
  */
 export class SearchMoviesUseCase {
-  constructor(
-    private readonly tmdbRepo: ITmdbRepository,
-    private readonly movieFilterService: MovieFilterOutService,
-  ) {}
+  constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   /**
    * @param query - 検索キーワード
@@ -23,10 +17,9 @@ export class SearchMoviesUseCase {
     const movies = await this.tmdbRepo.searchMovies(query);
 
     // 2. ビジネスルールに基づくフィルタリング（画像必須）
-    const filteredMovies =
-      this.movieFilterService.filterMovieWithoutImages(movies);
+    const filteredMovies = movies.filter((m) => m.hasValidImages());
 
-    // 3. ドメインモデルからDTOへの変換
-    return filteredMovies.map((movie) => movie.toDto());
+    // 3. マッパーでDTOへの変換
+    return filteredMovies.map((movie) => MovieMapper.toBffDto(movie));
   }
 }

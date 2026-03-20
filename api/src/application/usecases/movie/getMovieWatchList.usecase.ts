@@ -1,4 +1,5 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { MovieDetailEntity } from "../../../domain/models/movieDetail";
 
@@ -28,8 +29,7 @@ export class GetMovieWatchListUseCase {
           this.tmdbRepo.getMovieImages(id),
         ]);
 
-        // 2. エンリッチメント（ロゴ画像の統合）
-        return detailEntity.withLogo(image);
+        return { detailEntity, image };
       } catch (error) {
         console.error(`映画ID ${id} の取得に失敗しました:`, error);
         return null;
@@ -40,7 +40,16 @@ export class GetMovieWatchListUseCase {
 
     // 3. 有効なデータのみを抽出し、DTOに変換して返却
     return results
-      .filter((movie): movie is MovieDetailEntity => movie !== null)
-      .map((movie) => movie.toDto());
+      .filter(
+        (
+          item,
+        ): item is { detailEntity: MovieDetailEntity; image: string | null } =>
+          item !== null,
+      )
+      .map((item) =>
+        MovieMapper.toBffDto(item.detailEntity.baseInfo, {
+          logoPath: item.image,
+        }),
+      );
   }
 }

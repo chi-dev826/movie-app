@@ -7,12 +7,14 @@ import {
   searchMovies,
   searchMoviesByPerson,
   fetchMovieWatchList,
+  fetchHomePage,
 } from '@/services/movieApi';
-import { MovieListResponse } from '@/types/api';
+import { MovieListResponse, HomePageResponse } from '@/types/api';
 import { Movie } from '@/types/domain';
 
 const movieKeys = {
   all: ['movies'] as const,
+  home: () => [...movieKeys.all, 'home'] as const,
   lists: () => [...movieKeys.all, 'list'] as const,
   list: (type: string) => [...movieKeys.lists(), type] as const,
   details: () => [...movieKeys.all, 'detail'] as const,
@@ -79,5 +81,13 @@ export const useUpcomingMovies = () => {
     queryKey: movieKeys.list('upcoming'),
     queryFn: () => fetchUpcomingMovies(),
     staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+  });
+};
+
+export const useHomePage = () => {
+  return useQuery<HomePageResponse>({
+    queryKey: movieKeys.home(),
+    queryFn: fetchHomePage,
+    staleTime: 1000 * 60 * 60, // ホーム画面全体のキャッシュ時間（1時間）
   });
 };

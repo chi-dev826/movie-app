@@ -1,5 +1,3 @@
-import { Movie as MovieDTO } from "../../../../shared/types/domain";
-
 export class MovieEntity {
   constructor(
     public readonly id: number,
@@ -11,52 +9,20 @@ export class MovieEntity {
     public readonly backdropPath: string | null,
     public readonly releaseDate: string | null, // YYYY-MM-DD
     public readonly voteAverage: number | null,
-    private readonly _logoPath: string | null = null,
-    private readonly _videoKey: string | null = null,
+    public readonly genreIds: readonly number[] = [],
   ) {
     if (new.target === MovieEntity) {
       Object.freeze(this);
+      Object.freeze(this.genreIds);
     }
   }
 
-  public withLogo(path: string | null): MovieEntity {
-    return new MovieEntity(
-      this.id,
-      this.title,
-      this.originalTitle,
-      this.originalLanguage,
-      this.overview,
-      this.posterPath,
-      this.backdropPath,
-      this.releaseDate,
-      this.voteAverage,
-      path,
-      this._videoKey,
-    );
-  }
-
-  public withVideo(key: string | null): MovieEntity {
-    return new MovieEntity(
-      this.id,
-      this.title,
-      this.originalTitle,
-      this.originalLanguage,
-      this.overview,
-      this.posterPath,
-      this.backdropPath,
-      this.releaseDate,
-      this.voteAverage,
-      this._logoPath,
-      key,
-    );
-  }
-
-  public get videoKey(): string | null {
-    return this._videoKey;
-  }
-
-  public get logoPathValue(): string | null {
-    return this._logoPath;
+  /**
+   * 画像情報の整合性をチェックする (ビジネスルール)
+   * @description 画像が欠損している映画は、UI上での表示に適さない「不完全なデータ」として扱う。
+   */
+  public hasValidImages(): boolean {
+    return !!(this.posterPath && this.backdropPath);
   }
 
   public isMostlyJapanese(): boolean {
@@ -65,22 +31,5 @@ export class MovieEntity {
       return false;
     const jpChars = this.title.match(/[\u3040-\u30FF\u4E00-\u9FFF]/g) || [];
     return jpChars.length / this.title.length > 0.3;
-  }
-
-  public toDto(): MovieDTO {
-    return {
-      id: this.id,
-      title: this.title,
-      original_title: this.originalTitle,
-      original_language: this.originalLanguage,
-      overview: this.overview,
-      poster_path: this.posterPath,
-      backdrop_path: this.backdropPath,
-      release_date: this.releaseDate,
-      // TMDB の 10 段階評価を星 5 段階（UI 表示用）に変換
-      vote_average: this.voteAverage ? this.voteAverage / 2 : null,
-      logo_path: this._logoPath,
-      video: this._videoKey,
-    };
   }
 }

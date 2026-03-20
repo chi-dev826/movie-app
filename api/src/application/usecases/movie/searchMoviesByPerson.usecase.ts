@@ -1,4 +1,5 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
+import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
 import { MOVIE_RULES } from "../../../domain/constants/movieRules";
@@ -35,7 +36,7 @@ export class SearchMoviesByPersonUseCase {
 
     const movies = await this.tmdbRepo.getDiscoverMovies(params);
 
-    // 4. ドメインモデルからDTOへの変換
-    return movies.map((m) => m.toDto());
+    // 4. マッパーでDTOへの変換
+    return movies.map((m) => MovieMapper.toBffDto(m));
   }
 }

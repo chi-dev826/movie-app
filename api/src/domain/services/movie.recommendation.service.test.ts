@@ -1,5 +1,4 @@
 import { MovieRecommendationService } from "./movie.recommendation.service";
-import { MovieFilterOutService } from "./movie.filterOut.service";
 import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
 import { MovieEntity } from "../models/movie";
 import { CollectionEntity } from "../models/collection";
@@ -8,10 +7,17 @@ import { CollectionEntity } from "../models/collection";
  * テスト用の MovieEntity を最小限のプロパティで生成するヘルパー
  */
 const createMovie = (id: number): MovieEntity =>
-  new MovieEntity(id, `映画${id}`, `Movie${id}`, "ja", "概要", "/poster.jpg", "/backdrop.jpg", "2024-01-01", 7.5);
-
-// 古典派: MovieFilterOutService は実オブジェクトを使用
-const filterService = new MovieFilterOutService();
+  new MovieEntity(
+    id,
+    `映画${id}`,
+    `Movie${id}`,
+    "ja",
+    "概要",
+    "/poster.jpg",
+    "/backdrop.jpg",
+    "2024-01-01",
+    7.5,
+  );
 
 // ITmdbRepository はプロセス外の依存 → モック
 const mockTmdbRepo: jest.Mocked<ITmdbRepository> = {
@@ -32,7 +38,7 @@ describe("MovieRecommendationService", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    service = new MovieRecommendationService(mockTmdbRepo, filterService);
+    service = new MovieRecommendationService(mockTmdbRepo);
   });
 
   describe("おすすめリストの取得ポリシー: Collection(シリーズ) > Similar(類似)", () => {
@@ -53,8 +59,16 @@ describe("MovieRecommendationService", () => {
     it("collectionId があり、シリーズ作品が存在する場合、シリーズ作品を返す", async () => {
       // Given
       const currentMovieId = 1;
-      const seriesMovies = [createMovie(currentMovieId), createMovie(2), createMovie(3)];
-      const collection = new CollectionEntity(100, "テストシリーズ", seriesMovies);
+      const seriesMovies = [
+        createMovie(currentMovieId),
+        createMovie(2),
+        createMovie(3),
+      ];
+      const collection = new CollectionEntity(
+        100,
+        "テストシリーズ",
+        seriesMovies,
+      );
       mockTmdbRepo.getCollection.mockResolvedValue(collection);
 
       // When
@@ -70,7 +84,9 @@ describe("MovieRecommendationService", () => {
     it("コレクションから自分自身を除外した結果が0件の場合、類似作品にフォールバックする", async () => {
       // Given: コレクションに自分自身しかいない
       const currentMovieId = 1;
-      const collection = new CollectionEntity(100, "単独シリーズ", [createMovie(currentMovieId)]);
+      const collection = new CollectionEntity(100, "単独シリーズ", [
+        createMovie(currentMovieId),
+      ]);
       mockTmdbRepo.getCollection.mockResolvedValue(collection);
       const similarMovies = [createMovie(20)];
       mockTmdbRepo.getSimilarMovies.mockResolvedValue(similarMovies);

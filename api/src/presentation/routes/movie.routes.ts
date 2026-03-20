@@ -36,6 +36,11 @@ export const createMovieRoutes = ({
       movieController.searchMoviesByPerson(req, res, next),
   );
   router.get(
+    API_PATHS.HOME,
+    (req: Request, res: Response, next: NextFunction) =>
+      movieController.getHomePage(req, res, next),
+  );
+  router.get(
     API_PATHS.MOVIES.HOME,
     (req: Request, res: Response, next: NextFunction) =>
       movieController.getMovieList(req, res, next),

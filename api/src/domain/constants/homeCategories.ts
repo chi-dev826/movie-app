@@ -3,7 +3,10 @@ import { MovieListResponse } from "../../../../shared/types/api";
 import { TMDB_CONFIG } from "../constants/tmdbConfig";
 import { SORT_OPTIONS } from "../../../../shared/types/external/tmdb/sortOptions";
 
-export const HOME_CATEGORIES: Record<keyof MovieListResponse, DiscoverMovieParams> = {
+export const HOME_CATEGORIES: Record<
+  keyof MovieListResponse,
+  DiscoverMovieParams
+> = {
   popular: {
     "vote_count.gte": TMDB_CONFIG.FILTERS.HOME.POPULAR_VOTE_COUNT,
     sort_by: SORT_OPTIONS.POPULARITY_DESC,

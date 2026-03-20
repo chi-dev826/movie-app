@@ -10,6 +10,7 @@ export const APP_PATHS = {
 } as const;
 
 export const API_PATHS = {
+  HOME: "/home",
   MOVIE: {
     FULL: "/movie/:movieId/full",
     EIGA_COM_NEWS: "/movie/:movieId/eiga-com-news",

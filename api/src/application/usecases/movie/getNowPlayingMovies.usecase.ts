@@ -1,5 +1,5 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
-import { MovieFilterOutService } from "../../../domain/services/movie.filterOut.service";
+import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
 import { Movie as MovieDTO } from "../../../../../shared/types/domain";
 import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
 
@@ -7,15 +7,9 @@ import { ArrayUtils } from "../../../utils/array";
 
 /**
  * 現在上映中の映画リストを取得・加工するユースケース。
- * * @description
- * TMDBから複数ページ分の「現在上映中」映画を取得し、画像必須フィルタと
- * 重複排除を適用して返却する。
  */
 export class GetNowPlayingMoviesUseCase {
-  constructor(
-    private readonly tmdbRepo: ITmdbRepository,
-    private readonly movieFilterService: MovieFilterOutService,
-  ) {}
+  constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   /**
    * @returns 現在上映中の映画リスト
@@ -35,13 +29,12 @@ export class GetNowPlayingMoviesUseCase {
     const responses = await Promise.all(promises);
     const allMovies = responses.flatMap((res) => res);
 
-    // 2. ビジネスルールに基づくフィルタリング（画像必須）と重複排除
-    const filteredMovies =
-      this.movieFilterService.filterMovieWithoutImages(allMovies);
+    // 2. ビジネスルールに基づくフィルタリングと重複排除
+    const processedMovies = ArrayUtils.deduplicate(allMovies).filter((m) =>
+      m.hasValidImages(),
+    );
 
-    const uniqueMovies = this.movieFilterService.deduplicate(filteredMovies);
-
-    // 3. ドメインモデルからDTOへの変換
-    return uniqueMovies.map((m) => m.toDto());
+    // 3. マッパーでDTOへの変換
+    return processedMovies.map((m) => MovieMapper.toBffDto(m));
   }
 }

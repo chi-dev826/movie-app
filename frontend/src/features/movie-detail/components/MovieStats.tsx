@@ -6,20 +6,11 @@ type Props = {
 };
 
 const MovieStats = ({ detail }: Props) => {
-  const formatCurrency = (value: number) => {
-    if (value === 0) return '-';
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
-
   const stats = [
     { label: '原題', value: detail.original_title },
     { label: '制作国', value: detail.production_countries.join(', ') || '-' },
-    { label: '予算', value: formatCurrency(detail.budget) },
-    { label: '興行収入', value: formatCurrency(detail.revenue) },
+    { label: '予算', value: detail.budget_jpy_display },
+    { label: '興行収入', value: detail.revenue_jpy_display },
   ];
 
   const { directors, writers, composers } = detail.keyStaff;

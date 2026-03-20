@@ -6,7 +6,6 @@ import { EffectCoverflow, Autoplay, Pagination, Navigation } from 'swiper/module
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactPlayer from 'react-player';
 
-import type { Movie } from '@/types/domain';
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
 import { getTmdbImage } from '@/utils/imageUtils';
@@ -18,9 +17,10 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 import 'swiper/css';
+import { HeroMovie } from '@/types/api';
 
 type Props = {
-  movies: Movie[];
+  movies: HeroMovie[];
   onSwiperReady?: () => void;
 };
 
@@ -56,7 +56,7 @@ const HeroSwiper = ({ movies, onSwiperReady }: Props) => {
     >
       {movies.map((movie) => (
         <SwiperSlide
-          key={movie.id}
+          key={`${movie.category}-${movie.id}`}
           onMouseEnter={() => {
             setHoveredId(movie.id);
             swiperRef.current?.autoplay.stop();
@@ -78,7 +78,7 @@ export default HeroSwiper;
 
 // HeroSlide component
 type HeroSlideProps = {
-  movie: Movie;
+  movie: HeroMovie;
   isHovered: boolean;
 };
 
@@ -160,3 +160,4 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
     </Link>
   );
 };
+

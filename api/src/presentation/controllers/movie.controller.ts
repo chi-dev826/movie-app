@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { ERROR_MESSAGES } from "../constants/messages";
 import { GetFullMovieDataUseCase } from "../../application/usecases/movie/getFullMovieData.usecase";
+import { GetHomePageUseCase } from "../../application/usecases/movie/getHomePage.usecase";
 import { GetHomePageMovieListUseCase } from "../../application/usecases/movie/getHomePageMovieList.usecase";
 import { GetUpcomingMovieListUseCase } from "../../application/usecases/movie/getUpcomingMovieList.usecase";
 import { SearchMoviesUseCase } from "../../application/usecases/movie/searchMovies.usecase";
@@ -12,6 +13,7 @@ import { GetMovieWatchListUseCase } from "../../application/usecases/movie/getMo
 export class MovieController {
   constructor(
     private readonly getFullMovieDataUseCase: GetFullMovieDataUseCase,
+    private readonly getHomePageUseCase: GetHomePageUseCase,
     private readonly getHomePageMovieListUseCase: GetHomePageMovieListUseCase,
     private readonly getUpcomingMovieListUseCase: GetUpcomingMovieListUseCase,
     private readonly searchMoviesUseCase: SearchMoviesUseCase,
@@ -68,6 +70,14 @@ export class MovieController {
   async getMovieList(req: Request, res: Response, next: NextFunction) {
     try {
       res.json(await this.getHomePageMovieListUseCase.execute());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getHomePage(req: Request, res: Response, next: NextFunction) {
+    try {
+      res.json(await this.getHomePageUseCase.execute());
     } catch (error) {
       next(error);
     }

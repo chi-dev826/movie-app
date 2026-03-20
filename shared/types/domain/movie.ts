@@ -1,4 +1,4 @@
-// アプリケーション内で使用する整形済みの映画カード情報
+// アプリケーション内で使用する汎用映画カード情報
 export type Movie = {
   readonly id: number;
   readonly backdrop_path: string | null;
@@ -11,10 +11,19 @@ export type Movie = {
   readonly logo_path?: string | null;
   readonly video?: string | null;
   readonly release_date?: string | null;
-  readonly release_date_display?: string | null;
-  readonly days_until_release?: number | null;
-  readonly upcoming_badge_label?: string | null;
+  readonly genre_ids?: number[];
 };
+
+// 公開予定映画向けの追加メタ情報
+export type UpcomingMeta = {
+  readonly release_date_display: string | null;
+  readonly days_until_release: number | null;
+  readonly upcoming_badge_label: string | null;
+  readonly release_date_short: string | null;
+};
+
+// 公開予定セクションなどで使用する映画カード情報
+export type UpcomingMovie = Movie & UpcomingMeta;
 
 export type Cast = {
   readonly id: number;
@@ -41,8 +50,8 @@ export type keyStaff = {
   readonly composers: Staff[];
 };
 
-// アプリケーション内で使用する整形済みの映画詳細情報
-export type MovieDetail = {
+// アプリケーション内で使用する汎用の映画詳細情報 (装飾前)
+export type MovieDetailBase = {
   readonly id: number;
   readonly backdrop_path: string | null;
   readonly belongs_to_collection_id: number | null;
@@ -61,4 +70,14 @@ export type MovieDetail = {
   readonly revenue: number;
   readonly budget: number;
   readonly production_countries: string[];
+  readonly release_date: string | null;
 };
+
+// 金額（円換算）関連のメタ情報
+export type MoneyMeta = {
+  readonly revenue_jpy_display: string;
+  readonly budget_jpy_display: string;
+};
+
+// UI表示用にバッジや整形済み文字列が付与された映画詳細情報
+export type MovieDetail = MovieDetailBase & UpcomingMeta & MoneyMeta;

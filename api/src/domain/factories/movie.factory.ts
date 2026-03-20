@@ -23,14 +23,14 @@ export class MovieFactory {
       data.backdrop_path,
       data.release_date ?? null,
       data.vote_average ?? null,
+      data.genre_ids ?? [],
     );
   }
 
   static createFromDetailResponse(
     data: MovieDetailResponse,
   ): MovieDetailEntity {
-    return new MovieDetailEntity(
-      // Base properties
+    const baseInfo = new MovieEntity(
       data.id,
       data.title,
       data.original_title,
@@ -40,7 +40,11 @@ export class MovieFactory {
       data.backdrop_path,
       data.release_date ?? null,
       data.vote_average ?? null,
-      // Extended properties
+      data.genres?.map((g) => g.id) ?? [],
+    );
+
+    return new MovieDetailEntity(
+      baseInfo,
       data.belongs_to_collection?.id ?? null,
       data.runtime,
       data.genres?.map((g) => g.name) ?? null,

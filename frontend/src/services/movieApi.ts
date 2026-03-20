@@ -1,5 +1,5 @@
 import { Movie, Article } from '@/types/domain';
-import { FullMovieData, MovieListResponse } from '@/types/api/movie';
+import { FullMovieData, MovieListResponse, HomePageResponse } from '@/types/api';
 import { API_PATHS } from '@shared/constants/routes';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -62,4 +62,8 @@ export const fetchMovieWatchList = async (ids: number[]): Promise<Movie[]> => {
   }
   const idsParam = ids.join(',');
   return fetchFromApi<Movie[]>(`${API_PATHS.MOVIES.LIST}?ids=${idsParam}`);
+};
+
+export const fetchHomePage = async (): Promise<HomePageResponse> => {
+  return fetchFromApi<HomePageResponse>(API_PATHS.HOME);
 };

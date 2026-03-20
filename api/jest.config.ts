@@ -7,6 +7,7 @@ module.exports = {
   },
   testMatch: [
     "<rootDir>/tests/**/*.test.ts",
+    "<rootDir>/src/**/*.test.ts",
     "<rootDir>/src/domain/services/**/*.test.ts",
   ],
   transform: {

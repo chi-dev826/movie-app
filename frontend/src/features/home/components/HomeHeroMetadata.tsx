@@ -1,15 +1,25 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { StarIcon } from '@heroicons/react/24/solid';
 
 import { TMDB_CONFIG } from '@/constants/config';
-import type { Movie } from '@/types/domain';
+import type { HeroMovie } from '@/types/api';
+
+/** カテゴリに対応するバッジのラベルとスタイル */
+const CATEGORY_BADGE = {
+  upcoming: { label: '公開予定', className: 'bg-red-600/80 border-red-500/30' },
+  now_playing: { label: '公開中', className: 'bg-red-600/80 border-red-500/30' },
+  recently_added: { label: '新着', className: 'bg-blue-600/80 border-blue-500/30' },
+} as const;
 
 type Props = {
-  movie: Movie;
+  movie: HeroMovie;
 };
 
 export const HomeHeroMetadata = ({ movie }: Props) => {
   const [isHoveredLogo, setIsHoveredLogo] = useState(false);
+
+  const badge = CATEGORY_BADGE[movie.category];
 
   return (
     <div className="relative gap-8 px-5 z-overlay max-w-7xl">
@@ -18,6 +28,31 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
         onMouseEnter={() => setIsHoveredLogo(true)}
         onMouseLeave={() => setIsHoveredLogo(false)}
       >
+        {/* バッジ群 */}
+        <div className="flex items-center gap-2 mb-3">
+          {/* カテゴリバッジ */}
+          <span
+            className={`px-2.5 py-1 text-[10px] font-bold text-white rounded-full backdrop-blur-sm border shadow-lg md:text-xs ${badge.className}`}
+          >
+            {badge.label}
+          </span>
+
+          {/* 評価バッジ */}
+          {movie.vote_average !== null && movie.vote_average > 0 && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-yellow-300 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 md:text-xs">
+              <StarIcon className="w-3 h-3 text-yellow-400" />
+              {movie.vote_average.toFixed(1)}
+            </span>
+          )}
+
+          {/* 公開予定の場合: 公開日バッジ */}
+          {movie.category === 'upcoming' && movie.release_date_display && (
+            <span className="px-2 py-1 text-[10px] font-medium text-gray-200 rounded-full bg-white/10 backdrop-blur-sm border border-white/5 md:text-xs">
+              {movie.release_date_display}
+            </span>
+          )}
+        </div>
+
         {/* ロゴ部分 */}
         <motion.h2
           layout // ← 高さ変化をFramer Motionが補間して吸収

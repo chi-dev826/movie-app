@@ -27,6 +27,27 @@ body {
   pointer-events: auto;
 }
 
+/* Spotlight Swiper */
+.spotlight-swiper .swiper-button-next,
+.spotlight-swiper .swiper-button-prev {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  color: white;
+  --swiper-navigation-size: 28px;
+}
+.spotlight-swiper:hover .swiper-button-next,
+.spotlight-swiper:hover .swiper-button-prev {
+  opacity: 1;
+  pointer-events: auto;
+}
+.spotlight-swiper .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.4);
+}
+.spotlight-swiper .swiper-pagination-bullet-active {
+  background: rgba(239, 68, 68, 0.9);
+}
+
 /* --- Layout Debugging Utilities --- */
 .debug-outline,
 .debug-outline * {

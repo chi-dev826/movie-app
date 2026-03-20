@@ -1,31 +1,32 @@
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
-import { MovieEnricher } from "../../../domain/services/movie.enricher";
+import { MovieEnrichService } from "../../services/movie.enrich.service";
 import { UpcomingMovieService } from "../../../domain/services/upcomingMovie.service";
-import { MovieFilterOutService } from "../../../domain/services/movie.filterOut.service";
-import { Movie as MovieDTO } from "../../../../../shared/types/domain";
+import { MoviePresenter } from "../../../presentation/presenters/movie.presenter";
+import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
+import { UpcomingMovie as UpcomingMovieDTO } from "../../../../../shared/types/domain";
 import { DiscoverMovieParams } from "../../../../../shared/types/external/tmdb";
 import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
 import { ArrayUtils } from "../../../utils/array";
+import { IClock } from "../../../domain/repositories/clock.service.interface";
 
 /**
  * 日本で近日公開予定の映画リストを取得・加工するユースケース。
- * * @description
- * 日本の公開スケジュールに基づき映画を取得し、ロゴ、予告編、
- * および公開までのカウントダウン情報を付加して返却する。
  */
 export class GetUpcomingMovieListUseCase {
   constructor(
     private readonly tmdbRepo: ITmdbRepository,
-    private readonly enricher: MovieEnricher,
+    private readonly enrichService: MovieEnrichService,
     private readonly upcomingService: UpcomingMovieService,
-    private readonly movieFilterService: MovieFilterOutService,
+    private readonly clock: IClock,
   ) {}
 
   /**
-   * @returns 公開日が近い順にソート・加工された映画リスト
+   * @returns 公開日が近い順にソート・加工された公開予定映画リスト
    */
-  async execute(): Promise<MovieDTO[]> {
-    // 1. データ取得期間の計算とパラメータ構築 (Serviceに移譲)
+  async execute(): Promise<UpcomingMovieDTO[]> {
+    const today = this.clock.now();
+
+    // 1. データ取得期間の計算とパラメータ構築
     const params: DiscoverMovieParams =
       this.upcomingService.getSearchPeriodParams();
 
@@ -39,38 +40,27 @@ export class GetUpcomingMovieListUseCase {
     const allMovies = responses.flatMap((res) => res);
 
     // 3. ビジネスルールに基づくフィルタリングとソート
-    // 適用順序: 日本語フィルタ → 画像フィルタ → 重複排除 → 公開日ソート
-    // 日本語フィルタを先に適用することで、後続処理の対象件数を削減する
-    const filteredMovies = allMovies.filter((movie) =>
-      movie.isMostlyJapanese(),
+    // 日本向けの判定（MostlyJapanese）と画像バリデーション、重複排除、ドメインソート
+    const processedMovies = this.upcomingService.sort(
+      ArrayUtils.deduplicate(
+        allMovies.filter((m) => m.isMostlyJapanese() && m.hasValidImages()),
+      ),
     );
 
-    const filteredAndUniqueMovies = this.movieFilterService.deduplicate(
-      this.movieFilterService.filterMovieWithoutImages(filteredMovies),
-    );
+    // 4. エンリッチメント（AppServiceによる並行取得）
+    const movieIds = processedMovies.map((m) => m.id);
+    const [logosMap, trailersMap] = await Promise.all([
+      this.enrichService.getLogos(movieIds),
+      this.enrichService.getTrailers(movieIds),
+    ]);
 
-    const sortedMovies = this.upcomingService.sort(filteredAndUniqueMovies);
-
-    // 4. エンリッチメント（ロゴと予告編の一括付与）
-    let enrichedMovies = await this.enricher.enrichWithLogos(sortedMovies);
-    enrichedMovies = await this.enricher.enrichWithTrailers(enrichedMovies);
-
-    // 5. レスポンス構築（DTO変換と公開情報の付加）
-    const jstToday = this.upcomingService.getJstToday();
-
-    return enrichedMovies.map((movie) => {
-      const dto = movie.toDto();
-      const daysUntil = this.upcomingService.calculateDaysUntilRelease(
-        movie,
-        jstToday,
-      );
-
-      return {
-        ...dto,
-        release_date_display: this.upcomingService.getDisplayDate(movie),
-        days_until_release: daysUntil,
-        upcoming_badge_label: this.upcomingService.getBadgeLabel(daysUntil),
-      };
+    // 5. レスポンス構築（1. MapperでDTO化 -> 2. PresenterでUI装飾）
+    return processedMovies.map((movie) => {
+      const dto = MovieMapper.toBffDto(movie, {
+        logoPath: logosMap.get(movie.id),
+        videoKey: trailersMap.get(movie.id),
+      });
+      return MoviePresenter.toUpcomingMovie(dto, today);
     });
   }
 }

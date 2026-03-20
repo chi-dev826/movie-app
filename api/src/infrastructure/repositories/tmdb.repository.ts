@@ -72,7 +72,10 @@ export class TmdbRepository implements ITmdbRepository {
         CACHE_TTL.STANDARD,
       );
     } catch (error) {
-      console.error(`動画情報の取得に失敗しました (movieId: ${movieId}):`, error);
+      console.error(
+        `動画情報の取得に失敗しました (movieId: ${movieId}):`,
+        error,
+      );
       return [];
     }
   }
@@ -93,7 +96,10 @@ export class TmdbRepository implements ITmdbRepository {
         CACHE_TTL.STANDARD,
       );
     } catch (error) {
-      console.error(`画像情報の取得に失敗しました (movieId: ${movieId}):`, error);
+      console.error(
+        `画像情報の取得に失敗しました (movieId: ${movieId}):`,
+        error,
+      );
       return null;
     }
   }
@@ -116,7 +122,10 @@ export class TmdbRepository implements ITmdbRepository {
         CACHE_TTL.STANDARD,
       );
     } catch (error) {
-      console.error(`配信情報の取得に失敗しました (movieId: ${movieId}):`, error);
+      console.error(
+        `配信情報の取得に失敗しました (movieId: ${movieId}):`,
+        error,
+      );
       return [];
     }
   }
@@ -140,7 +149,10 @@ export class TmdbRepository implements ITmdbRepository {
         CACHE_TTL.STANDARD,
       );
     } catch (error) {
-      console.error(`類似映画の取得に失敗しました (movieId: ${movieId}):`, error);
+      console.error(
+        `類似映画の取得に失敗しました (movieId: ${movieId}):`,
+        error,
+      );
       return [];
     }
   }

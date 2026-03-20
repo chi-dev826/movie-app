@@ -9,6 +9,7 @@ import { YoutubeRepository } from "./infrastructure/repositories/youtube.reposit
 
 // New imports for Movie features
 import { GetFullMovieDataUseCase } from "./application/usecases/movie/getFullMovieData.usecase";
+import { GetHomePageUseCase } from "./application/usecases/movie/getHomePage.usecase";
 import { GetHomePageMovieListUseCase } from "./application/usecases/movie/getHomePageMovieList.usecase";
 import { GetUpcomingMovieListUseCase } from "./application/usecases/movie/getUpcomingMovieList.usecase";
 import { SearchMoviesUseCase } from "./application/usecases/movie/searchMovies.usecase";
@@ -18,9 +19,8 @@ import { GetMovieWatchListUseCase } from "./application/usecases/movie/getMovieW
 
 import { TmdbRepository } from "./infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCache.repository";
-import { MovieEnricher } from "./domain/services/movie.enricher";
+import { MovieEnrichService } from "./application/services/movie.enrich.service";
 import { MovieRecommendationService } from "./domain/services/movie.recommendation.service";
-import { MovieFilterOutService } from "./domain/services/movie.filterOut.service";
 import { UpcomingMovieService } from "./domain/services/upcomingMovie.service";
 import { SystemClock } from "./infrastructure/services/systemClock.service"; // SystemClockのインポート
 
@@ -38,13 +38,14 @@ export const createContainer = (): Dependencies => {
   const googleSearchRepository = new GoogleSearchRepository(cacheRepository);
   const youtubeRepository = new YoutubeRepository(cacheRepository);
 
-  // Domain Services
-  const movieEnricher = new MovieEnricher(tmdbRepository, youtubeRepository);
+  // Application/Domain Services
+  const movieEnrichService = new MovieEnrichService(
+    tmdbRepository,
+    youtubeRepository,
+  );
 
-  const movieFilterOutService = new MovieFilterOutService();
   const movieRecommendationService = new MovieRecommendationService(
     tmdbRepository,
-    movieFilterOutService,
   );
   const systemClock = new SystemClock(); // SystemClockのインスタンス化
   const upcomingMovieService = new UpcomingMovieService(systemClock); // 修正: systemClockを注入
@@ -52,27 +53,28 @@ export const createContainer = (): Dependencies => {
   // UseCases
   const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
     tmdbRepository,
-    movieEnricher,
+    movieEnrichService,
     movieRecommendationService,
   );
   const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
     tmdbRepository,
-    movieFilterOutService,
+    systemClock,
   );
   const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
     tmdbRepository,
-    movieEnricher,
+    movieEnrichService,
     upcomingMovieService,
-    movieFilterOutService,
-  );
-  const searchMoviesUseCase = new SearchMoviesUseCase(
-    tmdbRepository,
-    movieFilterOutService,
+    systemClock,
   );
   const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
     tmdbRepository,
-    movieFilterOutService,
   );
+  const getHomePageUseCase = new GetHomePageUseCase(
+    getHomePageMovieListUseCase,
+    getUpcomingMovieListUseCase,
+    getNowPlayingMoviesUseCase,
+  );
+  const searchMoviesUseCase = new SearchMoviesUseCase(tmdbRepository);
   const searchMoviesByPersonUseCase = new SearchMoviesByPersonUseCase(
     tmdbRepository,
   );
@@ -87,6 +89,7 @@ export const createContainer = (): Dependencies => {
   // コントローラのインスタンス化
   const movieController = new MovieController(
     getFullMovieDataUseCase,
+    getHomePageUseCase,
     getHomePageMovieListUseCase,
     getUpcomingMovieListUseCase,
     searchMoviesUseCase,
