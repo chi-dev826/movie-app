@@ -113,7 +113,7 @@ function HomePage() {
           items={data.upcoming}
           renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="upcoming" />}
           renderRemainingItem={(movie) => (
-            <UpcomingMovieCard movie={movie} className="basis-[24%] xl:basis-[22%] 2xl:basis-[12%]" />
+            <UpcomingMovieCard movie={movie} className="basis-[28%] xl:basis-[22%] 2xl:basis-[12%]" />
           )}
         />
 
@@ -125,7 +125,7 @@ function HomePage() {
           items={data.nowPlaying}
           renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="now_playing" />}
           renderRemainingItem={(movie) => (
-            <NowPlayingCard movie={movie} className="basis-[24%] xl:basis-[22%] 2xl:basis-[12%]" />
+            <NowPlayingCard movie={movie} className="basis-[28%] xl:basis-[22%] 2xl:basis-[12%]" />
           )}
         />
 

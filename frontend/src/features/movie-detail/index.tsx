@@ -182,9 +182,11 @@ function MovieDetailPage() {
       )}
       <motion.div variants={itemVariants}>
         <SectionContainer>
-          <h2 className="mb-2 ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
-            {data?.recommendations.title}
-          </h2>
+          <div className="mb-4">
+            <span className="ml-2 border-b-2 border-blue-500 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
+              {data?.recommendations.title}
+            </span>
+          </div>
           <HorizontalScrollContainer>
             {data?.recommendations.movies.map((movie) => (
               <ResponsiveMovieTile key={movie.id} movie={movie} />

@@ -20,7 +20,7 @@ const MovieStats = ({ detail }: Props) => {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {/* スタッフ情報 */}
         <div className="space-y-4">
-          <h3 className="text-lg font-bold text-yellow-500">主要スタッフ</h3>
+          <span className="text-lg font-bold text-white border-b-2 border-blue-500">主要スタッフ</span>
           <dl className="space-y-2 text-sm">
             {directors.length > 0 && (
               <div className="flex flex-col">
@@ -45,7 +45,7 @@ const MovieStats = ({ detail }: Props) => {
 
         {/* 統計情報 */}
         <div className="space-y-4">
-          <h3 className="text-lg font-bold text-yellow-500">詳細データ</h3>
+          <span className="text-lg font-bold text-white border-b-2 border-blue-500">詳細データ</span>
           <dl className="grid grid-cols-2 gap-4 text-sm">
             {stats.map((stat) => (
               <div key={stat.label} className="flex flex-col">
