@@ -5,15 +5,18 @@ import 'swiper/css';
 
 import { useMovieNews, useMovieAnalysis } from '../hooks/useMovieArticles';
 import type { Article } from '@/types/domain';
-import { EXTERNAL_URLS } from '@/constants/config';
+import { EXTERNAL_URLS, TMDB_CONFIG } from '@/constants/config';
 import { SectionContainer } from './SectionContainer';
+import { getTmdbImage } from '@/utils/imageUtils';
 
 export default function NewsAndAnalysisSection({
   movieId,
   movieTitle,
+  movieBackdropPath,
 }: {
   movieId: number;
   movieTitle: string;
+  movieBackdropPath: string | null | undefined;
 }) {
   const {
     data: newsItems,
@@ -86,17 +89,23 @@ export default function NewsAndAnalysisSection({
       </span>
       <Swiper onSwiper={setSwiper} onSlideChange={handleSlideChange}>
         <SwiperSlide>
-          <ArticleList articles={newsItems} />
+          <ArticleList articles={newsItems} fallbackImageUrl={getTmdbImage(movieBackdropPath, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.SMALL)} />
         </SwiperSlide>
         <SwiperSlide>
-          <ArticleList articles={analysisItems} />
+          <ArticleList articles={analysisItems} fallbackImageUrl={getTmdbImage(movieBackdropPath, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.SMALL)} />
         </SwiperSlide>
       </Swiper>
     </SectionContainer>
   );
 }
 
-export const ArticleList = ({ articles }: { articles: Article[] | undefined }) => {
+export const ArticleList = ({ 
+  articles, 
+  fallbackImageUrl 
+}: { 
+  articles: Article[] | undefined;
+  fallbackImageUrl: string | null;
+}) => {
   const itemLinkPrefix =
     articles && articles.length > 0 && articles[0].source === '映画.com'
       ? EXTERNAL_URLS.EIGA_COM
@@ -109,12 +118,12 @@ export const ArticleList = ({ articles }: { articles: Article[] | undefined }) =
           href={`${itemLinkPrefix}${article.link}`}
           className="flex p-2 bg-gray-800 border rounded-lg xl:p-4 xl:hover:transition xl:duration-300 border-gray-950 xl:hover:shadow-lg xl:hover:scale-105 xl:hover:bg-gray-700"
         >
-          <div className="flex-shrink-0 h-24 w-36 xl:h-48 xl:w-64">
-            {article.imageUrl && (
+          <div className="flex-shrink-0 h-24 w-36 xl:h-48 xl:w-64 bg-gray-900 rounded overflow-hidden">
+            {(article.imageUrl || fallbackImageUrl) && (
               <img
-                src={article.imageUrl}
+                src={article.imageUrl || fallbackImageUrl || ''}
                 alt={article.title}
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full opacity-80"
               />
             )}
           </div>

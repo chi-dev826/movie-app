@@ -173,7 +173,11 @@ function MovieDetailPage() {
 
       {data && (
         <motion.div variants={itemVariants}>
-          <NewsAndAnalysisSection movieId={data.detail.id} movieTitle={data.detail.title} />
+          <NewsAndAnalysisSection 
+            movieId={data.detail.id} 
+            movieTitle={data.detail.title} 
+            movieBackdropPath={data.detail.backdrop_path}
+          />
         </motion.div>
       )}
       <motion.div variants={itemVariants}>
