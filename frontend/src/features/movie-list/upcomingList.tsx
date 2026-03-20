@@ -1,7 +1,7 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useUpcomingMovies } from '@/hooks/useMovies';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
-import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import HeroVideo from '@/features/movie-detail/components/HeroVideo';
 import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG } from '@/constants/config';
@@ -41,9 +41,24 @@ const UpcomingList = () => {
   }
 
   return (
-    <>
-      <div className="mt-2">
-        <div className="flex flex-col items-center min-h-screen gap-1 text-white bg-gray-900 xl:grid xl:grid-cols-3">
+    <div className="min-h-screen text-white bg-gray-900 pb-12">
+      <div className="container px-4 py-8 mx-auto">
+        {/* ヘッダー */}
+        <div className="mb-8">
+          <Link
+            to="/"
+            className="inline-flex items-center mb-4 text-gray-400 transition-colors hover:text-white"
+          >
+            <ArrowLeft size={20} className="mr-2" />
+            ホームに戻る
+          </Link>
+          <h1 className="mb-2 text-3xl font-bold">公開予定の映画</h1>
+          <p className="text-gray-400">
+            {upcomingMovies.length}件の映画
+          </p>
+        </div>
+
+        <div className="flex flex-col items-center gap-4 xl:grid xl:grid-cols-3">
           {upcomingMovies &&
             upcomingMovies.map((movie) => (
               <div key={movie.id} className="w-full bg-gray-800 rounded-lg shadow-lg">
@@ -82,7 +97,7 @@ const UpcomingList = () => {
         </div>
       </div>
       {isModalOpen && <HeroVideo youtubeKey={trailerKey} onClose={handleCloseModal} />}
-    </>
+    </div>
   );
 };
 

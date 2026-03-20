@@ -1,6 +1,24 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { useMovieList, useNowPlayingMovies } from '@/hooks/useMovies';
 import { MoviePoster } from '@/components/movie-card';
+
+const getTitle = (type?: string) => {
+  switch (type) {
+    case 'popular':
+      return '人気映画';
+    case 'recently_added':
+      return '最近追加された映画';
+    case 'top_rated':
+      return '高評価映画';
+    case 'high_rated':
+      return '話題の映画';
+    case 'now_playing':
+      return '公開中の映画';
+    default:
+      return '映画一覧';
+  }
+};
 
 const MovieList = () => {
   const { type } = useParams<{
@@ -11,7 +29,7 @@ const MovieList = () => {
 
   // 映画リストの種類に応じてデータを選択
   const movieList = type === 'now_playing' ? NowPlayingData : type ? data?.[type] : [];
-  const title = type ? type.replace(/_/g, ' ').toUpperCase() : 'Movies';
+  const title = getTitle(type);
 
   if (isLoading) {
     return <div className="container px-4 py-8 mx-auto text-center">Loading movies...</div>;
@@ -34,15 +52,28 @@ const MovieList = () => {
   }
 
   return (
-    <div className="container px-4 py-8 mx-auto">
-      <h2 className="mb-8 text-2xl font-bold tracking-tight text-white">
-        {title}{' '}
-        <span className="text-lg font-normal text-gray-400">({movieList.length} movies)</span>
-      </h2>
-      <div className="grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8">
-        {movieList.map((movie) => (
-          <MoviePoster key={movie.id} movie={movie} />
-        ))}
+    <div className="min-h-screen text-white bg-gray-900">
+      <div className="container px-4 py-8 mx-auto">
+        {/* ヘッダー */}
+        <div className="mb-8">
+          <Link
+            to="/"
+            className="inline-flex items-center mb-4 text-gray-400 transition-colors hover:text-white"
+          >
+            <ArrowLeft size={20} className="mr-2" />
+            ホームに戻る
+          </Link>
+          <h1 className="mb-2 text-3xl font-bold">{title}</h1>
+          <p className="text-gray-400">
+            {movieList.length}件の映画
+          </p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8">
+          {movieList.map((movie) => (
+            <MoviePoster key={movie.id} movie={movie} />
+          ))}
+        </div>
       </div>
     </div>
   );
