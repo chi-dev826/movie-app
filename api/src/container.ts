@@ -20,6 +20,9 @@ import { GetMovieWatchListUseCase } from "./application/usecases/movie/getMovieW
 import { TmdbRepository } from "./infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCache.repository";
 import { MovieEnrichService } from "./application/services/movie.enrich.service";
+import { ArticleEnrichService } from "./application/services/article.enrich.service";
+import { IOgpImageProvider } from "./application/services/ogp-image-provider.interface";
+import { OgpParser } from "./infrastructure/lib/ogp.parser";
 import { MovieRecommendationService } from "./domain/services/movie.recommendation.service";
 import { UpcomingMovieService } from "./domain/services/upcomingMovie.service";
 import { SystemClock } from "./infrastructure/services/systemClock.service"; // SystemClockのインポート
@@ -44,9 +47,10 @@ export const createContainer = (): Dependencies => {
     youtubeRepository,
   );
 
-  const movieRecommendationService = new MovieRecommendationService(
-    tmdbRepository,
-  );
+  const ogpImageProvider: IOgpImageProvider = new OgpParser();
+  const articleEnrichService = new ArticleEnrichService(ogpImageProvider);
+
+  const movieRecommendationService = new MovieRecommendationService();
   const systemClock = new SystemClock(); // SystemClockのインスタンス化
   const upcomingMovieService = new UpcomingMovieService(systemClock); // 修正: systemClockを注入
 
@@ -84,6 +88,7 @@ export const createContainer = (): Dependencies => {
   const getEigaComNewsUseCase = new GetEigaComNewsUseCase(eigaComRepository);
   const getMovieAnalysisUseCase = new GetMovieAnalysisUseCase(
     googleSearchRepository,
+    articleEnrichService,
   );
 
   // コントローラのインスタンス化

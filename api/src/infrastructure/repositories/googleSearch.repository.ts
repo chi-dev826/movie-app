@@ -8,7 +8,6 @@ import { IGoogleSearchRepository } from "../../domain/repositories/googleSearch.
 import { ArticleEntity } from "../../domain/models/article.entity";
 import { ArticleFactory } from "../../domain/factories/article.factory";
 import { CACHE_TTL } from "../../domain/constants/cacheTtl";
-import { OgpParser } from "../lib/ogp.parser";
 
 export class GoogleSearchRepository implements IGoogleSearchRepository {
   constructor(private readonly cache: ICacheRepository) {}
@@ -24,7 +23,7 @@ export class GoogleSearchRepository implements IGoogleSearchRepository {
     };
   }): Promise<ArticleEntity[]> {
     return this.cache.getOrSet(
-      `serpApi:movieAnalysis:enriched:${query}`,
+      `serpApi:movieAnalysis:raw:${query}`,
       async () => {
         const response = await serpApiClient.get<SerpApiResponse>("/search", {
           params: {
@@ -36,22 +35,7 @@ export class GoogleSearchRepository implements IGoogleSearchRepository {
 
         const items = response.data.organic_results || [];
 
-        // 並列（Promise.all）で各記事のOGP画像を補完
-        const enrichedItems = await Promise.all(
-          items.map(async (item: SerpApiOrganicResult) => {
-            // すでにサムネイルがある場合はそれを使用
-            if (item.thumbnail) return item;
-
-            // ない場合はOGPを解析（失敗時はnullのまま）
-            const ogpImage = await OgpParser.getOgpImage(item.link);
-            return {
-              ...item,
-              thumbnail: ogpImage || undefined,
-            };
-          }),
-        );
-
-        return enrichedItems.map((item: SerpApiOrganicResult) =>
+        return items.map((item: SerpApiOrganicResult) =>
           ArticleFactory.createFromSerpApi(item),
         );
       },

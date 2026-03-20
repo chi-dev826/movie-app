@@ -31,10 +31,26 @@ export class GetFullMovieDataUseCase {
       this.tmdbRepo.getMovieWatchProviders(movieId),
     ]);
 
-    // 2. おすすめ選定
-    const recommendation = await this.recommendationService.getRecommendations(
+    // 2. おすすめ選定: ドメインサービスは候補選定のみを担当し、外部API呼び出しはユースケースで実行
+    let collection = null;
+    if (detailEntity.belongsToCollectionId) {
+      try {
+        collection = await this.tmdbRepo.getCollection(detailEntity.belongsToCollectionId);
+      } catch (error) {
+        console.error(
+          `コレクション情報の取得に失敗しました (movieId: ${movieId}):`,
+          error,
+        );
+        collection = null;
+      }
+    }
+
+    const similarMovies = await this.tmdbRepo.getSimilarMovies(movieId);
+
+    const recommendation = this.recommendationService.getRecommendations(
       movieId,
-      detailEntity.belongsToCollectionId,
+      collection,
+      similarMovies,
     );
 
     // 3. エンリッチメント（App Service で動画キー等の補助データだけを取得）

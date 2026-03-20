@@ -1,21 +1,26 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { IOgpImageProvider } from "../../application/services/ogp-image-provider.interface";
 
 /**
  * 指定されたURLからOGP画像（og:image）を取得するユーティリティ。
  * AxiosでHTMLを取得し、Cheerioでメタタグを解析する。
  */
-export class OgpParser {
-  private static readonly TIMEOUT = 3000; // 3秒でタイムアウト
+export class OgpParser implements IOgpImageProvider {
+  private readonly timeout: number;
+
+  constructor(timeout = 1500) {
+    this.timeout = timeout;
+  }
 
   /**
    * 対象URLのHTMLからog:imageメタタグの内容を抽出する。
    * 失敗した場合やタグがない場合はnullを返す。
    */
-  public static async getOgpImage(url: string): Promise<string | null> {
+  public async getOgpImage(url: string): Promise<string | null> {
     try {
       const response = await axios.get(url, {
-        timeout: this.TIMEOUT,
+        timeout: this.timeout,
         headers: {
           "User-Agent":
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",

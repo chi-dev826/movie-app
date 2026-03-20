@@ -1,5 +1,4 @@
 import { MovieRecommendationService } from "./movie.recommendation.service";
-import { ITmdbRepository } from "../repositories/tmdb.repository.interface";
 import { MovieEntity } from "../models/movie";
 import { CollectionEntity } from "../models/collection";
 
@@ -19,44 +18,27 @@ const createMovie = (id: number): MovieEntity =>
     7.5,
   );
 
-// ITmdbRepository はプロセス外の依存 → モック
-const mockTmdbRepo: jest.Mocked<ITmdbRepository> = {
-  getMovieDetails: jest.fn(),
-  getMovieVideos: jest.fn(),
-  getMovieImages: jest.fn(),
-  getSimilarMovies: jest.fn(),
-  getCollection: jest.fn(),
-  getDiscoverMovies: jest.fn(),
-  getNowPlayingMovies: jest.fn(),
-  searchMovies: jest.fn(),
-  searchPerson: jest.fn(),
-  getMovieWatchProviders: jest.fn(),
-};
-
 describe("MovieRecommendationService", () => {
   let service: MovieRecommendationService;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    service = new MovieRecommendationService(mockTmdbRepo);
+    service = new MovieRecommendationService();
   });
 
   describe("おすすめリストの取得ポリシー: Collection(シリーズ) > Similar(類似)", () => {
-    it("collectionId が null の場合、類似作品を返す", async () => {
+    it("collection が null の場合、類似作品を返す", () => {
       // Given
       const similarMovies = [createMovie(10), createMovie(11)];
-      mockTmdbRepo.getSimilarMovies.mockResolvedValue(similarMovies);
 
       // When
-      const result = await service.getRecommendations(1, null);
+      const result = service.getRecommendations(1, null, similarMovies);
 
       // Then
       expect(result.title).toBe("関連作品");
       expect(result.movies).toEqual(similarMovies);
-      expect(mockTmdbRepo.getCollection).not.toHaveBeenCalled();
     });
 
-    it("collectionId があり、シリーズ作品が存在する場合、シリーズ作品を返す", async () => {
+    it("collection があり、シリーズ作品が存在する場合、シリーズ作品を返す", () => {
       // Given
       const currentMovieId = 1;
       const seriesMovies = [
@@ -69,44 +51,23 @@ describe("MovieRecommendationService", () => {
         "テストシリーズ",
         seriesMovies,
       );
-      mockTmdbRepo.getCollection.mockResolvedValue(collection);
 
       // When
-      const result = await service.getRecommendations(currentMovieId, 100);
+      const result = service.getRecommendations(currentMovieId, collection, [createMovie(20)]);
 
       // Then
       expect(result.title).toBe("シリーズ作品: テストシリーズ");
-      // 現在表示中の映画（id=1）は除外される
       expect(result.movies.map((m) => m.id)).toEqual([2, 3]);
-      expect(mockTmdbRepo.getSimilarMovies).not.toHaveBeenCalled();
     });
 
-    it("コレクションから自分自身を除外した結果が0件の場合、類似作品にフォールバックする", async () => {
+    it("コレクションから自分自身を除外した結果が0件の場合、類似作品にフォールバックする", () => {
       // Given: コレクションに自分自身しかいない
       const currentMovieId = 1;
-      const collection = new CollectionEntity(100, "単独シリーズ", [
-        createMovie(currentMovieId),
-      ]);
-      mockTmdbRepo.getCollection.mockResolvedValue(collection);
+      const collection = new CollectionEntity(100, "単独シリーズ", [createMovie(currentMovieId)]);
       const similarMovies = [createMovie(20)];
-      mockTmdbRepo.getSimilarMovies.mockResolvedValue(similarMovies);
 
       // When
-      const result = await service.getRecommendations(currentMovieId, 100);
-
-      // Then
-      expect(result.title).toBe("関連作品");
-      expect(result.movies).toEqual(similarMovies);
-    });
-
-    it("コレクション取得が失敗した場合、類似作品にフォールバックする", async () => {
-      // Given
-      mockTmdbRepo.getCollection.mockRejectedValue(new Error("API Error"));
-      const similarMovies = [createMovie(30)];
-      mockTmdbRepo.getSimilarMovies.mockResolvedValue(similarMovies);
-
-      // When
-      const result = await service.getRecommendations(1, 100);
+      const result = service.getRecommendations(currentMovieId, collection, similarMovies);
 
       // Then
       expect(result.title).toBe("関連作品");
