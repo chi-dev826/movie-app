@@ -33,11 +33,11 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
           className="group/header inline-flex flex-col gap-1"
         >
           <span className="flex items-center gap-2">
-            <span className="inline-block w-1 h-6 rounded-full bg-gradient-to-b from-red-500 to-red-700 md:h-7" />
-            <span className="text-base font-bold tracking-wide text-white md:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl drop-shadow-lg">
+            <span className="inline-block w-1.5 h-6 rounded-full bg-gradient-to-b from-red-500 to-red-700 md:h-8 lg:h-9" />
+            <span className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-md">
               {title}
             </span>
-            <ChevronRightIcon className="w-5 h-5 text-gray-400 transition-transform duration-200 md:w-6 md:h-6 group-hover/header:translate-x-1 group-hover/header:text-red-400" />
+            <ChevronRightIcon className="w-5 h-5 text-gray-400 transition-transform duration-200 md:w-6 md:h-6 group-hover/header:translate-x-1 group-hover/header:text-red-400 mt-1" />
           </span>
           {subtitle && (
             <span className="ml-3 text-xs text-gray-400 md:text-sm xl:text-base">
@@ -49,14 +49,20 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
     );
   }
 
-  // secondary (従来のスタイル)
+  // secondary (画像に合わせた強調スタイル)
   return (
-    <Link to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', type)}>
-      <span className="flex items-center gap-1 mb-1 ml-2 text-xs font-semibold text-gray-500 md:text-sm 2xl:text-md 3xl:text-lg hover:text-gray-300">
+    <div className="flex items-end justify-between mb-3 ml-2 mr-4 md:mb-5 lg:mb-6">
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-md">
         {title}
-        <ChevronRightIcon className="relative w-4 h-4 md:w-5 md:h-5 xl:w-6 xl:h-6 -bottom-px" />
-      </span>
-    </Link>
+      </h2>
+      <Link 
+        to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', type)}
+        className="flex items-center text-xs md:text-sm font-bold text-red-500 hover:text-red-400 transition-colors pb-1"
+      >
+        すべて見る
+        <ChevronRightIcon className="w-3 h-3 md:w-4 md:h-4 ml-0.5" />
+      </Link>
+    </div>
   );
 };
 

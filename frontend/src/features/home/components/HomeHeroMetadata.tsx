@@ -36,7 +36,6 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
           >
             {badge.label}
           </span>
-
           {/* 評価バッジ */}
           {movie.vote_average !== null && movie.vote_average > 0 && (
             <span className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-yellow-300 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 md:text-xs">

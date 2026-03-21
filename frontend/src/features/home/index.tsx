@@ -2,13 +2,16 @@ import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 import { useHomePage } from '@/hooks/useMovies';
 import HeroSwiper from './components/HeroSwiper';
-import { ResponsiveMovieTile } from '@/components/movie-card';
 import SpotlightSection from './components/SpotlightSection';
 import SpotlightCard from './components/SpotlightCard';
 import UpcomingMovieCard from './components/UpcomingMovieCard';
 import NowPlayingCard from './components/NowPlayingCard';
 import SectionHeader from './components/SectionHeader';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
+import RankingMovieCard from './components/RankingMovieCard';
+import TopRatedMovieCard from './components/TopRatedMovieCard';
+import NewReleaseMovieCard from './components/NewReleaseMovieCard';
+import MoviePoster from '@/components/movie-card/MoviePoster';
 
 /**
  * HomePage
@@ -77,13 +80,7 @@ function HomePage() {
     );
   }
 
-  // カテゴリ別発見用セクション（標準的な横スクロールレイアウト）
-  const categoryDiscoverySections = [
-    { title: '人気映画', type: 'popular', movies: data.popular },
-    { title: '最近追加された映画', type: 'recently_added', movies: data.recentlyAdded },
-    { title: '高評価映画', type: 'top_rated', movies: data.topRated },
-    { title: '話題の映画', type: 'high_rated', movies: data.highRated },
-  ];
+
 
   return (
     <motion.div
@@ -129,17 +126,76 @@ function HomePage() {
           )}
         />
 
-        {/* カテゴリ別発見用セクション */}
-        {categoryDiscoverySections.map((section) => (
-          <div key={section.type} className="p-2">
-            <SectionHeader title={section.title} type={section.type} />
+        {/* 人気ランキング */}
+        {data.popular && data.popular.length > 0 && (
+          <div className="p-2 mt-6 lg:mt-12">
+            <SectionHeader title="人気ランキング" type="popular" />
             <HorizontalScrollContainer>
-              {section.movies?.map((movie) => (
-                <ResponsiveMovieTile key={movie.id} movie={movie} />
+              {data.popular.map((movie, index) => (
+                <RankingMovieCard key={movie.id} movie={movie} rank={index + 1} />
               ))}
             </HorizontalScrollContainer>
           </div>
-        ))}
+        )}
+
+        {/* 高評価映画 (縦2列の横スクロール) */}
+        {data.topRated && data.topRated.length > 0 && (
+          <div className="p-2 mt-6 lg:mt-12 relative">
+            <SectionHeader title="高評価映画" type="top_rated" />
+            <div 
+              className="grid grid-rows-2 grid-flow-col gap-x-4 md:gap-x-6 gap-y-4 md:gap-y-6 overflow-x-auto snap-x pt-2 pb-6"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {data.topRated.map((movie) => (
+                <div className="w-[85vw] sm:w-[400px] shrink-0 snap-start" key={movie.id}>
+                  <TopRatedMovieCard movie={movie} className="w-full h-full m-0" />
+                </div>
+              ))}
+            </div>
+            {/* CSSで::-webkit-scrollbar { display: none; } が効かせるためのインラインスタイル補完 */}
+            <style dangerouslySetInnerHTML={{__html: `
+              .grid.grid-rows-2::-webkit-scrollbar { display: none; }
+            `}} />
+          </div>
+        )}
+
+        {/* 新着作品 (2行グリッド横スクロール) */}
+        {data.recentlyAdded && data.recentlyAdded.length > 0 && (
+          <div className="p-2 mt-6 lg:mt-12 relative">
+            <SectionHeader title="新着作品" type="recently_added" />
+            {/* WebKit scrollbar を隠すためのクラスとスナップ用のスタイル */}
+            <div 
+              className="grid grid-rows-2 grid-flow-col gap-x-4 md:gap-x-6 gap-y-8 overflow-x-auto snap-x pt-2 pb-6"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {data.recentlyAdded.map((movie) => (
+                <div className="w-48 sm:w-56 md:w-64 shrink-0 snap-start" key={movie.id}>
+                  <NewReleaseMovieCard movie={movie} />
+                </div>
+              ))}
+            </div>
+            {/* CSSで::-webkit-scrollbar { display: none; } が効かせるためのインラインスタイル補完 */}
+            <style dangerouslySetInnerHTML={{__html: `
+              .grid.grid-rows-2::-webkit-scrollbar { display: none; }
+            `}} />
+          </div>
+        )}
+
+        {/* 話題の映画 (小さめの純粋なポスター) */}
+        {data.highRated && data.highRated.length > 0 && (
+          <div className="p-2 mt-6 lg:mt-12">
+            <SectionHeader title="話題の映画" type="high_rated" />
+            <HorizontalScrollContainer>
+              {data.highRated.map((movie) => (
+                <MoviePoster 
+                  key={movie.id} 
+                  movie={movie} 
+                  className="w-24 md:w-32 lg:w-40 xl:w-44 !aspect-[2/3]" 
+                />
+              ))}
+            </HorizontalScrollContainer>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
