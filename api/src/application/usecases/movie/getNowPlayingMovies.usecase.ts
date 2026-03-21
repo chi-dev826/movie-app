@@ -31,7 +31,7 @@ export class GetNowPlayingMoviesUseCase {
 
     // 2. ビジネスルールに基づくフィルタリングと重複排除
     const processedMovies = ArrayUtils.deduplicate(allMovies).filter(
-      (m) => m.hasValidImages() && m.isLocalized(),
+      (m) => m.hasValidImages() && m.isMostlyJapanese(),
     );
 
     // 3. マッパーでDTOへの変換
