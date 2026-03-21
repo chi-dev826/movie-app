@@ -3,8 +3,7 @@ import { useUpcomingMovies } from '@/hooks/useMovies';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import { ArrowLeft } from 'lucide-react';
 import HeroVideo from '@/features/movie-detail/components/HeroVideo';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import UpcomingListCard from './components/UpcomingListCard';
 import { APP_PATHS } from '@shared/constants/routes';
 
 const UpcomingList = () => {
@@ -58,41 +57,14 @@ const UpcomingList = () => {
           </p>
         </div>
 
-        <div className="flex flex-col items-center gap-4 xl:grid xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {upcomingMovies &&
             upcomingMovies.map((movie) => (
-              <div key={movie.id} className="w-full bg-gray-800 rounded-lg shadow-lg">
-                <div className="flex">
-                  <Link
-                    to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
-                    className="p-4"
-                  >
-                    <img
-                      src={
-                        getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.LARGE) ?? ''
-                      }
-                      alt={movie.title}
-                      className="w-32 h-48 rounded-md xl:w-48 xl:h-72 "
-                    />
-                  </Link>
-                  <div className="flex-1 m-2">
-                    <h2 className="mb-2 text-base font-bold line-clamp-2">{movie.title}</h2>
-                    <p className="mb-2 text-sm text-gray-300 line-clamp-4">{movie.overview}</p>
-                    <p className="text-sm">公開日: {movie.release_date}</p>
-                    {movie.video && (
-                      <button
-                        onClick={() => handleOpenModal(movie.video || '')}
-                        className="flex flex-col items-center"
-                      >
-                        <PlayCircleIcon className="w-8 h-8 mt-4 text-white hover:content-none xl:hover:text-blue-500" />
-                        <span className="mt-1 mb-2 text-sm text-white hover:text-blue-500">
-                          予告編を見る
-                        </span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <UpcomingListCard
+                key={movie.id}
+                movie={movie}
+                onWatchTrailer={handleOpenModal}
+              />
             ))}
         </div>
       </div>
