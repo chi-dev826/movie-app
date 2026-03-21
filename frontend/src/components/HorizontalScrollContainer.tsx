@@ -57,7 +57,7 @@ const HorizontalScrollContainer = ({ children }: Props) => {
       )}
       <div
         ref={containerRef}
-        className="flex p-2 space-x-8 overflow-x-auto lg:p-4 scrollbar-hide scroll-smooth"
+        className="flex p-2 space-x-8 overflow-x-auto overflow-y-hidden lg:p-4 scrollbar-hide scroll-smooth"
       >
         {children}
       </div>
