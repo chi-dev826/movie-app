@@ -30,8 +30,8 @@ export class GetNowPlayingMoviesUseCase {
     const allMovies = responses.flatMap((res) => res);
 
     // 2. ビジネスルールに基づくフィルタリングと重複排除
-    const processedMovies = ArrayUtils.deduplicate(allMovies).filter((m) =>
-      m.hasValidImages(),
+    const processedMovies = ArrayUtils.deduplicate(allMovies).filter(
+      (m) => m.hasValidImages() && m.isLocalized(),
     );
 
     // 3. マッパーでDTOへの変換

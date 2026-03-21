@@ -32,4 +32,12 @@ export class MovieEntity {
     const jpChars = this.title.match(/[\u3040-\u30FF\u4E00-\u9FFF]/g) || [];
     return jpChars.length / this.title.length > 0.3;
   }
+
+  /**
+   * 日本向けタイトルが存在するかチェックする
+   * @description TMDBから取得したデータに日本語タイトル（title属性）が設定されているかを確認する
+   */
+  public isLocalized(): boolean {
+    return !!this.title;
+  }
 }
