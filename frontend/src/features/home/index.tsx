@@ -187,11 +187,12 @@ function HomePage() {
             <SectionHeader title="話題の映画" type="high_rated" />
             <HorizontalScrollContainer>
               {data.highRated.map((movie) => (
-                <MoviePoster 
+                <div 
                   key={movie.id} 
-                  movie={movie} 
-                  className="w-24 md:w-32 lg:w-40 xl:w-44 !aspect-[2/3]" 
-                />
+                  className="w-24 md:w-32 lg:w-40 xl:w-44 shrink-0"
+                >
+                  <MoviePoster movie={movie} />
+                </div>
               ))}
             </HorizontalScrollContainer>
           </div>
