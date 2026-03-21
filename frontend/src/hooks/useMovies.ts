@@ -10,7 +10,7 @@ import {
   fetchHomePage,
 } from '@/services/movieApi';
 import { MovieListResponse, HomePageResponse } from '@/types/api';
-import { Movie } from '@/types/domain';
+import { Movie, UpcomingMovie } from '@/types/domain';
 
 const movieKeys = {
   all: ['movies'] as const,
@@ -77,7 +77,7 @@ export const useNowPlayingMovies = () => {
 };
 
 export const useUpcomingMovies = () => {
-  return useQuery({
+  return useQuery<UpcomingMovie[]>({
     queryKey: movieKeys.list('upcoming'),
     queryFn: () => fetchUpcomingMovies(),
     staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)

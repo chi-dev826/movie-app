@@ -1,4 +1,4 @@
-import { Movie, Article } from '@/types/domain';
+import { Movie, UpcomingMovie, Article } from '@/types/domain';
 import { FullMovieData, MovieListResponse, HomePageResponse } from '@/types/api';
 import { API_PATHS } from '@shared/constants/routes';
 
@@ -48,8 +48,8 @@ export const fetchMovieList = async (): Promise<MovieListResponse> => {
   return fetchFromApi<MovieListResponse>(API_PATHS.MOVIES.HOME);
 };
 
-export const fetchUpcomingMovies = async (): Promise<Movie[]> => {
-  return fetchFromApi<Movie[]>(API_PATHS.MOVIES.UPCOMING);
+export const fetchUpcomingMovies = async (): Promise<UpcomingMovie[]> => {
+  return fetchFromApi<UpcomingMovie[]>(API_PATHS.MOVIES.UPCOMING);
 };
 
 export const fetchNowPlayingMovies = async (): Promise<Movie[]> => {
