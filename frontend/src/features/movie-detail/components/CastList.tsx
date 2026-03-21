@@ -18,9 +18,12 @@ const CastList = ({ cast }: Props) => {
   return (
     <SectionContainer>
       <div className="mb-4">
-        <span className="ml-2 text-base font-bold border-b-2 border-blue-500 tracking-tight text-white xl:text-xl 3xl:text-2xl">
-          キャスト
-        </span>
+        <div className="flex items-center">
+          <span className="inline-block w-1 h-6 rounded-full bg-blue-500 md:h-7" />
+          <span className="ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
+            キャスト
+          </span>
+        </div>
       </div>
       <HorizontalScrollContainer>
         {cast.map((actor) => (

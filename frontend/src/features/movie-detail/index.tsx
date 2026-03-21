@@ -183,9 +183,12 @@ function MovieDetailPage() {
       <motion.div variants={itemVariants}>
         <SectionContainer>
           <div className="mb-4">
-            <span className="ml-2 border-b-2 border-blue-500 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
-              {data?.recommendations.title}
-            </span>
+            <div className="flex items-center ml-2">
+              <span className="inline-block w-1 h-6 rounded-full bg-blue-500 xl:h-7" />
+              <span className="ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
+                {data?.recommendations.title}
+              </span>
+            </div>
           </div>
           <HorizontalScrollContainer>
             {data?.recommendations.movies.map((movie) => (
