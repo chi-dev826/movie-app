@@ -11,6 +11,7 @@ import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
 import CastList from './components/CastList';
 import MovieStats from './components/MovieStats';
 import { SectionContainer } from './components/SectionContainer';
+import TrailerSection from './components/TrailerSection';
 import { useFullMovieData } from '@/hooks/useMovies';
 import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
@@ -180,6 +181,13 @@ function MovieDetailPage() {
           />
         </motion.div>
       )}
+
+      {data && data.otherVideos.length > 0 && (
+        <motion.div variants={itemVariants}>
+          <TrailerSection videoKeys={data.otherVideos} />
+        </motion.div>
+      )}
+
       <motion.div variants={itemVariants}>
         <SectionContainer>
           <div className="mb-4">

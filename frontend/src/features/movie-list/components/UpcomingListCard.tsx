@@ -5,21 +5,31 @@ import { getTmdbImage } from '@/utils/imageUtils';
 import { TMDB_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 import { useWatchList } from '@/hooks/useWatchList';
+import { useState } from 'react';
+import HeroVideo from '@/features/movie-detail/components/HeroVideo';
 
 type Props = {
   movie: UpcomingMovie;
-  onWatchTrailer: (videoKey: string) => void;
 };
 
 /**
  * 公開予定一覧ページ専用のリッチな映画カード
  */
-const UpcomingListCard = ({ movie, onWatchTrailer }: Props) => {
+const UpcomingListCard = ({ movie }: Props) => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { isInWatchList, toggleWatchList } = useWatchList();
   const isInList = isInWatchList(movie.id);
 
   const backdropUrl = getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleGoToDetail = () => {
     navigate(APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString()));
@@ -64,14 +74,23 @@ const UpcomingListCard = ({ movie, onWatchTrailer }: Props) => {
         <div className="mt-auto flex flex-col gap-3">
           <div className="flex gap-3">
             {/* 予告編再生 */}
-            <button
-              onClick={() => movie.video && onWatchTrailer(movie.video)}
-              className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 text-sm font-black text-black transition-all hover:from-red-600 hover:to-red-700 active:scale-95 disabled:opacity-50"
-              disabled={!movie.video}
-            >
-              <PlayIcon className="h-4 w-4 fill-current" />
-              予告編を観る
-            </button>
+            {movie.video ? (
+              <button
+                onClick={handleOpenModal}
+                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 text-sm font-black text-black transition-all hover:from-red-600 hover:to-red-700 active:scale-95 disabled:opacity-50"
+                disabled={!movie.video}
+              >
+                <PlayIcon className="h-4 w-4 fill-current" />
+                予告編を観る
+              </button>
+            ) : (
+              <button
+                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gray-800 px-6 py-3 text-sm font-black text-gray-400 transition-all hover:from-gray-600 hover:to-gray-700 active:scale-95 disabled:opacity-50"
+              >
+                <PlayIcon className="h-4 w-4 fill-current" />
+                予告編は準備中
+              </button>
+            )}
 
             {/* ウォッチリスト追加 */}
             <button
@@ -91,7 +110,7 @@ const UpcomingListCard = ({ movie, onWatchTrailer }: Props) => {
             </button>
           </div>
 
-          {/* 詳細を見る (公式サイトの代わり) */}
+          {/* 詳細を見る */}
           <button
             onClick={handleGoToDetail}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-3 text-sm font-bold text-gray-300 transition-all hover:bg-white/10 active:scale-[0.98]"
@@ -101,6 +120,10 @@ const UpcomingListCard = ({ movie, onWatchTrailer }: Props) => {
           </button>
         </div>
       </div>
+
+      {isModalOpen && movie.video && (
+        <HeroVideo youtubeKey={movie.video} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };

@@ -1,25 +1,10 @@
-import { useSearchParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useUpcomingMovies } from '@/hooks/useMovies';
-import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import { ArrowLeft } from 'lucide-react';
-import HeroVideo from '@/features/movie-detail/components/HeroVideo';
 import UpcomingListCard from './components/UpcomingListCard';
-import { APP_PATHS } from '@shared/constants/routes';
 
 const UpcomingList = () => {
   const { data, isLoading, error } = useUpcomingMovies();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const trailerKey = searchParams.get('trailer');
-  const isModalOpen = !!trailerKey;
-
-  const handleOpenModal = (key: string) => {
-    setSearchParams({ trailer: key });
-  };
-
-  const handleCloseModal = () => {
-    setSearchParams({});
-  };
 
   const upcomingMovies = data
     ? data
@@ -60,15 +45,10 @@ const UpcomingList = () => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {upcomingMovies &&
             upcomingMovies.map((movie) => (
-              <UpcomingListCard
-                key={movie.id}
-                movie={movie}
-                onWatchTrailer={handleOpenModal}
-              />
+              <UpcomingListCard key={movie.id} movie={movie} />
             ))}
         </div>
       </div>
-      {isModalOpen && <HeroVideo youtubeKey={trailerKey} onClose={handleCloseModal} />}
     </div>
   );
 };
