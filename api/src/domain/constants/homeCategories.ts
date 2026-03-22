@@ -17,14 +17,4 @@ export const HOME_CATEGORIES: Record<
     sort_by: SORT_OPTIONS.PRIMARY_RELEASE_DATE_DESC,
     region: TMDB_CONFIG.REGION,
   },
-  top_rated: {
-    "vote_count.gte": TMDB_CONFIG.FILTERS.HOME.TOP_RATED_VOTE_COUNT,
-    sort_by: SORT_OPTIONS.VOTE_AVERAGE_DESC,
-    region: TMDB_CONFIG.REGION,
-  },
-  high_rated: {
-    "vote_count.gte": TMDB_CONFIG.FILTERS.HOME.HIGH_RATED_VOTE_COUNT,
-    sort_by: SORT_OPTIONS.VOTE_COUNT_DESC,
-    region: TMDB_CONFIG.REGION,
-  },
 };

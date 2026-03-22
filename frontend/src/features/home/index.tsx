@@ -9,9 +9,7 @@ import NowPlayingCard from './components/NowPlayingCard';
 import SectionHeader from './components/SectionHeader';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import RankingMovieCard from './components/RankingMovieCard';
-import TopRatedMovieCard from './components/TopRatedMovieCard';
 import NewReleaseMovieCard from './components/NewReleaseMovieCard';
-import MoviePoster from '@/components/movie-card/MoviePoster';
 
 /**
  * HomePage
@@ -138,27 +136,6 @@ function HomePage() {
           </div>
         )}
 
-        {/* 高評価映画 (縦2列の横スクロール) */}
-        {data.topRated && data.topRated.length > 0 && (
-          <div className="p-2 mt-6 lg:mt-12 relative">
-            <SectionHeader title="高評価映画" type="top_rated" />
-            <div 
-              className="grid grid-rows-2 grid-flow-col gap-x-4 md:gap-x-6 gap-y-4 md:gap-y-6 overflow-x-auto snap-x pt-2 pb-6"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {data.topRated.map((movie) => (
-                <div className="w-[85vw] sm:w-[400px] shrink-0 snap-start" key={movie.id}>
-                  <TopRatedMovieCard movie={movie} className="w-full h-full m-0" />
-                </div>
-              ))}
-            </div>
-            {/* CSSで::-webkit-scrollbar { display: none; } が効かせるためのインラインスタイル補完 */}
-            <style dangerouslySetInnerHTML={{__html: `
-              .grid.grid-rows-2::-webkit-scrollbar { display: none; }
-            `}} />
-          </div>
-        )}
-
         {/* 新着作品 (2行グリッド横スクロール) */}
         {data.recentlyAdded && data.recentlyAdded.length > 0 && (
           <div className="p-2 mt-6 lg:mt-12 relative">
@@ -178,23 +155,6 @@ function HomePage() {
             <style dangerouslySetInnerHTML={{__html: `
               .grid.grid-rows-2::-webkit-scrollbar { display: none; }
             `}} />
-          </div>
-        )}
-
-        {/* 話題の映画 (小さめの純粋なポスター) */}
-        {data.highRated && data.highRated.length > 0 && (
-          <div className="p-2 mt-6 lg:mt-12">
-            <SectionHeader title="話題の映画" type="high_rated" />
-            <HorizontalScrollContainer>
-              {data.highRated.map((movie) => (
-                <div 
-                  key={movie.id} 
-                  className="w-24 md:w-32 lg:w-40 xl:w-44 shrink-0"
-                >
-                  <MoviePoster movie={movie} />
-                </div>
-              ))}
-            </HorizontalScrollContainer>
           </div>
         )}
       </motion.div>

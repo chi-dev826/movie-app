@@ -37,8 +37,6 @@ export class GetHomePageUseCase {
       nowPlaying,
       popular: popularResponse.popular || [],
       recentlyAdded,
-      topRated: popularResponse.top_rated || [],
-      highRated: popularResponse.high_rated || [],
     };
   }
 }

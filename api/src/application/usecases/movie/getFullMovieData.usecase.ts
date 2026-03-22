@@ -35,7 +35,9 @@ export class GetFullMovieDataUseCase {
     let collection = null;
     if (detailEntity.belongsToCollectionId) {
       try {
-        collection = await this.tmdbRepo.getCollection(detailEntity.belongsToCollectionId);
+        collection = await this.tmdbRepo.getCollection(
+          detailEntity.belongsToCollectionId,
+        );
       } catch (error) {
         console.error(
           `コレクション情報の取得に失敗しました (movieId: ${movieId}):`,
@@ -64,7 +66,10 @@ export class GetFullMovieDataUseCase {
     const rawDetailDto = MovieMapper.toDetailBffDto(detailEntity, {
       videoKey: videoInfo.video,
     });
-    const decoratedDetail = MoviePresenter.toMovieDetail(rawDetailDto, new Date());
+    const decoratedDetail = MoviePresenter.toMovieDetail(
+      rawDetailDto,
+      new Date(),
+    );
 
     return {
       detail: decoratedDetail,

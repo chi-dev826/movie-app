@@ -27,7 +27,7 @@ export class MovieEntity {
 
   /**
    * タイトルが日本市場向けに提供されているか（邦画、またはローカライズ済み）を判定する
-   * @description 
+   * @description
    * 1. 邦画 (ja) は常に許可。
    * 2. タイトルまたは概要に「かな（ひらがな・カタカナ）」が含まれていれば、翻訳済みと判断し許可。
    *    ※日本で一般公開される作品は、タイトルが英語のままでも概要文が翻訳されているため、この基準でマイナーな未翻訳作品を排除可能。
@@ -35,7 +35,7 @@ export class MovieEntity {
    */
   public isMostlyJapanese(): boolean {
     if (!this.title) return false;
-    
+
     // 1. 邦画は無条件で許可
     if (this.originalLanguage === "ja") return true;
 
@@ -43,7 +43,9 @@ export class MovieEntity {
     // 日本で一般に認知・公開される外国映画は、タイトルが英語のままでも概要文は日本語化されていることが多いため、
     // 両方をチェックすることで「JOKER」のようなメジャー作品を維持しつつ、マイナーな英語作品を弾くことができます。
     const hasKanaInTitle = /[\u3040-\u309F\u30A0-\u30FF]/.test(this.title);
-    const hasKanaInOverview = /[\u3040-\u309F\u30A0-\u30FF]/.test(this.overview);
+    const hasKanaInOverview = /[\u3040-\u309F\u30A0-\u30FF]/.test(
+      this.overview,
+    );
 
     return hasKanaInTitle || hasKanaInOverview;
   }

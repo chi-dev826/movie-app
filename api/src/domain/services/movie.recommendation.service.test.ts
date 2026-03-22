@@ -53,7 +53,9 @@ describe("MovieRecommendationService", () => {
       );
 
       // When
-      const result = service.getRecommendations(currentMovieId, collection, [createMovie(20)]);
+      const result = service.getRecommendations(currentMovieId, collection, [
+        createMovie(20),
+      ]);
 
       // Then
       expect(result.title).toBe("シリーズ作品: テストシリーズ");
@@ -63,11 +65,17 @@ describe("MovieRecommendationService", () => {
     it("コレクションから自分自身を除外した結果が0件の場合、類似作品にフォールバックする", () => {
       // Given: コレクションに自分自身しかいない
       const currentMovieId = 1;
-      const collection = new CollectionEntity(100, "単独シリーズ", [createMovie(currentMovieId)]);
+      const collection = new CollectionEntity(100, "単独シリーズ", [
+        createMovie(currentMovieId),
+      ]);
       const similarMovies = [createMovie(20)];
 
       // When
-      const result = service.getRecommendations(currentMovieId, collection, similarMovies);
+      const result = service.getRecommendations(
+        currentMovieId,
+        collection,
+        similarMovies,
+      );
 
       // Then
       expect(result.title).toBe("関連作品");

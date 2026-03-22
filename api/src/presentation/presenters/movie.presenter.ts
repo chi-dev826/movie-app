@@ -23,7 +23,10 @@ export class MoviePresenter {
     const todayClone = new Date(today);
     todayClone.setUTCHours(0, 0, 0, 0);
 
-    const daysUntil = this.calculateDaysUntilRelease(releaseDateStr, todayClone);
+    const daysUntil = this.calculateDaysUntilRelease(
+      releaseDateStr,
+      todayClone,
+    );
     const isUpcoming = daysUntil !== null && daysUntil >= 0;
 
     return {
@@ -50,7 +53,7 @@ export class MoviePresenter {
   private static formatToYen(usdAmount: number, exchangeRate = 150): string {
     if (!usdAmount || usdAmount === 0) return "-";
     const yen = usdAmount * exchangeRate;
-    
+
     if (yen >= 100_000_000) {
       return `約${Math.round(yen / 100_000_000).toLocaleString()}億円`;
     }
@@ -60,10 +63,7 @@ export class MoviePresenter {
   /**
    * 詳細 DTO に UI 固有の装飾を付与して装飾済み MovieDetailDTO を構築する
    */
-  static toMovieDetail(
-    dto: MovieDetailBaseDTO,
-    today: Date,
-  ): MovieDetailDTO {
+  static toMovieDetail(dto: MovieDetailBaseDTO, today: Date): MovieDetailDTO {
     return {
       ...dto,
       ...this.getUpcomingMeta(dto.release_date, today),

@@ -11,8 +11,6 @@ export const TMDB_CONFIG = {
     HOME: {
       POPULAR_VOTE_COUNT: 10000,
       RECENT_VOTE_COUNT: 1000,
-      TOP_RATED_VOTE_COUNT: 1000,
-      HIGH_RATED_VOTE_COUNT: 5000,
     },
   },
   DATE: {

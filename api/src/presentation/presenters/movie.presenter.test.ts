@@ -51,7 +51,11 @@ describe("MoviePresenter", () => {
       const nowPlaying = [dto];
       const recentlyAdded = [dto];
 
-      const result = MoviePresenter.toHomeHeroList(upcoming, nowPlaying, recentlyAdded);
+      const result = MoviePresenter.toHomeHeroList(
+        upcoming,
+        nowPlaying,
+        recentlyAdded,
+      );
 
       expect(result.length).toBeGreaterThan(0);
       expect(result[0].category).toBeDefined();

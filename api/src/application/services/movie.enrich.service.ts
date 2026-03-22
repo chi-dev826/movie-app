@@ -44,7 +44,7 @@ export class MovieEnrichService {
     const results = new Map<number, string>();
     const promises = movieIds.map(async (id) => {
       const videos = await this.tmdbRepo.getMovieVideos(id);
-      
+
       // Trailerを優先し、なければTeaserを探す
       const trailer = videos.find((v) => v.getType() === VIDEO_TYPE.TRAILER);
       const teaser = videos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
@@ -85,7 +85,9 @@ export class MovieEnrichService {
 
     // 候補：Teaserを最優先、次にTrailers
     const teaser = allVideos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
-    const trailers = allVideos.filter((v) => v.getType() === VIDEO_TYPE.TRAILER);
+    const trailers = allVideos.filter(
+      (v) => v.getType() === VIDEO_TYPE.TRAILER,
+    );
 
     const candidates = [...(teaser ? [teaser] : []), ...trailers];
 
@@ -105,8 +107,7 @@ export class MovieEnrichService {
     // その他の動画（メイン以外から最大3件）
     const otherVideos: string[] = [];
     const otherCandidates = allVideos.filter(
-      (v) =>
-        v.getType() === VIDEO_TYPE.TRAILER && v.getKey() !== mainVideoKey,
+      (v) => v.getType() === VIDEO_TYPE.TRAILER && v.getKey() !== mainVideoKey,
     );
 
     for (const v of otherCandidates) {

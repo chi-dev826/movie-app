@@ -2,8 +2,6 @@ import { MovieMapper } from "./movie.mapper";
 import { MovieEntity } from "../../domain/models/movie";
 
 describe("MovieMapper", () => {
-  const fixedToday = new Date("2024-06-01T00:00:00Z");
-
   const createMovie = (overrides: Partial<MovieEntity> = {}): MovieEntity => {
     return new MovieEntity(
       overrides.id ?? 1,

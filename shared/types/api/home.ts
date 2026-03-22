@@ -13,6 +13,4 @@ export type HomePageResponse = {
   readonly nowPlaying: Movie[];
   readonly popular: Movie[];
   readonly recentlyAdded: Movie[];
-  readonly topRated: Movie[];
-  readonly highRated: Movie[];
 };

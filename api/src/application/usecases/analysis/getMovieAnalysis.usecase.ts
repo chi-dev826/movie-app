@@ -17,9 +17,8 @@ export class GetMovieAnalysisUseCase {
       },
     });
 
-    const enrichedArticles = await this.articleEnrichService.enrichArticles(
-      articles,
-    );
+    const enrichedArticles =
+      await this.articleEnrichService.enrichArticles(articles);
 
     return enrichedArticles.map((article) => article.toDto());
   }
