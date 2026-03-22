@@ -55,21 +55,22 @@ export class GetFullMovieDataUseCase {
 
     // 3. エンリッチメント（App Service で動画キー等の補助データだけを取得）
     // 一覧系はバルクAPIを利用し、詳細1件は単体APIを利用する。
-    const [recLogosMap, detailTrailerKey] = await Promise.all([
+    const [recLogosMap, videoInfo] = await Promise.all([
       this.enrichService.getLogos(recommendation.movies.map((m) => m.id)),
-      this.enrichService.getTrailer(movieId),
+      this.enrichService.getDetailedVideos(movieId),
     ]);
 
     // 4. レスポンス構築（マッパー生成後、プレゼンターでUI装飾）
     const rawDetailDto = MovieMapper.toDetailBffDto(detailEntity, {
-      videoKey: detailTrailerKey,
+      videoKey: videoInfo.video,
     });
     const decoratedDetail = MoviePresenter.toMovieDetail(rawDetailDto, new Date());
 
     return {
       detail: decoratedDetail,
       image: imagePath,
-      video: detailTrailerKey ?? null,
+      video: videoInfo.video ?? null,
+      otherVideos: videoInfo.otherVideos,
       recommendations: {
         title: recommendation.title,
         movies: recommendation.movies.map((m) =>
