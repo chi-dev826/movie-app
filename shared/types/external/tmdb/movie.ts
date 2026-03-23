@@ -1,8 +1,10 @@
+import { TmdbGenreId } from './genres';
+
 // TMDB APIのMovieオブジェクトの生データ型
 export type MovieResponse = {
   adult: boolean;
   backdrop_path: string | null; // null許容に変更
-  genre_ids: number[];
+  genre_ids: TmdbGenreId[];
   id: number;
   original_language: string;
   original_title: string;
@@ -62,7 +64,7 @@ export type MovieDetailResponse = {
   } | null;
   budget: number;
   credits?: CreditsResponse;
-  genres: { id: number; name: string }[];
+  genres: { id: TmdbGenreId; name: string }[];
   homepage: string | null; // null許容に変更
   id: number;
   imdb_id: string | null; // null許容に変更
