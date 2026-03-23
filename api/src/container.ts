@@ -16,6 +16,7 @@ import { SearchMoviesUseCase } from "./application/usecases/movie/searchMovies.u
 import { GetNowPlayingMoviesUseCase } from "./application/usecases/movie/getNowPlayingMovies.usecase";
 import { SearchMoviesByPersonUseCase } from "./application/usecases/movie/searchMoviesByPerson.usecase";
 import { GetMovieWatchListUseCase } from "./application/usecases/movie/getMovieWatchList.usecase";
+import { GetTrendingListUseCase } from "./application/usecases/movie/getTrendingList.usecase";
 
 import { TmdbRepository } from "./infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCache.repository";
@@ -62,7 +63,6 @@ export const createContainer = (): Dependencies => {
   );
   const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
     tmdbRepository,
-    systemClock,
   );
   const getUpcomingMovieListUseCase = new GetUpcomingMovieListUseCase(
     tmdbRepository,
@@ -73,10 +73,13 @@ export const createContainer = (): Dependencies => {
   const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
     tmdbRepository,
   );
+  const getTrendingListUseCase = new GetTrendingListUseCase(tmdbRepository);
+
   const getHomePageUseCase = new GetHomePageUseCase(
     getHomePageMovieListUseCase,
     getUpcomingMovieListUseCase,
     getNowPlayingMoviesUseCase,
+    getTrendingListUseCase,
   );
   const searchMoviesUseCase = new SearchMoviesUseCase(tmdbRepository);
   const searchMoviesByPersonUseCase = new SearchMoviesByPersonUseCase(
@@ -101,6 +104,7 @@ export const createContainer = (): Dependencies => {
     getNowPlayingMoviesUseCase,
     searchMoviesByPersonUseCase,
     getMovieWatchListUseCase,
+    getTrendingListUseCase,
   );
   const eigaComController = new EigaComController(getEigaComNewsUseCase);
   const googleSearchController = new GoogleSearchController(

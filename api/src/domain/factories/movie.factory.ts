@@ -6,6 +6,7 @@ import {
   MovieDetailResponse,
   VideoItem,
   MovieWatchProvidersResponse,
+  TrendingMovieResponse,
 } from "../../../../shared/types/external/tmdb";
 import { EXCLUDED_PROVIDERS } from "../constants/watchProviders";
 
@@ -71,6 +72,7 @@ export class MovieFactory {
       data.revenue,
       data.budget,
       data.production_countries?.map((c) => c.name) ?? [],
+      data.production_companies?.map((c) => c.name) ?? [],
       data.production_companies?.[0]?.logo_path ?? null,
     );
   }
@@ -94,6 +96,22 @@ export class MovieFactory {
           logo_path: p.logo_path,
           name: p.provider_name,
         })) ?? []
+    );
+  }
+
+  static createFromTrendingResponse(data: TrendingMovieResponse): MovieEntity {
+    return new MovieEntity(
+      data.id,
+      data.title,
+      data.original_title,
+      data.original_language,
+      data.overview,
+      data.poster_path,
+      data.backdrop_path,
+      data.release_date ?? null,
+      data.vote_average ?? null,
+      data.genre_ids ?? [],
+      data.media_type,
     );
   }
 }

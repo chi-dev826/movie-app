@@ -25,4 +25,9 @@ export interface ITmdbRepository {
   getMovieWatchProviders(
     movieId: number,
   ): Promise<{ logo_path: string | null; name: string }[]>;
+  getTrendingMovies(params: {
+    page: number;
+    language: string;
+    region: string;
+  }): Promise<MovieEntity[]>;
 }

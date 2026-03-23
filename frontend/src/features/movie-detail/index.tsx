@@ -1,212 +1,82 @@
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import ReactPlayer from 'react-player';
-import { AnimatePresence } from 'framer-motion';
-import { motion } from 'framer-motion';
-
-import { ResponsiveMovieTile } from '@/components/movie-card';
-import HeroMetadata from './components/DetailHeroMetadata';
-import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
-import NewsAndAnalysisSection from './components/NewsAndAnalysisSection';
-import CastList from './components/CastList';
-import MovieStats from './components/MovieStats';
-import { SectionContainer } from './components/SectionContainer';
-import TrailerSection from './components/TrailerSection';
 import { useFullMovieData } from '@/hooks/useMovies';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
+import { EXTERNAL_URLS } from '@/constants/config';
 
-function MovieDetailPage() {
+import { DetailHeroSection } from './components/v2/DetailHeroSection';
+import { DetailActionSection } from './components/v2/DetailActionSection';
+import { WatchProviderSection } from './components/v2/WatchProviderSection';
+import { StorySection } from './components/v2/StorySection';
+import { CastCarouselSection } from './components/v2/CastCarouselSection';
+import { MovieStatsSection } from './components/v2/MovieStatsSection';
+import { NewsAnalysisSection } from './components/v2/NewsAnalysisSection';
+import { TrailerCarouselSection } from './components/v2/TrailerCarouselSection';
+import { RecommendationSection } from './components/v2/RecommendationSection';
+
+export const MovieDetailPage: React.FC = () => {
   const { id: movieId } = useParams<{ id: string }>();
-
   const { data, isLoading, error } = useFullMovieData(Number(movieId));
-
-  const [isBackdropVisible, setIsBackdropVisible] = useState(true);
-
-  useEffect(() => {
-    // 背景が表示状態でビデオが存在するときだけタイマーをセットする
-    if (!isBackdropVisible || !data?.video) return;
-
-    const timeoutId = window.setTimeout(() => {
-      setIsBackdropVisible(false);
-    }, 5000);
-
-    return () => clearTimeout(timeoutId);
-  }, [isBackdropVisible, data?.video]);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen text-on-surface bg-background">
         <p>読み込み中...</p>
       </div>
     );
   }
 
-  if (error) {
+  if (error || !data) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
-        <p>エラーが発生しました</p>
+      <div className="flex items-center justify-center min-h-screen text-on-surface bg-background">
+        <p>エラーが発生しました: {error?.message}</p>
       </div>
     );
   }
 
-  // アニメーション設定
-  const containerVariants = {
-    visible: {
-      opacity: 1,
-      transition: {
-        when: 'beforeChildren',
-        staggerChildren: 0.3,
-      },
-    },
-    hidden: {
-      opacity: 0,
-    },
+  const { detail, watchProviders, video, otherVideos, recommendations } = data;
+
+  const providerLinks = {
+    'Disney Plus': () => null,
+    Netflix: (title: string) => `${EXTERNAL_URLS.NETFLIX_SEARCH}${encodeURIComponent(title)}`,
+    'Apple TV': (title: string) => `${EXTERNAL_URLS.APPLE_TV_SEARCH}${encodeURIComponent(title)}`,
+    'Amazon Prime Video': (title: string) =>
+      `${EXTERNAL_URLS.AMAZON_SEARCH}${encodeURIComponent(title)}${EXTERNAL_URLS.AMAZON_SEARCH_PARAMS}`,
+    Hulu: (title: string) => `${EXTERNAL_URLS.HULU_SEARCH}${encodeURIComponent(title)}`,
+    'U-NEXT': (title: string) => `${EXTERNAL_URLS.UNEXT_SEARCH}${encodeURIComponent(title)}`,
   };
 
-  const itemVariants = {
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-    hidden: { opacity: 0, y: 20 },
-  };
+  const providerListWithLinks = watchProviders?.map((provider) => {
+    const link = providerLinks[provider.name as keyof typeof providerLinks]
+      ? providerLinks[provider.name as keyof typeof providerLinks](detail.title)
+      : null;
+    return { ...provider, link };
+  });
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className="flex flex-col min-h-screen overflow-hidden bg-black"
-    >
-      <motion.section
-        variants={itemVariants}
-        className="relative w-full overflow-hidden aspect-video 2xl:aspect-cinema"
-      >
-        <div className="absolute inset-0 z-gradient bg-gradient-to-b from-black/20 to-black/100" />
-
-        {/* フェードアウトする背景画像 */}
-        <AnimatePresence>
-          {isBackdropVisible && data?.detail?.backdrop_path && data?.video && (
-            <div className="absolute inset-0">
-              <motion.img
-                key={data.detail.backdrop_path}
-                initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
-                animate={{ opacity: 1 }}
-                exit={{
-                  opacity: 0,
-                  scale: 1.1,
-                  transition: { duration: 1.5, ease: 'easeInOut' },
-                }}
-                transition={{ duration: 1 }}
-                src={
-                  getTmdbImage(data.detail.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ??
-                  ''
-                }
-                alt={data.detail.title}
-                className="absolute inset-0 object-cover w-full h-full z-backdrop"
-              />
-            </div>
-          )}
-        </AnimatePresence>
-
-        {/* 動画プレイヤー */}
-        {data?.video ? (
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-            <div
-              className="absolute w-full h-full top-1/2 left-1/2"
-              style={{ transform: 'translate(-50%, -50%) scale(1.35)' }}
-            >
-              <ReactPlayer
-                src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${data.video}`}
-                playing
-                muted
-                onEnded={() => setIsBackdropVisible(true)}
-                onReady={() => setIsBackdropVisible(true)}
-                controls={false}
-                loop
-                width="100%"
-                height="100%"
-              />
-            </div>
-          </div>
-        ) : (
-          data?.detail?.backdrop_path && (
-            <img
-              src={
-                getTmdbImage(data.detail.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ??
-                ''
-              }
-              alt={data.detail.title}
-              className="absolute inset-0 object-cover w-full h-full"
-            />
-          )
-        )}
-      </motion.section>
-      {/* メタデータ */}
-      {data && (
-        <>
-          <motion.div
-            className="w-full px-4 pt-10 text-white z-overlay xl:absolute xl:bottom-0 xl:left-0 xl:mt-0 xl:p-12 2xl:p-16 3xl:p-20"
-            variants={itemVariants}
-          >
-            <HeroMetadata
-              movieDetail={data.detail}
-              watchProviders={data.watchProviders}
-              youtubeKey={data.video ?? null}
-            />
-          </motion.div>
-          {data.detail.company_logo && (
-            <motion.img
-              src={getTmdbImage(data.detail.company_logo, TMDB_CONFIG.IMAGE_SIZES.LOGO.LARGE) ?? ''}
-              alt={data.detail.title}
-              className="absolute right-0 flex z-overlay max-w-16 md:max-w-20 lg:max-w-24 xl:max-w-28 2xl:max-w-32 3xl:max-w-36 4xl:max-w-40 top-16"
-              variants={itemVariants}
-            />
-          )}
-        </>
-      )}
-
-      {/* キャストと統計情報 */}
-      {data?.detail && (
-        <motion.div variants={itemVariants}>
-          <CastList cast={data.detail.cast} />
-          <MovieStats detail={data.detail} />
-        </motion.div>
-      )}
-
-      {data && (
-        <motion.div variants={itemVariants}>
-          <NewsAndAnalysisSection 
-            movieId={data.detail.id} 
-            movieTitle={data.detail.title} 
-            movieBackdropPath={data.detail.backdrop_path}
-          />
-        </motion.div>
-      )}
-
-      {data && data.otherVideos.length > 0 && (
-        <motion.div variants={itemVariants}>
-          <TrailerSection videoKeys={data.otherVideos} />
-        </motion.div>
-      )}
-
-      <motion.div variants={itemVariants}>
-        <SectionContainer>
-          <div className="mb-4">
-            <div className="flex items-center ml-2">
-              <span className="inline-block w-1 h-6 rounded-full bg-blue-500 xl:h-7" />
-              <span className="ml-2 text-base font-bold tracking-tight text-white xl:text-xl 3xl:text-2xl">
-                {data?.recommendations.title}
-              </span>
-            </div>
-          </div>
-          <HorizontalScrollContainer>
-            {data?.recommendations.movies.map((movie) => (
-              <ResponsiveMovieTile key={movie.id} movie={movie} />
-            ))}
-          </HorizontalScrollContainer>
-        </SectionContainer>
-      </motion.div>
-    </motion.div>
+    <div className="bg-background text-on-surface min-h-screen pb-12 font-sans font-medium selection:bg-primary/30 antialiased">
+      <DetailHeroSection detail={detail} videoKey={video || null} />
+      
+      <DetailActionSection 
+        movieId={detail.id}
+        videoKey={video || null}
+        watchProviders={providerListWithLinks} 
+      />
+      
+      <WatchProviderSection watchProviders={providerListWithLinks} />
+      
+      <StorySection overview={detail.overview} />
+      
+      <CastCarouselSection cast={detail.cast} />
+      
+      <MovieStatsSection detail={detail} />
+      
+      <NewsAnalysisSection movieId={detail.id} movieTitle={detail.title} />
+      
+      <TrailerCarouselSection otherVideos={otherVideos} />
+      
+      <RecommendationSection recommendations={recommendations} />
+    </div>
   );
-}
+};
 
 export default MovieDetailPage;

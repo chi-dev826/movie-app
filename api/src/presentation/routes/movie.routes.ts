@@ -58,6 +58,12 @@ export const createMovieRoutes = ({
   );
 
   router.get(
+    API_PATHS.MOVIES.TRENDING,
+    (req: Request, res: Response, next: NextFunction) =>
+      movieController.getTrendingMovies(req, res, next),
+  );
+
+  router.get(
     API_PATHS.MOVIES.LIST,
     (req: Request, res: Response, next: NextFunction) =>
       movieController.getMovieWatchList(req, res, next),

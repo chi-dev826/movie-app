@@ -74,6 +74,7 @@ export class MovieMapper {
       revenue: detailEntity.revenue,
       budget: detailEntity.budget,
       production_countries: [...detailEntity.productionCountries],
+      production_companies: [...detailEntity.productionCompanies],
       release_date: detailEntity.baseInfo.releaseDate ?? null,
     };
   }

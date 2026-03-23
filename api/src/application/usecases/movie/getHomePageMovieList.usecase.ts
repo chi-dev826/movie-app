@@ -11,9 +11,7 @@ import { ArrayUtils } from "../../../utils/array";
  * ホーム画面に表示する各種カテゴリの映画リストを一括取得・加工するユースケース。
  */
 export class GetHomePageMovieListUseCase {
-  constructor(
-    private readonly tmdbRepo: ITmdbRepository,
-  ) {}
+  constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   /**
    * @returns カテゴリ別に分類された映画リスト

@@ -1,18 +1,16 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { useMovieList, useNowPlayingMovies } from '@/hooks/useMovies';
+import { useMovieList, useNowPlayingMovies, useTrendingMovies } from '@/hooks/useMovies';
 import { MoviePoster } from '@/components/movie-card';
 
 const getTitle = (type?: string) => {
   switch (type) {
     case 'popular':
       return '人気映画';
+    case 'trending':
+      return '今週人気の映画';
     case 'recently_added':
       return '最近追加された映画';
-    case 'top_rated':
-      return '高評価映画';
-    case 'high_rated':
-      return '話題の映画';
     case 'now_playing':
       return '公開中の映画';
     default:
@@ -22,23 +20,41 @@ const getTitle = (type?: string) => {
 
 const MovieList = () => {
   const { type } = useParams<{
-    type: 'popular' | 'recently_added' | 'top_rated' | 'high_rated' | 'now_playing';
+    type: 'popular' | 'recently_added' | 'now_playing' | 'trending';
   }>();
   const { data, isLoading, isError, error } = useMovieList();
   const { data: NowPlayingData } = useNowPlayingMovies();
+  const { data: trendingData, isLoading: isLoadingTrending, isError: isErrorTrending, error: errorTrending } = useTrendingMovies();
 
   // 映画リストの種類に応じてデータを選択
-  const movieList = type === 'now_playing' ? NowPlayingData : type ? data?.[type] : [];
+  let movieList: any[] | undefined = [];
+  let isCurrentlyLoading = isLoading;
+  let currentError = isError;
+  let currentErrorObj = error;
+
+  if (type === 'now_playing') {
+    movieList = NowPlayingData;
+  } else if (type === 'trending') {
+    movieList = trendingData;
+    isCurrentlyLoading = isLoadingTrending;
+    currentError = isErrorTrending;
+    currentErrorObj = errorTrending;
+  } else if (type === 'recently_added') {
+    movieList = data?.recently_added;
+  } else if (type === 'popular') { // Fallback, though not used usually anymore
+    movieList = []; 
+  }
+
   const title = getTitle(type);
 
-  if (isLoading) {
+  if (isCurrentlyLoading) {
     return <div className="container px-4 py-8 mx-auto text-center">Loading movies...</div>;
   }
 
-  if (isError) {
+  if (currentError) {
     return (
       <div className="container px-4 py-8 mx-auto text-center text-red-500">
-        Error: {error.message}
+        Error: {currentErrorObj?.message || 'エラーが発生しました'}
       </div>
     );
   }

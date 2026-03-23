@@ -13,6 +13,7 @@ export class MovieDetailEntity {
     public readonly revenue: number,
     public readonly budget: number,
     public readonly productionCountries: readonly string[],
+    public readonly productionCompanies: readonly string[],
     public readonly companyLogo: string | null,
   ) {
     Object.freeze(this);
@@ -20,5 +21,6 @@ export class MovieDetailEntity {
     Object.freeze(this.cast);
     Object.freeze(this.crew);
     Object.freeze(this.productionCountries);
+    Object.freeze(this.productionCompanies);
   }
 }

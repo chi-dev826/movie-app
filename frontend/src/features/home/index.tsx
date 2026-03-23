@@ -7,7 +7,6 @@ import SpotlightCard from './components/SpotlightCard';
 import UpcomingMovieCard from './components/UpcomingMovieCard';
 import NowPlayingCard from './components/NowPlayingCard';
 import SectionHeader from './components/SectionHeader';
-import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import RankingMovieCard from './components/RankingMovieCard';
 import NewReleaseMovieCard from './components/NewReleaseMovieCard';
 import { Movie } from '@/types/domain';
@@ -37,7 +36,7 @@ function HomePage() {
   }, [data?.hero, controls]);
 
   // 人気リストを3つのリストずつに分割
-  const popularLists = data?.popular.reduce<Movie[][]>((acc, movie, index) => {
+  const popularLists = data?.trending.reduce<Movie[][]>((acc, movie, index) => {
     if (index % 3 === 0) {
       acc.push([]);
     }
@@ -135,9 +134,9 @@ function HomePage() {
         />
 
         {/* 人気ランキング */}
-        {data.popular && data.popular.length > 0 && (
+        {data.trending && data.trending.length > 0 && (
           <div className="mt-12 px-4 py-8 rounded-3xl bg-[#131313]">
-            <SectionHeader title="人気ランキング" type="popular" />
+            <SectionHeader title="今週人気" type="trending" />
             <div className="flex overflow-x-auto gap-4 snap-x snap-mandatory scrollbar-hide">
               {popularLists?.map((list, groupIndex) => (
                 <div key={groupIndex} className="flex-none flex flex-col gap-4 w-full snap-start">

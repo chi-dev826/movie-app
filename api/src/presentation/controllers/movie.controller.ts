@@ -9,6 +9,7 @@ import { SearchMoviesUseCase } from "../../application/usecases/movie/searchMovi
 import { GetNowPlayingMoviesUseCase } from "../../application/usecases/movie/getNowPlayingMovies.usecase";
 import { SearchMoviesByPersonUseCase } from "../../application/usecases/movie/searchMoviesByPerson.usecase";
 import { GetMovieWatchListUseCase } from "../../application/usecases/movie/getMovieWatchList.usecase";
+import { GetTrendingListUseCase } from "../../application/usecases/movie/getTrendingList.usecase";
 
 export class MovieController {
   constructor(
@@ -20,6 +21,7 @@ export class MovieController {
     private readonly getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
     private readonly searchMoviesByPersonUseCase: SearchMoviesByPersonUseCase,
     private readonly getMovieWatchListUseCase: GetMovieWatchListUseCase,
+    private readonly getTrendingListUseCase: GetTrendingListUseCase,
   ) {}
 
   async getMovieDetails(req: Request, res: Response, next: NextFunction) {
@@ -94,6 +96,14 @@ export class MovieController {
   async getNowPlayingMovies(req: Request, res: Response, next: NextFunction) {
     try {
       res.json(await this.getNowPlayingMoviesUseCase.execute());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getTrendingMovies(req: Request, res: Response, next: NextFunction) {
+    try {
+      res.json(await this.getTrendingListUseCase.execute());
     } catch (error) {
       next(error);
     }

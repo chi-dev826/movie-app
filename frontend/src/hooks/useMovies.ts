@@ -4,6 +4,7 @@ import {
   fetchMovieList,
   fetchUpcomingMovies,
   fetchNowPlayingMovies,
+  fetchTrendingMovies,
   searchMovies,
   searchMoviesByPerson,
   fetchMovieWatchList,
@@ -80,6 +81,14 @@ export const useUpcomingMovies = () => {
   return useQuery<UpcomingMovie[]>({
     queryKey: movieKeys.list('upcoming'),
     queryFn: () => fetchUpcomingMovies(),
+    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+  });
+};
+
+export const useTrendingMovies = () => {
+  return useQuery<Movie[]>({
+    queryKey: movieKeys.list('trending'),
+    queryFn: fetchTrendingMovies,
     staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
   });
 };

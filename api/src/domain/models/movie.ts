@@ -10,6 +10,7 @@ export class MovieEntity {
     public readonly releaseDate: string | null, // YYYY-MM-DD
     public readonly voteAverage: number | null,
     public readonly genreIds: readonly number[] = [],
+    public readonly mediaType?: string,
   ) {
     if (new.target === MovieEntity) {
       Object.freeze(this);
@@ -23,6 +24,14 @@ export class MovieEntity {
    */
   public hasValidImages(): boolean {
     return !!(this.posterPath && this.backdropPath);
+  }
+
+  /**
+   * 概要文の整合性をチェックする (ビジネスルール)
+   * @description 概要文が欠損している映画は、UI上での表示に適さない「不完全なデータ」として扱う。
+   */
+  public hasOverview(): boolean {
+    return !!this.overview;
   }
 
   /**

@@ -70,6 +70,7 @@ export type MovieDetailBase = {
   readonly revenue: number;
   readonly budget: number;
   readonly production_countries: string[];
+  readonly production_companies: string[];
   readonly release_date: string | null;
 };
 

@@ -19,6 +19,7 @@ import {
   VideoItem,
   DiscoverMovieParams,
   PersonResponse,
+  TrendingMovieResponse,
 } from "../../../../shared/types/external/tmdb";
 
 export class TmdbRepository implements ITmdbRepository {
@@ -213,6 +214,25 @@ export class TmdbRepository implements ITmdbRepository {
         );
         return response.data.results.map((movie) =>
           MovieFactory.createFromApiResponse(movie),
+        );
+      },
+      CACHE_TTL.SHORT,
+    );
+  }
+
+  async getTrendingMovies(params: {
+    page: number;
+    language: string;
+    region: string;
+  }): Promise<MovieEntity[]> {
+    return this.cache.getOrSet(
+      `tmdb:trending:${JSON.stringify(params)}`,
+      async () => {
+        const response = await this.api.get<
+          PaginatedResponse<TrendingMovieResponse>
+        >("/trending/movie/week", { params });
+        return response.data.results.map((movie) =>
+          MovieFactory.createFromTrendingResponse(movie),
         );
       },
       CACHE_TTL.SHORT,

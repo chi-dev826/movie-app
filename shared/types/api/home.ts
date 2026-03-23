@@ -12,4 +12,5 @@ export type HomePageResponse = {
   readonly upcoming: UpcomingMovie[];
   readonly nowPlaying: Movie[];
   readonly recentlyAdded: Movie[];
+  readonly trending: Movie[];
 };
