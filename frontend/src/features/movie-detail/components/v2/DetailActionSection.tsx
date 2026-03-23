@@ -30,7 +30,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({ movieI
 
   return (
     <section className="px-4 pb-6 max-w-7xl mx-auto relative z-overlay">
-      <div className="flex gap-3 mt-6 pointer-events-auto">
+      <div className="flex gap-3 pointer-events-auto">
         {videoKey ? (
           <button
             onClick={handleOpenModal}

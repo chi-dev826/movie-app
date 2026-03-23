@@ -70,7 +70,7 @@ export const MovieDetailPage: React.FC = () => {
       
       <MovieStatsSection detail={detail} />
       
-      <NewsAnalysisSection movieId={detail.id} movieTitle={detail.title} />
+      <NewsAnalysisSection movieId={detail.id} movieTitle={detail.title} posterPath={detail.poster_path || ''} />
       
       <TrailerCarouselSection otherVideos={otherVideos} />
       
