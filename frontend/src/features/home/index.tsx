@@ -10,6 +10,7 @@ import SectionHeader from './components/SectionHeader';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import RankingMovieCard from './components/RankingMovieCard';
 import NewReleaseMovieCard from './components/NewReleaseMovieCard';
+import { Movie } from '@/types/domain';
 
 /**
  * HomePage
@@ -34,6 +35,15 @@ function HomePage() {
       setTimeout(() => controls.start('visible'), 0);
     }
   }, [data?.hero, controls]);
+
+  // 人気リストを3つのリストずつに分割
+  const popularLists = data?.popular.reduce<Movie[][]>((acc, movie, index) => {
+    if (index % 3 === 0) {
+      acc.push([]);
+    }
+    acc[acc.length - 1].push(movie);
+    return acc;
+  }, []);
 
   // アニメーション設定
   const containerVariants = {
@@ -126,13 +136,21 @@ function HomePage() {
 
         {/* 人気ランキング */}
         {data.popular && data.popular.length > 0 && (
-          <div className="p-2 mt-6 lg:mt-12">
+          <div className="mt-12 px-4 py-8 rounded-3xl bg-[#131313]">
             <SectionHeader title="人気ランキング" type="popular" />
-            <HorizontalScrollContainer>
-              {data.popular.map((movie, index) => (
-                <RankingMovieCard key={movie.id} movie={movie} rank={index + 1} />
+            <div className="flex overflow-x-auto gap-4 snap-x snap-mandatory scrollbar-hide">
+              {popularLists?.map((list, groupIndex) => (
+                <div key={groupIndex} className="flex-none flex flex-col gap-4 w-full snap-start">
+                  {list.map((movie, itemIndex) => (
+                    <RankingMovieCard 
+                      key={movie.id} 
+                      movie={movie} 
+                      rank={groupIndex * 3 + itemIndex + 1} 
+                    />
+                  ))}
+                </div>
               ))}
-            </HorizontalScrollContainer>
+            </div>
           </div>
         )}
 
