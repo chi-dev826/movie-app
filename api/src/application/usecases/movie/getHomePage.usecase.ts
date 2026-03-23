@@ -35,7 +35,6 @@ export class GetHomePageUseCase {
       hero,
       upcoming,
       nowPlaying,
-      popular: popularResponse.popular || [],
       recentlyAdded,
     };
   }

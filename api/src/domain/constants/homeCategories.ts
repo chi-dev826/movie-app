@@ -7,11 +7,6 @@ export const HOME_CATEGORIES: Record<
   keyof MovieListResponse,
   DiscoverMovieParams
 > = {
-  popular: {
-    "vote_count.gte": TMDB_CONFIG.FILTERS.HOME.POPULAR_VOTE_COUNT,
-    sort_by: SORT_OPTIONS.POPULARITY_DESC,
-    region: TMDB_CONFIG.REGION,
-  },
   recently_added: {
     "vote_count.gte": TMDB_CONFIG.FILTERS.HOME.RECENT_VOTE_COUNT,
     sort_by: SORT_OPTIONS.PRIMARY_RELEASE_DATE_DESC,

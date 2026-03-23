@@ -5,11 +5,11 @@ export const TMDB_CONFIG = {
     HOME: 10,
     UPCOMING: 10,
     NOW_PLAYING: 3,
+    TRENDING: 5,
   },
   FILTERS: {
     MIN_VOTE_COUNT: 10,
     HOME: {
-      POPULAR_VOTE_COUNT: 10000,
       RECENT_VOTE_COUNT: 1000,
     },
   },

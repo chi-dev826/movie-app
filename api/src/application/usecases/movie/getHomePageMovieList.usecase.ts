@@ -4,7 +4,6 @@ import { HOME_CATEGORIES } from "../../../domain/constants/homeCategories";
 import { MovieEntity } from "../../../domain/models/movie";
 import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
 import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
-import { IClock } from "../../../domain/repositories/clock.service.interface";
 
 import { ArrayUtils } from "../../../utils/array";
 
@@ -14,7 +13,6 @@ import { ArrayUtils } from "../../../utils/array";
 export class GetHomePageMovieListUseCase {
   constructor(
     private readonly tmdbRepo: ITmdbRepository,
-    private readonly clock: IClock,
   ) {}
 
   /**

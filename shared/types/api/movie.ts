@@ -13,6 +13,6 @@ export type FullMovieData = {
 };
 
 export type MovieListResponse = Record<
-  "popular" | "recently_added",
+  "recently_added",
   Movie[]
 >;
