@@ -26,7 +26,7 @@ export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ 
             Trailers & Extras
          </h3>
       </div>
-      <div className="flex overflow-x-auto hide-scrollbar gap-4 px-4 pb-4 max-w-7xl mx-auto">
+      <div className="flex flex-col overflow-x-auto hide-scrollbar gap-4 px-4 pb-4 max-w-7xl mx-auto md:flex-row">
         {otherVideos.map((key) => {
           const isSelected = activeKey === key;
 
@@ -34,8 +34,8 @@ export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ 
             <motion.div 
               key={key} 
               whileHover={!isSelected ? { scale: 1.02 } : undefined}
-              className={`relative flex-shrink-0 w-[260px] md:w-[320px] aspect-video rounded-xl overflow-hidden bg-surface-container-high border transition-colors group ${
-                isSelected ? 'border-red-500/50 shadow-lg shadow-red-500/20' : 'border-white/5 hover:border-primary/50'
+              className={`relative flex-shrink-0 w-[320px] h-[180px] rounded-xl overflow-hidden bg-surface-container-high border transition-colors group ${
+                isSelected ? 'border-red-500/50 shadow-lg shadow-red-500/20' : 'border-white/10 hover:border-primary/50'
               }`}
             >
                {!isSelected ? (
@@ -58,15 +58,17 @@ export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ 
                    </div>
                  </div>
                ) : (
-                 <ReactPlayer
-                   src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${key}`}
-                   width="100%"
-                   height="100%"
-                   playing={isPlaying}
-                   controls={true}
-                   onPlay={() => setIsPlaying(true)}
-                   onPause={() => setIsPlaying(false)}
-                 />
+                 <div className="absolute inset-0 w-full h-full overflow-hidden rounded-xl">
+                   <ReactPlayer
+                     src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${key}`}
+                     width="100%"
+                     height="100%"
+                     playing={isPlaying}
+                     controls={true}
+                     onPlay={() => setIsPlaying(true)}
+                     onPause={() => setIsPlaying(false)}
+                   />
+                 </div>
                )}
             </motion.div>
           );

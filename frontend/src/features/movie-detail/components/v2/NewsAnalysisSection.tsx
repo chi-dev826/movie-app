@@ -73,7 +73,7 @@ export const NewsAnalysisSection: React.FC<NewsAnalysisSectionProps> = ({ movieI
               {newsItems.slice(0, 3).map((item, idx) => (
                  <a key={`news-${idx}`} href={EXTERNAL_URLS.EIGA_COM + item.link} target="_blank" rel="noreferrer" className="flex flex-col gap-3 bg-surface-container-low p-4 rounded-2xl w-full border border-white/5 hover:bg-surface-container-highest transition-colors group cursor-pointer">
                     <div className="flex gap-4 items-center">
-                       <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden flex-shrink-0 relative">
+                       <div className="w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden flex-shrink-0 relative">
                          {item.imageUrl ? (
                            <img src={item.imageUrl} alt="News thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                          ) : (
@@ -99,7 +99,7 @@ export const NewsAnalysisSection: React.FC<NewsAnalysisSectionProps> = ({ movieI
               {analysisItems.slice(0, 3).map((item, idx) => (
                  <a key={`analysis-${idx}`} href={EXTERNAL_URLS.EIGA_COM + item.link} target="_blank" rel="noreferrer" className="flex flex-col gap-3 bg-surface-container-low p-4 rounded-2xl w-full border border-white/5 hover:bg-surface-container-highest transition-colors group cursor-pointer">
                     <div className="flex gap-4 items-center">
-                       <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden flex-shrink-0 relative">
+                       <div className="w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden flex-shrink-0 relative">
                          {item.imageUrl ? (
                            <img src={item.imageUrl} alt="Analysis thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                          ) : (
