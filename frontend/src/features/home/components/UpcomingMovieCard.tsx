@@ -36,17 +36,17 @@ const UpcomingMovieCard = ({ movie, className = '' }: Props) => {
         />
 
         {/* カウントダウンバッジ — 左上 */}
-        {movie.upcomingBadgeLabel && !movie.releaseDate_short && (
+        {movie.upcomingBadgeLabel && !movie.releaseDateShort && (
           <div className="absolute top-2 left-2 px-2 py-1 text-[10px] font-bold text-white bg-red-600/90 backdrop-blur-sm rounded-full shadow-lg border border-red-500/30">
             {movie.upcomingBadgeLabel}
           </div>
         )}
 
         {/* ✦ 公開日バッジ ✦ */}
-        {movie.releaseDate_short && (
+        {movie.releaseDateShort && (
           <div className="absolute top-0 left-0 z-20 flex flex-col items-center justify-center bg-red-600/80 backdrop-blur-md text-white px-1 py-1 rounded border border-white/10 shadow-lg">
             <span className="text-xs font-bold leading-none tracking-wider text-white">
-              {movie.releaseDate_short}
+              {movie.releaseDateShort}
             </span>
             <span className="text-[6px] font-bold leading-none mt-1">
               公開

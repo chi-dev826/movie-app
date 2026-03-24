@@ -4,6 +4,7 @@ import { StarIcon } from '@heroicons/react/24/solid';
 
 import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import type { HeroMovie } from '@/types/api/response';
+import { Calendar } from 'lucide-react';
 
 /** カテゴリに対応するバッジのラベルとスタイル */
 const CATEGORY_BADGE = {
@@ -45,9 +46,10 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
           )}
 
           {/* 公開予定の場合: 公開日バッジ */}
-          {movie.category === 'upcoming' && movie.releaseDate_display && (
-            <span className="px-2 py-1 text-[10px] font-medium text-gray-200 rounded-full bg-white/10 backdrop-blur-sm border border-white/5 md:text-xs">
-              {movie.releaseDate_display}
+          {movie.category === 'upcoming' && movie.releaseDateDisplay && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-200 md:text-sm border border-white/5">
+              <Calendar className="w-3.5 h-3.5 text-red-400" />
+              {movie.releaseDateDisplay}
             </span>
           )}
         </div>

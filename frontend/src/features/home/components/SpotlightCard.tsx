@@ -98,10 +98,10 @@ const SpotlightCard = (props: Props) => {
               {props.variant === 'upcoming' && (
                 <>
                   {/* 公開日 */}
-                  {props.movie.releaseDate_display && (
+                  {props.movie.releaseDateDisplay && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-200 md:text-sm border border-white/5">
                       <CalendarDaysIcon className="w-3.5 h-3.5 text-red-400" />
-                      {props.movie.releaseDate_display}
+                      {props.movie.releaseDateDisplay}
                     </span>
                   )}
                   {/* カウントダウン */}
