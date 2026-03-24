@@ -10,7 +10,13 @@ import { GetNowPlayingMoviesUseCase } from "../../application/usecases/movie/get
 import { SearchMoviesByPersonUseCase } from "../../application/usecases/movie/searchMoviesByPerson.usecase";
 import { GetMovieWatchListUseCase } from "../../application/usecases/movie/getMovieWatchList.usecase";
 import { GetTrendingListUseCase } from "../../application/usecases/movie/getTrendingList.usecase";
+import { MovieResponseBuilder } from "../builders/movieResponse.builder";
+import { IClock } from "../../domain/repositories/clock.service.interface";
 
+/**
+ * 映画関連のエンドポイントを制御するコントローラー。
+ * 責務: HTTPリクエストのハンドリング、例外制御、レスポンス構築の依頼(Builder)。
+ */
 export class MovieController {
   constructor(
     private readonly getFullMovieDataUseCase: GetFullMovieDataUseCase,
@@ -22,8 +28,13 @@ export class MovieController {
     private readonly searchMoviesByPersonUseCase: SearchMoviesByPersonUseCase,
     private readonly getMovieWatchListUseCase: GetMovieWatchListUseCase,
     private readonly getTrendingListUseCase: GetTrendingListUseCase,
+    private readonly builder: MovieResponseBuilder,
+    private readonly clock: IClock,
   ) {}
 
+  /**
+   * 映画の詳細情報を取得する (GET /api/movie/:movieId/full)
+   */
   async getMovieDetails(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.movieId);
@@ -33,12 +44,18 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
       }
 
-      res.json(await this.getFullMovieDataUseCase.execute(id));
+      const domainData = await this.getFullMovieDataUseCase.execute(id);
+      const response = this.builder.buildDetails(domainData, this.clock.now());
+
+      res.json(response);
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * キーワード検索 (GET /api/search/movie)
+   */
   async searchMovies(req: Request, res: Response, next: NextFunction) {
     try {
       const query = req.query.q as string;
@@ -48,12 +65,16 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.SEARCH_QUERY_REQUIRED });
       }
 
-      res.json(await this.searchMoviesUseCase.execute(query));
+      const movies = await this.searchMoviesUseCase.execute(query);
+      res.json(this.builder.buildSimpleList(movies));
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * 人物名での検索 (GET /api/movies/search-by-person)
+   */
   async searchMoviesByPerson(req: Request, res: Response, next: NextFunction) {
     try {
       const name = req.query.name as string;
@@ -63,69 +84,93 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.PERSON_NAME_REQUIRED });
       }
 
-      res.json(await this.searchMoviesByPersonUseCase.execute(name));
+      const movies = await this.searchMoviesByPersonUseCase.execute(name);
+      res.json(this.builder.buildSimpleList(movies));
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * ホーム画面リスト (GET /api/movies/home)
+   */
   async getMovieList(req: Request, res: Response, next: NextFunction) {
     try {
-      res.json(await this.getHomePageMovieListUseCase.execute());
+      const movies = await this.getHomePageMovieListUseCase.execute();
+      res.json({
+        recently_added: this.builder.buildSimpleList(movies),
+      });
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * ホーム画面全体のデータ (GET /api/home)
+   */
   async getHomePage(req: Request, res: Response, next: NextFunction) {
     try {
-      res.json(await this.getHomePageUseCase.execute());
+      const homeData = await this.getHomePageUseCase.execute();
+      const response = this.builder.buildHomePage(homeData, this.clock.now());
+      res.json(response);
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * 近日公開予定の映画 (GET /api/movies/upcoming)
+   */
   async getUpcomingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      res.json(await this.getUpcomingMovieListUseCase.execute());
+      const movies = await this.getUpcomingMovieListUseCase.execute();
+      res.json(this.builder.buildUpcomingList(movies, this.clock.now()));
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * 現在上映中の映画 (GET /api/movies/now-playing)
+   */
   async getNowPlayingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      res.json(await this.getNowPlayingMoviesUseCase.execute());
+      const movies = await this.getNowPlayingMoviesUseCase.execute();
+      res.json(this.builder.buildSimpleList(movies));
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * トレンド映画 (GET /api/movies/trending)
+   */
   async getTrendingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      res.json(await this.getTrendingListUseCase.execute());
+      const movies = await this.getTrendingListUseCase.execute();
+      res.json(this.builder.buildSimpleList(movies));
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * ウォッチリストの映画を取得 (GET /api/movies/list)
+   */
   async getMovieWatchList(req: Request, res: Response, next: NextFunction) {
     try {
       const idsParam = req.query.ids as string;
-      if (!idsParam) {
-        return res.json([]);
-      }
+      if (!idsParam) return res.json([]);
 
       const movieIds = idsParam
         .split(",")
         .map((id) => parseInt(id, 10))
         .filter((id) => !isNaN(id));
 
-      if (movieIds.length === 0) {
-        return res.json([]);
-      }
+      if (movieIds.length === 0) return res.json([]);
 
-      res.json(await this.getMovieWatchListUseCase.execute(movieIds));
+      const items = await this.getMovieWatchListUseCase.execute(movieIds);
+      res.json(this.builder.buildWatchList(items));
     } catch (error) {
       next(error);
     }

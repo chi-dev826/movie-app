@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useFullMovieData } from '@/hooks/useMovies';
-import { EXTERNAL_URLS } from '@/constants/config';
 
 import { DetailHeroSection } from './components/v2/DetailHeroSection';
 import { DetailActionSection } from './components/v2/DetailActionSection';
@@ -33,36 +32,19 @@ export const MovieDetailPage: React.FC = () => {
     );
   }
 
-  const { detail, watchProviders, video, otherVideos, recommendations } = data;
-
-  const providerLinks = {
-    'Disney Plus': () => null,
-    Netflix: (title: string) => `${EXTERNAL_URLS.NETFLIX_SEARCH}${encodeURIComponent(title)}`,
-    'Apple TV': (title: string) => `${EXTERNAL_URLS.APPLE_TV_SEARCH}${encodeURIComponent(title)}`,
-    'Amazon Prime Video': (title: string) =>
-      `${EXTERNAL_URLS.AMAZON_SEARCH}${encodeURIComponent(title)}${EXTERNAL_URLS.AMAZON_SEARCH_PARAMS}`,
-    Hulu: (title: string) => `${EXTERNAL_URLS.HULU_SEARCH}${encodeURIComponent(title)}`,
-    'U-NEXT': (title: string) => `${EXTERNAL_URLS.UNEXT_SEARCH}${encodeURIComponent(title)}`,
-  };
-
-  const providerListWithLinks = watchProviders?.map((provider) => {
-    const link = providerLinks[provider.name as keyof typeof providerLinks]
-      ? providerLinks[provider.name as keyof typeof providerLinks](detail.title)
-      : null;
-    return { ...provider, link };
-  });
+  const { detail, watchProviders, videoUrl, otherVideoUrls, recommendations } = data;
 
   return (
-    <div className="bg-background text-on-surface min-h-screen pb-12 font-sans font-medium selection:bg-primary/30 antialiased">
-      <DetailHeroSection detail={detail} videoKey={video || null} />
+    <div className="bg-background text-on-surface min-h-screen pb-6 font-sans font-medium selection:bg-primary/30 antialiased">
+      <DetailHeroSection detail={detail} videoKey={videoUrl || null} />
       
       <DetailActionSection 
         movieId={detail.id}
-        videoKey={video || null}
-        watchProviders={providerListWithLinks} 
+        videoKey={videoUrl || null}
+        watchProviders={watchProviders} 
       />
       
-      <WatchProviderSection watchProviders={providerListWithLinks} />
+      <WatchProviderSection watchProviders={watchProviders} />
       
       <StorySection overview={detail.overview} />
       
@@ -70,9 +52,9 @@ export const MovieDetailPage: React.FC = () => {
       
       <MovieStatsSection detail={detail} />
       
-      <NewsAnalysisSection movieId={detail.id} movieTitle={detail.title} posterPath={detail.poster_path || ''} />
+      <NewsAnalysisSection movieId={detail.id} movieTitle={detail.title} posterPath={detail.posterPath || ''} />
       
-      <TrailerCarouselSection otherVideos={otherVideos} />
+      <TrailerCarouselSection otherVideoUrls={otherVideoUrls} />
       
       <RecommendationSection recommendations={recommendations} />
     </div>

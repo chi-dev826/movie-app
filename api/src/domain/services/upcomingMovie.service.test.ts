@@ -132,13 +132,4 @@ describe("UpcomingMovieService", () => {
       expect(result.getUTCHours()).toBe(0); // 時刻は 00:00:00
     });
   });
-
-  describe("getSearchPeriodParams", () => {
-    it("TMDB検索用の期間パラメータを生成する", () => {
-      mockClock.now.mockReturnValue(new Date("2024-06-01T06:30:00Z")); // JST 2024-06-01
-      const params = service.getSearchPeriodParams();
-      expect(params["primary_release_date.gte"]).toBe("2024-06-01");
-      expect(params["primary_release_date.lte"]).toBe("2024-08-01"); // 2ヶ月後
-    });
-  });
 });

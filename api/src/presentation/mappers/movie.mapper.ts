@@ -3,7 +3,8 @@ import { MovieDetailEntity } from "../../domain/models/movieDetail";
 import {
   Movie as MovieDTO,
   MovieDetailBase as MovieDetailBaseDTO,
-} from "../../../../shared/types/domain";
+} from "../../../../shared/types/api/dto";
+import { MoviePresenter } from "../presenters/movie.presenter";
 
 export class MovieMapper {
   /**
@@ -16,19 +17,19 @@ export class MovieMapper {
     return {
       id: entity.id,
       title: entity.title,
-      original_title: entity.originalTitle,
-      original_language: entity.originalLanguage,
+      originalTitle: entity.originalTitle,
+      originalLanguage: entity.originalLanguage,
       overview: entity.overview,
-      poster_path: entity.posterPath,
-      backdrop_path: entity.backdropPath,
-      release_date: entity.releaseDate ?? undefined,
+      posterPath: entity.posterPath,
+      backdropPath: entity.backdropPath,
+      releaseDate: entity.releaseDate ?? undefined,
       // TMDB の 10 段階評価を星 5 段階に変換
-      vote_average: entity.voteAverage ? entity.voteAverage / 2 : null,
-      genre_ids: [...entity.genreIds],
+      voteAverage: entity.voteAverage ? entity.voteAverage / 2 : null,
+      genreIds: [...entity.genreIds],
 
       // オプションのエンリッチデータ
-      video: options?.videoKey ?? null,
-      logo_path: options?.logoPath ?? null,
+      video: MoviePresenter.enrichVideoUrl(options?.videoKey ?? null),
+      logoPath: options?.logoPath ?? null,
     };
   }
 
@@ -44,20 +45,20 @@ export class MovieMapper {
     return {
       id: baseDto.id,
       title: baseDto.title,
-      original_title: baseDto.original_title,
+      originalTitle: baseDto.originalTitle,
       overview: baseDto.overview,
-      poster_path: baseDto.poster_path,
-      backdrop_path: baseDto.backdrop_path,
+      posterPath: baseDto.posterPath,
+      backdropPath: baseDto.backdropPath,
       // TMDB の 10 段階評価を星 5 段階に変換
-      vote_average: baseDto.vote_average,
+      voteAverage: baseDto.voteAverage,
 
-      belongs_to_collection_id: detailEntity.belongsToCollectionId,
+      belongsToCollectionId: detailEntity.belongsToCollectionId,
       year: detailEntity.baseInfo.releaseDate
         ? parseInt(detailEntity.baseInfo.releaseDate.slice(0, 4))
         : null,
       runtime: detailEntity.runtime,
       genres: detailEntity.genres ? [...detailEntity.genres] : null,
-      company_logo: detailEntity.companyLogo,
+      companyLogo: detailEntity.companyLogo,
       homePageUrl: detailEntity.homePageUrl,
       cast: [...detailEntity.cast],
       keyStaff: {
@@ -73,9 +74,9 @@ export class MovieMapper {
       },
       revenue: detailEntity.revenue,
       budget: detailEntity.budget,
-      production_countries: [...detailEntity.productionCountries],
-      production_companies: [...detailEntity.productionCompanies],
-      release_date: detailEntity.baseInfo.releaseDate ?? null,
+      productionCountries: [...detailEntity.productionCountries],
+      productionCompanies: [...detailEntity.productionCompanies],
+      releaseDate: detailEntity.baseInfo.releaseDate ?? null,
     };
   }
 }

@@ -6,13 +6,59 @@ import {
   MovieDetailBase as MovieDetailBaseDTO,
   MovieDetail as MovieDetailDTO,
   UpcomingMeta,
-} from "../../../../shared/types/domain";
-import { HeroMovie } from "../../../../shared/types/api";
+} from "../../../../shared/types/api/dto";
+import { HeroMovie } from "../../../../shared/types/api/response";
+import { EXTERNAL_WATCH_URLS } from "../constants/urls";
 
 /**
  * 映画データの表示・装飾ロジックを担当するプレゼンタークラス (UIの関心事)
  */
 export class MoviePresenter {
+  /**
+   * 配信サービス名から対応する検索URLを構築する。
+   */
+  private static buildWatchUrl(
+    providerName: string,
+    movieTitle: string,
+  ): string | null {
+    const encodedTitle = encodeURIComponent(movieTitle);
+
+    switch (providerName) {
+      case "Netflix":
+        return `${EXTERNAL_WATCH_URLS.NETFLIX_SEARCH}${encodedTitle}`;
+      case "Apple TV":
+        return `${EXTERNAL_WATCH_URLS.APPLE_TV_SEARCH}${encodedTitle}`;
+      case "Amazon Prime Video":
+        return `${EXTERNAL_WATCH_URLS.AMAZON_SEARCH}${encodedTitle}${EXTERNAL_WATCH_URLS.AMAZON_SEARCH_PARAMS}`;
+      case "Hulu":
+        return `${EXTERNAL_WATCH_URLS.HULU_SEARCH}${encodedTitle}`;
+      case "U-NEXT":
+        return `${EXTERNAL_WATCH_URLS.UNEXT_SEARCH}${encodedTitle}`;
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * YouTubeビデオキーを再生用URL（フルパス）に変換する
+   */
+  static enrichVideoUrl(key: string | null): string | null {
+    if (!key) return null;
+    return `${EXTERNAL_WATCH_URLS.YOUTUBE_WATCH}${key}`;
+  }
+
+  /**
+   * 配信業者リストに検索リンクを付与してリターンする
+   */
+  static enrichWatchProviderLinks(
+    providers: { logoPath: string | null; name: string }[],
+    movieTitle: string,
+  ): { logoPath: string | null; name: string; link: string | null }[] {
+    return providers.map((provider) => ({
+      ...provider,
+      link: this.buildWatchUrl(provider.name, movieTitle),
+    }));
+  }
   /**
    * 共通のバッジ情報計算を行い UpcomingMeta を返却する
    */
@@ -30,10 +76,10 @@ export class MoviePresenter {
     const isUpcoming = daysUntil !== null && daysUntil >= 0;
 
     return {
-      release_date_display: this.getDisplayDate(releaseDateStr),
-      days_until_release: isUpcoming ? daysUntil : null,
-      upcoming_badge_label: isUpcoming ? this.getBadgeLabel(daysUntil) : null,
-      release_date_short: this.getShortDate(releaseDateStr),
+      releaseDateDisplay: this.getDisplayDate(releaseDateStr),
+      daysUntilRelease: isUpcoming ? daysUntil : null,
+      upcomingBadgeLabel: isUpcoming ? this.getBadgeLabel(daysUntil) : null,
+      releaseDateShort: this.getShortDate(releaseDateStr),
     };
   }
 
@@ -43,7 +89,7 @@ export class MoviePresenter {
   static toUpcomingMovie(dto: MovieDTO, today: Date): UpcomingMovieDTO {
     return {
       ...dto,
-      ...this.getUpcomingMeta(dto.release_date ?? null, today),
+      ...this.getUpcomingMeta(dto.releaseDate ?? null, today),
     };
   }
 
@@ -66,9 +112,9 @@ export class MoviePresenter {
   static toMovieDetail(dto: MovieDetailBaseDTO, today: Date): MovieDetailDTO {
     return {
       ...dto,
-      ...this.getUpcomingMeta(dto.release_date, today),
-      revenue_jpy_display: this.formatToYen(dto.revenue),
-      budget_jpy_display: this.formatToYen(dto.budget),
+      ...this.getUpcomingMeta(dto.releaseDate, today),
+      revenueJpyDisplay: this.formatToYen(dto.revenue),
+      budgetJpyDisplay: this.formatToYen(dto.budget),
     };
   }
 
@@ -88,7 +134,7 @@ export class MoviePresenter {
     ];
 
     const filtered = tagged.map((list) =>
-      list.filter((m) => m.backdrop_path && m.overview?.trim()),
+      list.filter((m) => m.backdropPath && m.overview?.trim()),
     );
 
     const result: HeroMovie[] = [];

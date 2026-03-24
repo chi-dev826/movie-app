@@ -1,25 +1,25 @@
 // アプリケーション内で使用する汎用映画カード情報
 export type Movie = {
   readonly id: number;
-  readonly backdrop_path: string | null;
-  readonly original_title: string;
-  readonly original_language: string;
+  readonly backdropPath: string | null;
+  readonly originalTitle: string;
+  readonly originalLanguage: string;
   readonly title: string;
   readonly overview: string;
-  readonly poster_path: string | null;
-  readonly vote_average: number | null;
-  readonly logo_path?: string | null;
+  readonly posterPath: string | null;
+  readonly voteAverage: number | null;
+  readonly logoPath?: string | null;
   readonly video?: string | null;
-  readonly release_date?: string | null;
-  readonly genre_ids?: number[];
+  readonly releaseDate?: string | null;
+  readonly genreIds?: number[];
 };
 
 // 公開予定映画向けの追加メタ情報
 export type UpcomingMeta = {
-  readonly release_date_display: string | null;
-  readonly days_until_release: number | null;
-  readonly upcoming_badge_label: string | null;
-  readonly release_date_short: string | null;
+  readonly releaseDateDisplay: string | null;
+  readonly daysUntilRelease: number | null;
+  readonly upcomingBadgeLabel: string | null;
+  readonly releaseDateShort: string | null;
 };
 
 // 公開予定セクションなどで使用する映画カード情報
@@ -29,14 +29,14 @@ export type Cast = {
   readonly id: number;
   readonly name: string;
   readonly character: string;
-  readonly profile_path: string | null;
+  readonly profilePath: string | null;
 };
 
 export type Crew = {
   readonly id: number;
   readonly name: string;
   readonly job: string;
-  readonly profile_path: string | null;
+  readonly profilePath: string | null;
 };
 
 export type Staff = {
@@ -53,31 +53,31 @@ export type keyStaff = {
 // アプリケーション内で使用する汎用の映画詳細情報 (装飾前)
 export type MovieDetailBase = {
   readonly id: number;
-  readonly backdrop_path: string | null;
-  readonly belongs_to_collection_id: number | null;
-  readonly original_title: string;
+  readonly backdropPath: string | null;
+  readonly belongsToCollectionId: number | null;
+  readonly originalTitle: string;
   readonly title: string;
   readonly overview: string;
-  readonly poster_path: string | null;
+  readonly posterPath: string | null;
   readonly year: number | null;
   readonly runtime: number | null;
-  readonly vote_average: number | null;
+  readonly voteAverage: number | null;
   readonly genres: string[] | null;
-  readonly company_logo: string | null;
+  readonly companyLogo: string | null;
   readonly homePageUrl: string | null;
   readonly keyStaff: keyStaff;
   readonly cast: Cast[];
   readonly revenue: number;
   readonly budget: number;
-  readonly production_countries: string[];
-  readonly production_companies: string[];
-  readonly release_date: string | null;
+  readonly productionCountries: string[];
+  readonly productionCompanies: string[];
+  readonly releaseDate: string | null;
 };
 
 // 金額（円換算）関連のメタ情報
 export type MoneyMeta = {
-  readonly revenue_jpy_display: string;
-  readonly budget_jpy_display: string;
+  readonly revenueJpyDisplay: string;
+  readonly budgetJpyDisplay: string;
 };
 
 // UI表示用にバッジや整形済み文字列が付与された映画詳細情報

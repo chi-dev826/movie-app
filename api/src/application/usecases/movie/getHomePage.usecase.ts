@@ -1,13 +1,19 @@
-import { MoviePresenter } from "../../../presentation/presenters/movie.presenter";
-import { HomePageResponse } from "../../../../../shared/types/api";
+import { MovieEntity } from "../../../domain/models/movie";
 import { GetHomePageMovieListUseCase as PopularUseCase } from "./getHomePageMovieList.usecase";
 import { GetUpcomingMovieListUseCase } from "./getUpcomingMovieList.usecase";
 import { GetNowPlayingMoviesUseCase } from "./getNowPlayingMovies.usecase";
 import { GetTrendingListUseCase } from "./getTrendingList.usecase";
 
 /**
- * ホーム画面表示用の全データを一括取得・加工するBFFユースケース。
+ * ホーム画面表示用の全データを一括取得するドメイン関心事のオーケストレーション。
  */
+export type HomePageData = {
+  recentlyAdded: MovieEntity[];
+  upcoming: (MovieEntity & { logoPath?: string; videoKey?: string })[];
+  nowPlaying: MovieEntity[];
+  trending: MovieEntity[];
+};
+
 export class GetHomePageUseCase {
   constructor(
     private readonly popularUseCase: PopularUseCase,
@@ -16,31 +22,22 @@ export class GetHomePageUseCase {
     private readonly trendingUseCase: GetTrendingListUseCase,
   ) {}
 
-  async execute(): Promise<HomePageResponse> {
-    // 既存のユースケースを並列実行 (Orchestration)
-    const [popularResponse, upcoming, nowPlaying, trending] = await Promise.all(
-      [
-        this.popularUseCase.execute(),
-        this.upcomingUseCase.execute(),
-        this.nowPlayingUseCase.execute(),
-        this.trendingUseCase.execute(),
-      ],
-    );
-
-    const recentlyAdded = popularResponse.recently_added || [];
-
-    // ミックスリストの構築 (表示ロジックは Presenter に委譲)
-    const hero = MoviePresenter.toHomeHeroList(
-      upcoming,
-      nowPlaying,
-      recentlyAdded,
-    );
+  /**
+   * 各カテゴリの映画リストを並列取得し、ドメインデータの集合体を返却する。
+   * 表示用加工（Heroセクションの構築等）はプレゼンテーション層に委譲する。
+   */
+  async execute(): Promise<HomePageData> {
+    const [recentlyAdded, upcoming, nowPlaying, trending] = await Promise.all([
+      this.popularUseCase.execute(),
+      this.upcomingUseCase.execute(),
+      this.nowPlayingUseCase.execute(),
+      this.trendingUseCase.execute(),
+    ]);
 
     return {
-      hero,
+      recentlyAdded,
       upcoming,
       nowPlaying,
-      recentlyAdded,
       trending,
     };
   }

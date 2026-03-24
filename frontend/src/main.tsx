@@ -5,6 +5,7 @@ import App from './App';
 import HomePage from './features/home';
 import SearchPage from './features/search';
 import MovieDetailPage from './features/movie-detail';
+import TrailerPage from './features/video-player';
 import MovieList from './features/movie-list';
 import UpcomingList from './features/movie-list/upcomingList';
 import WatchListPage from './features/watch-list';
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
         element: <MovieList />,
       },
     ],
+  },
+  {
+    path: APP_PATHS.TRAILER,
+    element: <TrailerPage />,
   },
 ]);
 

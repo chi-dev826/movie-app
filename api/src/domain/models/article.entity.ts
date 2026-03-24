@@ -1,4 +1,4 @@
-import { Article as ArticleDTO } from "../../../../shared/types/domain";
+import { Article as ArticleDTO } from "../../../../shared/types/api/dto";
 
 /**
  * 外部ソースから取得した記事やコンテンツを表すドメインモデル。

@@ -6,7 +6,7 @@ import { MovieEntity } from "../../domain/models/movie";
 import { MovieDetailEntity } from "../../domain/models/movieDetail";
 import { CollectionEntity } from "../../domain/models/collection";
 import { Video } from "../../domain/models/video";
-import { CACHE_TTL } from "../../domain/constants/cacheTtl";
+import { CACHE_TTL } from "../constants/cacheTtl";
 import { tmdbApi } from "../lib/tmdb.client";
 import {
   MovieDetailResponse,
@@ -20,26 +20,32 @@ import {
   DiscoverMovieParams,
   PersonResponse,
   TrendingMovieResponse,
-} from "../../../../shared/types/external/tmdb";
+} from "../external/tmdb";
+import { SORT_OPTIONS } from "../external/tmdb/sortOptions";
+import { RELEASE_TYPE } from "../external/tmdb/releaseType";
+import { IClock } from "../../domain/repositories/clock.service.interface";
+
+/** リポジトリ内部で使用するTMDB固有の設定値 */
+const TMDB_DEFAULTS = {
+  REGION: "JP",
+  LANGUAGE: "ja",
+  UPCOMING_MONTHS: 2,
+  FILTERS: {
+    MIN_VOTE_COUNT: 10,
+    RECENT_VOTE_COUNT: 1000,
+  },
+} as const;
 
 export class TmdbRepository implements ITmdbRepository {
   constructor(
     private readonly cache: ICacheRepository,
+    private readonly clock: IClock,
     private readonly api: typeof tmdbApi = tmdbApi,
   ) {}
 
-  /**
-   * 人物名検索はユーザー入力に依存し揮発性が高いため、キャッシュ対象外とする
-   */
-  async searchPerson(
-    query: string,
-  ): Promise<PaginatedResponse<PersonResponse>> {
-    const response = await this.api.get<PaginatedResponse<PersonResponse>>(
-      "/search/person",
-      { params: { query } },
-    );
-    return response.data;
-  }
+  // ──────────────────────────────────────────
+  // 基本取得
+  // ──────────────────────────────────────────
 
   async getMovieDetails(movieId: number): Promise<MovieDetailEntity> {
     return this.cache.getOrSet(
@@ -54,6 +60,146 @@ export class TmdbRepository implements ITmdbRepository {
       CACHE_TTL.STANDARD,
     );
   }
+
+  async getCollection(collectionId: number): Promise<CollectionEntity> {
+    return this.cache.getOrSet(
+      `tmdb:collection:${collectionId}`,
+      async () => {
+        const response = await this.api.get<CollectionResponse>(
+          `/collection/${collectionId}`,
+        );
+        return CollectionFactory.createFromApiResponse(response.data);
+      },
+      CACHE_TTL.STANDARD,
+    );
+  }
+
+  // ──────────────────────────────────────────
+  // 検索
+  // ──────────────────────────────────────────
+
+  /**
+   * キーワード検索はユーザー入力に依存し揮発性が高いため、キャッシュ対象外とする
+   */
+  async searchMovies(query: string): Promise<MovieEntity[]> {
+    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+      "/search/movie",
+      { params: { query } },
+    );
+    return response.data.results.map((movie) =>
+      MovieFactory.createFromApiResponse(movie),
+    );
+  }
+
+  /**
+   * 人物名から最も関連性の高い人物IDを特定する。
+   * TMDB の searchPerson は関連度順で返却されるため、先頭を最適な候補として採用する。
+   */
+  async findPersonIdByName(query: string): Promise<number | null> {
+    const response = await this.api.get<PaginatedResponse<PersonResponse>>(
+      "/search/person",
+      { params: { query } },
+    );
+    const results = response.data.results;
+    return results.length > 0 ? results[0].id : null;
+  }
+
+  // ──────────────────────────────────────────
+  // 特化型検索（旧 Discover/汎用メソッドの分割先）
+  // ──────────────────────────────────────────
+
+  /**
+   * 近日公開予定の映画を取得する。
+   * 検索期間・リリースタイプ等のAPIパラメータはすべてリポジトリ内部で構築する。
+   */
+  async findUpcomingMovies(page: number): Promise<MovieEntity[]> {
+    const periodParams = this.buildUpcomingPeriodParams();
+    const params: DiscoverMovieParams = {
+      page,
+      region: TMDB_DEFAULTS.REGION,
+      watch_region: TMDB_DEFAULTS.REGION,
+      sort_by: SORT_OPTIONS.POPULARITY_DESC,
+      include_adult: false,
+      include_video: false,
+      with_release_type: `${RELEASE_TYPE.THEATRICAL}|${RELEASE_TYPE.THEATRICAL_LIMITED}`,
+      ...periodParams,
+    };
+
+    return this.discoverMovies(params);
+  }
+
+  /** 現在上映中の映画を取得する */
+  async findNowPlayingMovies(page: number): Promise<MovieEntity[]> {
+    return this.cache.getOrSet(
+      `tmdb:now_playing:${page}`,
+      async () => {
+        const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+          "/movie/now_playing",
+          {
+            params: {
+              page,
+              language: TMDB_DEFAULTS.LANGUAGE,
+              region: TMDB_DEFAULTS.REGION,
+            },
+          },
+        );
+        return response.data.results.map((movie) =>
+          MovieFactory.createFromApiResponse(movie),
+        );
+      },
+      CACHE_TTL.SHORT,
+    );
+  }
+
+  /** トレンド映画を取得する */
+  async findTrendingMovies(page: number): Promise<MovieEntity[]> {
+    return this.cache.getOrSet(
+      `tmdb:trending:${page}`,
+      async () => {
+        const response = await this.api.get<
+          PaginatedResponse<TrendingMovieResponse>
+        >("/trending/movie/week", {
+          params: {
+            page,
+            language: TMDB_DEFAULTS.LANGUAGE,
+            region: TMDB_DEFAULTS.REGION,
+          },
+        });
+        return response.data.results.map((movie) =>
+          MovieFactory.createFromTrendingResponse(movie),
+        );
+      },
+      CACHE_TTL.SHORT,
+    );
+  }
+
+  /** 特定の出演者が関わった映画を取得する */
+  async findMoviesByCastId(personId: number): Promise<MovieEntity[]> {
+    const params: DiscoverMovieParams = {
+      sort_by: SORT_OPTIONS.POPULARITY_DESC,
+      region: TMDB_DEFAULTS.REGION,
+      "vote_count.gte": TMDB_DEFAULTS.FILTERS.MIN_VOTE_COUNT,
+      with_cast: String(personId),
+    };
+
+    return this.discoverMovies(params);
+  }
+
+  /** 最近追加された人気映画を取得する */
+  async findRecentlyAddedMovies(page: number): Promise<MovieEntity[]> {
+    const params: DiscoverMovieParams = {
+      page,
+      "vote_count.gte": TMDB_DEFAULTS.FILTERS.RECENT_VOTE_COUNT,
+      sort_by: SORT_OPTIONS.PRIMARY_RELEASE_DATE_DESC,
+      region: TMDB_DEFAULTS.REGION,
+    };
+
+    return this.discoverMovies(params);
+  }
+
+  // ──────────────────────────────────────────
+  // 補助データ
+  // ──────────────────────────────────────────
 
   /**
    * 補助データ: 取得失敗時は空配列を返し、上位層の処理を中断させない
@@ -110,7 +256,7 @@ export class TmdbRepository implements ITmdbRepository {
    */
   async getMovieWatchProviders(
     movieId: number,
-  ): Promise<{ logo_path: string | null; name: string }[]> {
+  ): Promise<{ logoPath: string | null; name: string }[]> {
     try {
       return await this.cache.getOrSet(
         `tmdb:movie:${movieId}:watch_providers`,
@@ -158,20 +304,17 @@ export class TmdbRepository implements ITmdbRepository {
     }
   }
 
-  async getCollection(collectionId: number): Promise<CollectionEntity> {
-    return this.cache.getOrSet(
-      `tmdb:collection:${collectionId}`,
-      async () => {
-        const response = await this.api.get<CollectionResponse>(
-          `/collection/${collectionId}`,
-        );
-        return CollectionFactory.createFromApiResponse(response.data);
-      },
-      CACHE_TTL.STANDARD,
-    );
-  }
+  // ──────────────────────────────────────────
+  // 内部ヘルパー（外部APIの詳細をカプセル化）
+  // ──────────────────────────────────────────
 
-  async getDiscoverMovies(params: DiscoverMovieParams): Promise<MovieEntity[]> {
+  /**
+   * Discover API の共通呼び出しロジック。
+   * 外部APIの具体的なパラメータ構造はこのメソッド内に閉じ込める。
+   */
+  private async discoverMovies(
+    params: DiscoverMovieParams,
+  ): Promise<MovieEntity[]> {
     return this.cache.getOrSet(
       `tmdb:discover:${JSON.stringify(params)}`,
       async () => {
@@ -188,54 +331,35 @@ export class TmdbRepository implements ITmdbRepository {
   }
 
   /**
-   * キーワード検索はユーザー入力に依存し揮発性が高いため、キャッシュ対象外とする
+   * 近日公開映画の検索期間パラメータを構築する。
+   * JST基準で「今日」から「N月後」までの期間を算出する。
    */
-  async searchMovies(query: string): Promise<MovieEntity[]> {
-    const response = await this.api.get<PaginatedResponse<MovieResponse>>(
-      "/search/movie",
-      { params: { query } },
+  private buildUpcomingPeriodParams(): Pick<
+    DiscoverMovieParams,
+    "primary_release_date.gte" | "primary_release_date.lte"
+  > {
+    const now = this.clock.now();
+    const jstTime = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+    const today = new Date(
+      Date.UTC(
+        jstTime.getUTCFullYear(),
+        jstTime.getUTCMonth(),
+        jstTime.getUTCDate(),
+      ),
     );
-    return response.data.results.map((movie) =>
-      MovieFactory.createFromApiResponse(movie),
-    );
-  }
+    const endDate = new Date(today);
+    endDate.setUTCMonth(today.getUTCMonth() + TMDB_DEFAULTS.UPCOMING_MONTHS);
 
-  async getNowPlayingMovies(params: {
-    page: number;
-    language: string;
-    region: string;
-  }): Promise<MovieEntity[]> {
-    return this.cache.getOrSet(
-      `tmdb:now_playing:${JSON.stringify(params)}`,
-      async () => {
-        const response = await this.api.get<PaginatedResponse<MovieResponse>>(
-          "/movie/now_playing",
-          { params },
-        );
-        return response.data.results.map((movie) =>
-          MovieFactory.createFromApiResponse(movie),
-        );
-      },
-      CACHE_TTL.SHORT,
-    );
-  }
+    const formatDate = (d: Date) => {
+      const y = d.getUTCFullYear();
+      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+      const day = String(d.getUTCDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    };
 
-  async getTrendingMovies(params: {
-    page: number;
-    language: string;
-    region: string;
-  }): Promise<MovieEntity[]> {
-    return this.cache.getOrSet(
-      `tmdb:trending:${JSON.stringify(params)}`,
-      async () => {
-        const response = await this.api.get<
-          PaginatedResponse<TrendingMovieResponse>
-        >("/trending/movie/week", { params });
-        return response.data.results.map((movie) =>
-          MovieFactory.createFromTrendingResponse(movie),
-        );
-      },
-      CACHE_TTL.SHORT,
-    );
+    return {
+      "primary_release_date.gte": formatDate(today),
+      "primary_release_date.lte": formatDate(endDate),
+    };
   }
 }

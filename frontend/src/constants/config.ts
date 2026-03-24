@@ -1,4 +1,4 @@
-export const TMDB_CONFIG = {
+export const TMDB_IMAGE_CONFIG = {
   IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/',
   IMAGE_SIZES: {
     POSTER: {
@@ -25,36 +25,24 @@ export const TMDB_CONFIG = {
   },
 } as const;
 
-export const EXTERNAL_URLS = {
-  YOUTUBE_WATCH: 'https://www.youtube.com/watch?v=',
-  EIGA_COM: 'https://eiga.com',
-  NETFLIX_SEARCH: 'https://www.netflix.com/search?q=',
-  APPLE_TV_SEARCH: 'https://tv.apple.com/jp/search?term=',
-  AMAZON_SEARCH: 'https://www.amazon.co.jp/s?k=',
-  AMAZON_SEARCH_PARAMS: '&i=instant-video',
-  HULU_SEARCH: 'https://www.hulu.jp/search?q=',
-  UNEXT_SEARCH: 'https://video.unext.jp/freeword?query=',
+export const GENRE_NAMES: Record<number, string> = {
+  28: "アクション",
+  12: "アドベンチャー",
+  16: "アニメーション",
+  35: "コメディ",
+  80: "犯罪",
+  99: "ドキュメンタリー",
+  18: "ドラマ",
+  10751: "ファミリー",
+  14: "ファンタジー",
+  36: "歴史",
+  27: "ホラー",
+  10402: "音楽",
+  9648: "ミステリー",
+  10749: "ロマンス",
+  878: "SF",
+  10770: "テレビ映画",
+  53: "スリラー",
+  10752: "戦争",
+  37: "西部劇",
 } as const;
-import { TmdbGenreId } from '@shared/types/external/tmdb';
-
-export const GENRE_MAP: { id: TmdbGenreId; name: string }[] = [
-  { id: 28,    name: "アクション" },
-  { id: 12,    name: "アドベンチャー" },
-  { id: 16,    name: "アニメーション" },
-  { id: 35,    name: "コメディ" },
-  { id: 80,    name: "犯罪" },
-  { id: 99,    name: "ドキュメンタリー" },
-  { id: 18,    name: "ドラマ" },
-  { id: 10751, name: "ファミリー" },
-  { id: 14,    name: "ファンタジー" },
-  { id: 36,    name: "履歴" },
-  { id: 27,    name: "ホラー" },
-  { id: 10402, name: "音楽" },
-  { id: 9648,  name: "謎" },
-  { id: 10749, name: "ロマンス" },
-  { id: 878,   name: "サイエンスフィクション" },
-  { id: 10770, name: "テレビ映画" },
-  { id: 53,    name: "スリラー" },
-  { id: 10752, name: "戦争" },
-  { id: 37,    name: "西洋" },
-] as const;

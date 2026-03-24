@@ -92,14 +92,12 @@ export class MovieEnrichService {
     const candidates = [...(teaser ? [teaser] : []), ...trailers];
 
     let mainVideoKey: string | null = null;
-    let selectedIndex = -1;
 
     // 公開済みのメイン動画を決定
     for (let i = 0; i < candidates.length; i++) {
       const key = candidates[i].getKey();
       if (await this.youtubeRepo.getVideoStatus(key)) {
         mainVideoKey = key;
-        selectedIndex = i;
         break;
       }
     }

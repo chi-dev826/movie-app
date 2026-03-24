@@ -1,9 +1,9 @@
 import React from 'react';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 
 export interface WatchProvider {
   link?: string | null;
-  logo_path: string | null;
+  logoPath: string | null;
   name: string;
 }
 
@@ -33,7 +33,7 @@ export const WatchProviderSection: React.FC<WatchProviderSectionProps> = ({ watc
               className="relative transition-transform hover:scale-110 active:scale-95"
             >
               <img 
-                src={`${TMDB_CONFIG.IMAGE_BASE_URL}w92${provider.logo_path}`} 
+                src={`${TMDB_IMAGE_CONFIG.IMAGE_BASE_URL}w92${provider.logoPath}`} 
                 alt={provider.name} 
                 title={provider.name}
                 className="w-12 h-12 md:w-16 md:h-16 rounded-xl border border-white/10 shadow-lg"
@@ -42,7 +42,7 @@ export const WatchProviderSection: React.FC<WatchProviderSectionProps> = ({ watc
           ) : (
             <div key={idx} className="relative">
               <img 
-                src={`${TMDB_CONFIG.IMAGE_BASE_URL}w92${provider.logo_path}`} 
+                src={`${TMDB_IMAGE_CONFIG.IMAGE_BASE_URL}w92${provider.logoPath}`} 
                 alt={provider.name} 
                 title={provider.name}
                 className="w-12 h-12 md:w-16 md:h-16 rounded-xl border border-white/10 shadow-lg opacity-50"

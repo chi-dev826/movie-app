@@ -1,5 +1,5 @@
 import { MovieEntity } from "./movie";
-import { Crew, Cast } from "../../../../shared/types/domain";
+import { Crew, Cast } from "../../../../shared/types/api/dto";
 
 export class MovieDetailEntity {
   constructor(

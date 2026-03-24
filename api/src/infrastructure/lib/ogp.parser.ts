@@ -42,7 +42,7 @@ export class OgpParser implements IOgpImageProvider {
       }
 
       return ogImage;
-    } catch (error) {
+    } catch {
       // タイムアウトや404などはログに出さず、nullを返す（検索結果を壊さないため）
       return null;
     }

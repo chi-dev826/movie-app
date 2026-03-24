@@ -1,4 +1,4 @@
-export const TMDB_CONFIG = {
+export const TMDB_FETCH_CONFIG = {
   REGION: "JP",
   LANGUAGE: "ja",
   FETCH_PAGES: {

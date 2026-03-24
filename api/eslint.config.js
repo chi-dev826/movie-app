@@ -70,6 +70,19 @@ export default tseslint.config(
           selector: "objectLiteralProperty",
           format: null, // オブジェクトリテラルのプロパティは任意の形式を許可
         },
+        {
+          selector: "typeProperty",
+          format: ["camelCase", "snake_case"],
+        },
+        // ドットを含むTMDB APIパラメータ名を除外
+        {
+          selector: "typeProperty",
+          filter: {
+            regex: "\\.",
+            match: true,
+          },
+          format: null,
+        },
       ],
 
       // --- 未使用変数の設定 ---

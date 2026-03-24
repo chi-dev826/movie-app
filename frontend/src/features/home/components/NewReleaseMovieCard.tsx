@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { StarIcon } from '@heroicons/react/24/solid';
-import type { Movie } from '@/types/domain';
+import type { Movie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
  */
 export default function NewReleaseMovieCard({ movie, className = '' }: Props) {
   // バックドロップがない場合はポスターをフォールバックとして利用
-  const imageUrl = getTmdbImage(movie.backdrop_path || movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.SMALL);
+  const imageUrl = getTmdbImage(movie.backdropPath || movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.SMALL);
 
   return (
     <Link 
@@ -41,10 +41,10 @@ export default function NewReleaseMovieCard({ movie, className = '' }: Props) {
            </span>
            
            {/* 評価バッジ */}
-           {movie.vote_average !== null && movie.vote_average > 0 && (
+           {movie.voteAverage !== null && movie.voteAverage > 0 && (
              <span className="inline-flex items-center gap-1 px-1.5 md:px-2 py-0.5 md:py-1 text-[9px] md:text-[10px] font-bold text-yellow-300 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 shadow-sm">
                <StarIcon className="w-2.5 h-2.5 text-yellow-400 md:w-3 md:h-3" />
-               {(movie.vote_average ?? 0).toFixed(1)}
+               {(movie.voteAverage ?? 0).toFixed(1)}
              </span>
            )}
          </div>

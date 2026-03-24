@@ -1,16 +1,24 @@
+import { MovieEntity } from "../../../domain/models/movie";
+import { MovieDetailEntity } from "../../../domain/models/movieDetail";
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
 import { MovieEnrichService } from "../../services/movie.enrich.service";
 import { MovieRecommendationService } from "../../../domain/services/movie.recommendation.service";
-import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
-import { MoviePresenter } from "../../../presentation/presenters/movie.presenter";
-import { FullMovieData } from "../../../../../shared/types/api";
 
 /**
- * 映画の詳細表示に必要な関連リソースを一括取得・加工するユースケース。
- * * @description
- * 基本情報に加え、配信状況、動的なおすすめ選定（シリーズ優先）、
- * およびロゴや予告編の補完を一括して行う。
+ * 映画の詳細表示に必要な関連リソースを一括取得するドメイン関心事のオーケストレーション。
  */
+export type FullMovieDomainData = {
+  detail: MovieDetailEntity;
+  imagePath: string | null;
+  watchProviders: { logoPath: string | null; name: string }[];
+  recommendation: {
+    title: string;
+    movies: readonly MovieEntity[];
+  };
+  recLogosMap: Map<number, string>;
+  videoInfo: { video: string | null; otherVideos: string[] };
+};
+
 export class GetFullMovieDataUseCase {
   constructor(
     private readonly tmdbRepo: ITmdbRepository,
@@ -20,10 +28,10 @@ export class GetFullMovieDataUseCase {
 
   /**
    * @param movieId - 対象の映画ID
-   * @returns プレゼンテーション層に最適化された一括データ
+   * @returns ドメインデータの集合体
    * @throws {Error} 必須データ（詳細情報）が取得できない場合
    */
-  async execute(movieId: number): Promise<FullMovieData> {
+  async execute(movieId: number): Promise<FullMovieDomainData> {
     // 1. 並行実行によるレイテンシの最小化
     const [detailEntity, imagePath, watchProviders] = await Promise.all([
       this.tmdbRepo.getMovieDetails(movieId),
@@ -31,7 +39,7 @@ export class GetFullMovieDataUseCase {
       this.tmdbRepo.getMovieWatchProviders(movieId),
     ]);
 
-    // 2. おすすめ選定: ドメインサービスは候補選定のみを担当し、外部API呼び出しはユースケースで実行
+    // 2. おすすめ選定
     let collection = null;
     if (detailEntity.belongsToCollectionId) {
       try {
@@ -55,34 +63,19 @@ export class GetFullMovieDataUseCase {
       similarMovies,
     );
 
-    // 3. エンリッチメント（App Service で動画キー等の補助データだけを取得）
-    // 一覧系はバルクAPIを利用し、詳細1件は単体APIを利用する。
+    // 3. エンリッチメント
     const [recLogosMap, videoInfo] = await Promise.all([
       this.enrichService.getLogos(recommendation.movies.map((m) => m.id)),
       this.enrichService.getDetailedVideos(movieId),
     ]);
 
-    // 4. レスポンス構築（マッパー生成後、プレゼンターでUI装飾）
-    const rawDetailDto = MovieMapper.toDetailBffDto(detailEntity, {
-      videoKey: videoInfo.video,
-    });
-    const decoratedDetail = MoviePresenter.toMovieDetail(
-      rawDetailDto,
-      new Date(),
-    );
-
     return {
-      detail: decoratedDetail,
-      image: imagePath,
-      video: videoInfo.video ?? null,
-      otherVideos: videoInfo.otherVideos,
-      recommendations: {
-        title: recommendation.title,
-        movies: recommendation.movies.map((m) =>
-          MovieMapper.toBffDto(m, { logoPath: recLogosMap.get(m.id) }),
-        ),
-      },
+      detail: detailEntity,
+      imagePath,
       watchProviders,
+      recommendation,
+      recLogosMap,
+      videoInfo,
     };
   }
 }

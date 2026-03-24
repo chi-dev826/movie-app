@@ -1,4 +1,4 @@
-import { TmdbGenreId } from './genres';
+import { TmdbGenreId } from "./genres";
 
 // TMDB APIのMovieオブジェクトの生データ型
 export type MovieResponse = {
@@ -116,4 +116,4 @@ export type TrendingMovieResponse = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-}
+};

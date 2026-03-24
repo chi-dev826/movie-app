@@ -1,7 +1,6 @@
+import { MovieEntity } from "../../../domain/models/movie";
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
-import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
-import { Movie as MovieDTO } from "../../../../../shared/types/domain";
-import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
+import { TMDB_FETCH_CONFIG } from "../../../domain/constants/tmdbFetchConfig";
 
 import { ArrayUtils } from "../../../utils/array";
 
@@ -11,27 +10,25 @@ import { ArrayUtils } from "../../../utils/array";
 export class GetTrendingListUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
-  async execute(): Promise<MovieDTO[]> {
-    const pagesToFetch = ArrayUtils.range(TMDB_CONFIG.FETCH_PAGES.TRENDING);
+  /**
+   * @returns トレンド映画リスト（ドメインエンティティ）
+   */
+  async execute(): Promise<MovieEntity[]> {
+    const pagesToFetch = ArrayUtils.range(
+      TMDB_FETCH_CONFIG.FETCH_PAGES.TRENDING,
+    );
 
     // 1. 指定されたページ数分のデータを並行取得
     const promises = pagesToFetch.map((page) =>
-      this.tmdbRepo.getTrendingMovies({
-        page,
-        language: TMDB_CONFIG.LANGUAGE,
-        region: TMDB_CONFIG.REGION,
-      }),
+      this.tmdbRepo.findTrendingMovies(page),
     );
 
     const responses = await Promise.all(promises);
     const allMovies = responses.flatMap((res) => res);
 
     // 2. ビジネスルールに基づくフィルタリングと重複排除
-    const processedMovies = ArrayUtils.deduplicate(allMovies).filter(
+    return ArrayUtils.deduplicate(allMovies).filter(
       (m) => m.hasValidImages() && m.hasOverview() && m.isMostlyJapanese(),
     );
-
-    // 3. マッパーでDTOへの変換
-    return processedMovies.map((m) => MovieMapper.toBffDto(m));
   }
 }

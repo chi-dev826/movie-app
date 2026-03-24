@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import type { Movie } from '@/types/domain';
+import type { Movie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 const MoviePoster = ({ movie, className = '' }: Props) => {
-  const posterUrl = getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
+  const posterUrl = getTmdbImage(movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
 
   return (
     posterUrl && (

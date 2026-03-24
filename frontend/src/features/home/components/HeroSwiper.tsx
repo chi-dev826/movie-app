@@ -9,7 +9,7 @@ import ReactPlayer from 'react-player';
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 import 'swiper/css/effect-coverflow';
@@ -17,7 +17,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 import 'swiper/css';
-import { HeroMovie } from '@/types/api';
+import { HeroMovie } from '@/types/api/response';
 
 type Props = {
   movies: HeroMovie[];
@@ -105,7 +105,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
               }}
               transition={{ duration: 1 }}
               src={
-                getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+                getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
               }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"
@@ -122,7 +122,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
             style={{ transform: 'translate(-50%, -50%) scale(1.35)' }}
           >
             <ReactPlayer
-              src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${movie.video}`}
+              src={movie.video}
               playing
               muted
               controls={false}
@@ -134,10 +134,10 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
         </div>
       ) : (
         <AnimatePresence>
-          {movie?.backdrop_path && (
+          {movie?.backdropPath && (
             <motion.img
               src={
-                getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+                getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
               }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"

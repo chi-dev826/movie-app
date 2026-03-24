@@ -3,12 +3,24 @@ import { createApp } from "../../src/app";
 import { createContainer } from "../../src/container";
 import { API_PATHS } from "../../../shared/constants/routes";
 
-// YoutubeRepository をモック化して、APIキーのチェックを無効にする
-jest.mock("../../src/infrastructure/repositories/youtube.repository", () => ({
-  YoutubeRepository: jest.fn().mockImplementation(() => ({
-    getVideoStatus: jest.fn().mockResolvedValue(false),
-  })),
-}));
+// リポジトリをモック化して、外部APIへの依存を排除する
+jest.mock("../../src/infrastructure/repositories/youtube.repository");
+jest.mock("../../src/infrastructure/repositories/tmdb.repository", () => {
+  return {
+    TmdbRepository: jest.fn().mockImplementation(() => ({
+      findUpcomingMovies: jest.fn().mockResolvedValue([]),
+      findNowPlayingMovies: jest.fn().mockResolvedValue([]),
+      findRecentlyAddedMovies: jest.fn().mockResolvedValue([]),
+      findTrendingMovies: jest.fn().mockResolvedValue([]),
+      getMovieDetails: jest.fn(),
+      getMovieImages: jest.fn().mockResolvedValue(null),
+      getMovieWatchProviders: jest.fn().mockResolvedValue([]),
+      getSimilarMovies: jest.fn().mockResolvedValue([]),
+      getCollection: jest.fn(),
+    })),
+  };
+});
+jest.mock("../../src/infrastructure/repositories/googleSearch.repository");
 
 describe("アプリケーション統合", () => {
   // コンテナとアプリを作成
@@ -17,24 +29,29 @@ describe("アプリケーション統合", () => {
 
   it("ホームの映画リストを取得できること", async () => {
     // 1. リクエストの実行
-    const res = await request(app).get(`/api${API_PATHS.MOVIES.HOME}`); // 'API_PATHS.MOVIES.HOME' は '/movies/home' に対応
-    const categories = Object.keys(res.body); // レスポンスのカテゴリを取得
+    const res = await request(app).get(`/api${API_PATHS.HOME}`);
+    const body = res.body;
 
     // 2. レスポンスの検証
-    expect(res.statusCode).toEqual(200); // ステータスコードが200であること
-    expect(Array.isArray(res.body.popular)).toBe(true); // 'results' が配列であること
-    expect(res.body.popular.length).toBeGreaterThan(0); // 'results' 配列が空でないこと
+    expect(res.statusCode).toEqual(200);
+    expect(body).toHaveProperty("hero");
+    expect(body).toHaveProperty("upcoming");
+    expect(body).toHaveProperty("nowPlaying");
+    expect(body).toHaveProperty("recentlyAdded");
+    expect(body).toHaveProperty("trending");
 
-    // 3. 各映画オブジェクトの基本的なプロパティを検証
+    // 3. 各映画リストの基本的な構造を検証
+    const categories = ["upcoming", "nowPlaying", "recentlyAdded", "trending"];
     for (const category of categories) {
-      expect(Array.isArray(res.body[category])).toBe(true); // 各カテゴリが配列であること
-      if (category.length > 0) {
-        const movie = res.body.popular[0];
-        expect(movie).toHaveProperty("id"); // 'id' プロパティが存在すること
-        expect(movie).toHaveProperty("title"); // 'title' プロパティが存在すること
-        expect(movie).toHaveProperty("poster_path"); // 'poster_path' プロパティが存在すること
-        expect(typeof movie.id).toBe("number"); // 'id' が数値であること
-        expect(typeof movie.title).toBe("string"); // 'title' が文字列であること
+      const list = body[category];
+      expect(Array.isArray(list)).toBe(true);
+      if (list.length > 0) {
+        const movie = list[0];
+        expect(movie).toHaveProperty("id");
+        expect(movie).toHaveProperty("title");
+        expect(movie).toHaveProperty("poster_path");
+        expect(typeof movie.id).toBe("number");
+        expect(typeof movie.title).toBe("string");
       }
     }
   });

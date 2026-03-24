@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 import { motion } from 'framer-motion';
-import { EXTERNAL_URLS } from '@/constants/config';
 
 interface TrailerCarouselSectionProps {
-  otherVideos?: string[];
+  otherVideoUrls?: string[];
 }
 
 /**
@@ -12,11 +11,11 @@ interface TrailerCarouselSectionProps {
  * @param {TrailerCarouselSectionProps} props - YouTubeの動画キーリスト
  * @returns {React.ReactElement | null} 動画が存在しない場合はnullを返す
  */
-export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ otherVideos }) => {
-  const [activeKey, setActiveKey] = useState<string | null>(null);
+export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ otherVideoUrls }) => {
+  const [activeUrl, setActiveUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  if (!otherVideos || otherVideos.length === 0) return null;
+  if (!otherVideoUrls || otherVideoUrls.length === 0) return null;
 
   return (
     <section className="py-6 border-t border-white/5">
@@ -27,12 +26,14 @@ export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ 
          </h3>
       </div>
       <div className="flex flex-col overflow-x-auto hide-scrollbar gap-4 px-4 pb-4 max-w-7xl mx-auto md:flex-row">
-        {otherVideos.map((key) => {
-          const isSelected = activeKey === key;
+        {otherVideoUrls.map((url) => {
+          const isSelected = activeUrl === url;
+          // サムネイル用にURLからキーを抽出（v=以降を取得）
+          const videoKey = url.split('v=')[1];
 
           return (
             <motion.div 
-              key={key} 
+              key={url} 
               whileHover={!isSelected ? { scale: 1.02 } : undefined}
               className={`relative flex-shrink-0 w-[320px] h-[180px] rounded-xl overflow-hidden bg-surface-container-high border transition-colors group ${
                 isSelected ? 'border-red-500/50 shadow-lg shadow-red-500/20' : 'border-white/10 hover:border-primary/50'
@@ -42,12 +43,12 @@ export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ 
                  <div 
                    className="relative w-full h-full cursor-pointer"
                    onClick={() => {
-                     setActiveKey(key);
+                     setActiveUrl(url);
                      setIsPlaying(true);
                    }}
                  >
                    <img 
-                     src={`https://img.youtube.com/vi/${key}/hqdefault.jpg`} 
+                     src={`https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`} 
                      alt="Trailer Thumbnail" 
                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
                    />
@@ -60,7 +61,7 @@ export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ 
                ) : (
                  <div className="absolute inset-0 w-full h-full overflow-hidden rounded-xl">
                    <ReactPlayer
-                     src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${key}`}
+                     src={url}
                      width="100%"
                      height="100%"
                      playing={isPlaying}

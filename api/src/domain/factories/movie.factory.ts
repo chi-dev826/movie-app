@@ -7,7 +7,7 @@ import {
   VideoItem,
   MovieWatchProvidersResponse,
   TrendingMovieResponse,
-} from "../../../../shared/types/external/tmdb";
+} from "../../infrastructure/external/tmdb";
 import { EXCLUDED_PROVIDERS } from "../constants/watchProviders";
 
 const excludedProviderSet = new Set<string>(EXCLUDED_PROVIDERS);
@@ -54,7 +54,7 @@ export class MovieFactory {
         id: c.id,
         name: c.name,
         character: c.character,
-        profile_path: c.profile_path,
+        profilePath: c.profile_path,
       })) ?? [],
       data.credits?.crew
         ?.filter(
@@ -67,7 +67,7 @@ export class MovieFactory {
           id: c.id,
           name: c.name,
           job: c.job,
-          profile_path: c.profile_path,
+          profilePath: c.profile_path,
         })) ?? [],
       data.revenue,
       data.budget,
@@ -83,7 +83,7 @@ export class MovieFactory {
 
   static createWatchProviders(
     data: MovieWatchProvidersResponse,
-  ): { logo_path: string | null; name: string }[] {
+  ): { logoPath: string | null; name: string }[] {
     const regionalData = data.results["JP"];
     if (!regionalData) return [];
     return (
@@ -93,7 +93,7 @@ export class MovieFactory {
             !excludedProviderSet.has(p.provider_name),
         )
         .map((p: { logo_path: string | null; provider_name: string }) => ({
-          logo_path: p.logo_path,
+          logoPath: p.logo_path,
           name: p.provider_name,
         })) ?? []
     );

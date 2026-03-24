@@ -2,10 +2,10 @@ import React from 'react';
 
 interface MovieStatsSectionProps {
   detail: {
-    revenue_jpy_display?: string;
-    budget_jpy_display?: string;
-    production_companies?: string[];
-    production_countries?: string[];
+    revenueJpyDisplay?: string;
+    budgetJpyDisplay?: string;
+    productionCompanies?: string[];
+    productionCountries?: string[];
   };
 }
 
@@ -29,13 +29,13 @@ export const MovieStatsSection: React.FC<MovieStatsSectionProps> = ({ detail }) 
                <div className="flex-1 p-6 border-b md:border-b-0 md:border-r border-white/10">
                   <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">Box Office</p>
                   <p className="text-3xl font-headline font-black text-red-400 drop-shadow-sm">
-                    {detail.revenue_jpy_display || 'N/A'}
+                    {detail.revenueJpyDisplay || 'N/A'}
                   </p>
                </div>
                <div className="flex-1 p-6">
                   <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">Budget</p>
                   <p className="text-3xl font-headline font-black text-white drop-shadow-sm">
-                    {detail.budget_jpy_display || 'N/A'}
+                    {detail.budgetJpyDisplay || 'N/A'}
                   </p>
                </div>
             </div>
@@ -44,7 +44,7 @@ export const MovieStatsSection: React.FC<MovieStatsSectionProps> = ({ detail }) 
             <div className="p-6 border-b md:border-b-0 md:border-r border-white/10 flex flex-col justify-center">
                <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">Production Company</p>
                <p className="text-xl font-headline font-bold text-white leading-tight">
-                  {detail.production_companies?.join(' & ') || 'N/A'}
+                  {detail.productionCompanies?.join(' & ') || 'N/A'}
                </p>
             </div>
 
@@ -52,7 +52,7 @@ export const MovieStatsSection: React.FC<MovieStatsSectionProps> = ({ detail }) 
             <div className="p-6 flex flex-col justify-center">
                <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">Filming Locations</p>
                <p className="text-lg font-headline font-bold text-white leading-tight">
-                  {detail.production_countries?.join(', ') || 'N/A'}
+                  {detail.productionCountries?.join(', ') || 'N/A'}
                </p>
             </div>
          </div>

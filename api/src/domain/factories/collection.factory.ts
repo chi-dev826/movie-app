@@ -1,6 +1,6 @@
 import { CollectionEntity } from "../models/collection";
 import { MovieFactory } from "./movie.factory";
-import { CollectionResponse } from "../../../../shared/types/external/tmdb";
+import { CollectionResponse } from "../../infrastructure/external/tmdb";
 
 /**
  * 外部APIレスポンスからCollectionEntityを生成するためのファクトリクラス。

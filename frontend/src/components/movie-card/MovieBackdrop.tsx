@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import type { Movie } from '@/types/domain';
+import type { Movie } from '@/types/api/dto';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -11,8 +11,8 @@ type Props = {
 };
 
 const MovieBackdrop = ({ movie, className = '' }: Props) => {
-  const backdropUrl = getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.MEDIUM);
-  const logoUrl = getTmdbImage(movie.logo_path, TMDB_CONFIG.IMAGE_SIZES.LOGO.MEDIUM);
+  const backdropUrl = getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.MEDIUM);
+  const logoUrl = getTmdbImage(movie.logoPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.LOGO.MEDIUM);
 
   return (
     backdropUrl && (
@@ -22,7 +22,7 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
       >
         <img
           src={backdropUrl}
-          alt={movie.original_title}
+          alt={movie.originalTitle}
           className="hidden xl:object-cover xl:w-full xl:h-full xl:transition-all xl:duration-300 xl:ease-in-out xl:block"
           loading="lazy"
         />
@@ -41,7 +41,7 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
           {logoUrl && (
             <img
               src={logoUrl}
-              alt={movie.original_title}
+              alt={movie.originalTitle}
               className="object-contain w-full h-full opacity-80"
               loading="lazy"
             />
@@ -50,10 +50,10 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
 
         {/* 評価スコア */}
         <div className="absolute flex items-center gap-1 px-2 py-1 text-xs font-bold text-white rounded-full bottom-2 right-2 bg-black/50 backdrop-blur-sm">
-          {movie.vote_average !== null && (
+          {movie.voteAverage !== null && (
             <>
               <StarIcon className="w-3 h-3 text-yellow-400" />
-              <span>{movie.vote_average.toFixed(1)}</span>
+              <span>{movie.voteAverage.toFixed(1)}</span>
             </>
           )}
         </div>

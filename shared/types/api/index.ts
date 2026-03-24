@@ -1,2 +1,2 @@
-export * from './movie';
-export * from './home';
+export * from './dto';
+export * from './response';

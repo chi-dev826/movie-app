@@ -10,8 +10,8 @@ import {
   fetchMovieWatchList,
   fetchHomePage,
 } from '@/services/movieApi';
-import { MovieListResponse, HomePageResponse } from '@/types/api';
-import { Movie, UpcomingMovie } from '@/types/domain';
+import { MovieListResponse, HomePageResponse } from '@/types/api/response';
+import { Movie, UpcomingMovie } from '@/types/api/dto';
 
 const movieKeys = {
   all: ['movies'] as const,

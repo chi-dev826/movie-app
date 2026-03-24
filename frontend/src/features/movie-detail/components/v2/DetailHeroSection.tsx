@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG, EXTERNAL_URLS } from '@/constants/config';
-import { MovieDetail } from '@/types/domain';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { MovieDetail } from '@/types/api/dto';
 
 export interface DetailHeroSectionProps {
   detail: MovieDetail;
@@ -26,7 +26,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
     return () => clearTimeout(timeoutId);
   }, [isBackdropVisible, videoKey]);
 
-  const backdropUrl = getTmdbImage(detail.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) || '';
+  const backdropUrl = getTmdbImage(detail.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) || '';
 
   return (
     <>
@@ -35,9 +35,9 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
         <div className="absolute inset-0 z-gradient bg-gradient-to-t from-background via-background/20 to-transparent flex items-center justify-center pointer-events-none" />
 
         <AnimatePresence>
-          {isBackdropVisible && detail.backdrop_path && videoKey && (
+          {isBackdropVisible && detail.backdropPath && videoKey && (
             <motion.div
-              key={detail.backdrop_path || videoKey}
+              key={detail.backdropPath || videoKey}
               className="absolute inset-0 z-backdrop"
               initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
               animate={{ opacity: 1 }}
@@ -72,7 +72,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               style={{ transform: 'translate(-50%, -50%) scale(1.35)' }}
             >
               <ReactPlayer
-                src={`${EXTERNAL_URLS.YOUTUBE_WATCH}${videoKey}`}
+                src={videoKey}
                 playing
                 muted
                 onReady={() => setIsBackdropVisible(true)}
@@ -104,7 +104,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
 
         <div className="absolute top-4 right-4 bg-surface-container-highest/80 backdrop-blur-md px-2 py-1 items-center gap-1 rounded-md border border-white/10 shadow-lg hidden md:flex z-overlay">
            <span className="material-symbols-outlined text-[14px] text-primary" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
-           <span className="text-xs font-label font-bold tracking-wider">{detail.vote_average ? detail.vote_average.toFixed(1) : '-'}</span>
+           <span className="text-xs font-label font-bold tracking-wider">{detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}</span>
         </div>
       </section>
 
@@ -122,7 +122,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
                 <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
                 <span className="flex items-center gap-1 font-bold text-primary text-yellow-400">
                    <span className="material-symbols-outlined text-[16px]" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
-                   {detail.vote_average ? detail.vote_average.toFixed(1) : '-'}
+                   {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
                 </span>
               </div>
               <div className="flex flex-wrap gap-2 mt-3">
@@ -136,7 +136,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
            <div className="hidden md:flex flex-col items-center justify-center bg-surface-container-high rounded-xl p-3 border border-white/5 shadow-xl">
               <div className="flex items-center gap-1 text-primary">
                  <span className="material-symbols-outlined text-[24px]" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
-                 <span className="text-2xl font-headline font-black">{detail.vote_average ? detail.vote_average.toFixed(1) : '-'}</span>
+                 <span className="text-2xl font-headline font-black">{detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}</span>
               </div>
               <span className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mt-1">TMDB</span>
            </div>

@@ -1,7 +1,7 @@
 import { getYoutubeApi } from "../lib/youtubeClient";
 import { IYoutubeRepository } from "../../domain/repositories/youtube.repository.interface";
 import { ICacheRepository } from "../../domain/repositories/cache.repository.interface";
-import { CACHE_TTL } from "../../domain/constants/cacheTtl";
+import { CACHE_TTL } from "../constants/cacheTtl";
 import { AxiosInstance } from "axios";
 
 export class YoutubeRepository implements IYoutubeRepository {

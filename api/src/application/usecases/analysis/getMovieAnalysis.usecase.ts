@@ -1,5 +1,5 @@
 import { IGoogleSearchRepository } from "../../../domain/repositories/googleSearch.repository.interface";
-import { Article } from "../../../../../shared/types/domain";
+import { Article } from "../../../../../shared/types/api/dto";
 import { ArticleEnrichService } from "../../services/article.enrich.service";
 
 export class GetMovieAnalysisUseCase {

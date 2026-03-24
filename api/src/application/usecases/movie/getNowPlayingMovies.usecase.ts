@@ -1,7 +1,6 @@
+import { MovieEntity } from "../../../domain/models/movie";
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
-import { MovieMapper } from "../../../presentation/mappers/movie.mapper";
-import { Movie as MovieDTO } from "../../../../../shared/types/domain";
-import { TMDB_CONFIG } from "../../../domain/constants/tmdbConfig";
+import { TMDB_FETCH_CONFIG } from "../../../domain/constants/tmdbFetchConfig";
 
 import { ArrayUtils } from "../../../utils/array";
 
@@ -12,29 +11,24 @@ export class GetNowPlayingMoviesUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   /**
-   * @returns 現在上映中の映画リスト
+   * @returns 現在上映中の映画リスト（ドメインエンティティ）
    */
-  async execute(): Promise<MovieDTO[]> {
-    const pagesToFetch = ArrayUtils.range(TMDB_CONFIG.FETCH_PAGES.NOW_PLAYING);
+  async execute(): Promise<MovieEntity[]> {
+    const pagesToFetch = ArrayUtils.range(
+      TMDB_FETCH_CONFIG.FETCH_PAGES.NOW_PLAYING,
+    );
 
     // 1. 指定されたページ数分のデータを並行取得
     const promises = pagesToFetch.map((page) =>
-      this.tmdbRepo.getNowPlayingMovies({
-        page,
-        language: TMDB_CONFIG.LANGUAGE,
-        region: TMDB_CONFIG.REGION,
-      }),
+      this.tmdbRepo.findNowPlayingMovies(page),
     );
 
     const responses = await Promise.all(promises);
     const allMovies = responses.flatMap((res) => res);
 
     // 2. ビジネスルールに基づくフィルタリングと重複排除
-    const processedMovies = ArrayUtils.deduplicate(allMovies).filter(
+    return ArrayUtils.deduplicate(allMovies).filter(
       (m) => m.hasValidImages() && m.isMostlyJapanese(),
     );
-
-    // 3. マッパーでDTOへの変換
-    return processedMovies.map((m) => MovieMapper.toBffDto(m));
   }
 }

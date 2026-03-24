@@ -17,6 +17,7 @@ import { GetNowPlayingMoviesUseCase } from "./application/usecases/movie/getNowP
 import { SearchMoviesByPersonUseCase } from "./application/usecases/movie/searchMoviesByPerson.usecase";
 import { GetMovieWatchListUseCase } from "./application/usecases/movie/getMovieWatchList.usecase";
 import { GetTrendingListUseCase } from "./application/usecases/movie/getTrendingList.usecase";
+import { MovieResponseBuilder } from "./presentation/builders/movieResponse.builder";
 
 import { TmdbRepository } from "./infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCache.repository";
@@ -35,9 +36,12 @@ export interface Dependencies {
 }
 
 export const createContainer = (): Dependencies => {
-  // リポジトリのインスタンス化
+  // 共通インフラ
   const cacheRepository = new NodeCacheRepository();
-  const tmdbRepository = new TmdbRepository(cacheRepository);
+  const systemClock = new SystemClock();
+
+  // リポジトリのインスタンス化
+  const tmdbRepository = new TmdbRepository(cacheRepository, systemClock);
   const eigaComRepository = new EigaComRepository(cacheRepository);
   const googleSearchRepository = new GoogleSearchRepository(cacheRepository);
   const youtubeRepository = new YoutubeRepository(cacheRepository);
@@ -52,8 +56,10 @@ export const createContainer = (): Dependencies => {
   const articleEnrichService = new ArticleEnrichService(ogpImageProvider);
 
   const movieRecommendationService = new MovieRecommendationService();
-  const systemClock = new SystemClock(); // SystemClockのインスタンス化
-  const upcomingMovieService = new UpcomingMovieService(systemClock); // 修正: systemClockを注入
+  const upcomingMovieService = new UpcomingMovieService(systemClock);
+
+  // Builders
+  const movieResponseBuilder = new MovieResponseBuilder();
 
   // UseCases
   const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
@@ -68,7 +74,6 @@ export const createContainer = (): Dependencies => {
     tmdbRepository,
     movieEnrichService,
     upcomingMovieService,
-    systemClock,
   );
   const getNowPlayingMoviesUseCase = new GetNowPlayingMoviesUseCase(
     tmdbRepository,
@@ -105,6 +110,8 @@ export const createContainer = (): Dependencies => {
     searchMoviesByPersonUseCase,
     getMovieWatchListUseCase,
     getTrendingListUseCase,
+    movieResponseBuilder,
+    systemClock,
   );
   const eigaComController = new EigaComController(getEigaComNewsUseCase);
   const googleSearchController = new GoogleSearchController(

@@ -26,9 +26,9 @@ describe("MoviePresenter", () => {
       const dto = MovieMapper.toBffDto(movie);
       const result = MoviePresenter.toUpcomingMovie(dto, fixedToday);
 
-      expect(result.days_until_release).toBe(5);
-      expect(result.upcoming_badge_label).toBe("公開予定");
-      expect(result.release_date_display).toBe("3月25日(水)");
+      expect(result.daysUntilRelease).toBe(5);
+      expect(result.upcomingBadgeLabel).toBe("公開予定");
+      expect(result.releaseDateDisplay).toBe("3月25日(水)");
     });
 
     it("should handle released movies as null for upcoming metadata", () => {
@@ -38,8 +38,8 @@ describe("MoviePresenter", () => {
       const dto = MovieMapper.toBffDto(pastMovie);
       const result = MoviePresenter.toUpcomingMovie(dto, fixedToday);
 
-      expect(result.days_until_release).toBeNull();
-      expect(result.upcoming_badge_label).toBeNull();
+      expect(result.daysUntilRelease).toBeNull();
+      expect(result.upcomingBadgeLabel).toBeNull();
     });
   });
 

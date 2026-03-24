@@ -1,4 +1,4 @@
-import type { Movie } from '@/types/domain';
+import type { Movie } from '@/types/api/dto';
 import MoviePoster from './MoviePoster';
 import MovieBackdrop from './MovieBackdrop';
 

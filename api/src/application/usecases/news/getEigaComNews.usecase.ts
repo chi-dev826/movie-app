@@ -1,5 +1,5 @@
 import { IEigaComRepository } from "../../../domain/repositories/eigaCom.repository.interface";
-import { Article } from "../../../../../shared/types/domain";
+import { Article } from "../../../../../shared/types/api/dto";
 
 /**
  * 映画.comのニュースを映画タイトルで検索するユースケース

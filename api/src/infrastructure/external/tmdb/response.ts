@@ -1,4 +1,4 @@
-import { TMDB_COUNTRY_CODES, TmdbCountryCode } from "../../../constants/tmdb";
+import { TMDB_COUNTRY_CODES, TmdbCountryCode } from "./country";
 import { MovieResponse } from "./movie";
 
 // 共通

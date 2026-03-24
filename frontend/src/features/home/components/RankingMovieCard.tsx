@@ -1,7 +1,7 @@
-import type { Movie } from '@/types/domain';
-import { TMDB_CONFIG } from '@/constants/config';
+import type { Movie } from '@/types/api/dto';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { StarIcon } from '@heroicons/react/24/solid';
-import { GENRE_MAP } from '@/constants/config';
+import { GENRE_NAMES } from '@/constants/config';
 
 type Props = {
   movie: Movie;
@@ -14,16 +14,16 @@ type Props = {
  * @param rank 順位（1〜）
  */
 export default function RankingMovieCard({ movie, rank }: Props) {
-  const displayGenres = movie.genre_ids?.slice(0, 2).map((id) => GENRE_MAP.find((g) => g.id === id)?.name);
+  const displayGenres = movie.genreIds?.slice(0, 2).map((id) => GENRE_NAMES[id as keyof typeof GENRE_NAMES]);
   // 5段階評価を10段階に戻す（Mapperで半分にされているため）
-  const displayScore = movie.vote_average ? (movie.vote_average * 2).toFixed(1) : '0.0';
+  const displayScore = movie.voteAverage ? (movie.voteAverage * 2).toFixed(1) : '0.0';
 
   return (
     <div className="flex items-center gap-4 p-2 bg-[#131313] rounded-3xl group hover:bg-[#1a1a1a] transition-colors duration-300">
       {/* ポスター */}
       <div className="flex-none w-24 h-36 overflow-hidden rounded-lg shadow-lg md:w-20 md:h-28">
         <img
-          src={`${TMDB_CONFIG.IMAGE_BASE_URL}w342${movie.poster_path}`}
+          src={`${TMDB_IMAGE_CONFIG.IMAGE_BASE_URL}w342${movie.posterPath}`}
           alt={movie.title}
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
         />
@@ -36,7 +36,7 @@ export default function RankingMovieCard({ movie, rank }: Props) {
         </h3>
         <div className="flex flex-col gap-1.5 mt-1">
           <p className="text-xs font-bold text-gray-500 md:text-sm">
-            {movie.release_date?.slice(0, 4)}
+            {movie.releaseDate?.slice(0, 4)}
           </p>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex flex-wrap gap-2">

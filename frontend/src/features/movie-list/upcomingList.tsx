@@ -8,11 +8,11 @@ const UpcomingList = () => {
 
   const upcomingMovies = data
     ? data
-        .filter((movie) => movie.release_date)
+        .filter((movie) => movie.releaseDate)
         .slice()
         .sort(
           (a, b) =>
-            new Date(a.release_date ?? '').getTime() - new Date(b.release_date ?? '').getTime(),
+            new Date(a.releaseDate ?? '').getTime() - new Date(b.releaseDate ?? '').getTime(),
         )
     : [];
 

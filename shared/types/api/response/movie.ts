@@ -1,11 +1,11 @@
-import { Movie, MovieDetail } from "../domain";
+import { Movie, MovieDetail } from "../dto";
 
 export type FullMovieData = {
   detail: MovieDetail;
-  video: string | null;
-  otherVideos: string[];
+  videoUrl: string | null;
+  otherVideoUrls: string[];
   image: string | null;
-  watchProviders: { logo_path: string | null; name: string }[];
+  watchProviders: { logoPath: string | null; name: string }[];
   recommendations: {
     title: string;
     movies: Movie[];

@@ -1,4 +1,4 @@
-import { Movie, UpcomingMovie, UpcomingMeta } from "../domain";
+import { Movie, UpcomingMovie, UpcomingMeta } from "../dto";
 
 /** ヒーロースワイパーで使用するカテゴリ付き映画 */
 export type HeroMovie = Movie &

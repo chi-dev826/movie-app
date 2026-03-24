@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { StarIcon } from '@heroicons/react/24/solid';
 
-import { TMDB_CONFIG } from '@/constants/config';
-import type { HeroMovie } from '@/types/api';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import type { HeroMovie } from '@/types/api/response';
 
 /** カテゴリに対応するバッジのラベルとスタイル */
 const CATEGORY_BADGE = {
@@ -37,17 +37,17 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
             {badge.label}
           </span>
           {/* 評価バッジ */}
-          {movie.vote_average !== null && movie.vote_average > 0 && (
+          {movie.voteAverage !== null && movie.voteAverage > 0 && (
             <span className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-yellow-300 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 md:text-xs">
               <StarIcon className="w-3 h-3 text-yellow-400" />
-              {movie.vote_average.toFixed(1)}
+              {movie.voteAverage.toFixed(1)}
             </span>
           )}
 
           {/* 公開予定の場合: 公開日バッジ */}
-          {movie.category === 'upcoming' && movie.release_date_display && (
+          {movie.category === 'upcoming' && movie.releaseDate_display && (
             <span className="px-2 py-1 text-[10px] font-medium text-gray-200 rounded-full bg-white/10 backdrop-blur-sm border border-white/5 md:text-xs">
-              {movie.release_date_display}
+              {movie.releaseDate_display}
             </span>
           )}
         </div>
@@ -61,9 +61,9 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
           transition={{ type: 'spring', stiffness: 220, damping: 24 }}
           className="inline-block mb-4"
         >
-          {movie.logo_path ? (
+          {movie.logoPath ? (
             <img
-              src={`${TMDB_CONFIG.IMAGE_BASE_URL}w1280${movie.logo_path}`}
+              src={`${TMDB_IMAGE_CONFIG.IMAGE_BASE_URL}w1280${movie.logoPath}`}
               alt={`${movie.title} logo`}
               className="object-cover max-w-28 md:max-w-52 lg:max-w-64 2xl:max-w-72 3xl:max-w-sm 4xl:max-w-xl drop-shadow-lg"
             />

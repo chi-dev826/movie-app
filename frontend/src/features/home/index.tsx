@@ -9,7 +9,7 @@ import NowPlayingCard from './components/NowPlayingCard';
 import SectionHeader from './components/SectionHeader';
 import RankingMovieCard from './components/RankingMovieCard';
 import NewReleaseMovieCard from './components/NewReleaseMovieCard';
-import { Movie } from '@/types/domain';
+import { Movie } from '@/types/api/dto';
 
 /**
  * HomePage

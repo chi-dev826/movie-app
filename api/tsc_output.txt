@@ -1,3 +1,0 @@
-src/presentation/mappers/movie.mapper.test.ts(43,31): error TS2339: Property 'toUpcomingBffDto' does not exist on type 'typeof MovieMapper'.
-src/presentation/mappers/movie.mapper.test.ts(51,31): error TS2339: Property 'toUpcomingBffDto' does not exist on type 'typeof MovieMapper'.
-src/presentation/mappers/movie.mapper.test.ts(59,31): error TS2339: Property 'toUpcomingBffDto' does not exist on type 'typeof MovieMapper'.

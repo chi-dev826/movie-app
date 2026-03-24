@@ -3,6 +3,7 @@ export const APP_PATHS = {
   SEARCH: "/search",
   WATCH_LIST: "/watch-list",
   MOVIE_DETAIL: "/movie/:id",
+  TRAILER: "/trailer/:id",
   MOVIES: {
     UPCOMING: "/movies/upcoming",
     BY_TYPE: "/movies/:type",

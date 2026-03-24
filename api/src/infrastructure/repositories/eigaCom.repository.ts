@@ -3,7 +3,7 @@ import { ICacheRepository } from "../../domain/repositories/cache.repository.int
 import { IEigaComRepository } from "../../domain/repositories/eigaCom.repository.interface";
 import { ArticleEntity } from "../../domain/models/article.entity";
 import { ArticleFactory } from "../../domain/factories/article.factory";
-import { CACHE_TTL } from "../../domain/constants/cacheTtl";
+import { CACHE_TTL } from "../constants/cacheTtl";
 import * as cheerio from "cheerio";
 
 export class EigaComRepository implements IEigaComRepository {

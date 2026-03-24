@@ -1,12 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { CalendarDaysIcon, PlayIcon, PlusIcon, CheckIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import type { UpcomingMovie } from '@/types/domain';
+import type { UpcomingMovie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 import { useWatchList } from '@/hooks/useWatchList';
-import { useState } from 'react';
-import HeroVideo from '@/features/movie-detail/components/HeroVideo';
 
 type Props = {
   movie: UpcomingMovie;
@@ -17,19 +15,10 @@ type Props = {
  */
 const UpcomingListCard = ({ movie }: Props) => {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { isInWatchList, toggleWatchList } = useWatchList();
   const isInList = isInWatchList(movie.id);
 
-  const backdropUrl = getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const backdropUrl = getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
 
   const handleGoToDetail = () => {
     navigate(APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString()));
@@ -51,11 +40,11 @@ const UpcomingListCard = ({ movie }: Props) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
         {/* 公開日バッジ (SpotlightCard互換) */}
-        {movie.release_date_display && (
+        {movie.releaseDate_display && (
           <div className="absolute left-4 top-4">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5 text-xs font-bold text-gray-200 border border-white/10">
               <CalendarDaysIcon className="w-3.5 h-3.5 text-red-500" />
-              {movie.release_date_display}
+              {movie.releaseDate_display}
             </span>
           </div>
         )}
@@ -75,14 +64,13 @@ const UpcomingListCard = ({ movie }: Props) => {
           <div className="flex gap-3">
             {/* 予告編再生 */}
             {movie.video ? (
-              <button
-                onClick={handleOpenModal}
+              <Link
+                to={APP_PATHS.TRAILER.replace(':id', movie.id.toString())}
                 className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 text-sm font-black text-black transition-all hover:from-red-600 hover:to-red-700 active:scale-95 disabled:opacity-50"
-                disabled={!movie.video}
               >
                 <PlayIcon className="h-4 w-4 fill-current" />
                 予告編を観る
-              </button>
+              </Link>
             ) : (
               <button
                 className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gray-800 px-6 py-3 text-sm font-black text-gray-400 transition-all hover:from-gray-600 hover:to-gray-700 active:scale-95 disabled:opacity-50"
@@ -120,10 +108,6 @@ const UpcomingListCard = ({ movie }: Props) => {
           </button>
         </div>
       </div>
-
-      {isModalOpen && movie.video && (
-        <HeroVideo youtubeKey={movie.video} onClose={handleCloseModal} />
-      )}
     </div>
   );
 };

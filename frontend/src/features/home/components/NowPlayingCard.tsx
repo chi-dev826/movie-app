@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { StarIcon } from '@heroicons/react/24/solid';
 
-import type { Movie } from '@/types/domain';
+import type { Movie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
  * @param className - 外部からの幅制御用クラス
  */
 const NowPlayingCard = ({ movie, className = '' }: Props) => {
-  const posterUrl = getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
+  const posterUrl = getTmdbImage(movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
 
   if (!posterUrl) return null;
 
@@ -51,10 +51,10 @@ const NowPlayingCard = ({ movie, className = '' }: Props) => {
 
           <div className="flex items-center justify-between">
             {/* 評価スコア */}
-            {movie.vote_average !== null && (
+            {movie.voteAverage !== null && (
               <span className="inline-flex items-center gap-0.5 text-[10px] text-yellow-300">
                 <StarIcon className="w-2.5 h-2.5 text-yellow-400" />
-                <span className="font-bold">{movie.vote_average.toFixed(1)}</span>
+                <span className="font-bold">{movie.voteAverage.toFixed(1)}</span>
               </span>
             )}
 

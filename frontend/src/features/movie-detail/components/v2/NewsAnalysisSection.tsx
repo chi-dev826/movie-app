@@ -4,7 +4,7 @@ import { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 
 import { useMovieNews, useMovieAnalysis } from '@/features/movie-detail/hooks/useMovieArticles';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 
 interface NewsAnalysisSectionProps {
   movieId: number;
@@ -105,7 +105,7 @@ export const NewsAnalysisSection: React.FC<NewsAnalysisSectionProps> = ({ movieI
                            <img src={item.imageUrl} alt="Analysis thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                          ) : (
                            <div className="w-full h-full bg-surface-container-high">
-                            <img src={`${TMDB_CONFIG.IMAGE_BASE_URL}${posterPath}`} alt="Movie poster" className="w-full h-full object-cover" />
+                            <img src={`${TMDB_IMAGE_CONFIG.IMAGE_BASE_URL}${posterPath}`} alt="Movie poster" className="w-full h-full object-cover" />
                            </div>
                          )}
                        </div>

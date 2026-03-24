@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/24/solid';
 
-import type { Movie, UpcomingMovie } from '@/types/domain';
+import type { Movie, UpcomingMovie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = 
@@ -22,9 +22,9 @@ type Props =
  */
 const SpotlightCard = (props: Props) => {
   const { movie } = props;
-  const backdropUrl = getTmdbImage(movie.backdrop_path, TMDB_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL);
-  const posterUrl = getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.LARGE);
-  const logoUrl = getTmdbImage(movie.logo_path, TMDB_CONFIG.IMAGE_SIZES.LOGO.LARGE);
+  const backdropUrl = getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL);
+  const posterUrl = getTmdbImage(movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.POSTER.LARGE);
+  const logoUrl = getTmdbImage(movie.logoPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
 
   if (!backdropUrl) return null;
 
@@ -98,17 +98,17 @@ const SpotlightCard = (props: Props) => {
               {props.variant === 'upcoming' && (
                 <>
                   {/* 公開日 */}
-                  {props.movie.release_date_display && (
+                  {props.movie.releaseDate_display && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-200 md:text-sm border border-white/5">
                       <CalendarDaysIcon className="w-3.5 h-3.5 text-red-400" />
-                      {props.movie.release_date_display}
+                      {props.movie.releaseDate_display}
                     </span>
                   )}
                   {/* カウントダウン */}
-                  {props.movie.upcoming_badge_label && (
+                  {props.movie.upcomingBadgeLabel && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600/80 backdrop-blur-sm px-3 py-1 text-xs font-bold text-white md:text-sm shadow-lg shadow-red-900/30">
                       <ClockIcon className="w-3.5 h-3.5" />
-                      {props.movie.upcoming_badge_label}
+                      {props.movie.upcomingBadgeLabel}
                     </span>
                   )}
                 </>
@@ -117,10 +117,10 @@ const SpotlightCard = (props: Props) => {
               {props.variant === 'now_playing' && (
                 <>
                   {/* 評価 */}
-                  {movie.vote_average !== null && (
+                  {movie.voteAverage !== null && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-yellow-500/20 backdrop-blur-sm px-3 py-1 text-xs font-bold text-yellow-300 md:text-sm border border-yellow-500/20">
                       <StarIcon className="w-3.5 h-3.5 text-yellow-400" />
-                      {movie.vote_average.toFixed(1)}
+                      {movie.voteAverage.toFixed(1)}
                     </span>
                   )}
                   {/* 公開中バッジ */}

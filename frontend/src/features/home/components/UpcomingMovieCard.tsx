@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import type { UpcomingMovie } from '@/types/domain';
+import type { UpcomingMovie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_CONFIG } from '@/constants/config';
+import { TMDB_IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
  * @param className - 外部からの幅制御用クラス
  */
 const UpcomingMovieCard = ({ movie, className = '' }: Props) => {
-  const posterUrl = getTmdbImage(movie.poster_path, TMDB_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
+  const posterUrl = getTmdbImage(movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
 
   return (
     posterUrl && (
@@ -36,17 +36,17 @@ const UpcomingMovieCard = ({ movie, className = '' }: Props) => {
         />
 
         {/* カウントダウンバッジ — 左上 */}
-        {movie.upcoming_badge_label && !movie.release_date_short && (
+        {movie.upcomingBadgeLabel && !movie.releaseDate_short && (
           <div className="absolute top-2 left-2 px-2 py-1 text-[10px] font-bold text-white bg-red-600/90 backdrop-blur-sm rounded-full shadow-lg border border-red-500/30">
-            {movie.upcoming_badge_label}
+            {movie.upcomingBadgeLabel}
           </div>
         )}
 
         {/* ✦ 公開日バッジ ✦ */}
-        {movie.release_date_short && (
+        {movie.releaseDate_short && (
           <div className="absolute top-0 left-0 z-20 flex flex-col items-center justify-center bg-red-600/80 backdrop-blur-md text-white px-1 py-1 rounded border border-white/10 shadow-lg">
             <span className="text-xs font-bold leading-none tracking-wider text-white">
-              {movie.release_date_short}
+              {movie.releaseDate_short}
             </span>
             <span className="text-[6px] font-bold leading-none mt-1">
               公開

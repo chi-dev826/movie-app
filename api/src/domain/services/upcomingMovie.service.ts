@@ -1,9 +1,13 @@
 import { MovieEntity } from "../models/movie";
 import { IClock } from "../repositories/clock.service.interface";
-import { TMDB_CONFIG } from "../constants/tmdbConfig";
-import { DiscoverMovieParams } from "../../../../shared/types/external/tmdb";
-import { MOVIE_RULES } from "../constants/movieRules";
 
+/**
+ * 近日公開映画に関するドメインロジックを提供するサービス。
+ *
+ * @description
+ * 検索パラメータの構築（APIの仕様に依存する処理）はリポジトリに委譲し、
+ * 本サービスはソートや日付計算などの純粋なビジネスルールに特化する。
+ */
 export class UpcomingMovieService {
   constructor(private readonly clock: IClock) {}
 
@@ -22,30 +26,6 @@ export class UpcomingMovieService {
 
     // JSTの「今日」の始まり（00:00:00）を表すDateオブジェクトをUTCで作成
     return new Date(Date.UTC(year, month, day, 0, 0, 0));
-  }
-
-  /**
-   * TMDB検索用のパラメータ（期間指定）を生成する
-   */
-  public getSearchPeriodParams(): DiscoverMovieParams {
-    const today = this.getJstToday();
-    const twoMonthsLater = new Date(today);
-    twoMonthsLater.setUTCMonth(
-      today.getUTCMonth() + TMDB_CONFIG.DATE.UPCOMING_MONTHS,
-    );
-
-    const formatDate = (d: Date) => {
-      const year = d.getUTCFullYear();
-      const month = String(d.getUTCMonth() + 1).padStart(2, "0");
-      const day = String(d.getUTCDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    };
-
-    return {
-      ...MOVIE_RULES.UPCOMING,
-      "primary_release_date.gte": formatDate(today),
-      "primary_release_date.lte": formatDate(twoMonthsLater),
-    };
   }
 
   /**

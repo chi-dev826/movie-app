@@ -1,5 +1,5 @@
 import { ArticleEntity } from "../models/article.entity";
-import { SerpApiOrganicResult } from "../../../../shared/types/external/serpApi/response";
+import { SerpApiOrganicResult } from "../../infrastructure/external/serpApi/response";
 import { EXTERNAL_API_URLS } from "../../infrastructure/constants/external";
 
 /**
@@ -39,6 +39,13 @@ export class ArticleFactory {
   }): ArticleEntity {
     // UI側での結合を不要にするため、ドメイン層でフルURLに構築する（境界防御）
     const fullUrl = `${EXTERNAL_API_URLS.EIGA_COM}${url}`;
-    return new ArticleEntity(fullUrl, title, fullUrl, snippet, source, imageUrl);
+    return new ArticleEntity(
+      fullUrl,
+      title,
+      fullUrl,
+      snippet,
+      source,
+      imageUrl,
+    );
   }
 }

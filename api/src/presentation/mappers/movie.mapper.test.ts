@@ -21,7 +21,7 @@ describe("MovieMapper", () => {
     it("評価値が10段階から5段階に正しく変換されること", () => {
       const movie = createMovie({ voteAverage: 8.4 });
       const dto = MovieMapper.toBffDto(movie);
-      expect(dto.vote_average).toBe(4.2);
+      expect(dto.voteAverage).toBe(4.2);
     });
 
     it("オプションのビデオキーとロゴパスが反映されること", () => {
@@ -31,7 +31,7 @@ describe("MovieMapper", () => {
         logoPath: "/logo.png",
       });
       expect(dto.video).toBe("video123");
-      expect(dto.logo_path).toBe("/logo.png");
+      expect(dto.logoPath).toBe("/logo.png");
     });
   });
 
@@ -42,11 +42,11 @@ describe("MovieMapper", () => {
       const dto = MovieMapper.toBffDto(movie);
 
       // DTOの配列を変更してもEntityには影響しない
-      if (dto.genre_ids) {
-        dto.genre_ids.push(3);
+      if (dto.genreIds) {
+        dto.genreIds.push(3);
       }
       expect(movie.genreIds).toEqual([1, 2]);
-      expect(dto.genre_ids).toEqual([1, 2, 3]);
+      expect(dto.genreIds).toEqual([1, 2, 3]);
     });
   });
 });
