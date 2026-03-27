@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { APP_PATHS } from '@shared/constants/routes';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
-import { getTmdbImage } from '@/utils/imageUtils';
+import { IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
 
 interface RecommendationSectionProps {
   recommendations?: {
@@ -29,7 +29,7 @@ export const RecommendationSection: React.FC<RecommendationSectionProps> = ({ re
       </div>
       <div className="flex overflow-x-auto hide-scrollbar gap-4 px-4 max-w-7xl mx-auto">
         {recommendations.movies.map((movie) => {
-           const poster = getTmdbImage(movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
+           const poster = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
            return (
              <Link key={movie.id} to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())} className="flex flex-col gap-2 w-[140px] md:w-[180px] shrink-0 group cursor-pointer">
                 <div className="relative w-full aspect-[2/3] rounded-2xl overflow-hidden bg-surface-container-high shadow-2xl border border-white/5 group-hover:border-white/20 transition-all duration-300 md:group-hover:scale-105 md:group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">

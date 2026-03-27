@@ -2,15 +2,15 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useFullMovieData } from '@/hooks/useMovies';
 
-import { DetailHeroSection } from './components/v2/DetailHeroSection';
-import { DetailActionSection } from './components/v2/DetailActionSection';
-import { WatchProviderSection } from './components/v2/WatchProviderSection';
-import { StorySection } from './components/v2/StorySection';
-import { CastCarouselSection } from './components/v2/CastCarouselSection';
-import { MovieStatsSection } from './components/v2/MovieStatsSection';
-import { NewsAnalysisSection } from './components/v2/NewsAnalysisSection';
-import { TrailerCarouselSection } from './components/v2/TrailerCarouselSection';
-import { RecommendationSection } from './components/v2/RecommendationSection';
+import { DetailHeroSection } from './components/DetailHeroSection';
+import { DetailActionSection } from './components/DetailActionSection';
+import { WatchProviderSection } from './components/WatchProviderSection';
+import { StorySection } from './components/StorySection';
+import { CastCarouselSection } from './components/CastCarouselSection';
+import { MovieStatsSection } from './components/MovieStatsSection';
+import { NewsAnalysisSection } from './components/NewsAnalysisSection';
+import { TrailerCarouselSection } from './components/TrailerCarouselSection';
+import { RecommendationSection } from './components/RecommendationSection';
 
 export const MovieDetailPage: React.FC = () => {
   const { id: movieId } = useParams<{ id: string }>();

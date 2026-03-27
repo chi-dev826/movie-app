@@ -12,6 +12,7 @@ import {
 } from '@/services/movieApi';
 import { MovieListResponse, HomePageResponse } from '@/types/api/response';
 import { Movie, UpcomingMovie } from '@/types/api/dto';
+import { QUERY_CONFIG } from '@/constants/config';
 
 const movieKeys = {
   all: ['movies'] as const,
@@ -30,7 +31,7 @@ export const useFullMovieData = (movieId: number) => {
     queryKey: movieKeys.detail(movieId),
     queryFn: () => fetchFullMovieData(movieId),
     enabled: !!movieId,
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -39,7 +40,7 @@ export const useSearchMovies = (query: string) => {
     queryKey: movieKeys.search(query),
     queryFn: () => searchMovies(query),
     enabled: query.length > 0,
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -48,7 +49,7 @@ export const useSearchMoviesByPerson = (name: string) => {
     queryKey: movieKeys.searchByPerson(name),
     queryFn: () => searchMoviesByPerson(name),
     enabled: name.length > 0,
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -57,7 +58,7 @@ export const useMoviesByIds = (ids: number[]) => {
     queryKey: movieKeys.ids(ids),
     queryFn: () => fetchMovieWatchList(ids),
     enabled: ids.length > 0,
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -65,7 +66,7 @@ export const useMovieList = () => {
   return useQuery<MovieListResponse>({
     queryKey: movieKeys.list('movies'),
     queryFn: fetchMovieList,
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -73,7 +74,7 @@ export const useNowPlayingMovies = () => {
   return useQuery<Movie[]>({
     queryKey: movieKeys.list('now_playing'),
     queryFn: fetchNowPlayingMovies,
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -81,7 +82,7 @@ export const useUpcomingMovies = () => {
   return useQuery<UpcomingMovie[]>({
     queryKey: movieKeys.list('upcoming'),
     queryFn: () => fetchUpcomingMovies(),
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -89,7 +90,7 @@ export const useTrendingMovies = () => {
   return useQuery<Movie[]>({
     queryKey: movieKeys.list('trending'),
     queryFn: fetchTrendingMovies,
-    staleTime: 1000 * 60 * 60, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
 };
 
@@ -97,6 +98,6 @@ export const useHomePage = () => {
   return useQuery<HomePageResponse>({
     queryKey: movieKeys.home(),
     queryFn: fetchHomePage,
-    staleTime: 1000 * 60 * 60, // ホーム画面全体のキャッシュ時間（1時間）
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // ホーム画面全体のキャッシュ時間（1時間）
   });
 };

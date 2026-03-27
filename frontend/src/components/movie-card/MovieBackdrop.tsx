@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import type { Movie } from '@/types/api/dto';
 import { StarIcon } from '@heroicons/react/24/solid';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -11,8 +11,8 @@ type Props = {
 };
 
 const MovieBackdrop = ({ movie, className = '' }: Props) => {
-  const backdropUrl = getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.MEDIUM);
-  const logoUrl = getTmdbImage(movie.logoPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.LOGO.MEDIUM);
+  const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.MEDIUM);
+  const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.MEDIUM);
 
   return (
     backdropUrl && (

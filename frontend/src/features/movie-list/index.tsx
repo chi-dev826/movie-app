@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useMovieList, useNowPlayingMovies, useTrendingMovies } from '@/hooks/useMovies';
 import { MoviePoster } from '@/components/movie-card';
+import { Movie } from '@/types/api/dto';
 
 const getTitle = (type?: string) => {
   switch (type) {
@@ -27,7 +28,7 @@ const MovieList = () => {
   const { data: trendingData, isLoading: isLoadingTrending, isError: isErrorTrending, error: errorTrending } = useTrendingMovies();
 
   // 映画リストの種類に応じてデータを選択
-  let movieList: any[] | undefined = [];
+  let movieList: Movie[] | undefined = [];
   let isCurrentlyLoading = isLoading;
   let currentError = isError;
   let currentErrorObj = error;

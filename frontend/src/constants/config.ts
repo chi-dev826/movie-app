@@ -1,4 +1,4 @@
-export const TMDB_IMAGE_CONFIG = {
+export const IMAGE_CONFIG = {
   IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/',
   IMAGE_SIZES: {
     POSTER: {
@@ -45,4 +45,10 @@ export const GENRE_NAMES: Record<number, string> = {
   53: "スリラー",
   10752: "戦争",
   37: "西部劇",
+} as const;
+
+/** React Query のキャッシュ設定 */
+export const QUERY_CONFIG = {
+  /** デフォルトのキャッシュ生存時間: 1時間 */
+  STALE_TIME_DEFAULT: 1000 * 60 * 60,
 } as const;

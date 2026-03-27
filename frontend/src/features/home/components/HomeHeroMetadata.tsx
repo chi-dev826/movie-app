@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { StarIcon } from '@heroicons/react/24/solid';
 
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { IMAGE_CONFIG } from '@/constants/config';
 import type { HeroMovie } from '@/types/api/response';
 import { Calendar } from 'lucide-react';
 
@@ -65,7 +65,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
         >
           {movie.logoPath ? (
             <img
-              src={`${TMDB_IMAGE_CONFIG.IMAGE_BASE_URL}w1280${movie.logoPath}`}
+              src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w1280${movie.logoPath}`}
               alt={`${movie.title} logo`}
               className="object-cover max-w-28 md:max-w-52 lg:max-w-64 2xl:max-w-72 3xl:max-w-sm 4xl:max-w-xl drop-shadow-lg"
             />

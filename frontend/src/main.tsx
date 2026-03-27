@@ -7,7 +7,7 @@ import SearchPage from './features/search';
 import MovieDetailPage from './features/movie-detail';
 import TrailerPage from './features/video-player';
 import MovieList from './features/movie-list';
-import UpcomingList from './features/movie-list/upcomingList';
+import UpcomingList from './features/upcoming-list';
 import WatchListPage from './features/watch-list';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

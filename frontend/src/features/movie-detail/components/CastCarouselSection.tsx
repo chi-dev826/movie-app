@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 export interface CastMember {
@@ -40,7 +40,7 @@ export const CastCarouselSection: React.FC<CastCarouselSectionProps> = ({ cast }
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-red-900 p-1 group-hover:border-primary transition-colors duration-300">
               <div className="w-full h-full rounded-full overflow-hidden bg-surface-container-high relative">
                  {actor.profilePath ? (
-                   <img src={`${TMDB_IMAGE_CONFIG.IMAGE_BASE_URL}w185${actor.profilePath}`} alt={actor.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                   <img src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w185${actor.profilePath}`} alt={actor.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                  ) : (
                    <div className="flex items-center justify-center w-full h-full text-outline">
                      <span className="material-symbols-outlined text-[32px]">person</span>

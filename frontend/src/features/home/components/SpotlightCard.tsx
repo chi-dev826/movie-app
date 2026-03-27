@@ -4,8 +4,8 @@ import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/24/solid';
 
 import type { Movie, UpcomingMovie } from '@/types/api/dto';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = 
@@ -22,9 +22,9 @@ type Props =
  */
 const SpotlightCard = (props: Props) => {
   const { movie } = props;
-  const backdropUrl = getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL);
-  const posterUrl = getTmdbImage(movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.POSTER.LARGE);
-  const logoUrl = getTmdbImage(movie.logoPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
+  const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL);
+  const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.LARGE);
+  const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
 
   if (!backdropUrl) return null;
 

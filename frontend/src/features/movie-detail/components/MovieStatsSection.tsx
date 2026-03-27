@@ -27,13 +27,13 @@ export const MovieStatsSection: React.FC<MovieStatsSectionProps> = ({ detail }) 
             {/* Box Office & Budget */}
             <div className="flex flex-col md:flex-row col-span-1 md:col-span-2 lg:col-span-1 border-b lg:border-b-0 lg:border-r border-white/10">
                <div className="flex-1 p-6 border-b md:border-b-0 md:border-r border-white/10">
-                  <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">Box Office</p>
+                  <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">興行収入</p>
                   <p className="text-3xl font-headline font-black text-red-400 drop-shadow-sm">
                     {detail.revenueJpyDisplay || 'N/A'}
                   </p>
                </div>
                <div className="flex-1 p-6">
-                  <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">Budget</p>
+                  <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest mb-2 font-bold">予算</p>
                   <p className="text-3xl font-headline font-black text-white drop-shadow-sm">
                     {detail.budgetJpyDisplay || 'N/A'}
                   </p>

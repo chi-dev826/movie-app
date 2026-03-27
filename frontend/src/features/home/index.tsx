@@ -159,8 +159,7 @@ function HomePage() {
             <SectionHeader title="新着作品" type="recently_added" />
             {/* WebKit scrollbar を隠すためのクラスとスナップ用のスタイル */}
             <div 
-              className="grid grid-rows-2 grid-flow-col gap-x-4 md:gap-x-6 gap-y-8 overflow-x-auto snap-x pt-2 pb-6"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              className="grid grid-rows-2 grid-flow-col gap-x-4 md:gap-x-6 gap-y-8 overflow-x-auto snap-x pt-2 pb-6 hide-scrollbar"
             >
               {data.recentlyAdded.map((movie) => (
                 <div className="w-48 sm:w-56 md:w-64 shrink-0 snap-start" key={movie.id}>
@@ -168,10 +167,6 @@ function HomePage() {
                 </div>
               ))}
             </div>
-            {/* CSSで::-webkit-scrollbar { display: none; } が効かせるためのインラインスタイル補完 */}
-            <style dangerouslySetInnerHTML={{__html: `
-              .grid.grid-rows-2::-webkit-scrollbar { display: none; }
-            `}} />
           </div>
         )}
       </motion.div>

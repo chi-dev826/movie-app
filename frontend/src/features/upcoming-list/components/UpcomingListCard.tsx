@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { CalendarDaysIcon, PlayIcon, PlusIcon, CheckIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import type { UpcomingMovie } from '@/types/api/dto';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 import { useWatchList } from '@/hooks/useWatchList';
 
@@ -18,7 +18,7 @@ const UpcomingListCard = ({ movie }: Props) => {
   const { isInWatchList, toggleWatchList } = useWatchList();
   const isInList = isInWatchList(movie.id);
 
-  const backdropUrl = getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
+  const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
 
   const handleGoToDetail = () => {
     navigate(APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString()));
@@ -40,11 +40,11 @@ const UpcomingListCard = ({ movie }: Props) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
         {/* 公開日バッジ (SpotlightCard互換) */}
-        {movie.releaseDate_display && (
+        {movie.releaseDateDisplay && (
           <div className="absolute left-4 top-4">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5 text-xs font-bold text-gray-200 border border-white/10">
               <CalendarDaysIcon className="w-3.5 h-3.5 text-red-500" />
-              {movie.releaseDate_display}
+              {movie.releaseDateDisplay}
             </span>
           </div>
         )}

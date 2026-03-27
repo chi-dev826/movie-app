@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import { StarIcon } from '@heroicons/react/24/solid';
 
 import type { Movie } from '@/types/api/dto';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
  * @param className - 外部からの幅制御用クラス
  */
 const NowPlayingCard = ({ movie, className = '' }: Props) => {
-  const posterUrl = getTmdbImage(movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
+  const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
 
   if (!posterUrl) return null;
 

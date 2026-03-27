@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { StarIcon } from '@heroicons/react/24/solid';
 import type { Movie } from '@/types/api/dto';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -16,19 +16,19 @@ type Props = {
  */
 export default function NewReleaseMovieCard({ movie, className = '' }: Props) {
   // バックドロップがない場合はポスターをフォールバックとして利用
-  const imageUrl = getTmdbImage(movie.backdropPath || movie.posterPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.SMALL);
+  const imageUrl = getTmdbImage(movie.backdropPath || movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.SMALL);
 
   return (
     <Link 
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
       className={`group block shrink-0 cursor-pointer ${className}`}
     >
-      <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-gray-900 mb-2.5 border border-gray-800 group-hover:border-gray-600 transition-colors shadow-lg">
+      <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-gray-900 mb-2.5 border border-gray-800 group/card hover/card:border-gray-600 transition-colors shadow-lg">
          {imageUrl && (
            <img 
              src={imageUrl} 
              alt={movie.title}
-             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" 
+             className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500 ease-out" 
              loading="lazy"
            />
          )}

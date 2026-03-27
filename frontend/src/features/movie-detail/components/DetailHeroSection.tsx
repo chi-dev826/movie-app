@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { AnimatePresence, motion } from 'framer-motion';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { MovieDetail } from '@/types/api/dto';
 
 export interface DetailHeroSectionProps {
@@ -26,7 +26,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
     return () => clearTimeout(timeoutId);
   }, [isBackdropVisible, videoKey]);
 
-  const backdropUrl = getTmdbImage(detail.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) || '';
+  const backdropUrl = getTmdbImage(detail.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) || '';
 
   return (
     <>
@@ -54,7 +54,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
         </AnimatePresence>
 
         {videoKey ? (
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute w-full h-full overflow-hidden pointer-events-none">
             <div
               className="absolute w-full h-full top-1/2 left-1/2"
               /*
@@ -69,7 +69,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
                * 3. [Cinematic Immersion]: 画像で妥協せず、あえて動画を背景に採用するこだわりを、全デバイス
                *    （特にモバイル）で等しく担保するための、最も合理的かつ堅実なハックである。
                */
-              style={{ transform: 'translate(-50%, -50%) scale(1.35)' }}
+              style={{ transform: 'translate(-50%, -50%) scale(1.3)'}}
             >
               <ReactPlayer
                 src={videoKey}

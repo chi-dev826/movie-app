@@ -8,8 +8,8 @@ import ReactPlayer from 'react-player';
 
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
-import { getTmdbImage } from '@/utils/imageUtils';
-import { TMDB_IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
+import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
 import 'swiper/css/effect-coverflow';
@@ -105,7 +105,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
               }}
               transition={{ duration: 1 }}
               src={
-                getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
               }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"
@@ -137,7 +137,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
           {movie?.backdropPath && (
             <motion.img
               src={
-                getTmdbImage(movie.backdropPath, TMDB_IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
               }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"
