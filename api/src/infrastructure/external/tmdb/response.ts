@@ -1,4 +1,4 @@
-import { TMDB_COUNTRY_CODES, TmdbCountryCode } from "./country";
+import { TMDB_COUNTRY_CODES, TmdbCountryCode } from "./config";
 import { MovieResponse } from "./movie";
 
 // 共通
@@ -14,7 +14,6 @@ export type DefaultResponse<T> = {
   results: T[];
 };
 
-// Now Playing
 export type NowPlayingMovieResponse = {
   dates: {
     maximum: string;
@@ -22,7 +21,6 @@ export type NowPlayingMovieResponse = {
   };
 } & PaginatedResponse<MovieResponse>;
 
-// Images
 export type ImageDetails = {
   aspect_ratio: number;
   file_path: string;
@@ -54,7 +52,6 @@ export type VideoItem = {
   published_at: string;
 };
 
-// Watch Providers
 export type WatchProvider = {
   display_priority: number;
   logo_path: string;
@@ -78,7 +75,6 @@ export type MovieWatchProvidersResponse = {
   results: WatchProvidersByCountry;
 };
 
-// Country
 export const countryCodes = TMDB_COUNTRY_CODES;
 
 export type CountryCode = TmdbCountryCode;

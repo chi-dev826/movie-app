@@ -1,29 +1,73 @@
 /**
- * TMDB Discover API のクエリパラメータ型定義
+ * TMDB API 設定（定数および型定義）
+ * 認識負荷を下げ、インポートを簡素化するために、TMDB 固有の定義をこのファイルに集約しています。
+ *
  * 参考: https://developer.themoviedb.org/reference/discover-movie
  */
 
-export type SortOption =
-  | "original_title.asc"
-  | "original_title.desc"
-  | "popularity.asc"
-  | "popularity.desc"
-  | "revenue.asc"
-  | "revenue.desc"
-  | "primary_release_date.asc"
-  | "primary_release_date.desc"
-  | "title.asc"
-  | "title.desc"
-  | "vote_average.asc"
-  | "vote_average.desc"
-  | "vote_count.asc"
-  | "vote_count.desc";
+/**
+ * Discover API 用のソートオプション
+ */
+export const SORT_OPTIONS = {
+  ORIGINAL_TITLE_ASC: "original_title.asc",
+  ORIGINAL_TITLE_DESC: "original_title.desc",
+  POPULARITY_ASC: "popularity.asc",
+  POPULARITY_DESC: "popularity.desc",
+  REVENUE_ASC: "revenue.asc",
+  REVENUE_DESC: "revenue.desc",
+  PRIMARY_RELEASE_DATE_ASC: "primary_release_date.asc",
+  PRIMARY_RELEASE_DATE_DESC: "primary_release_date.desc",
+  TITLE_ASC: "title.asc",
+  TITLE_DESC: "title.desc",
+  VOTE_AVERAGE_ASC: "vote_average.asc",
+  VOTE_AVERAGE_DESC: "vote_average.desc",
+  VOTE_COUNT_ASC: "vote_count.asc",
+  VOTE_COUNT_DESC: "vote_count.desc",
+} as const;
 
+export type SortOptionValue = (typeof SORT_OPTIONS)[keyof typeof SORT_OPTIONS];
+
+/**
+ * TMDB API で使用される主要な国コード
+ */
+export const TMDB_COUNTRY_CODES = {
+  JP: "JP",
+  US: "US",
+  GB: "GB",
+  KR: "KR",
+  FR: "FR",
+  DE: "DE",
+  ES: "ES",
+  IT: "IT",
+  CA: "CA",
+  AU: "AU",
+} as const;
+
+export type TmdbCountryCode =
+  (typeof TMDB_COUNTRY_CODES)[keyof typeof TMDB_COUNTRY_CODES];
+
+/**
+ * Discover API 用の公開形態（リリースタイプ）
+ */
+export const RELEASE_TYPE = {
+  PREMIERE: 1,
+  THEATRICAL_LIMITED: 2,
+  THEATRICAL: 3,
+  DIGITAL: 4,
+  PHYSICAL: 5,
+  TV: 6,
+} as const;
+
+export type ReleaseTypeValue = (typeof RELEASE_TYPE)[keyof typeof RELEASE_TYPE];
+
+/**
+ * Discover Movie API のクエリパラメータ
+ */
 export interface DiscoverMovieParams {
   // 共通パラメータ
   language?: string; // 言語 (例: "ja-JP")
   region?: string; // リージョン (例: "JP")
-  sort_by?: SortOption; // 並び順
+  sort_by?: SortOptionValue; // 並び順
   page?: number; // ページ番号
   include_adult?: boolean; // アダルト作品を含むか
   include_video?: boolean; // ビデオ作品を含むか

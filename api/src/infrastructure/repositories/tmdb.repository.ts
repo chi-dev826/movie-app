@@ -20,9 +20,9 @@ import {
   DiscoverMovieParams,
   PersonResponse,
   TrendingMovieResponse,
+  SORT_OPTIONS,
+  RELEASE_TYPE,
 } from "../external/tmdb";
-import { SORT_OPTIONS } from "../external/tmdb/sortOptions";
-import { RELEASE_TYPE } from "../external/tmdb/releaseType";
 import { IClock } from "../../domain/repositories/clock.service.interface";
 
 /** リポジトリ内部で使用するTMDB固有の設定値 */
