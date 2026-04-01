@@ -5,6 +5,7 @@ import 'swiper/css';
 
 import { useMovieNews, useMovieAnalysis } from '@/features/movie-detail/hooks/useMovieArticles';
 import { IMAGE_CONFIG } from '@/constants/config';
+import { getTmdbImage } from '@/utils/image';
 
 interface NewsAnalysisSectionProps {
   movieId: number;
@@ -78,9 +79,13 @@ export const NewsAnalysisSection: React.FC<NewsAnalysisSectionProps> = ({ movieI
                          {item.imageUrl ? (
                            <img src={item.imageUrl} alt="News thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                          ) : (
+                          posterPath ? (
                            <div className="w-full h-full bg-surface-container-high">
-                            <img src={`${IMAGE_CONFIG.IMAGE_BASE_URL}${posterPath}`} alt="Movie poster" className="w-full h-full object-cover" />
+                            <img src={getTmdbImage(posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.SMALL) ?? ''} alt="Movie poster" className="w-full h-full object-cover" />
                            </div>
+                          ) : (
+                            <div className="w-full h-full bg-surface-container-high"></div>
+                          )
                          )}
                        </div>
                        <div className="flex flex-col gap-1.5 justify-center">
@@ -107,7 +112,7 @@ export const NewsAnalysisSection: React.FC<NewsAnalysisSectionProps> = ({ movieI
                            <img src={item.imageUrl} alt="Analysis thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                          ) : (
                            <div className="w-full h-full bg-surface-container-high">
-                            <img src={`${IMAGE_CONFIG.IMAGE_BASE_URL}${posterPath}`} alt="Movie poster" className="w-full h-full object-cover" />
+                            <img src={getTmdbImage(posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.SMALL) ?? ''} alt="Movie poster" className="w-full h-full object-cover" />
                            </div>
                          )}
                        </div>
