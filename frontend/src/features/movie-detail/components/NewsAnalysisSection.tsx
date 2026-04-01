@@ -78,7 +78,9 @@ export const NewsAnalysisSection: React.FC<NewsAnalysisSectionProps> = ({ movieI
                          {item.imageUrl ? (
                            <img src={item.imageUrl} alt="News thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                          ) : (
-                           <div className="w-full h-full bg-surface-container-high"></div>
+                           <div className="w-full h-full bg-surface-container-high">
+                            <img src={`${IMAGE_CONFIG.IMAGE_BASE_URL}${posterPath}`} alt="Movie poster" className="w-full h-full object-cover" />
+                           </div>
                          )}
                        </div>
                        <div className="flex flex-col gap-1.5 justify-center">
