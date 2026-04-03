@@ -1,5 +1,6 @@
 import { IEigaComRepository } from "../../../domain/repositories/eigaCom.repository.interface";
 import { Article } from "../../../../../shared/types/api/dto";
+import { ARTICLE_CONFIG } from "../../../domain/constants/article";
 
 /**
  * 映画.comのニュースを映画タイトルで検索するユースケース
@@ -17,6 +18,8 @@ export class GetEigaComNewsUseCase {
 
   async execute(movieTitle: string): Promise<Article[]> {
     const articles = await this.eigaComRepository.searchNews(movieTitle);
-    return articles.map((article) => article.toDto());
+    return articles
+      .slice(0, ARTICLE_CONFIG.MAX_DISPLAY_COUNT)
+      .map((article) => article.toDto());
   }
 }
