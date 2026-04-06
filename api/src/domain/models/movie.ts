@@ -58,4 +58,17 @@ export class MovieEntity {
 
     return hasKanaInTitle || hasKanaInOverview;
   }
+
+  /**
+   * 映画が公開済みかどうかを判定する（ビジネスルール）。
+   * @description TMDBは配信契約の確定時点でwatchProvidersを返すが、
+   * 実際の配信開始日は提供されない。この判定を用いて、未公開作品に対する
+   * 配信情報の提供可否をユースケース層で制御する。
+   * releaseDateが不明な場合は未公開として扱う（安全側に倒す）。
+   */
+  public isReleased(today: Date): boolean {
+    if (!this.releaseDate) return false;
+    const release = new Date(this.releaseDate);
+    return release < today;
+  }
 }

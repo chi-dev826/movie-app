@@ -32,14 +32,21 @@ export class GetFullMovieDataUseCase {
    * @throws {Error} 必須データ（詳細情報）が取得できない場合
    */
   async execute(movieId: number): Promise<FullMovieDomainData> {
-    // 1. 並行実行によるレイテンシの最小化
-    const [detailEntity, imagePath, watchProviders] = await Promise.all([
+    const today = new Date();
+
+    // 1. 詳細情報と画像を並行取得
+    const [detailEntity, imagePath] = await Promise.all([
       this.tmdbRepo.getMovieDetails(movieId),
       this.tmdbRepo.getMovieImages(movieId),
-      this.tmdbRepo.getMovieWatchProviders(movieId),
     ]);
 
-    // 2. おすすめ選定
+    // 2. 配信情報の取得判定
+    // 未公開作品はTMDBの配信情報の正確性が保証できないため取得しない
+    const watchProviders = detailEntity.baseInfo.isReleased(today)
+      ? await this.tmdbRepo.getMovieWatchProviders(movieId)
+      : [];
+
+    // 3. おすすめ選定
     let collection = null;
     if (detailEntity.belongsToCollectionId) {
       try {
@@ -63,7 +70,7 @@ export class GetFullMovieDataUseCase {
       similarMovies,
     );
 
-    // 3. エンリッチメント
+    // 4. エンリッチメント
     const [recLogosMap, videoInfo] = await Promise.all([
       this.enrichService.getLogos(recommendation.movies.map((m) => m.id)),
       this.enrichService.getDetailedVideos(movieId),
