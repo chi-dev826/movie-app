@@ -18,7 +18,6 @@ export class GoogleSearchRepository implements IGoogleSearchRepository {
   }: {
     query: string | number;
     params?: {
-      num?: number;
       filter?: number;
     };
   }): Promise<ArticleEntity[]> {
@@ -28,7 +27,6 @@ export class GoogleSearchRepository implements IGoogleSearchRepository {
         const response = await serpApiClient.get<SerpApiResponse>("/search", {
           params: {
             q: query,
-            num: params?.num,
             filter: params?.filter,
           },
         });

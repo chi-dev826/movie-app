@@ -13,7 +13,6 @@ export class GetMovieAnalysisUseCase {
     const articles = await this.googleSearchRepository.searchMovieAnalysis({
       query,
       params: {
-        num: ARTICLE_CONFIG.MAX_DISPLAY_COUNT,
         filter: 1, // SerpAPI: 類似結果の重複排除を有効化
       },
     });
@@ -21,6 +20,8 @@ export class GetMovieAnalysisUseCase {
     const enrichedArticles =
       await this.articleEnrichService.enrichArticles(articles);
 
-    return enrichedArticles.map((article) => article.toDto());
+    return enrichedArticles
+      .slice(0, ARTICLE_CONFIG.MAX_DISPLAY_COUNT)
+      .map((article) => article.toDto());
   }
 }
