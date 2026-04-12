@@ -48,7 +48,7 @@ export class GetUpcomingMovieListUseCase {
 
     // 4. ドメインオブジェクトの構築 (Entity + EnrichData)
     return processedMovies.map((movie) =>
-      Object.assign(movie, {
+      Object.assign(Object.create(movie), {
         logoPath: logosMap.get(movie.id),
         videoKey: trailersMap.get(movie.id),
       }),
