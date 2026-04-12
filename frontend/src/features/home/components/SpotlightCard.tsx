@@ -37,6 +37,7 @@ const SpotlightCard = (props: Props) => {
       <div className="relative w-full aspect-[21/9] md:aspect-[2.8/1] overflow-hidden">
         <motion.img
           src={backdropUrl}
+          loading="lazy"
           alt={movie.title}
           className="absolute inset-0 object-cover w-full h-full transition-transform duration-700 group-hover/spotlight:scale-105"
           initial={{ opacity: 0 }}
@@ -60,6 +61,7 @@ const SpotlightCard = (props: Props) => {
             >
               <img
                 src={posterUrl}
+                loading="lazy"
                 alt={movie.title}
                 className="object-cover w-full h-full"
               />
@@ -77,6 +79,7 @@ const SpotlightCard = (props: Props) => {
             {logoUrl ? (
               <img
                 src={logoUrl}
+                loading="lazy"
                 alt={`${movie.title} logo`}
                 className="object-contain max-w-32 md:max-w-48 xl:max-w-64 2xl:max-w-72 3xl:max-w-sm drop-shadow-lg"
               />

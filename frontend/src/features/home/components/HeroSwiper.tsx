@@ -44,6 +44,7 @@ const HeroSwiper = ({ movies, onSwiperReady }: Props) => {
     slidesPerView: 1,
     pagination: { clickable: true },
     navigation: true,
+    watchSlidesProgress: true,
     modules: [EffectCoverflow, Autoplay, Pagination, Navigation],
   };
 

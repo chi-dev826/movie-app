@@ -59,6 +59,7 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
           autoplay={{ delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true }}
           pagination={{ clickable: true }}
           navigation
+          watchSlidesProgress
           className="rounded-xl overflow-hidden"
         >
           {spotlightItems.map((item) => (
