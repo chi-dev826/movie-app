@@ -69,7 +69,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
                * 3. [Cinematic Immersion]: 画像で妥協せず、あえて動画を背景に採用するこだわりを、全デバイス
                *    （特にモバイル）で等しく担保するための、最も合理的かつ堅実なハックである。
                */
-              style={{ transform: 'translate(-50%, -50%) scale(1.3)'}}
+              style={{ transform: 'translate(-50%, -50%) scale(1.2)'}}
             >
               <ReactPlayer
                 src={videoKey}
@@ -84,7 +84,6 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
                   youtube: {
                     playerVars: {
                       rel: 0,
-                      cc_load_policy: 0, // 字幕をデフォルトでオフ
                       iv_load_policy: 3, // アノテーション非表示
                       modestbranding: 1, // youtubeロゴを最小限に
                       disablekb: 1, // キーボード操作無効化
