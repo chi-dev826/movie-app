@@ -1,22 +1,26 @@
-import NodeCache from "node-cache";
+import { Redis } from "@upstash/redis";
 import { ICacheRepository } from "../../../domain/repositories/cache.repository.interface";
 
-export class NodeCacheRepository implements ICacheRepository {
-  private cache: NodeCache;
+export class UpstashCacheRepository implements ICacheRepository {
+  private redis: Redis;
 
-  constructor(ttlSeconds: number = 86400) {
-    this.cache = new NodeCache({ stdTTL: ttlSeconds });
+  constructor() {
+    this.redis = new Redis({
+      url: process.env.UPSTASH_REDIS_URL,
+      token: process.env.UPSTASH_REDIS_TOKEN,
+    });
   }
 
   async get<T>(key: string): Promise<T | undefined> {
-    return this.cache.get<T>(key);
+    const value = await this.redis.get<T>(key);
+    return value ?? undefined;
   }
 
   async set<T>(key: string, value: T, ttl?: number): Promise<void> {
     if (ttl) {
-      this.cache.set(key, value, ttl);
+      await this.redis.set(key, value, { ex: ttl });
     } else {
-      this.cache.set(key, value);
+      await this.redis.set(key, value);
     }
   }
 

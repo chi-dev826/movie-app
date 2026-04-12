@@ -21,6 +21,8 @@ import { MovieResponseBuilder } from "./presentation/builders/movieResponse.buil
 
 import { TmdbRepository } from "./infrastructure/repositories/tmdb.repository";
 import { NodeCacheRepository } from "./infrastructure/repositories/cache/nodeCache.repository";
+import { UpstashCacheRepository } from "./infrastructure/repositories/cache/upstashCache.repository";
+import { ICacheRepository } from "./domain/repositories/cache.repository.interface";
 import { MovieEnrichService } from "./application/services/movie.enrich.service";
 import { ArticleEnrichService } from "./application/services/article.enrich.service";
 import { IOgpImageProvider } from "./application/services/ogp-image-provider.interface";
@@ -37,7 +39,9 @@ export interface Dependencies {
 
 export const createContainer = (): Dependencies => {
   // 共通インフラ
-  const cacheRepository = new NodeCacheRepository();
+  const cacheRepository: ICacheRepository = process.env.UPSTASH_REDIS_URL
+    ? new UpstashCacheRepository()
+    : new NodeCacheRepository();
   const systemClock = new SystemClock();
 
   // リポジトリのインスタンス化

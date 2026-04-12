@@ -1,6 +1,6 @@
 export interface ICacheRepository {
-  get<T>(key: string): T | undefined;
-  set<T>(key: string, value: T, ttl?: number): boolean;
+  get<T>(key: string): Promise<T | undefined>;
+  set<T>(key: string, value: T, ttl?: number): Promise<void>;
 
   /**
    * キャッシュから値を取得し、存在しなければ fetcher で取得して保存する
