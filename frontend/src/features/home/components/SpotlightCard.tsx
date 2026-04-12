@@ -4,7 +4,7 @@ import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/24/solid';
 
 import type { Movie, UpcomingMovie } from '@/types/api/dto';
-import { getTmdbImage } from '@/utils/image';
+import { getTmdbImage, getBackdropSrcSet } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -22,11 +22,12 @@ type Props =
  */
 const SpotlightCard = (props: Props) => {
   const { movie } = props;
-  const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL);
+  const backdropSrcSet = getBackdropSrcSet(movie.backdropPath);
+  const backdropFallbackUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
   const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.LARGE);
   const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
 
-  if (!backdropUrl) return null;
+  if (!backdropFallbackUrl) return null;
 
   return (
     <Link
@@ -36,7 +37,9 @@ const SpotlightCard = (props: Props) => {
       {/* バックドロップ画像 */}
       <div className="relative w-full aspect-[21/9] md:aspect-[2.8/1] overflow-hidden">
         <motion.img
-          src={backdropUrl}
+          srcSet={backdropSrcSet}
+          sizes="100vw"
+          src={backdropFallbackUrl}
           loading="lazy"
           alt={movie.title}
           className="absolute inset-0 object-cover w-full h-full transition-transform duration-700 group-hover/spotlight:scale-105"

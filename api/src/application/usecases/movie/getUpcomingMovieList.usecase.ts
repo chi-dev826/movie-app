@@ -1,9 +1,8 @@
-import { MovieEntity } from "../../../domain/models/movie";
 import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
 import { MovieEnrichService } from "../../services/movie.enrich.service";
 import { UpcomingMovieService } from "../../../domain/services/upcomingMovie.service";
-import { TMDB_FETCH_CONFIG } from "../../../domain/constants/tmdbFetchConfig";
 import { ArrayUtils } from "../../../utils/array";
+import { EnrichedMovie } from "../../types/enrichedMovie";
 
 /**
  * 日本で近日公開予定の映画リストを取得・加工するユースケース。
@@ -16,26 +15,21 @@ export class GetUpcomingMovieListUseCase {
   ) {}
 
   /**
-   * @returns 公開予定映画リスト（ドメインエンティティとエンリッチデータの結合体）
+   * @param page 取得するページ番号
+   * @returns 公開予定映画リスト（エンリッチデータ結合済）とページネーション情報
    */
-  async execute(): Promise<
-    (MovieEntity & { logoPath?: string; videoKey?: string })[]
-  > {
-    // 1. 複数ページにわたるデータの並行取得
-    const pagesToFetch = ArrayUtils.range(
-      TMDB_FETCH_CONFIG.FETCH_PAGES.UPCOMING,
-    );
-    const promises = pagesToFetch.map((page) =>
-      this.tmdbRepo.findUpcomingMovies(page),
-    );
-
-    const responses = await Promise.all(promises);
-    const allMovies = responses.flatMap((res) => res);
+  async execute(page: number = 1): Promise<{
+    movies: EnrichedMovie[];
+    currentPage: number;
+    totalPages: number;
+  }> {
+    // 1. 指定されたページのデータを取得
+    const result = await this.tmdbRepo.findUpcomingMovies(page);
 
     // 2. ビジネスルールに基づくフィルタリングとソート
     const processedMovies = this.upcomingService.sort(
       ArrayUtils.deduplicate(
-        allMovies.filter((m) => m.isMostlyJapanese() && m.hasValidImages()),
+        result.movies.filter((m) => m.isMostlyJapanese() && m.hasValidImages()),
       ),
     );
 
@@ -46,12 +40,17 @@ export class GetUpcomingMovieListUseCase {
       this.enrichService.getTrailers(movieIds),
     ]);
 
-    // 4. ドメインオブジェクトの構築 (Entity + EnrichData)
-    return processedMovies.map((movie) =>
-      Object.assign(Object.create(movie), {
-        logoPath: logosMap.get(movie.id),
-        videoKey: trailersMap.get(movie.id),
-      }),
-    );
+    // 4. ドメインエンティティと補助データの合成
+    const enrichedMovies: EnrichedMovie[] = processedMovies.map((movie) => ({
+      entity: movie,
+      logoPath: logosMap.get(movie.id),
+      videoKey: trailersMap.get(movie.id),
+    }));
+
+    return {
+      movies: enrichedMovies,
+      currentPage: result.currentPage,
+      totalPages: result.totalPages,
+    };
   }
 }

@@ -11,24 +11,26 @@ export class GetTrendingListUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   /**
-   * @returns トレンド映画リスト（ドメインエンティティ）
+   * @param page 取得するページ番号
+   * @returns トレンド映画リスト（ドメインエンティティ）とページネーション情報
    */
-  async execute(): Promise<MovieEntity[]> {
-    const pagesToFetch = ArrayUtils.range(
-      TMDB_FETCH_CONFIG.FETCH_PAGES.TRENDING,
-    );
-
-    // 1. 指定されたページ数分のデータを並行取得
-    const promises = pagesToFetch.map((page) =>
-      this.tmdbRepo.findTrendingMovies(page),
-    );
-
-    const responses = await Promise.all(promises);
-    const allMovies = responses.flatMap((res) => res);
+  async execute(page: number = 1): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
+    // 1. 指定されたページのデータを取得
+    const result = await this.tmdbRepo.findTrendingMovies(page);
 
     // 2. ビジネスルールに基づくフィルタリングと重複排除
-    return ArrayUtils.deduplicate(allMovies).filter(
+    const filteredMovies = ArrayUtils.deduplicate(result.movies).filter(
       (m) => m.hasValidImages() && m.hasOverview() && m.isMostlyJapanese(),
     );
+
+    return {
+      movies: filteredMovies,
+      currentPage: result.currentPage,
+      totalPages: result.totalPages,
+    };
   }
 }

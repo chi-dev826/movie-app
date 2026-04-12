@@ -58,7 +58,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({ movieI
 
         <button 
           onClick={() => toggleWatchList(movieId)}
-          className={`flex-1 ${isInList ? 'bg-surface-container-highest text-primary border border-primary/30' : 'bg-surface-container-high bg-gray-800 text-on-surface hover:bg-surface-container-highest'} py-3.5 rounded-xl font-label font-bold text-sm tracking-widest uppercase transition-colors active:scale-95 flex justify-center items-center gap-2`}
+          className={`flex-1 ${isInList ? 'bg-surface-container-highest text-primary border border-primary/30' : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'} py-3.5 rounded-xl font-label font-bold text-sm tracking-widest uppercase transition-colors active:scale-95 flex justify-center items-center gap-2`}
         >
           <span className="material-symbols-outlined text-[20px]">{isInList ? 'check' : 'add'}</span>
           {isInList ? 'リストから削除' : 'リストへ追加'}

@@ -10,3 +10,15 @@ export const getTmdbImage = (path: string | null | undefined, size: string): str
   if (!path) return null;
   return `${IMAGE_CONFIG.IMAGE_BASE_URL}${size}${path}`;
 };
+
+/**
+ * @summary バックドロップ画像のsrcSet文字列を生成する。ブラウザが画面幅に応じて最適サイズを自動選択する。
+ * @param path TMDB画像パス
+ * @returns srcSet文字列。pathがnullの場合はundefinedを返す
+ */
+export const getBackdropSrcSet = (path: string | null | undefined): string | undefined => {
+  if (!path) return undefined;
+  const { BACKDROP } = IMAGE_CONFIG.IMAGE_SIZES;
+  const base = IMAGE_CONFIG.IMAGE_BASE_URL;
+  return `${base}${BACKDROP.SMALL}${path} 300w, ${base}${BACKDROP.MEDIUM}${path} 780w, ${base}${BACKDROP.LARGE}${path} 1280w`;
+};

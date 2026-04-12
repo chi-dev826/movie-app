@@ -1,5 +1,11 @@
 import { Movie, MovieDetail } from "../dto";
 
+export type PaginatedResponse<T> = {
+  movies: T[];
+  currentPage: number;
+  totalPages: number;
+};
+
 export type FullMovieData = {
   detail: MovieDetail;
   videoUrl: string | null;
@@ -14,5 +20,5 @@ export type FullMovieData = {
 
 export type MovieListResponse = Record<
   "recently_added", 
-  Movie[]
+  PaginatedResponse<Movie>
 >;

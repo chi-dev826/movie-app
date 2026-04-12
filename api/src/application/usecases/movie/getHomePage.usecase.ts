@@ -3,15 +3,22 @@ import { GetHomePageMovieListUseCase as PopularUseCase } from "./getHomePageMovi
 import { GetUpcomingMovieListUseCase } from "./getUpcomingMovieList.usecase";
 import { GetNowPlayingMoviesUseCase } from "./getNowPlayingMovies.usecase";
 import { GetTrendingListUseCase } from "./getTrendingList.usecase";
+import { EnrichedMovie } from "../../types/enrichedMovie";
 
 /**
  * ホーム画面表示用の全データを一括取得するドメイン関心事のオーケストレーション。
  */
+export type PaginatedData<T> = {
+  movies: T[];
+  currentPage: number;
+  totalPages: number;
+};
+
 export type HomePageData = {
-  recentlyAdded: MovieEntity[];
-  upcoming: (MovieEntity & { logoPath?: string; videoKey?: string })[];
-  nowPlaying: MovieEntity[];
-  trending: MovieEntity[];
+  recentlyAdded: PaginatedData<MovieEntity>;
+  upcoming: PaginatedData<EnrichedMovie>;
+  nowPlaying: PaginatedData<MovieEntity>;
+  trending: PaginatedData<MovieEntity>;
 };
 
 export class GetHomePageUseCase {
@@ -28,10 +35,10 @@ export class GetHomePageUseCase {
    */
   async execute(): Promise<HomePageData> {
     const [recentlyAdded, upcoming, nowPlaying, trending] = await Promise.all([
-      this.popularUseCase.execute(),
-      this.upcomingUseCase.execute(),
-      this.nowPlayingUseCase.execute(),
-      this.trendingUseCase.execute(),
+      this.popularUseCase.execute(1),
+      this.upcomingUseCase.execute(1),
+      this.nowPlayingUseCase.execute(1),
+      this.trendingUseCase.execute(1),
     ]);
 
     return {

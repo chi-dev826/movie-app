@@ -20,19 +20,35 @@ export interface ITmdbRepository {
   findPersonIdByName(query: string): Promise<number | null>;
 
   /** 近日公開予定の映画を取得する（地域・期間はリポジトリ内部で決定） */
-  findUpcomingMovies(page: number): Promise<MovieEntity[]>;
+  findUpcomingMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }>;
 
   /** 現在上映中の映画を取得する（地域・言語はリポジトリ内部で決定） */
-  findNowPlayingMovies(page: number): Promise<MovieEntity[]>;
+  findNowPlayingMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }>;
 
-  /** トレンド映画を取得する（地域・言語はリポジトリ内部で決定） */
-  findTrendingMovies(page: number): Promise<MovieEntity[]>;
+  /** トレンド映画をページ単位で取得する */
+  findTrendingMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }>;
 
   /** 特定の出演者が関わった映画を取得する */
   findMoviesByCastId(personId: number): Promise<MovieEntity[]>;
 
   /** 最近追加された人気映画を取得する */
-  findRecentlyAddedMovies(page: number): Promise<MovieEntity[]>;
+  findRecentlyAddedMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }>;
 
   /** 補助データ: 映画の動画情報を取得する */
   getMovieVideos(movieId: number): Promise<Video[]>;

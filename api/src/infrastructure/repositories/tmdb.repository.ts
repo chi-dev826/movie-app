@@ -114,7 +114,11 @@ export class TmdbRepository implements ITmdbRepository {
    * 近日公開予定の映画を取得する。
    * 検索期間・リリースタイプ等のAPIパラメータはすべてリポジトリ内部で構築する。
    */
-  async findUpcomingMovies(page: number): Promise<MovieEntity[]> {
+  async findUpcomingMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
     const periodParams = this.buildUpcomingPeriodParams();
     const params: DiscoverMovieParams = {
       page,
@@ -131,7 +135,11 @@ export class TmdbRepository implements ITmdbRepository {
   }
 
   /** 現在上映中の映画を取得する */
-  async findNowPlayingMovies(page: number): Promise<MovieEntity[]> {
+  async findNowPlayingMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
     const rawData = await this.cache.getOrSet(
       `tmdb:now_playing:raw:${page}`,
       async () => {
@@ -145,15 +153,25 @@ export class TmdbRepository implements ITmdbRepository {
             },
           },
         );
-        return response.data.results;
+        return response.data;
       },
       CACHE_TTL.SHORT,
     );
-    return rawData.map((movie) => MovieFactory.createFromApiResponse(movie));
+    return {
+      movies: rawData.results.map((movie) =>
+        MovieFactory.createFromApiResponse(movie),
+      ),
+      currentPage: rawData.page,
+      totalPages: rawData.total_pages,
+    };
   }
 
-  /** トレンド映画を取得する */
-  async findTrendingMovies(page: number): Promise<MovieEntity[]> {
+  /** トレンド映画をページ単位で取得する */
+  async findTrendingMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
     const rawData = await this.cache.getOrSet(
       `tmdb:trending:raw:${page}`,
       async () => {
@@ -166,11 +184,18 @@ export class TmdbRepository implements ITmdbRepository {
             region: TMDB_DEFAULTS.REGION,
           },
         });
-        return response.data.results;
+        return response.data;
       },
       CACHE_TTL.SHORT,
     );
-    return rawData.map((movie) => MovieFactory.createFromTrendingResponse(movie));
+
+    return {
+      movies: rawData.results.map((movie) =>
+        MovieFactory.createFromTrendingResponse(movie),
+      ),
+      currentPage: rawData.page,
+      totalPages: rawData.total_pages,
+    };
   }
 
   /** 特定の出演者が関わった映画を取得する */
@@ -182,11 +207,16 @@ export class TmdbRepository implements ITmdbRepository {
       with_cast: String(personId),
     };
 
-    return this.discoverMovies(params);
+    const res = await this.discoverMovies(params);
+    return res.movies;
   }
 
   /** 最近追加された人気映画を取得する */
-  async findRecentlyAddedMovies(page: number): Promise<MovieEntity[]> {
+  async findRecentlyAddedMovies(page: number): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
     const params: DiscoverMovieParams = {
       page,
       "vote_count.gte": TMDB_DEFAULTS.FILTERS.RECENT_VOTE_COUNT,
@@ -311,9 +341,11 @@ export class TmdbRepository implements ITmdbRepository {
    * Discover API の共通呼び出しロジック。
    * 外部APIの具体的なパラメータ構造はこのメソッド内に閉じ込める。
    */
-  private async discoverMovies(
-    params: DiscoverMovieParams,
-  ): Promise<MovieEntity[]> {
+  private async discoverMovies(params: DiscoverMovieParams): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
     const rawData = await this.cache.getOrSet(
       `tmdb:discover:raw:${JSON.stringify(params)}`,
       async () => {
@@ -321,11 +353,17 @@ export class TmdbRepository implements ITmdbRepository {
           "/discover/movie",
           { params },
         );
-        return response.data.results;
+        return response.data;
       },
       CACHE_TTL.SHORT,
     );
-    return rawData.map((movie) => MovieFactory.createFromApiResponse(movie));
+    return {
+      movies: rawData.results.map((movie) =>
+        MovieFactory.createFromApiResponse(movie),
+      ),
+      currentPage: rawData.page,
+      totalPages: rawData.total_pages,
+    };
   }
 
   /**

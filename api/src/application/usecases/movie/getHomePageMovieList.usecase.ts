@@ -11,19 +11,26 @@ export class GetHomePageMovieListUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   /**
-   * @returns 最近追加された映画リスト（ドメインエンティティ）
+   * @param page 取得するページ番号
+   * @returns 最近追加された映画リストとページネーション情報
    */
-  async execute(): Promise<MovieEntity[]> {
-    const pagesToFetch = ArrayUtils.range(TMDB_FETCH_CONFIG.FETCH_PAGES.HOME);
-
-    // 1. 全ページを並行で取得
-    const pagePromises = pagesToFetch.map((page) =>
-      this.tmdbRepo.findRecentlyAddedMovies(page),
-    );
-    const results: MovieEntity[][] = await Promise.all(pagePromises);
+  async execute(page: number = 1): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
+    // 1. 指定されたページのデータを取得
+    const result = await this.tmdbRepo.findRecentlyAddedMovies(page);
 
     // 2. ビジネスルールに基づくフィルタリングと重複排除
-    const flatList: MovieEntity[] = results.flat();
-    return ArrayUtils.deduplicate(flatList).filter((m) => m.hasValidImages());
+    const filteredMovies = ArrayUtils.deduplicate(result.movies).filter((m) =>
+      m.hasValidImages(),
+    );
+
+    return {
+      movies: filteredMovies,
+      currentPage: result.currentPage,
+      totalPages: result.totalPages,
+    };
   }
 }

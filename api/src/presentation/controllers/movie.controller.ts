@@ -96,9 +96,14 @@ export class MovieController {
    */
   async getMovieList(req: Request, res: Response, next: NextFunction) {
     try {
-      const movies = await this.getHomePageMovieListUseCase.execute();
+      const page = Number(req.query.page) || 1;
+      const result = await this.getHomePageMovieListUseCase.execute(page);
       res.json({
-        recently_added: this.builder.buildSimpleList(movies),
+        recently_added: {
+          movies: this.builder.buildSimpleList(result.movies),
+          currentPage: result.currentPage,
+          totalPages: result.totalPages,
+        },
       });
     } catch (error) {
       next(error);
@@ -123,8 +128,13 @@ export class MovieController {
    */
   async getUpcomingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const movies = await this.getUpcomingMovieListUseCase.execute();
-      res.json(this.builder.buildUpcomingList(movies, this.clock.now()));
+      const page = Number(req.query.page) || 1;
+      const result = await this.getUpcomingMovieListUseCase.execute(page);
+      res.json({
+        movies: this.builder.buildUpcomingList(result.movies, this.clock.now()),
+        currentPage: result.currentPage,
+        totalPages: result.totalPages,
+      });
     } catch (error) {
       next(error);
     }
@@ -135,8 +145,13 @@ export class MovieController {
    */
   async getNowPlayingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const movies = await this.getNowPlayingMoviesUseCase.execute();
-      res.json(this.builder.buildSimpleList(movies));
+      const page = Number(req.query.page) || 1;
+      const result = await this.getNowPlayingMoviesUseCase.execute(page);
+      res.json({
+        movies: this.builder.buildSimpleList(result.movies),
+        currentPage: result.currentPage,
+        totalPages: result.totalPages,
+      });
     } catch (error) {
       next(error);
     }
@@ -147,8 +162,14 @@ export class MovieController {
    */
   async getTrendingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const movies = await this.getTrendingListUseCase.execute();
-      res.json(this.builder.buildSimpleList(movies));
+      const page = Number(req.query.page) || 1;
+      const result = await this.getTrendingListUseCase.execute(page);
+
+      res.json({
+        movies: this.builder.buildSimpleList(result.movies),
+        currentPage: result.currentPage,
+        totalPages: result.totalPages,
+      });
     } catch (error) {
       next(error);
     }

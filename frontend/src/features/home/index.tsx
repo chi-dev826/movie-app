@@ -6,10 +6,8 @@ import SpotlightSection from './components/SpotlightSection';
 import SpotlightCard from './components/SpotlightCard';
 import UpcomingMovieCard from './components/UpcomingMovieCard';
 import NowPlayingCard from './components/NowPlayingCard';
-import SectionHeader from './components/SectionHeader';
-import RankingMovieCard from './components/RankingMovieCard';
-import NewReleaseMovieCard from './components/NewReleaseMovieCard';
-import { Movie } from '@/types/api/dto';
+import TrendingSection from './components/TrendingSection';
+import RecentlyAddedSection from './components/RecentlyAddedSection';
 
 /** スタガー制御用の親バリアント（詳細ページと統一） */
 const containerVariants = {
@@ -53,14 +51,7 @@ function HomePage() {
     }
   }, [data?.hero, controls]);
 
-  // 人気リストを3つのリストずつに分割
-  const popularLists = data?.trending.reduce<Movie[][]>((acc, movie, index) => {
-    if (index % 3 === 0) {
-      acc.push([]);
-    }
-    acc[acc.length - 1].push(movie);
-    return acc;
-  }, []);
+
 
   if (isLoading) {
     return (
@@ -112,7 +103,7 @@ function HomePage() {
             title="公開予定"
             subtitle="まもなく公開される注目作品"
             type="upcoming"
-            items={data.upcoming}
+            initialData={data.upcoming}
             renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="upcoming" />}
             renderRemainingItem={(movie) => (
               <UpcomingMovieCard movie={movie} className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]" /> // この２つのカード群は強調する
@@ -126,7 +117,7 @@ function HomePage() {
             title="公開中の映画"
             subtitle="今、劇場で観られる映画"
             type="now_playing"
-            items={data.nowPlaying}
+            initialData={data.nowPlaying}
             renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="now_playing" />}
             renderRemainingItem={(movie) => (
               <NowPlayingCard movie={movie} className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]" /> // この２つのカード群は強調する
@@ -135,43 +126,16 @@ function HomePage() {
         </motion.div>
 
         {/* 人気ランキング */}
-        {data.trending && data.trending.length > 0 && (
+        {data.trending && data.trending.movies.length > 0 && (
           <motion.div variants={sectionVariants}>
-            <div className="mt-12 px-4 py-8 rounded-3xl bg-[#131313]">
-              <SectionHeader title="今週人気" type="trending" />
-              <div className="flex overflow-x-auto gap-4 snap-x snap-mandatory scrollbar-hide">
-                {popularLists?.map((list, groupIndex) => (
-                  <div key={groupIndex} className="flex-none flex flex-col gap-4 w-full snap-start">
-                    {list.map((movie, itemIndex) => (
-                      <RankingMovieCard 
-                        key={movie.id} 
-                        movie={movie} 
-                        rank={groupIndex * 3 + itemIndex + 1} 
-                      />
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <TrendingSection initialData={data.trending} />
           </motion.div>
         )}
 
         {/* 新着作品 (2行グリッド横スクロール) */}
-        {data.recentlyAdded && data.recentlyAdded.length > 0 && (
+        {data.recentlyAdded && data.recentlyAdded.movies.length > 0 && (
           <motion.div variants={sectionVariants}>
-            <div className="p-2 mt-6 lg:mt-12 relative">
-              <SectionHeader title="新着作品" type="recently_added" />
-              {/* WebKit scrollbar を隠すためのクラスとスナップ用のスタイル */}
-              <div 
-                className="grid grid-rows-2 grid-flow-col gap-x-4 md:gap-x-6 gap-y-8 overflow-x-auto snap-x pt-2 pb-6 hide-scrollbar"
-              >
-                {data.recentlyAdded.map((movie) => (
-                  <div className="w-48 sm:w-56 md:w-64 shrink-0 snap-start" key={movie.id}>
-                    <NewReleaseMovieCard movie={movie} />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <RecentlyAddedSection initialData={data.recentlyAdded} />
           </motion.div>
         )}
       </div>

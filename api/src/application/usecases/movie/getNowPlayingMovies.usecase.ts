@@ -11,24 +11,26 @@ export class GetNowPlayingMoviesUseCase {
   constructor(private readonly tmdbRepo: ITmdbRepository) {}
 
   /**
-   * @returns 現在上映中の映画リスト（ドメインエンティティ）
+   * @param page 取得するページ番号
+   * @returns 現在上映中の映画リストとページネーション情報
    */
-  async execute(): Promise<MovieEntity[]> {
-    const pagesToFetch = ArrayUtils.range(
-      TMDB_FETCH_CONFIG.FETCH_PAGES.NOW_PLAYING,
-    );
-
-    // 1. 指定されたページ数分のデータを並行取得
-    const promises = pagesToFetch.map((page) =>
-      this.tmdbRepo.findNowPlayingMovies(page),
-    );
-
-    const responses = await Promise.all(promises);
-    const allMovies = responses.flatMap((res) => res);
+  async execute(page: number = 1): Promise<{
+    movies: MovieEntity[];
+    currentPage: number;
+    totalPages: number;
+  }> {
+    // 1. 指定されたページのデータを取得
+    const result = await this.tmdbRepo.findNowPlayingMovies(page);
 
     // 2. ビジネスルールに基づくフィルタリングと重複排除
-    return ArrayUtils.deduplicate(allMovies).filter(
+    const filteredMovies = ArrayUtils.deduplicate(result.movies).filter(
       (m) => m.hasValidImages() && m.isMostlyJapanese(),
     );
+
+    return {
+      movies: filteredMovies,
+      currentPage: result.currentPage,
+      totalPages: result.totalPages,
+    };
   }
 }

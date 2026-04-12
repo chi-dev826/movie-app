@@ -1,8 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { useMovieList, useNowPlayingMovies, useTrendingMovies } from '@/hooks/useMovies';
+import { useInfiniteMovieList } from '@/hooks/useMovies';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { MoviePoster } from '@/components/movie-card';
-import { Movie } from '@/types/api/dto';
+
 
 const getTitle = (type?: string) => {
   switch (type) {
@@ -23,28 +24,20 @@ const MovieList = () => {
   const { type } = useParams<{
     type: 'popular' | 'recently_added' | 'now_playing' | 'trending';
   }>();
-  const { data, isLoading, isError, error } = useMovieList();
-  const { data: NowPlayingData } = useNowPlayingMovies();
-  const { data: trendingData, isLoading: isLoadingTrending, isError: isErrorTrending, error: errorTrending } = useTrendingMovies();
+  const { 
+    data, 
+    isLoading: isCurrentlyLoading, 
+    isError, 
+    error: currentErrorObj,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage
+  } = useInfiniteMovieList(type);
 
-  // 映画リストの種類に応じてデータを選択
-  let movieList: Movie[] | undefined = [];
-  let isCurrentlyLoading = isLoading;
-  let currentError = isError;
-  let currentErrorObj = error;
+  const sentinelRef = useInfiniteScroll(hasNextPage, isFetchingNextPage, fetchNextPage);
 
-  if (type === 'now_playing') {
-    movieList = NowPlayingData;
-  } else if (type === 'trending') {
-    movieList = trendingData;
-    isCurrentlyLoading = isLoadingTrending;
-    currentError = isErrorTrending;
-    currentErrorObj = errorTrending;
-  } else if (type === 'recently_added') {
-    movieList = data?.recently_added;
-  } else if (type === 'popular') { // Fallback, though not used usually anymore
-    movieList = []; 
-  }
+  const movieList = data?.pages.flatMap(page => page.movies) ?? [];
+  const currentError = isError;
 
   const title = getTitle(type);
 
@@ -91,6 +84,18 @@ const MovieList = () => {
             <MoviePoster key={movie.id} movie={movie} />
           ))}
         </div>
+
+        {/* 無限スクロール用の番兵（Sentinel） */}
+        {hasNextPage && (
+          <div ref={sentinelRef} className="w-full h-1 mt-8" />
+        )}
+
+        {/* 読み込み中インジケーター */}
+        {isFetchingNextPage && (
+          <div className="py-8 text-center text-gray-400">
+            読み込み中...
+          </div>
+        )}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import ReactPlayer from 'react-player';
 
 import { useHoverVisibility } from '../hooks/useHoverVisibility';
 import HomeHeroMetadata from './HomeHeroMetadata';
-import { getTmdbImage } from '@/utils/image';
+import { getTmdbImage, getBackdropSrcSet } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -105,8 +105,10 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
                 transition: { duration: 1.5, ease: 'easeInOut' },
               }}
               transition={{ duration: 1 }}
+              srcSet={getBackdropSrcSet(movie.backdropPath)}
+              sizes="100vw"
               src={
-                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ?? ''
               }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"
@@ -137,8 +139,10 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
         <AnimatePresence>
           {movie?.backdropPath && (
             <motion.img
+              srcSet={getBackdropSrcSet(movie.backdropPath)}
+              sizes="100vw"
               src={
-                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.ORIGINAL) ?? ''
+                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ?? ''
               }
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"

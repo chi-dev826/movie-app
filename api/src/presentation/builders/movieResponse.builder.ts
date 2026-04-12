@@ -1,6 +1,7 @@
 import { MovieEntity } from "../../domain/models/movie";
 import { FullMovieDomainData } from "../../application/usecases/movie/getFullMovieData.usecase";
 import { HomePageData } from "../../application/usecases/movie/getHomePage.usecase";
+import { EnrichedMovie } from "../../application/types/enrichedMovie";
 import { MovieDetailEntity } from "../../domain/models/movieDetail";
 import { MovieMapper } from "../mappers/movie.mapper";
 import { MoviePresenter } from "../presenters/movie.presenter";
@@ -62,20 +63,24 @@ export class MovieResponseBuilder {
    */
   buildHomePage(data: HomePageData, today: Date): HomePageResponse {
     // 1. 各カテゴリのEntityをDTOに変換
-    const recentlyAddedDto = data.recentlyAdded.map((m) =>
+    const recentlyAddedDto = data.recentlyAdded.movies.map((m) =>
       MovieMapper.toBffDto(m),
     );
-    const upcomingDto = data.upcoming.map((m) =>
+    const upcomingDto = data.upcoming.movies.map((m) =>
       MoviePresenter.toUpcomingMovie(
-        MovieMapper.toBffDto(m, {
+        MovieMapper.toBffDto(m.entity, {
           logoPath: m.logoPath,
           videoKey: m.videoKey,
         }),
         today,
       ),
     );
-    const nowPlayingDto = data.nowPlaying.map((m) => MovieMapper.toBffDto(m));
-    const trendingDto = data.trending.map((m) => MovieMapper.toBffDto(m));
+    const nowPlayingDto = data.nowPlaying.movies.map((m) =>
+      MovieMapper.toBffDto(m),
+    );
+    const trendingDto = data.trending.movies.map((m) =>
+      MovieMapper.toBffDto(m),
+    );
 
     // 2. ヒーローセクションを構築
     const hero = MoviePresenter.toHomeHeroList(
@@ -86,23 +91,36 @@ export class MovieResponseBuilder {
 
     return {
       hero,
-      upcoming: upcomingDto,
-      nowPlaying: nowPlayingDto,
-      recentlyAdded: recentlyAddedDto,
-      trending: trendingDto,
+      upcoming: {
+        movies: upcomingDto,
+        currentPage: data.upcoming.currentPage,
+        totalPages: data.upcoming.totalPages,
+      },
+      nowPlaying: {
+        movies: nowPlayingDto,
+        currentPage: data.nowPlaying.currentPage,
+        totalPages: data.nowPlaying.totalPages,
+      },
+      recentlyAdded: {
+        movies: recentlyAddedDto,
+        currentPage: data.recentlyAdded.currentPage,
+        totalPages: data.recentlyAdded.totalPages,
+      },
+      trending: {
+        movies: trendingDto,
+        currentPage: data.trending.currentPage,
+        totalPages: data.trending.totalPages,
+      },
     };
   }
 
   /**
    * 近日公開映画のリストを構築する
    */
-  buildUpcomingList(
-    movies: (MovieEntity & { logoPath?: string; videoKey?: string })[],
-    today: Date,
-  ): UpcomingMovie[] {
+  buildUpcomingList(movies: EnrichedMovie[], today: Date): UpcomingMovie[] {
     return movies.map((m) =>
       MoviePresenter.toUpcomingMovie(
-        MovieMapper.toBffDto(m, {
+        MovieMapper.toBffDto(m.entity, {
           logoPath: m.logoPath,
           videoKey: m.videoKey,
         }),

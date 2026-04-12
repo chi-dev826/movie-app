@@ -3,10 +3,14 @@ import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import SectionHeader from './SectionHeader';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import { APP_PATHS } from '@shared/constants/routes';
+import { useInfiniteMovieList } from '@/hooks/useMovies';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { PaginatedResponse } from '@/types/api/response';
+import { Movie, UpcomingMovie } from '@/types/api/dto';
 
 import 'swiper/css';
 import 'swiper/css/effect-fade';
@@ -20,7 +24,7 @@ type Props<T> = {
   title: string;
   subtitle?: string;
   type: string;
-  items: T[] | undefined;
+  initialData?: PaginatedResponse<T>;
   renderSpotlightItem: (item: T) => ReactNode;
   renderRemainingItem: (item: T) => ReactNode;
 };
@@ -39,7 +43,38 @@ type Props<T> = {
  * @param renderRemainingItem - 横スクロール内のアイテムを描画する関数
  */
 const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) => {
-  const { title, subtitle, type, items, renderSpotlightItem, renderRemainingItem } = props;
+  const { title, subtitle, type, initialData, renderSpotlightItem, renderRemainingItem } = props;
+
+  const {
+    data: infiniteData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteMovieList(
+    type, 
+    initialData as unknown as PaginatedResponse<Movie | UpcomingMovie>
+  );
+
+  const observerRef = useInfiniteScroll(
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    { rootMargin: '0px 800px 0px 0px' } // 横方向の先読みマージン
+  );
+
+  // initialDataがある場合、マウント時に次ページをバックグラウンドでプリフェッチ
+  // 横スクロールはコンテンツ到達が速いため、番兵発火前に先行ロードを行う
+  useEffect(() => {
+    if (initialData && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const items = infiniteData
+    ? (infiniteData.pages.flatMap((page) => page.movies) as unknown as T[])
+    : [];
+
   if (!items || items.length === 0) return null;
 
   const spotlightItems = items.slice(0, SPOTLIGHT_COUNT);
@@ -86,6 +121,8 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
                 {renderRemainingItem(item)}
               </React.Fragment>
             ))}
+            {/* 番兵（インフィニットスクローラー） */}
+            <div ref={observerRef} className="w-10 flex-shrink-0" />
           </HorizontalScrollContainer>
         </div>
       )}
