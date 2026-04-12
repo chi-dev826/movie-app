@@ -22,7 +22,7 @@ export class GoogleSearchRepository implements IGoogleSearchRepository {
     };
   }): Promise<ArticleEntity[]> {
     const rawData = await this.cache.getOrSet(
-      `serpApi:movieAnalysis:raw2:${query}`, // キャッシュキーを変更して古いデータを無効化
+      `serpApi:movieAnalysis:raw:${query}`, // キャッシュキーを変更して古いデータを無効化
       async () => {
         const response = await serpApiClient.get<SerpApiResponse>("/search", {
           params: {
