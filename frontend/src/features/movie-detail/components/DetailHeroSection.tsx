@@ -119,14 +119,14 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
                 <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
                 <span>{detail.runtime ? `${detail.runtime}分` : '-'}</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
-                <span className="flex items-center gap-1 font-bold text-primary text-yellow-400">
+                <span className="flex items-center gap-1 font-bold text-yellow-400">
                    <span className="material-symbols-outlined text-[16px]" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
                    {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
                 </span>
               </div>
               <div className="flex flex-wrap gap-2 mt-3">
                 {detail.genres?.map((genre, idx) => (
-                  <span key={idx} className="bg-surface-container-high text-on-surface-variant px-2.5 py-1 rounded-full bg-gray-800 text-xs font-bold tracking-wider">
+                  <span key={idx} className="bg-surface-container-high text-on-surface-variant px-2.5 py-1 rounded-full text-xs font-bold tracking-wider">
                     {genre}
                   </span>
                 ))}
