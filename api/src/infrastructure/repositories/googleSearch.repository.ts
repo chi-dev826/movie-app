@@ -21,8 +21,8 @@ export class GoogleSearchRepository implements IGoogleSearchRepository {
       filter?: number;
     };
   }): Promise<ArticleEntity[]> {
-    return this.cache.getOrSet(
-      `serpApi:movieAnalysis:raw:${query}`,
+    const rawData = await this.cache.getOrSet(
+      `serpApi:movieAnalysis:raw2:${query}`, // キャッシュキーを変更して古いデータを無効化
       async () => {
         const response = await serpApiClient.get<SerpApiResponse>("/search", {
           params: {
@@ -31,13 +31,13 @@ export class GoogleSearchRepository implements IGoogleSearchRepository {
           },
         });
 
-        const items = response.data.organic_results || [];
-
-        return items.map((item: SerpApiOrganicResult) =>
-          ArticleFactory.createFromSerpApi(item),
-        );
+        return response.data.organic_results || [];
       },
       CACHE_TTL.STANDARD,
+    );
+
+    return rawData.map((item: SerpApiOrganicResult) =>
+      ArticleFactory.createFromSerpApi(item),
     );
   }
 }

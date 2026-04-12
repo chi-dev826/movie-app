@@ -48,30 +48,32 @@ export class TmdbRepository implements ITmdbRepository {
   // ──────────────────────────────────────────
 
   async getMovieDetails(movieId: number): Promise<MovieDetailEntity> {
-    return this.cache.getOrSet(
-      `tmdb:movie:${movieId}:details`,
+    const rawData = await this.cache.getOrSet(
+      `tmdb:movie:${movieId}:details:raw`,
       async () => {
         const response = await this.api.get<MovieDetailResponse>(
           `/movie/${movieId}`,
           { params: { append_to_response: "credits" } },
         );
-        return MovieFactory.createFromDetailResponse(response.data);
+        return response.data;
       },
       CACHE_TTL.STANDARD,
     );
+    return MovieFactory.createFromDetailResponse(rawData);
   }
 
   async getCollection(collectionId: number): Promise<CollectionEntity> {
-    return this.cache.getOrSet(
-      `tmdb:collection:${collectionId}`,
+    const rawData = await this.cache.getOrSet(
+      `tmdb:collection:${collectionId}:raw`,
       async () => {
         const response = await this.api.get<CollectionResponse>(
           `/collection/${collectionId}`,
         );
-        return CollectionFactory.createFromApiResponse(response.data);
+        return response.data;
       },
       CACHE_TTL.STANDARD,
     );
+    return CollectionFactory.createFromApiResponse(rawData);
   }
 
   // ──────────────────────────────────────────
@@ -130,8 +132,8 @@ export class TmdbRepository implements ITmdbRepository {
 
   /** 現在上映中の映画を取得する */
   async findNowPlayingMovies(page: number): Promise<MovieEntity[]> {
-    return this.cache.getOrSet(
-      `tmdb:now_playing:${page}`,
+    const rawData = await this.cache.getOrSet(
+      `tmdb:now_playing:raw:${page}`,
       async () => {
         const response = await this.api.get<PaginatedResponse<MovieResponse>>(
           "/movie/now_playing",
@@ -143,18 +145,17 @@ export class TmdbRepository implements ITmdbRepository {
             },
           },
         );
-        return response.data.results.map((movie) =>
-          MovieFactory.createFromApiResponse(movie),
-        );
+        return response.data.results;
       },
       CACHE_TTL.SHORT,
     );
+    return rawData.map((movie) => MovieFactory.createFromApiResponse(movie));
   }
 
   /** トレンド映画を取得する */
   async findTrendingMovies(page: number): Promise<MovieEntity[]> {
-    return this.cache.getOrSet(
-      `tmdb:trending:${page}`,
+    const rawData = await this.cache.getOrSet(
+      `tmdb:trending:raw:${page}`,
       async () => {
         const response = await this.api.get<
           PaginatedResponse<TrendingMovieResponse>
@@ -165,12 +166,11 @@ export class TmdbRepository implements ITmdbRepository {
             region: TMDB_DEFAULTS.REGION,
           },
         });
-        return response.data.results.map((movie) =>
-          MovieFactory.createFromTrendingResponse(movie),
-        );
+        return response.data.results;
       },
       CACHE_TTL.SHORT,
     );
+    return rawData.map((movie) => MovieFactory.createFromTrendingResponse(movie));
   }
 
   /** 特定の出演者が関わった映画を取得する */
@@ -206,18 +206,17 @@ export class TmdbRepository implements ITmdbRepository {
    */
   async getMovieVideos(movieId: number): Promise<Video[]> {
     try {
-      return await this.cache.getOrSet(
-        `tmdb:movie:${movieId}:videos`,
+      const rawData = await this.cache.getOrSet(
+        `tmdb:movie:${movieId}:videos:raw`,
         async () => {
           const response = await this.api.get<DefaultResponse<VideoItem>>(
             `/movie/${movieId}/videos`,
           );
-          return response.data.results.map((item) =>
-            MovieFactory.createVideo(item),
-          );
+          return response.data.results;
         },
         CACHE_TTL.STANDARD,
       );
+      return rawData.map((item) => MovieFactory.createVideo(item));
     } catch (error) {
       console.error(
         `動画情報の取得に失敗しました (movieId: ${movieId}):`,
@@ -258,16 +257,17 @@ export class TmdbRepository implements ITmdbRepository {
     movieId: number,
   ): Promise<{ logoPath: string | null; name: string }[]> {
     try {
-      return await this.cache.getOrSet(
-        `tmdb:movie:${movieId}:watch_providers`,
+      const rawData = await this.cache.getOrSet(
+        `tmdb:movie:${movieId}:watch_providers:raw`,
         async () => {
           const response = await this.api.get<MovieWatchProvidersResponse>(
             `/movie/${movieId}/watch/providers`,
           );
-          return MovieFactory.createWatchProviders(response.data);
+          return response.data;
         },
         CACHE_TTL.STANDARD,
       );
+      return MovieFactory.createWatchProviders(rawData);
     } catch (error) {
       console.error(
         `配信情報の取得に失敗しました (movieId: ${movieId}):`,
@@ -282,19 +282,18 @@ export class TmdbRepository implements ITmdbRepository {
    */
   async getSimilarMovies(movieId: number, page = 1): Promise<MovieEntity[]> {
     try {
-      return await this.cache.getOrSet(
-        `tmdb:movie:${movieId}:similar:${page}`,
+      const rawData = await this.cache.getOrSet(
+        `tmdb:movie:${movieId}:similar:raw:${page}`,
         async () => {
           const response = await this.api.get<PaginatedResponse<MovieResponse>>(
             `/movie/${movieId}/similar`,
             { params: { page } },
           );
-          return response.data.results.map((movie) =>
-            MovieFactory.createFromApiResponse(movie),
-          );
+          return response.data.results;
         },
         CACHE_TTL.STANDARD,
       );
+      return rawData.map((movie) => MovieFactory.createFromApiResponse(movie));
     } catch (error) {
       console.error(
         `類似映画の取得に失敗しました (movieId: ${movieId}):`,
@@ -315,19 +314,18 @@ export class TmdbRepository implements ITmdbRepository {
   private async discoverMovies(
     params: DiscoverMovieParams,
   ): Promise<MovieEntity[]> {
-    return this.cache.getOrSet(
-      `tmdb:discover:${JSON.stringify(params)}`,
+    const rawData = await this.cache.getOrSet(
+      `tmdb:discover:raw:${JSON.stringify(params)}`,
       async () => {
         const response = await this.api.get<PaginatedResponse<MovieResponse>>(
           "/discover/movie",
           { params },
         );
-        return response.data.results.map((movie) =>
-          MovieFactory.createFromApiResponse(movie),
-        );
+        return response.data.results;
       },
       CACHE_TTL.SHORT,
     );
+    return rawData.map((movie) => MovieFactory.createFromApiResponse(movie));
   }
 
   /**

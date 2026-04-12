@@ -13,14 +13,14 @@ export class EigaComRepository implements IEigaComRepository {
   ) {}
 
   async searchNews(movieTitle: string): Promise<ArticleEntity[]> {
-    return this.cache.getOrSet(
-      `eigaCom:news:${movieTitle}`,
+    const rawData = await this.cache.getOrSet(
+      `eigaCom:news:raw:${movieTitle}`,
       async () => {
         const searchUrl = `/search/${encodeURIComponent(movieTitle)}`;
         const response = await this.client.get(searchUrl);
         const $ = cheerio.load(response.data);
 
-        const entities: ArticleEntity[] = [];
+        const rawItems: { title: string; url: string; imageUrl: string | null; snippet: string; source: string }[] = [];
         $("#rslt-news .list-block").each((_, el) => {
           const element = $(el);
           const title = element.find("h3.title a").text().trim();
@@ -33,21 +33,15 @@ export class EigaComRepository implements IEigaComRepository {
             .trim();
 
           if (title && url) {
-            entities.push(
-              ArticleFactory.createFromScraping({
-                title,
-                url,
-                imageUrl,
-                snippet,
-                source: "映画.com",
-              }),
-            );
+            rawItems.push({ title, url, imageUrl, snippet, source: "映画.com" });
           }
         });
 
-        return entities;
+        return rawItems;
       },
       CACHE_TTL.STANDARD,
     );
+
+    return rawData.map(item => ArticleFactory.createFromScraping(item));
   }
 }
