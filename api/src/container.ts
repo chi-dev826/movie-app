@@ -39,7 +39,7 @@ export interface Dependencies {
 
 export const createContainer = (): Dependencies => {
   // 共通インフラ
-  const cacheRepository: ICacheRepository = process.env.UPSTASH_REDIS_URL
+  const cacheRepository: ICacheRepository = process.env.UPSTASH_REDIS_REST_URL
     ? new UpstashCacheRepository()
     : new NodeCacheRepository();
   const systemClock = new SystemClock();
