@@ -1,10 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { motion } from 'framer-motion';
 
 interface TrailerCarouselSectionProps {
   otherVideoUrls?: string[];
 }
+
+/**
+ * 各動画カードの可視性を管理し、ビューポートに近づくまでiframeのマウントを遅延させるラッパー。
+ */
+const LazyTrailerCard: React.FC<{
+  url: string;
+  activeUrl: string | null;
+  onSelect: (url: string) => void;
+  isPlaying: boolean;
+  onPlay: () => void;
+  onPause: () => void;
+}> = ({ url, activeUrl, onSelect, isPlaying, onPlay, onPause }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // 一度表示されたら監視を解除
+        }
+      },
+      { rootMargin: '200px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const isSelected = activeUrl === url;
+  const videoKey = url.split('v=')[1];
+
+  return (
+    <motion.div
+      ref={cardRef}
+      key={url}
+      whileHover={!isSelected ? { scale: 1.02 } : undefined}
+      className={`relative flex-shrink-0 w-[320px] h-[180px] rounded-xl overflow-hidden bg-surface-container-high border transition-colors group ${
+        isSelected ? 'border-red-500/50 shadow-lg shadow-red-500/20' : 'border-white/10 hover:border-primary/50'
+      }`}
+    >
+      {!isSelected ? (
+        <div
+          className="relative w-full h-full cursor-pointer"
+          onClick={() => onSelect(url)}
+        >
+          <img
+            src={`https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`}
+            alt="Trailer Thumbnail"
+            loading="lazy"
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
+            <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
+              <span className="material-symbols-outlined text-white text-[24px]" style={{fontVariationSettings: "'FILL' 1"}}>play_arrow</span>
+            </div>
+          </div>
+        </div>
+      ) : isVisible ? (
+        <div className="absolute inset-0 w-full h-full overflow-hidden rounded-xl">
+          <ReactPlayer
+            src={url}
+            width="100%"
+            height="100%"
+            playing={isPlaying}
+            controls={true}
+            onPlay={onPlay}
+            onPause={onPause}
+          />
+        </div>
+      ) : null}
+    </motion.div>
+  );
+};
 
 /**
  * @summary その他の予告編や関連動画リストを水平スクロールで表示し、インライン再生を行うコンポーネント。
@@ -26,55 +104,22 @@ export const TrailerCarouselSection: React.FC<TrailerCarouselSectionProps> = ({ 
          </h3>
       </div>
       <div className="flex flex-col overflow-x-auto hide-scrollbar gap-4 px-4 pb-4 max-w-7xl mx-auto md:flex-row">
-        {otherVideoUrls.map((url) => {
-          const isSelected = activeUrl === url;
-          // サムネイル用にURLからキーを抽出（v=以降を取得）
-          const videoKey = url.split('v=')[1];
-
-          return (
-            <motion.div 
-              key={url} 
-              whileHover={!isSelected ? { scale: 1.02 } : undefined}
-              className={`relative flex-shrink-0 w-[320px] h-[180px] rounded-xl overflow-hidden bg-surface-container-high border transition-colors group ${
-                isSelected ? 'border-red-500/50 shadow-lg shadow-red-500/20' : 'border-white/10 hover:border-primary/50'
-              }`}
-            >
-               {!isSelected ? (
-                 <div 
-                   className="relative w-full h-full cursor-pointer"
-                   onClick={() => {
-                     setActiveUrl(url);
-                     setIsPlaying(true);
-                   }}
-                 >
-                   <img 
-                     src={`https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`} 
-                     alt="Trailer Thumbnail" 
-                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
-                   />
-                   <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
-                      <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
-                         <span className="material-symbols-outlined text-white text-[24px]" style={{fontVariationSettings: "'FILL' 1"}}>play_arrow</span>
-                      </div>
-                   </div>
-                 </div>
-               ) : (
-                 <div className="absolute inset-0 w-full h-full overflow-hidden rounded-xl">
-                   <ReactPlayer
-                     src={url}
-                     width="100%"
-                     height="100%"
-                     playing={isPlaying}
-                     controls={true}
-                     onPlay={() => setIsPlaying(true)}
-                     onPause={() => setIsPlaying(false)}
-                   />
-                 </div>
-               )}
-            </motion.div>
-          );
-        })}
+        {otherVideoUrls.map((url) => (
+          <LazyTrailerCard
+            key={url}
+            url={url}
+            activeUrl={activeUrl}
+            onSelect={(u) => {
+              setActiveUrl(u);
+              setIsPlaying(true);
+            }}
+            isPlaying={isPlaying && activeUrl === url}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+          />
+        ))}
       </div>
     </section>
   );
 };
+
