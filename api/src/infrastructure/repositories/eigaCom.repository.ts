@@ -20,7 +20,13 @@ export class EigaComRepository implements IEigaComRepository {
         const response = await this.client.get(searchUrl);
         const $ = cheerio.load(response.data);
 
-        const rawItems: { title: string; url: string; imageUrl: string | null; snippet: string; source: string }[] = [];
+        const rawItems: {
+          title: string;
+          url: string;
+          imageUrl: string | null;
+          snippet: string;
+          source: string;
+        }[] = [];
         $("#rslt-news .list-block").each((_, el) => {
           const element = $(el);
           const title = element.find("h3.title a").text().trim();
@@ -33,7 +39,13 @@ export class EigaComRepository implements IEigaComRepository {
             .trim();
 
           if (title && url) {
-            rawItems.push({ title, url, imageUrl, snippet, source: "映画.com" });
+            rawItems.push({
+              title,
+              url,
+              imageUrl,
+              snippet,
+              source: "映画.com",
+            });
           }
         });
 
@@ -42,6 +54,6 @@ export class EigaComRepository implements IEigaComRepository {
       CACHE_TTL.STANDARD,
     );
 
-    return rawData.map(item => ArticleFactory.createFromScraping(item));
+    return rawData.map((item) => ArticleFactory.createFromScraping(item));
   }
 }
