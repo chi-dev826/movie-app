@@ -5,10 +5,10 @@ export class UpstashCacheRepository implements ICacheRepository {
   private redis: Redis;
 
   constructor() {
-    this.redis = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN,
-    });
+    // Redis.fromEnv() は自動的に以下の環境変数を読み込みます:
+    // - UPSTASH_REDIS_REST_URL
+    // - UPSTASH_REDIS_REST_TOKEN
+    this.redis = Redis.fromEnv();
   }
 
   async get<T>(key: string): Promise<T | undefined> {
