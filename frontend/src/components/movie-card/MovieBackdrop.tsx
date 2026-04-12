@@ -4,6 +4,7 @@ import { StarIcon } from '@heroicons/react/24/solid';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
+import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
 type Props = {
   movie: Movie;
@@ -13,11 +14,13 @@ type Props = {
 const MovieBackdrop = ({ movie, className = '' }: Props) => {
   const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.MEDIUM);
   const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.MEDIUM);
+  const prefetch = usePrefetchMovieDetail();
 
   return (
     backdropUrl && (
       <Link
         to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+        onMouseDown={() => prefetch(movie.id)}
         className={`group/card relative block flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 aspect-poster xl:aspect-auto ${className}`}
       >
         <img
@@ -63,3 +66,4 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
 };
 
 export default MovieBackdrop;
+

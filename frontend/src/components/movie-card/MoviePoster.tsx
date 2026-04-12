@@ -3,6 +3,7 @@ import type { Movie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
+import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
 type Props = {
   movie: Movie;
@@ -11,11 +12,13 @@ type Props = {
 
 const MoviePoster = ({ movie, className = '' }: Props) => {
   const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
+  const prefetch = usePrefetchMovieDetail();
 
   return (
     posterUrl && (
       <Link
         to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+        onMouseDown={() => prefetch(movie.id)}
         className={`group/card relative block flex-shrink-0 rounded-md overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-300 ease-in-out xl:hover:scale-105 xl:hover:shadow-slate-700 border border-gray-900 w-full aspect-poster ${className}`}
       >
         <img

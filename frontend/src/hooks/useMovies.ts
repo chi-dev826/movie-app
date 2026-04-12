@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   fetchFullMovieData,
   fetchMovieList,
@@ -100,4 +100,23 @@ export const useHomePage = () => {
     queryFn: fetchHomePage,
     staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // ホーム画面全体のキャッシュ時間（1時間）
   });
+};
+
+/**
+ * @summary 映画詳細データのプリフェッチを発火する関数を返すフック。
+ * @returns movieIdを受け取り、QueryClientのキャッシュに詳細データを先行取得する関数
+ * @example
+ * const prefetch = usePrefetchMovieDetail();
+ * <Link onMouseDown={() => prefetch(movieId)} ... />
+ */
+export const usePrefetchMovieDetail = () => {
+  const queryClient = useQueryClient();
+
+  return (movieId: number) => {
+    queryClient.prefetchQuery({
+      queryKey: movieKeys.detail(movieId),
+      queryFn: () => fetchFullMovieData(movieId),
+      staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT,
+    });
+  };
 };
