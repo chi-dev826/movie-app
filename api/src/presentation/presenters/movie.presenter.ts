@@ -128,13 +128,13 @@ export class MoviePresenter {
     maxCount = 8,
   ): HeroMovie[] {
     const tagged = [
-      this.tagMovies(nowPlaying, "now_playing", 4),
-      this.tagMovies(recentlyAdded, "recently_added", 4),
-      this.tagMovies(upcoming, "upcoming", 4),
+      this.tagMovies(nowPlaying, "now_playing", 8),
+      this.tagMovies(recentlyAdded, "recently_added", 8),
+      this.tagMovies(upcoming, "upcoming", 8),
     ];
 
-    const filtered = tagged.map((list) =>
-      list.filter((m) => m.backdropPath && m.overview?.trim()),
+    const filtered = tagged.map((list)  =>
+      list.filter((m) => m.backdropPath),
     );
 
     const result: HeroMovie[] = [];
