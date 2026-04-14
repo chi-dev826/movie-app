@@ -26,12 +26,12 @@ export const fetchFullMovieData = async (movieId: number): Promise<FullMovieData
   return fetchFromApi<FullMovieData>(API_PATHS.MOVIE.FULL.replace(':movieId', movieId.toString()));
 };
 
-export const fetchEigaComNews = async (movieId: number, movieTitle: string) => {
+export const fetchEigaComNews = async (movieId: number, movieTitle: string): Promise<Article[]> => {
   const path = API_PATHS.MOVIE.EIGA_COM_NEWS.replace(':movieId', movieId.toString());
   return fetchFromApi<Article[]>(`${path}?title=${movieTitle}`);
 };
 
-export const fetchMovieAnalysis = async (movieId: number, movieTitle: string) => {
+export const fetchMovieAnalysis = async (movieId: number, movieTitle: string): Promise<Article[]> => {
   const path = API_PATHS.MOVIE.ANALYSIS.replace(':movieId', movieId.toString());
   return fetchFromApi<Article[]>(`${path}?title=${movieTitle}`);
 };
