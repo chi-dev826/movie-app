@@ -134,7 +134,11 @@ export class MoviePresenter {
     ];
 
     const filtered = tagged.map((list)  =>
-      list.filter((m) => m.backdropPath),
+      list.filter((m) => m.backdropPath).sort((a, b) => {
+        const hasOverviewA = a.overview ? 1 : 0;
+        const hasOverviewB = b.overview ? 1 : 0;
+        return hasOverviewB - hasOverviewA;
+      }),
     );
 
     const result: HeroMovie[] = [];
