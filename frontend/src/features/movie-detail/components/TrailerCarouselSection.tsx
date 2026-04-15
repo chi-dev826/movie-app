@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 import { motion } from 'framer-motion';
 
@@ -17,33 +17,12 @@ const LazyTrailerCard: React.FC<{
   onPlay: () => void;
   onPause: () => void;
 }> = ({ url, activeUrl, onSelect, isPlaying, onPlay, onPause }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const el = cardRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect(); // 一度表示されたら監視を解除
-        }
-      },
-      { rootMargin: '200px' }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   const isSelected = activeUrl === url;
   const videoKey = url.split('v=')[1];
 
   return (
     <motion.div
-      ref={cardRef}
       key={url}
       whileHover={!isSelected ? { scale: 1.02 } : undefined}
       className={`relative flex-shrink-0 w-[320px] h-[180px] rounded-xl overflow-hidden bg-surface-container-high border transition-colors group ${
@@ -53,7 +32,10 @@ const LazyTrailerCard: React.FC<{
       {!isSelected ? (
         <div
           className="relative w-full h-full cursor-pointer"
-          onClick={() => onSelect(url)}
+          onClick={() => {
+            onSelect(url);
+            setIsVisible(true);
+          }}
         >
           <img
             src={`https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`}
@@ -68,7 +50,7 @@ const LazyTrailerCard: React.FC<{
           </div>
         </div>
       ) : isVisible ? (
-        <div className="absolute inset-0 w-full h-full overflow-hidden rounded-xl">
+        <div className="absolute inset-0 w-full h-full overflow-hidden rounded-xl cursor-pointer">
           <ReactPlayer
             src={url}
             width="100%"
