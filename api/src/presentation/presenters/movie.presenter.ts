@@ -133,13 +133,15 @@ export class MoviePresenter {
       this.tagMovies(upcoming, "upcoming", 8),
     ];
 
-    const filtered = tagged.map((list)  =>
-      list.filter((m) => m.backdropPath).sort((a, b) => {
-        // 概要があるものを優先的にソート（PC版ではホバー時に概要を表示するロジックがあるため、概要があるものを優先とする）
-        const hasOverviewA = a.overview ? 1 : 0;
-        const hasOverviewB = b.overview ? 1 : 0;
-        return hasOverviewB - hasOverviewA;
-      }),
+    const filtered = tagged.map((list) =>
+      list
+        .filter((m) => m.backdropPath)
+        .sort((a, b) => {
+          // 概要があるものを優先的にソート（PC版ではホバー時に概要を表示するロジックがあるため、概要があるものを優先とする）
+          const hasOverviewA = a.overview ? 1 : 0;
+          const hasOverviewB = b.overview ? 1 : 0;
+          return hasOverviewB - hasOverviewA;
+        }),
     );
 
     const result: HeroMovie[] = [];
