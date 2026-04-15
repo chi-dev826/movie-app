@@ -4,6 +4,7 @@ import type { Movie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
+import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
 type Props = {
   movie: Movie;
@@ -17,10 +18,12 @@ type Props = {
 export default function NewReleaseMovieCard({ movie, className = '' }: Props) {
   // バックドロップがない場合はポスターをフォールバックとして利用
   const imageUrl = getTmdbImage(movie.backdropPath || movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.SMALL);
+  const prefetchMovieDetail = usePrefetchMovieDetail();
 
   return (
     <Link 
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+      onMouseEnter={() => prefetchMovieDetail(movie.id)}
       className={`group block shrink-0 cursor-pointer ${className}`}
     >
       <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-gray-900 mb-2.5 border border-gray-800 group/card hover/card:border-gray-600 transition-colors shadow-lg">

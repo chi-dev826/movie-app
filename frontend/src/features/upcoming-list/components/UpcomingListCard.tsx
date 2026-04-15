@@ -5,6 +5,7 @@ import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 import { useWatchList } from '@/hooks/useWatchList';
+import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
 type Props = {
   movie: UpcomingMovie;
@@ -17,6 +18,7 @@ const UpcomingListCard = ({ movie }: Props) => {
   const navigate = useNavigate();
   const { isInWatchList, toggleWatchList } = useWatchList();
   const isInList = isInWatchList(movie.id);
+  const prefetchMovieDetail = usePrefetchMovieDetail();
 
   const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
 
@@ -29,6 +31,7 @@ const UpcomingListCard = ({ movie }: Props) => {
       {/* 上部: バックドロップ画像 (リンク) */}
       <Link
         to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+        onMouseEnter={() => prefetchMovieDetail(movie.id)}
         className="relative block aspect-video overflow-hidden"
       >
         <img

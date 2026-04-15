@@ -7,6 +7,7 @@ import type { Movie, UpcomingMovie } from '@/types/api/dto';
 import { getTmdbImage, getBackdropSrcSet } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
+import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
 type Props = 
   | { variant: 'upcoming'; movie: UpcomingMovie }
@@ -26,12 +27,14 @@ const SpotlightCard = (props: Props) => {
   const backdropFallbackUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
   const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.LARGE);
   const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
+  const prefetchMovieDetail = usePrefetchMovieDetail();
 
   if (!backdropFallbackUrl) return null;
 
   return (
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+      onMouseEnter={() => prefetchMovieDetail(movie.id)}
       className="group/spotlight relative block w-full overflow-hidden rounded-xl bg-gray-900"
     >
       {/* バックドロップ画像 */}

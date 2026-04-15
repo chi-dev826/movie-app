@@ -5,6 +5,7 @@ import type { Movie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
+import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
 type Props = {
   movie: Movie;
@@ -23,12 +24,14 @@ type Props = {
  */
 const NowPlayingCard = ({ movie, className = '' }: Props) => {
   const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.MEDIUM);
+  const prefetchMovieDetail = usePrefetchMovieDetail();
 
   if (!posterUrl) return null;
 
   return (
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+      onMouseEnter={() => prefetchMovieDetail(movie.id)}
       className={`group/now-playing relative block flex-shrink-0 rounded-lg overflow-hidden bg-gray-900 cursor-pointer transition-all duration-500 ease-out hover:scale-[1.03] hover:shadow-xl hover:shadow-red-900/10 border border-gray-800/50 hover:border-red-700/30 aspect-poster ${className}`}
     >
       {/* ポスター画像 */}
