@@ -43,8 +43,8 @@ export class GetUpcomingMovieListUseCase {
     // 4. ドメインエンティティと補助データの合成
     const enrichedMovies: EnrichedMovie[] = processedMovies.map((movie) => ({
       entity: movie,
-      logoPath: logosMap.get(movie.id),
-      videoKey: trailersMap.get(movie.id),
+      logoPath: logosMap.get(movie.id) ?? null,
+      videoKey: trailersMap.get(movie.id) ?? null,
     }));
 
     return {

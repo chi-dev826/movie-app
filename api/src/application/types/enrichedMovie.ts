@@ -7,6 +7,6 @@ import { MovieEntity } from "../../domain/models/movie";
  */
 export type EnrichedMovie = {
   readonly entity: MovieEntity;
-  readonly logoPath?: string;
-  readonly videoKey?: string;
+  readonly logoPath: string | null;
+  readonly videoKey: string | null;
 };
