@@ -41,23 +41,35 @@ export class MovieEnrichService {
   /**
    * 対象の映画IDリストに対して並行して予告編を取得し、IDをキーとしたMapを返す
    */
-  async getTrailers(movieIds: readonly number[]): Promise<Map<number, string | null>> {
+  async getTrailers(
+    movieIds: readonly number[],
+  ): Promise<Map<number, string | null>> {
     const moviesVideosMap = new Map<number, Video[]>();
     await Promise.all(
-      movieIds.map(async(id) => {
+      movieIds.map(async (id) => {
         const videos = await this.tmdbRepo.getMovieVideos(id);
         moviesVideosMap.set(id, videos);
-      })
+      }),
     );
 
-    const allkeys = [...moviesVideosMap.values()].flat().map((video) => video.getKey());
-    const publicKeys = new Set(await this.youtubeRepo.getPublicVideoKeys(allkeys));
-    
+    const allkeys = [...moviesVideosMap.values()]
+      .flat()
+      .map((video) => video.getKey());
+    const publicKeys = new Set(
+      await this.youtubeRepo.getPublicVideoKeys(allkeys),
+    );
+
     const results = new Map<number, string | null>();
     moviesVideosMap.forEach((videos, movieId) => {
-      const publicVideos = videos.filter((video) => publicKeys.has(video.getKey()));
-      const trailer = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TRAILER);
-      const teaser = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
+      const publicVideos = videos.filter((video) =>
+        publicKeys.has(video.getKey()),
+      );
+      const trailer = publicVideos.find(
+        (v) => v.getType() === VIDEO_TYPE.TRAILER,
+      );
+      const teaser = publicVideos.find(
+        (v) => v.getType() === VIDEO_TYPE.TEASER,
+      );
       const mainVideoKey = (trailer || teaser)?.getKey() ?? null;
       results.set(movieId, mainVideoKey);
     });
@@ -89,10 +101,14 @@ export class MovieEnrichService {
     // 1.Youtubeでの公開ステータスチェック
     const keys = allVideos.map((video) => video.getKey());
     const publicKeys = new Set(await this.youtubeRepo.getPublicVideoKeys(keys));
-    const publicVideos = allVideos.filter((video) => publicKeys.has(video.getKey()));
+    const publicVideos = allVideos.filter((video) =>
+      publicKeys.has(video.getKey()),
+    );
 
     // 2. Trailerを最優先し、なければTeaserを探す
-    const trailer = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TRAILER);
+    const trailer = publicVideos.find(
+      (v) => v.getType() === VIDEO_TYPE.TRAILER,
+    );
     const teaser = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
     const mainVideoKey = (trailer || teaser)?.getKey() ?? null;
 

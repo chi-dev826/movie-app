@@ -6,7 +6,7 @@ import { AxiosInstance } from "axios";
 
 type YoutubeVideoStatus = {
   items: {
-    id: string,
+    id: string;
     status: {
       privacyStatus: string;
     };
@@ -34,8 +34,12 @@ export class YoutubeRepository implements IYoutubeRepository {
           const response = await this.api.get<YoutubeVideoStatus>("/videos", {
             params: { part: "status", id: keyString },
           });
-          
-          return response.data?.items?.filter((item) => item.status.privacyStatus === "public").map((item) => item.id) ?? [];
+
+          return (
+            response.data?.items
+              ?.filter((item) => item.status.privacyStatus === "public")
+              .map((item) => item.id) ?? []
+          );
         } catch (error) {
           console.error("Error fetching video status from YouTube:", error);
 

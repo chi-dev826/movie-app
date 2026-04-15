@@ -35,7 +35,7 @@ export class NodeCacheRepository implements ICacheRepository {
     return value;
   }
 
-  async getOrSetAll<T> (
+  async getOrSetAll<T>(
     key: string,
     fetcher: () => Promise<T>,
     ttl?: number,
