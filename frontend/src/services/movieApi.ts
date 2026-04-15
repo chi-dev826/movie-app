@@ -1,5 +1,10 @@
 import { Movie, UpcomingMovie, Article } from '@/types/api/dto';
-import { FullMovieData, MovieListResponse, HomePageResponse, PaginatedResponse } from '@/types/api/response';
+import {
+  FullMovieData,
+  MovieListResponse,
+  HomePageResponse,
+  PaginatedResponse,
+} from '@/types/api/response';
 import { API_PATHS } from '@shared/constants/routes';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -31,7 +36,10 @@ export const fetchEigaComNews = async (movieId: number, movieTitle: string): Pro
   return fetchFromApi<Article[]>(`${path}?title=${movieTitle}`);
 };
 
-export const fetchMovieAnalysis = async (movieId: number, movieTitle: string): Promise<Article[]> => {
+export const fetchMovieAnalysis = async (
+  movieId: number,
+  movieTitle: string,
+): Promise<Article[]> => {
   const path = API_PATHS.MOVIE.ANALYSIS.replace(':movieId', movieId.toString());
   return fetchFromApi<Article[]>(`${path}?title=${movieTitle}`);
 };
@@ -44,27 +52,25 @@ export const searchMoviesByPerson = async (name: string): Promise<Movie[]> => {
   return fetchFromApi<Movie[]>(`${API_PATHS.SEARCH.PERSON}?name=${encodeURIComponent(name)}`);
 };
 
-export const fetchMovieList = async (
-  page: number = 1
-): Promise<MovieListResponse> => {
+export const fetchMovieList = async (page: number = 1): Promise<MovieListResponse> => {
   return fetchFromApi<MovieListResponse>(`${API_PATHS.MOVIES.HOME}?page=${page}`);
 };
 
 export const fetchUpcomingMovies = async (
-  page: number = 1
+  page: number = 1,
 ): Promise<PaginatedResponse<UpcomingMovie>> => {
-  return fetchFromApi<PaginatedResponse<UpcomingMovie>>(`${API_PATHS.MOVIES.UPCOMING}?page=${page}`);
+  return fetchFromApi<PaginatedResponse<UpcomingMovie>>(
+    `${API_PATHS.MOVIES.UPCOMING}?page=${page}`,
+  );
 };
 
 export const fetchNowPlayingMovies = async (
-  page: number = 1
+  page: number = 1,
 ): Promise<PaginatedResponse<Movie>> => {
   return fetchFromApi<PaginatedResponse<Movie>>(`${API_PATHS.MOVIES.NOW_PLAYING}?page=${page}`);
 };
 
-export const fetchTrendingMovies = async (
-  page: number = 1
-): Promise<PaginatedResponse<Movie>> => {
+export const fetchTrendingMovies = async (page: number = 1): Promise<PaginatedResponse<Movie>> => {
   return fetchFromApi<PaginatedResponse<Movie>>(`${API_PATHS.MOVIES.TRENDING}?page=${page}`);
 };
 

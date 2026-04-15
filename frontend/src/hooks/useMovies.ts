@@ -98,9 +98,7 @@ export const useTrendingMovies = () => {
     queryKey: movieKeys.list('trending'),
     queryFn: ({ pageParam = 1 }) => fetchTrendingMovies(pageParam),
     getNextPageParam: (lastPage) => {
-      return lastPage.currentPage < lastPage.totalPages
-        ? lastPage.currentPage + 1
-        : undefined;
+      return lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined;
     },
     initialPageParam: 1,
     staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT,
@@ -114,7 +112,7 @@ export const useTrendingMovies = () => {
  */
 export const useInfiniteMovieList = (
   type: string | undefined,
-  initialData?: PaginatedResponse<Movie | UpcomingMovie>
+  initialData?: PaginatedResponse<Movie | UpcomingMovie>,
 ) => {
   return useInfiniteQuery({
     queryKey: movieKeys.infiniteList(type || 'unknown'),
@@ -129,9 +127,7 @@ export const useInfiniteMovieList = (
       return { movies: [], currentPage: 1, totalPages: 1 };
     },
     getNextPageParam: (lastPage) => {
-      return lastPage.currentPage < lastPage.totalPages
-        ? lastPage.currentPage + 1
-        : undefined;
+      return lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined;
     },
     initialPageParam: 1,
     initialData: initialData

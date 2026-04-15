@@ -51,8 +51,6 @@ function HomePage() {
     }
   }, [data?.hero, controls]);
 
-
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
@@ -106,7 +104,10 @@ function HomePage() {
             initialData={data.upcoming}
             renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="upcoming" />}
             renderRemainingItem={(movie) => (
-              <UpcomingMovieCard movie={movie} className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]" /> // この２つのカード群は強調する
+              <UpcomingMovieCard
+                movie={movie}
+                className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]"
+              /> // この２つのカード群は強調する
             )}
           />
         </motion.div>
@@ -120,7 +121,10 @@ function HomePage() {
             initialData={data.nowPlaying}
             renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="now_playing" />}
             renderRemainingItem={(movie) => (
-              <NowPlayingCard movie={movie} className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]" /> // この２つのカード群は強調する
+              <NowPlayingCard
+                movie={movie}
+                className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]"
+              /> // この２つのカード群は強調する
             )}
           />
         </motion.div>
@@ -144,4 +148,3 @@ function HomePage() {
 }
 
 export default HomePage;
-

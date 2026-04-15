@@ -4,7 +4,6 @@ import { useInfiniteMovieList } from '@/hooks/useMovies';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { MoviePoster } from '@/components/movie-card';
 
-
 const getTitle = (type?: string) => {
   switch (type) {
     case 'popular':
@@ -24,19 +23,19 @@ const MovieList = () => {
   const { type } = useParams<{
     type: 'popular' | 'recently_added' | 'now_playing' | 'trending';
   }>();
-  const { 
-    data, 
-    isLoading: isCurrentlyLoading, 
-    isError, 
+  const {
+    data,
+    isLoading: isCurrentlyLoading,
+    isError,
     error: currentErrorObj,
     hasNextPage,
     fetchNextPage,
-    isFetchingNextPage
+    isFetchingNextPage,
   } = useInfiniteMovieList(type);
 
   const sentinelRef = useInfiniteScroll(hasNextPage, isFetchingNextPage, fetchNextPage);
 
-  const movieList = data?.pages.flatMap(page => page.movies) ?? [];
+  const movieList = data?.pages.flatMap((page) => page.movies) ?? [];
   const currentError = isError;
 
   const title = getTitle(type);
@@ -74,9 +73,7 @@ const MovieList = () => {
             ホームに戻る
           </Link>
           <h1 className="mb-2 text-3xl font-bold">{title}</h1>
-          <p className="text-gray-400">
-            {movieList.length}件の映画
-          </p>
+          <p className="text-gray-400">{movieList.length}件の映画</p>
         </div>
 
         <div className="grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8">
@@ -86,16 +83,10 @@ const MovieList = () => {
         </div>
 
         {/* 無限スクロール用の番兵（Sentinel） */}
-        {hasNextPage && (
-          <div ref={sentinelRef} className="w-full h-1 mt-8" />
-        )}
+        {hasNextPage && <div ref={sentinelRef} className="w-full h-1 mt-8" />}
 
         {/* 読み込み中インジケーター */}
-        {isFetchingNextPage && (
-          <div className="py-8 text-center text-gray-400">
-            読み込み中...
-          </div>
-        )}
+        {isFetchingNextPage && <div className="py-8 text-center text-gray-400">読み込み中...</div>}
       </div>
     </div>
   );

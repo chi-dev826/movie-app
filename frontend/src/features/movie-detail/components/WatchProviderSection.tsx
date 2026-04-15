@@ -21,35 +21,37 @@ export const WatchProviderSection: React.FC<WatchProviderSectionProps> = ({ watc
 
   return (
     <section className="px-4 py-2 max-w-7xl mx-auto flex flex-col items-start gap-2 overflow-hidden">
-      <span className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest flex-shrink-0">Available on</span>
+      <span className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest flex-shrink-0">
+        Available on
+      </span>
       <div className="flex flex-wrap gap-3">
-        {watchProviders.map((provider, idx) => (
+        {watchProviders.map((provider, idx) =>
           provider.link ? (
-            <a 
-              key={idx} 
-              href={provider.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              key={idx}
+              href={provider.link}
+              target="_blank"
+              rel="noopener noreferrer"
               className="relative transition-transform hover:scale-110 active:scale-95"
             >
-              <img 
-                src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w92${provider.logoPath}`} 
-                alt={provider.name} 
+              <img
+                src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w92${provider.logoPath}`}
+                alt={provider.name}
                 title={provider.name}
                 className="w-12 h-12 md:w-16 md:h-16 rounded-xl border border-white/10 shadow-lg"
               />
             </a>
           ) : (
             <div key={idx} className="relative">
-              <img 
-                src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w92${provider.logoPath}`} 
-                alt={provider.name} 
+              <img
+                src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w92${provider.logoPath}`}
+                alt={provider.name}
                 title={provider.name}
                 className="w-12 h-12 md:w-16 md:h-16 rounded-xl border border-white/10 shadow-lg opacity-50"
               />
             </div>
-          )
-        ))}
+          ),
+        )}
       </div>
     </section>
   );

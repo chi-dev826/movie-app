@@ -40,9 +40,7 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
             <ChevronRightIcon className="w-5 h-5 text-gray-400 transition-transform duration-200 md:w-6 md:h-6 group-hover/header:translate-x-1 group-hover/header:text-red-400 mt-1" />
           </span>
           {subtitle && (
-            <span className="ml-3 text-xs text-gray-400 md:text-sm xl:text-base">
-              {subtitle}
-            </span>
+            <span className="ml-3 text-xs text-gray-400 md:text-sm xl:text-base">{subtitle}</span>
           )}
         </Link>
       </div>
@@ -55,7 +53,7 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
       <h2 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-md">
         {title}
       </h2>
-      <Link 
+      <Link
         to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', type)}
         className="flex items-center text-xs md:text-sm font-bold text-red-500 hover:text-red-400 transition-colors pb-1"
       >

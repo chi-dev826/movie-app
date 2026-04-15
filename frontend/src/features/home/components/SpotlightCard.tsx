@@ -9,7 +9,7 @@ import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
-type Props = 
+type Props =
   | { variant: 'upcoming'; movie: UpcomingMovie }
   | { variant: 'now_playing'; movie: Movie };
 
@@ -24,7 +24,10 @@ type Props =
 const SpotlightCard = (props: Props) => {
   const { movie } = props;
   const backdropSrcSet = getBackdropSrcSet(movie.backdropPath);
-  const backdropFallbackUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
+  const backdropFallbackUrl = getTmdbImage(
+    movie.backdropPath,
+    IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE,
+  );
   const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.LARGE);
   const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
   const prefetchMovieDetail = usePrefetchMovieDetail();

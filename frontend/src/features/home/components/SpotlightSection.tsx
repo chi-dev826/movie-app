@@ -51,15 +51,15 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteMovieList(
-    type, 
-    initialData as unknown as PaginatedResponse<Movie | UpcomingMovie>
+    type,
+    initialData as unknown as PaginatedResponse<Movie | UpcomingMovie>,
   );
 
   const observerRef = useInfiniteScroll(
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-    { rootMargin: '0px 800px 0px 0px' } // 横方向の先読みマージン
+    { rootMargin: '0px 800px 0px 0px' }, // 横方向の先読みマージン
   );
 
   // initialDataがある場合、マウント時に次ページをバックグラウンドでプリフェッチ
@@ -68,7 +68,7 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
     if (initialData && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const items = infiniteData
@@ -98,9 +98,7 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
           className="rounded-xl overflow-hidden"
         >
           {spotlightItems.map((item) => (
-            <SwiperSlide key={item.id}>
-              {renderSpotlightItem(item)}
-            </SwiperSlide>
+            <SwiperSlide key={item.id}>{renderSpotlightItem(item)}</SwiperSlide>
           ))}
         </Swiper>
       </div>
@@ -117,9 +115,7 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
           </Link>
           <HorizontalScrollContainer>
             {remainingItems.map((item) => (
-              <React.Fragment key={item.id}>
-                {renderRemainingItem(item)}
-              </React.Fragment>
+              <React.Fragment key={item.id}>{renderRemainingItem(item)}</React.Fragment>
             ))}
             {/* 番兵（インフィニットスクローラー） */}
             <div ref={observerRef} className="w-10 flex-shrink-0" />
@@ -131,4 +127,3 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
 };
 
 export default SpotlightSection;
-

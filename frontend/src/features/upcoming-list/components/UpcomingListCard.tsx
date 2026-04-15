@@ -1,5 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { CalendarDaysIcon, PlayIcon, PlusIcon, CheckIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import {
+  CalendarDaysIcon,
+  PlayIcon,
+  PlusIcon,
+  CheckIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/24/outline';
 import type { UpcomingMovie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
@@ -55,12 +61,8 @@ const UpcomingListCard = ({ movie }: Props) => {
 
       {/* 中部: コンテンツ */}
       <div className="flex flex-1 flex-col p-5">
-        <h2 className="mb-2 text-xl font-black text-white line-clamp-1">
-          {movie.title}
-        </h2>
-        <p className="mb-6 text-sm leading-relaxed text-gray-400 line-clamp-3">
-          {movie.overview}
-        </p>
+        <h2 className="mb-2 text-xl font-black text-white line-clamp-1">{movie.title}</h2>
+        <p className="mb-6 text-sm leading-relaxed text-gray-400 line-clamp-3">{movie.overview}</p>
 
         {/* 下部: アクションボタン */}
         <div className="mt-auto flex flex-col gap-3">
@@ -75,9 +77,7 @@ const UpcomingListCard = ({ movie }: Props) => {
                 予告編を観る
               </Link>
             ) : (
-              <button
-                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gray-800 px-6 py-3 text-sm font-black text-gray-400 transition-all hover:from-gray-600 hover:to-gray-700 active:scale-95 disabled:opacity-50"
-              >
+              <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gray-800 px-6 py-3 text-sm font-black text-gray-400 transition-all hover:from-gray-600 hover:to-gray-700 active:scale-95 disabled:opacity-50">
                 <PlayIcon className="h-4 w-4 fill-current" />
                 予告編は準備中
               </button>
@@ -93,11 +93,7 @@ const UpcomingListCard = ({ movie }: Props) => {
               }`}
               title={isInList ? 'ウォッチリストから削除' : 'ウォッチリストに追加'}
             >
-              {isInList ? (
-                <CheckIcon className="h-6 w-6" />
-              ) : (
-                <PlusIcon className="h-6 w-6" />
-              )}
+              {isInList ? <CheckIcon className="h-6 w-6" /> : <PlusIcon className="h-6 w-6" />}
             </button>
           </div>
 

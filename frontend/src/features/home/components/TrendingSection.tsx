@@ -10,12 +10,10 @@ type Props = {
 };
 
 export default function TrendingSection({ initialData }: Props) {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteMovieList('trending', initialData);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteMovieList(
+    'trending',
+    initialData,
+  );
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +35,7 @@ export default function TrendingSection({ initialData }: Props) {
     if (initialData && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const rawItems = data ? data.pages.flatMap((page) => page.movies) : [];
@@ -69,10 +67,10 @@ export default function TrendingSection({ initialData }: Props) {
         {popularLists.map((list, groupIndex) => (
           <div key={groupIndex} className="flex-none flex flex-col gap-4 w-full snap-start">
             {list.map((movie, itemIndex) => (
-              <RankingMovieCard 
-                key={movie.id} 
-                movie={movie} 
-                rank={groupIndex * 3 + itemIndex + 1} 
+              <RankingMovieCard
+                key={movie.id}
+                movie={movie}
+                rank={groupIndex * 3 + itemIndex + 1}
               />
             ))}
           </div>
@@ -81,4 +79,3 @@ export default function TrendingSection({ initialData }: Props) {
     </div>
   );
 }
-

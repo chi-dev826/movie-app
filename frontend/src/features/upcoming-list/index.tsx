@@ -37,16 +37,12 @@ const UpcomingList = () => {
             ホームに戻る
           </Link>
           <h1 className="mb-2 text-3xl font-bold">公開予定の映画</h1>
-          <p className="text-gray-400">
-            {upcomingMovies.length}件の映画
-          </p>
+          <p className="text-gray-400">{upcomingMovies.length}件の映画</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {upcomingMovies &&
-            upcomingMovies.map((movie) => (
-              <UpcomingListCard key={movie.id} movie={movie} />
-            ))}
+            upcomingMovies.map((movie) => <UpcomingListCard key={movie.id} movie={movie} />)}
         </div>
       </div>
     </div>

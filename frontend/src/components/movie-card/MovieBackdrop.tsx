@@ -66,4 +66,3 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
 };
 
 export default MovieBackdrop;
-

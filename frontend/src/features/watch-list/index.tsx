@@ -25,7 +25,9 @@ const WatchListPage = () => {
             <p className="text-gray-400">0件の映画</p>
           </div>
           <div className="py-12 text-center">
-            <p className="text-lg text-gray-400">ウォッチリストは空です。映画を追加してみましょう！</p>
+            <p className="text-lg text-gray-400">
+              ウォッチリストは空です。映画を追加してみましょう！
+            </p>
           </div>
         </div>
       </div>
@@ -61,9 +63,7 @@ const WatchListPage = () => {
             ホームに戻る
           </Link>
           <h1 className="mb-2 text-3xl font-bold">ウォッチリスト</h1>
-          <p className="text-gray-400">
-            {movies?.length || 0}件の映画
-          </p>
+          <p className="text-gray-400">{movies?.length || 0}件の映画</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8">

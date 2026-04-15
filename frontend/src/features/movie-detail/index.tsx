@@ -59,16 +59,12 @@ export const MovieDetailPage: React.FC = () => {
       <DetailHeroSection detail={detail} videoKey={videoUrl || null} />
 
       {/* 以降のセクションを段階的にフェードイン */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <motion.div variants={containerVariants} initial="hidden" animate="visible">
         <motion.div variants={sectionVariants}>
-          <DetailActionSection 
+          <DetailActionSection
             movieId={detail.id}
             videoKey={videoUrl || null}
-            watchProviders={watchProviders} 
+            watchProviders={watchProviders}
           />
         </motion.div>
 
@@ -89,7 +85,11 @@ export const MovieDetailPage: React.FC = () => {
         </motion.div>
 
         <motion.div variants={sectionVariants}>
-          <NewsAnalysisSection movieId={detail.id} movieTitle={detail.title} posterPath={detail.posterPath || ''} />
+          <NewsAnalysisSection
+            movieId={detail.id}
+            movieTitle={detail.title}
+            posterPath={detail.posterPath || ''}
+          />
         </motion.div>
 
         <motion.div variants={sectionVariants}>

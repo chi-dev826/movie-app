@@ -11,7 +11,7 @@ export const useInfiniteScroll = (
   hasNextPage: boolean | undefined,
   isFetchingNextPage: boolean,
   fetchNextPage: () => void,
-  options?: IntersectionObserverInit
+  options?: IntersectionObserverInit,
 ) => {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +31,7 @@ export const useInfiniteScroll = (
         // 先読みの範囲を広げる (800px 手前で発火)
         rootMargin: '0px 0px 800px 0px',
         ...options,
-      }
+      },
     );
 
     observer.observe(sentinel);

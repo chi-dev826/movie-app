@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,16 +18,6 @@ const TrailerPage: React.FC = () => {
   const handleClose = () => {
     navigate(-1);
   };
-
-  // 動画が存在しない場合の自動遷移
-  useEffect(() => {
-    if (!isLoading && !data?.videoUrl && !error) {
-      const timer = setTimeout(() => {
-        handleClose();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading, data, error]);
 
   return (
     <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
@@ -50,7 +40,9 @@ const TrailerPage: React.FC = () => {
             className="flex flex-col items-center gap-4"
           >
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-white/60 font-bold tracking-widest text-sm uppercase">Loading Preview...</p>
+            <p className="text-white/60 font-bold tracking-widest text-sm uppercase">
+              Loading Preview...
+            </p>
           </motion.div>
         ) : error || !data?.videoUrl ? (
           <motion.div
@@ -67,7 +59,8 @@ const TrailerPage: React.FC = () => {
                 {error ? 'エラーが発生しました' : '予告編が見つかりません'}
               </h2>
               <p className="text-white/60 text-sm">
-                申し訳ありません。この作品の予告編は現在視聴できません。<br />
+                申し訳ありません。この作品の予告編は現在視聴できません。
+                <br />
                 自動的に前の画面に戻ります。
               </p>
             </div>
@@ -93,15 +86,6 @@ const TrailerPage: React.FC = () => {
               width="100%"
               height="100%"
               onEnded={handleClose}
-              config={{
-                youtube: {
-                  playerVars: {
-                    autoplay: 1,
-                    modestbranding: 1,
-                    rel: 0,
-                  },
-                } as any,
-              }}
             />
           </motion.div>
         )}

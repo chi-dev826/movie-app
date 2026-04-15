@@ -107,9 +107,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
               transition={{ duration: 1 }}
               srcSet={getBackdropSrcSet(movie.backdropPath)}
               sizes="100vw"
-              src={
-                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ?? ''
-              }
+              src={getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ?? ''}
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"
             />
@@ -141,9 +139,7 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
             <motion.img
               srcSet={getBackdropSrcSet(movie.backdropPath)}
               sizes="100vw"
-              src={
-                getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ?? ''
-              }
+              src={getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) ?? ''}
               alt={movie.title}
               className="absolute inset-0 object-cover w-full h-full z-backdrop"
               initial={{ opacity: 0, transition: { duration: 1, ease: 'easeInOut' } }}
@@ -165,4 +161,3 @@ const HeroSlide = ({ movie, isHovered }: HeroSlideProps) => {
     </Link>
   );
 };
-

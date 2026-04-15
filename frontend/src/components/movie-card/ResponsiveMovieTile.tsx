@@ -10,7 +10,8 @@ const ResponsiveMovieTile = ({ movie }: Props) => {
   return (
     <>
       {/* モバイル用: ポスター表示 */}
-      <MoviePoster movie={movie} className="xl:hidden basis-[28%] md:basis-[18%]" /> {/* 少し小さめに表示して、公開予定作品・公開中作品を目立たせる}
+      <MoviePoster movie={movie} className="xl:hidden basis-[28%] md:basis-[18%]" />{' '}
+      {/* 少し小さめに表示して、公開予定作品・公開中作品を目立たせる}
 
       {/* デスクトップ用: 横長詳細表示 */}
       <MovieBackdrop

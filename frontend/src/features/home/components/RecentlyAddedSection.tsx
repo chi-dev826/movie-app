@@ -11,26 +11,21 @@ type Props = {
 };
 
 export default function RecentlyAddedSection({ initialData }: Props) {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteMovieList('recently_added', initialData);
-
-  const observerRef = useInfiniteScroll(
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-    { rootMargin: '0px 800px 0px 0px' }
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteMovieList(
+    'recently_added',
+    initialData,
   );
+
+  const observerRef = useInfiniteScroll(hasNextPage, isFetchingNextPage, fetchNextPage, {
+    rootMargin: '0px 800px 0px 0px',
+  });
 
   // initialDataがある場合、マウント時に次ページをバックグラウンドでプリフェッチ
   useEffect(() => {
     if (initialData && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const items = data ? data.pages.flatMap((page) => page.movies) : [];

@@ -48,9 +48,7 @@ const UpcomingMovieCard = ({ movie, className = '' }: Props) => {
             <span className="text-xs font-bold leading-none tracking-wider text-white">
               {movie.releaseDateShort}
             </span>
-            <span className="text-[6px] font-bold leading-none mt-1">
-              公開
-            </span>
+            <span className="text-[6px] font-bold leading-none mt-1">公開</span>
           </div>
         )}
 
@@ -62,4 +60,3 @@ const UpcomingMovieCard = ({ movie, className = '' }: Props) => {
 };
 
 export default UpcomingMovieCard;
-
