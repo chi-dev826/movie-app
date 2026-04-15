@@ -34,19 +34,18 @@ export class GetFullMovieDataUseCase {
   async execute(movieId: number): Promise<FullMovieDomainData> {
     const today = new Date();
 
-    // 1. 詳細情報と画像を並行取得
-    const [detailEntity, imagePath] = await Promise.all([
-      this.tmdbRepo.getMovieDetails(movieId),
-      this.tmdbRepo.getMovieImages(movieId),
-    ]);
+    // 1. 依存関係のないリソースをすべて並行取得開始
+    // watchProviders は未公開なら後で捨てるが、ネットワーク待機時間を最小化するため並列に投げる
+    const [detailEntity, imagePath, watchProvidersRaw, similarMovies, videoInfo] =
+      await Promise.all([
+        this.tmdbRepo.getMovieDetails(movieId),
+        this.tmdbRepo.getMovieImages(movieId),
+        this.tmdbRepo.getMovieWatchProviders(movieId),
+        this.tmdbRepo.getSimilarMovies(movieId),
+        this.enrichService.getDetailedVideos(movieId),
+      ]);
 
-    // 2. 配信情報の取得判定
-    // 未公開作品はTMDBの配信情報の正確性が保証できないため取得しない
-    const watchProviders = detailEntity.baseInfo.isReleased(today)
-      ? await this.tmdbRepo.getMovieWatchProviders(movieId)
-      : [];
-
-    // 3. おすすめ選定
+    // 2. コレクション情報の取得 (detailEntity.belongsToCollectionId に依存)
     let collection = null;
     if (detailEntity.belongsToCollectionId) {
       try {
@@ -62,19 +61,21 @@ export class GetFullMovieDataUseCase {
       }
     }
 
-    const similarMovies = await this.tmdbRepo.getSimilarMovies(movieId);
-
+    // 3. おすすめ選定とロゴの取得 (collection と similarMovies に依存)
     const recommendation = this.recommendationService.getRecommendations(
       movieId,
       collection,
       similarMovies,
     );
 
-    // 4. エンリッチメント
-    const [recLogosMap, videoInfo] = await Promise.all([
-      this.enrichService.getLogos(recommendation.movies.map((m) => m.id)),
-      this.enrichService.getDetailedVideos(movieId),
-    ]);
+    const recLogosMap = await this.enrichService.getLogos(
+      recommendation.movies.map((m) => m.id),
+    );
+
+    // 4. 配信情報の確定 (未公開作品はTMDBの配信情報の正確性が保証できないため空にする)
+    const watchProviders = detailEntity.baseInfo.isReleased(today)
+      ? watchProvidersRaw
+      : [];
 
     return {
       detail: detailEntity,
