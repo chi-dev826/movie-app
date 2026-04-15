@@ -51,4 +51,6 @@ export const GENRE_NAMES: Record<number, string> = {
 export const QUERY_CONFIG = {
   /** デフォルトのキャッシュ生存時間: 1時間 */
   STALE_TIME_DEFAULT: 1000 * 60 * 60,
+  /** 公開予定のキャッシュ生存時間: 12時間 */
+  STALE_TIME_UPCOMING: 1000 * 60 * 60 * 12,
 } as const;
