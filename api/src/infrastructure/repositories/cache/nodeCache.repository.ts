@@ -34,4 +34,17 @@ export class NodeCacheRepository implements ICacheRepository {
     this.set(key, value, ttl);
     return value;
   }
+
+  async getOrSetAll<T> (
+    key: string,
+    fetcher: () => Promise<T>,
+    ttl?: number,
+  ): Promise<T> {
+    const cached = await this.get<T>(key);
+    if (cached !== undefined) return cached;
+
+    const value = await fetcher();
+    this.set(key, value, ttl);
+    return value;
+  }
 }

@@ -4,6 +4,15 @@ import { ICacheRepository } from "../../domain/repositories/cache.repository.int
 import { CACHE_TTL } from "../constants/cacheTtl";
 import { AxiosInstance } from "axios";
 
+type YoutubeVideoStatus = {
+  items: {
+    id: string,
+    status: {
+      privacyStatus: string;
+    };
+  }[];
+};
+
 export class YoutubeRepository implements IYoutubeRepository {
   private readonly api: AxiosInstance;
 
@@ -14,19 +23,23 @@ export class YoutubeRepository implements IYoutubeRepository {
     this.api = api;
   }
 
-  async getVideoStatus(key: string): Promise<boolean> {
+  async getPublicVideoKeys(keys: readonly string[]): Promise<string[]> {
+    const keyString = [...keys].join(",");
+    const cacheKey = `youtube:status:${keyString}`;
+
     return this.cache.getOrSet(
-      `youtube:status:${key}`,
+      cacheKey,
       async () => {
         try {
-          const response = await this.api.get("/videos", {
-            params: { part: "status", id: key },
+          const response = await this.api.get<YoutubeVideoStatus>("/videos", {
+            params: { part: "status", id: keyString },
           });
-          const status = response.data?.items?.[0]?.status;
-          return status?.privacyStatus === "public";
+          
+          return response.data?.items?.filter((item) => item.status.privacyStatus === "public").map((item) => item.id) ?? [];
         } catch (error) {
           console.error("Error fetching video status from YouTube:", error);
-          return false;
+
+          return [];
         }
       },
       CACHE_TTL.STANDARD,

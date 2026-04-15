@@ -1,6 +1,7 @@
 import { ITmdbRepository } from "../../domain/repositories/tmdb.repository.interface";
 import { IYoutubeRepository } from "../../domain/repositories/youtube.repository.interface";
 import { VIDEO_TYPE } from "../../domain/constants/video";
+import { Video } from "../../domain/models/video";
 
 /**
  * UI表示等に必要な補助データ（動画、ロゴなど）を独立して取得するアプリケーションサービス
@@ -40,25 +41,27 @@ export class MovieEnrichService {
   /**
    * 対象の映画IDリストに対して並行して予告編を取得し、IDをキーとしたMapを返す
    */
-  async getTrailers(movieIds: readonly number[]): Promise<Map<number, string>> {
-    const results = new Map<number, string>();
-    const promises = movieIds.map(async (id) => {
-      const videos = await this.tmdbRepo.getMovieVideos(id);
+  async getTrailers(movieIds: readonly number[]): Promise<Map<number, string | null>> {
+    const moviesVideosMap = new Map<number, Video[]>();
+    await Promise.all(
+      movieIds.map(async(id) => {
+        const videos = await this.tmdbRepo.getMovieVideos(id);
+        moviesVideosMap.set(id, videos);
+      })
+    );
 
-      // Trailerを優先し、なければTeaserを探す
-      const trailer = videos.find((v) => v.getType() === VIDEO_TYPE.TRAILER);
-      const teaser = videos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
-      const videoKey = (trailer || teaser)?.getKey();
-
-      if (videoKey) {
-        const isPublic = await this.youtubeRepo.getVideoStatus(videoKey);
-        if (isPublic) {
-          results.set(id, videoKey);
-        }
-      }
+    const allkeys = [...moviesVideosMap.values()].flat().map((video) => video.getKey());
+    const publicKeys = new Set(await this.youtubeRepo.getPublicVideoKeys(allkeys));
+    
+    const results = new Map<number, string | null>();
+    moviesVideosMap.forEach((videos, movieId) => {
+      const publicVideos = videos.filter((video) => publicKeys.has(video.getKey()));
+      const trailer = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TRAILER);
+      const teaser = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
+      const mainVideoKey = (trailer || teaser)?.getKey() ?? null;
+      results.set(movieId, mainVideoKey);
     });
 
-    await Promise.all(promises);
     return results;
   }
 
@@ -75,46 +78,29 @@ export class MovieEnrichService {
 
   /**
    * 単一映画の詳細な動画情報を取得する。
-   * ヒーローセクション用に Teaser を最優先し、
-   * その他の Trailer を最大3件取得する。
+   * ヒーローセクション用に Trailer を最優先し、
+   * その他を最大3件取得する。
    */
   async getDetailedVideos(
     movieId: number,
   ): Promise<{ video: string | null; otherVideos: string[] }> {
     const allVideos = await this.tmdbRepo.getMovieVideos(movieId);
 
-    // 候補：Teaserを最優先、次にTrailers
-    const teaser = allVideos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
-    const trailers = allVideos.filter(
-      (v) => v.getType() === VIDEO_TYPE.TRAILER,
-    );
+    // 1.Youtubeでの公開ステータスチェック
+    const keys = allVideos.map((video) => video.getKey());
+    const publicKeys = new Set(await this.youtubeRepo.getPublicVideoKeys(keys));
+    const publicVideos = allVideos.filter((video) => publicKeys.has(video.getKey()));
 
-    const candidates = [...(teaser ? [teaser] : []), ...trailers];
+    // 2. Trailerを最優先し、なければTeaserを探す
+    const trailer = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TRAILER);
+    const teaser = publicVideos.find((v) => v.getType() === VIDEO_TYPE.TEASER);
+    const mainVideoKey = (trailer || teaser)?.getKey() ?? null;
 
-    let mainVideoKey: string | null = null;
-
-    // 公開済みのメイン動画を決定
-    for (let i = 0; i < candidates.length; i++) {
-      const key = candidates[i].getKey();
-      if (await this.youtubeRepo.getVideoStatus(key)) {
-        mainVideoKey = key;
-        break;
-      }
-    }
-
-    // その他の動画（メイン以外から最大3件）
-    const otherVideos: string[] = [];
-    const otherCandidates = allVideos.filter(
-      (v) => v.getType() === VIDEO_TYPE.TRAILER && v.getKey() !== mainVideoKey,
-    );
-
-    for (const v of otherCandidates) {
-      if (otherVideos.length >= 3) break;
-      const key = v.getKey();
-      if (await this.youtubeRepo.getVideoStatus(key)) {
-        otherVideos.push(key);
-      }
-    }
+    // 3. その他を最大3件取得
+    const otherVideos = publicVideos
+      .filter((v) => v.getKey() !== mainVideoKey)
+      .slice(0, 3)
+      .map((v) => v.getKey());
 
     return { video: mainVideoKey, otherVideos };
   }

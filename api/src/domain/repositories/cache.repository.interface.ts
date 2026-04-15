@@ -10,3 +10,4 @@ export interface ICacheRepository {
    */
   getOrSet<T>(key: string, fetcher: () => Promise<T>, ttl?: number): Promise<T>;
 }
+
