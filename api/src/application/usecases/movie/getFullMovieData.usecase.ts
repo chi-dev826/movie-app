@@ -36,14 +36,19 @@ export class GetFullMovieDataUseCase {
 
     // 1. 依存関係のないリソースをすべて並行取得開始
     // watchProviders は未公開なら後で捨てるが、ネットワーク待機時間を最小化するため並列に投げる
-    const [detailEntity, imagePath, watchProvidersRaw, similarMovies, videoInfo] =
-      await Promise.all([
-        this.tmdbRepo.getMovieDetails(movieId),
-        this.tmdbRepo.getMovieImages(movieId),
-        this.tmdbRepo.getMovieWatchProviders(movieId),
-        this.tmdbRepo.getSimilarMovies(movieId),
-        this.enrichService.getDetailedVideos(movieId),
-      ]);
+    const [
+      detailEntity,
+      imagePath,
+      watchProvidersRaw,
+      similarMovies,
+      videoInfo,
+    ] = await Promise.all([
+      this.tmdbRepo.getMovieDetails(movieId),
+      this.tmdbRepo.getMovieImages(movieId),
+      this.tmdbRepo.getMovieWatchProviders(movieId),
+      this.tmdbRepo.getSimilarMovies(movieId),
+      this.enrichService.getDetailedVideos(movieId),
+    ]);
 
     // 2. コレクション情報の取得 (detailEntity.belongsToCollectionId に依存)
     let collection = null;
