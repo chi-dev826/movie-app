@@ -3,14 +3,10 @@ import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import SectionHeader from './SectionHeader';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import { APP_PATHS } from '@shared/constants/routes';
-import { useInfiniteMovieList } from '@/hooks/useMovies';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
-import { PaginatedResponse } from '@/types/api/response';
-import { Movie, UpcomingMovie } from '@/types/api/dto';
 
 import 'swiper/css';
 import 'swiper/css/effect-fade';
@@ -24,56 +20,21 @@ type Props<T> = {
   title: string;
   subtitle?: string;
   type: string;
-  initialData?: PaginatedResponse<T>;
+  items: T[];
   renderSpotlightItem: (item: T) => ReactNode;
   renderRemainingItem: (item: T) => ReactNode;
+  observerRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 /**
- * スポットライトセクション
+ * スポットライトセクション（表示専用）
  *
  * 先頭N件を大型 `SpotlightCard` のスワイパーで表示し、
  * 残りのアイテムを横スクロール可能なカード列として表示する純粋なレイアウトセクション。
- *
- * @param title - セクションタイトル
- * @param subtitle - サブテキスト
- * @param type - カテゴリタイプ
- * @param items - 表示するアイテムのリスト
- * @param renderSpotlightItem - スワイパー内のアイテムを描画する関数
- * @param renderRemainingItem - 横スクロール内のアイテムを描画する関数
  */
 const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) => {
-  const { title, subtitle, type, initialData, renderSpotlightItem, renderRemainingItem } = props;
-
-  const {
-    data: infiniteData,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteMovieList(
-    type,
-    initialData as unknown as PaginatedResponse<Movie | UpcomingMovie>,
-  );
-
-  const observerRef = useInfiniteScroll(
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-    { rootMargin: '0px 800px 0px 0px' }, // 横方向の先読みマージン
-  );
-
-  // initialDataがある場合、マウント時に次ページをバックグラウンドでプリフェッチ
-  // 横スクロールはコンテンツ到達が速いため、番兵発火前に先行ロードを行う
-  useEffect(() => {
-    if (initialData && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const items = infiniteData
-    ? (infiniteData.pages.flatMap((page) => page.movies) as unknown as T[])
-    : [];
+  const { title, subtitle, type, items, renderSpotlightItem, renderRemainingItem, observerRef } =
+    props;
 
   if (!items || items.length === 0) return null;
 
@@ -118,7 +79,7 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
               <React.Fragment key={item.id}>{renderRemainingItem(item)}</React.Fragment>
             ))}
             {/* 番兵（インフィニットスクローラー） */}
-            <div ref={observerRef} className="w-10 flex-shrink-0" />
+            {observerRef && <div ref={observerRef} className="w-10 flex-shrink-0" />}
           </HorizontalScrollContainer>
         </div>
       )}

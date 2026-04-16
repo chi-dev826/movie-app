@@ -29,7 +29,7 @@ import { IClock } from "../../domain/repositories/clock.service.interface";
 const TMDB_DEFAULTS = {
   REGION: "JP",
   LANGUAGE: "ja",
-  UPCOMING_MONTHS: 2,
+  UPCOMING_MONTHS: 6,
   FILTERS: {
     MIN_VOTE_COUNT: 10,
     RECENT_VOTE_COUNT: 1000,
@@ -131,7 +131,25 @@ export class TmdbRepository implements ITmdbRepository {
       ...periodParams,
     };
 
-    return this.discoverMovies(params);
+    const rawData = await this.cache.getOrSet(
+      `tmdb:upcoming:raw:${JSON.stringify(params)}`,
+      async () => {
+        const response = await this.api.get<PaginatedResponse<MovieResponse>>(
+          "/discover/movie",
+          { params },
+        );
+        return response.data;
+      },
+      CACHE_TTL.UPCOMING,
+    );
+
+    return {
+      movies: rawData.results.map((movie) =>
+        MovieFactory.createFromApiResponse(movie),
+      ),
+      currentPage: rawData.page,
+      totalPages: rawData.total_pages,
+    };
   }
 
   /** 現在上映中の映画を取得する */
