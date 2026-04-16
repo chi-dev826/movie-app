@@ -12,6 +12,7 @@ import WatchListPage from './features/watch-list';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { APP_PATHS } from '@shared/constants/routes';
+import { RouteHandle } from './types/transitions';
 
 const queryClient = new QueryClient();
 
@@ -23,33 +24,38 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+        handle: { transition: 'horizontal' } as RouteHandle,
       },
-
       {
         path: APP_PATHS.SEARCH.replace('/', ''),
         element: <SearchPage />,
+        handle: { transition: 'horizontal' } as RouteHandle,
       },
       {
         path: APP_PATHS.WATCH_LIST.replace('/', ''),
         element: <WatchListPage />,
+        handle: { transition: 'horizontal' } as RouteHandle,
       },
       {
         path: APP_PATHS.MOVIE_DETAIL.replace('/', ''),
         element: <MovieDetailPage />,
+        handle: { transition: 'horizontal' } as RouteHandle,
       },
       {
         path: APP_PATHS.MOVIES.UPCOMING.replace('/', ''),
         element: <UpcomingList />,
+        handle: { transition: 'horizontal' } as RouteHandle,
       },
       {
         path: APP_PATHS.MOVIES.BY_TYPE.replace('/', ''),
         element: <MovieList />,
+        handle: { transition: 'horizontal' } as RouteHandle,
+      },
+      {
+        path: APP_PATHS.TRAILER.replace('/', ''),
+        element: <TrailerPage />,
       },
     ],
-  },
-  {
-    path: APP_PATHS.TRAILER,
-    element: <TrailerPage />,
   },
 ]);
 

@@ -20,14 +20,18 @@ const TrailerPage: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
+    <motion.div
+      layoutId="trailer-player"
+      className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden"
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    >
       {/* 閉じるボタン (フローティング) */}
       <button
         onClick={handleClose}
         className="hidden lg:block lg:absolute top-6 right-6 z-[110] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all active:scale-90 group"
         aria-label="閉じる"
       >
-        <XMarkIcon className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
+        <XMarkIcon className="w-8 h-8 text-white transition-transform group-hover:scale-110" />
       </button>
 
       <AnimatePresence mode="wait">
@@ -39,8 +43,8 @@ const TrailerPage: React.FC = () => {
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-4"
           >
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-white/60 font-bold tracking-widest text-sm uppercase">
+            <div className="w-12 h-12 border-4 rounded-full border-primary border-t-transparent animate-spin" />
+            <p className="text-sm font-bold tracking-widest uppercase text-white/60">
               Loading Preview...
             </p>
           </motion.div>
@@ -51,14 +55,14 @@ const TrailerPage: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center gap-6 px-8 text-center"
           >
-            <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/50">
+            <div className="flex items-center justify-center w-20 h-20 border rounded-full bg-red-500/20 border-red-500/50">
               <ExclamationTriangleIcon className="w-10 h-10 text-red-500" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white mb-2">
+              <h2 className="mb-2 text-2xl font-bold text-white">
                 {error ? 'エラーが発生しました' : '予告編が見つかりません'}
               </h2>
-              <p className="text-white/60 text-sm">
+              <p className="text-sm text-white/60">
                 申し訳ありません。この作品の予告編は現在視聴できません。
                 <br />
                 自動的に前の画面に戻ります。
@@ -66,7 +70,7 @@ const TrailerPage: React.FC = () => {
             </div>
             <button
               onClick={handleClose}
-              className="px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors"
+              className="px-8 py-3 font-bold text-black transition-colors bg-white rounded-full hover:bg-gray-200"
             >
               今すぐ戻る
             </button>
@@ -95,7 +99,7 @@ const TrailerPage: React.FC = () => {
       {!isLoading && data?.videoUrl && (
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-transparent to-black/20 z-[105]" />
       )}
-    </div>
+    </motion.div>
   );
 };
 

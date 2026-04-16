@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useWatchList } from '@/hooks/useWatchList';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -30,21 +31,27 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
   const isInList = isInWatchList(movieId);
 
   return (
-    <section className="px-4 pb-6 max-w-7xl mx-auto relative z-overlay">
+    <section className="relative px-4 pb-6 mx-auto max-w-7xl z-overlay">
       <div className="flex gap-3 pointer-events-auto">
         {videoKey ? (
-          <Link
-            to={APP_PATHS.TRAILER.replace(':id', movieId.toString())}
-            className="flex-1 bg-red-500 from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm flex justify-center items-center gap-2 shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95"
+          <motion.div
+            layoutId="trailer-player"
+            className="flex-1"
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            <span
-              className="material-symbols-outlined text-[20px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
+            <Link
+              to={APP_PATHS.TRAILER.replace(':id', movieId.toString())}
+              className="w-full h-full bg-red-500 from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm flex justify-center items-center gap-2 shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95"
             >
-              play_circle
-            </span>
-            予告編を再生
-          </Link>
+              <span
+                className="material-symbols-outlined text-[20px]"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                play_circle
+              </span>
+              予告編を再生
+            </Link>
+          </motion.div>
         ) : watchProviders && watchProviders.length > 0 ? (
           <a
             href={watchProviders[0].link || '#'}
@@ -63,7 +70,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
         ) : (
           <button
             disabled
-            className="flex-1 bg-gray-700 text-gray-400 py-5 rounded-xl font-label font-bold text-sm flex justify-center items-center gap-2 opacity-50 cursor-not-allowed"
+            className="flex items-center justify-center flex-1 gap-2 py-5 text-sm font-bold text-gray-400 bg-gray-700 opacity-50 cursor-not-allowed rounded-xl font-label"
           >
             <span
               className="material-symbols-outlined text-[20px]"
