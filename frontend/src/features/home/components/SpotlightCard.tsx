@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/24/solid';
 
@@ -38,20 +37,17 @@ const SpotlightCard = (props: Props) => {
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
       onMouseEnter={() => prefetchMovieDetail(movie.id)}
-      className="group/spotlight relative block w-full overflow-hidden rounded-xl bg-gray-900"
+      className="relative block w-full overflow-hidden bg-gray-900 group/spotlight rounded-xl"
     >
       {/* バックドロップ画像 */}
       <div className="relative w-full aspect-[21/9] md:aspect-[2.8/1] overflow-hidden">
-        <motion.img
+        <img
           srcSet={backdropSrcSet}
           sizes="100vw"
           src={backdropFallbackUrl}
           loading="lazy"
           alt={movie.title}
           className="absolute inset-0 object-cover w-full h-full transition-transform duration-700 group-hover/spotlight:scale-105"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
         />
 
         {/* 多段グラデーションオーバーレイ */}
@@ -62,28 +58,18 @@ const SpotlightCard = (props: Props) => {
         <div className="absolute bottom-0 left-0 right-0 flex items-end gap-4 p-4 md:gap-6 md:p-6 xl:gap-8 xl:p-10 2xl:p-12">
           {/* ポスター */}
           {posterUrl && (
-            <motion.div
-              className="relative flex-shrink-0 hidden overflow-hidden border rounded-lg shadow-2xl md:block w-28 xl:w-36 2xl:w-44 3xl:w-52 aspect-poster border-white/10 shadow-black/50"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
+            <div className="relative flex-shrink-0 hidden overflow-hidden border rounded-lg shadow-2xl md:block w-28 xl:w-36 2xl:w-44 3xl:w-52 aspect-poster border-white/10 shadow-black/50">
               <img
                 src={posterUrl}
                 loading="lazy"
                 alt={movie.title}
                 className="object-cover w-full h-full"
               />
-            </motion.div>
+            </div>
           )}
 
           {/* メタ情報 */}
-          <motion.div
-            className="flex flex-col gap-2 pb-1 md:gap-3 md:pb-2"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
+          <div className="flex flex-col gap-2 pb-1 md:gap-3 md:pb-2">
             {/* ロゴ or タイトル */}
             {logoUrl ? (
               <img
@@ -100,7 +86,7 @@ const SpotlightCard = (props: Props) => {
 
             {/* あらすじ */}
             {movie.overview && (
-              <p className="hidden text-sm leading-relaxed text-gray-300 xl:block line-clamp-2 2xl:line-clamp-3 max-w-2xl 2xl:text-base drop-shadow-md">
+              <p className="hidden max-w-2xl text-sm leading-relaxed text-gray-300 xl:block line-clamp-2 2xl:line-clamp-3 2xl:text-base drop-shadow-md">
                 {movie.overview}
               </p>
             )}
@@ -142,7 +128,7 @@ const SpotlightCard = (props: Props) => {
                 </>
               )}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </Link>

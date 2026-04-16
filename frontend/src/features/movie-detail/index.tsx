@@ -36,23 +36,33 @@ export const MovieDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen pb-6 font-sans antialiased font-medium bg-background text-on-surface selection:bg-primary/30">
+      {/* Hero は即座に表示 */}
       <DetailHeroSection detail={detail} videoKey={videoUrl || null} />
-      <DetailActionSection
-        movieId={detail.id}
-        videoKey={videoUrl || null}
-        watchProviders={watchProviders}
-      />
-      <WatchProviderSection watchProviders={watchProviders} />
-      <StorySection overview={detail.overview} />
-      <CastCarouselSection cast={detail.cast} />
-      <MovieStatsSection detail={detail} />
-      <NewsAnalysisSection
-        movieId={detail.id}
-        movieTitle={detail.title}
-        posterPath={detail.posterPath || ''}
-      />
-      <TrailerCarouselSection otherVideoUrls={otherVideoUrls} />
-      <RecommendationSection recommendations={recommendations} />
+
+      <div className="flex flex-col gap-0">
+        <DetailActionSection
+          movieId={detail.id}
+          videoKey={videoUrl || null}
+          watchProviders={watchProviders}
+        />
+        <WatchProviderSection watchProviders={watchProviders} />
+
+        <StorySection overview={detail.overview} />
+
+        <CastCarouselSection cast={detail.cast} />
+
+        <MovieStatsSection detail={detail} />
+
+        <NewsAnalysisSection
+          movieId={detail.id}
+          movieTitle={detail.title}
+          posterPath={detail.posterPath || ''}
+        />
+
+        <TrailerCarouselSection otherVideoUrls={otherVideoUrls} />
+
+        <RecommendationSection recommendations={recommendations} />
+      </div>
     </div>
   );
 };
