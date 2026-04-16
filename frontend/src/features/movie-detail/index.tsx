@@ -12,20 +12,9 @@ import { NewsAnalysisSection } from './components/NewsAnalysisSection';
 import { TrailerCarouselSection } from './components/TrailerCarouselSection';
 import { RecommendationSection } from './components/RecommendationSection';
 
-/**
- * 詳細ページの初回訪問フラグ
- */
-let isDetailFirstVisit = true;
-
 export const MovieDetailPage: React.FC = () => {
   const { id: movieId } = useParams<{ id: string }>();
   const { data, isLoading, error } = useFullMovieData(Number(movieId));
-
-  useEffect(() => {
-    if (data) {
-      isDetailFirstVisit = false;
-    }
-  }, [data]);
 
   if (isLoading) {
     return (
