@@ -2,14 +2,11 @@ import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 import { useHomePage } from '@/hooks/useMovies';
 import HeroSwiper from './components/HeroSwiper';
-import SpotlightSection from './components/SpotlightSection';
-import SpotlightCard from './components/SpotlightCard';
-import UpcomingMovieCard from './components/UpcomingMovieCard';
-import NowPlayingCard from './components/NowPlayingCard';
+import UpcomingSpotlightSection from './components/UpcomingSpotlightSection';
+import NowPlayingSpotlightSection from './components/NowPlayingSpotlightSection';
 import TrendingSection from './components/TrendingSection';
 import RecentlyAddedSection from './components/RecentlyAddedSection';
 
-/** スタガー制御用の親バリアント（詳細ページと統一） */
 const containerVariants = {
   hidden: {},
   visible: {
@@ -26,6 +23,12 @@ const sectionVariants = {
     transition: { duration: 0.5, ease: 'easeOut' as const },
   },
 };
+
+/**
+ * 初回訪問フラグ（メモリ上で保持）
+ * リロードされるまで維持される。
+ */
+let isHomeFirstVisit = true;
 
 /**
  * HomePage
@@ -46,10 +49,14 @@ function HomePage() {
 
   // HeroSwiperが表示されない場合は、すぐにアニメーションを開始する
   useEffect(() => {
-    if (!data?.hero || data.hero.length < 3) {
-      setTimeout(() => controls.start('visible'), 0);
+    if (data) {
+      if (!data?.hero || data.hero.length < 3) {
+        setTimeout(() => controls.start('visible'), 0);
+      }
+      // マウント後にフラグを更新
+      isHomeFirstVisit = false;
     }
-  }, [data?.hero, controls]);
+  }, [data, controls]);
 
   if (isLoading) {
     return (
@@ -79,7 +86,7 @@ function HomePage() {
     <motion.div
       className="bg-black"
       variants={containerVariants}
-      initial="hidden"
+      initial={isHomeFirstVisit ? 'hidden' : 'visible'}
       animate={controls}
     >
       {/* ヒーロースワイパー（公開中 / 新着 / 公開予定ミックス） */}
@@ -97,35 +104,19 @@ function HomePage() {
       <div className="lg:p-6 xl:p-12 2xl:p-20 2xl:pb-0">
         {/* ✦ スポットライト: 公開予定 */}
         <motion.div variants={sectionVariants}>
-          <SpotlightSection
+          <UpcomingSpotlightSection
             title="公開予定"
             subtitle="まもなく公開される注目作品"
-            type="upcoming"
             initialData={data.upcoming}
-            renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="upcoming" />}
-            renderRemainingItem={(movie) => (
-              <UpcomingMovieCard
-                movie={movie}
-                className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]"
-              /> // この２つのカード群は強調する
-            )}
           />
         </motion.div>
 
         {/* ✦ スポットライト: 公開中 */}
         <motion.div variants={sectionVariants}>
-          <SpotlightSection
+          <NowPlayingSpotlightSection
             title="公開中の映画"
             subtitle="今、劇場で観られる映画"
-            type="now_playing"
             initialData={data.nowPlaying}
-            renderSpotlightItem={(movie) => <SpotlightCard movie={movie} variant="now_playing" />}
-            renderRemainingItem={(movie) => (
-              <NowPlayingCard
-                movie={movie}
-                className="basis-[32%] xl:basis-[22%] 2xl:basis-[12%]"
-              /> // この２つのカード群は強調する
-            )}
           />
         </motion.div>
 

@@ -16,7 +16,7 @@ const AnimatedOutlet = () => {
 
   return (
     <div className="relative w-full overflow-hidden">
-      <AnimatePresence mode="popLayout" custom={custom}>
+      <AnimatePresence mode="popLayout" custom={custom} initial={false}>
         <motion.div
           key={location.pathname}
           custom={custom}
