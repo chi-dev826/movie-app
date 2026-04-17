@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 import { motion } from 'framer-motion';
+import { Play } from 'lucide-react';
 
 interface TrailerCarouselSectionProps {
   otherVideoUrls?: string[];
@@ -47,12 +48,7 @@ const LazyTrailerCard: React.FC<{
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
             <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
-              <span
-                className="material-symbols-outlined text-white text-[24px]"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                play_arrow
-              </span>
+              <Play className="w-6 h-6 text-white fill-white" />
             </div>
           </div>
         </div>

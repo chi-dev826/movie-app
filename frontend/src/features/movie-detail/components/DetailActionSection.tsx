@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Play, Check, Plus } from 'lucide-react';
 import { useWatchList } from '@/hooks/useWatchList';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -43,12 +44,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
               to={APP_PATHS.TRAILER.replace(':id', movieId.toString())}
               className="w-full h-full bg-red-500 from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm flex justify-center items-center gap-2 shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95"
             >
-              <span
-                className="material-symbols-outlined text-[20px]"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                play_circle
-              </span>
+              <Play className="w-5 h-5 fill-current" />
               予告編を再生
             </Link>
           </motion.div>
@@ -59,12 +55,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
             rel="noopener noreferrer"
             className="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm tracking-widest uppercase shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95 flex justify-center items-center gap-2"
           >
-            <span
-              className="material-symbols-outlined text-[20px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              play_circle
-            </span>
+            <Play className="w-5 h-5 fill-current" />
             Watch Now
           </a>
         ) : (
@@ -72,12 +63,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
             disabled
             className="flex items-center justify-center flex-1 gap-2 py-5 text-sm font-bold text-gray-400 bg-gray-700 opacity-50 cursor-not-allowed rounded-xl font-label"
           >
-            <span
-              className="material-symbols-outlined text-[20px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              play_circle
-            </span>
+            <Play className="w-5 h-5" />
             予告編なし
           </button>
         )}
@@ -86,9 +72,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
           onClick={() => toggleWatchList(movieId)}
           className={`flex-1 ${isInList ? 'bg-surface-container-highest text-primary border border-primary/30' : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'} py-3.5 rounded-xl font-label font-bold text-sm tracking-widest uppercase transition-colors active:scale-95 flex justify-center items-center gap-2`}
         >
-          <span className="material-symbols-outlined text-[20px]">
-            {isInList ? 'check' : 'add'}
-          </span>
+          {isInList ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5"/>}
           {isInList ? 'リストから削除' : 'リストへ追加'}
         </button>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { User, Search } from 'lucide-react';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -48,11 +49,11 @@ export const CastCarouselSection: React.FC<CastCarouselSectionProps> = ({ cast }
                   />
                 ) : (
                   <div className="flex items-center justify-center w-full h-full text-outline">
-                    <span className="material-symbols-outlined text-[32px]">person</span>
+                    <User className="w-8 h-8 text-outline" />
                   </div>
                 )}
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="material-symbols-outlined text-white text-[24px]">search</span>
+                  <Search className="w-6 h-6 text-white" />
                 </div>
               </div>
             </div>

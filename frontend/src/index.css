@@ -6,10 +6,7 @@ body {
   @apply font-sans;
 }
 
-/* Material Symbols Rules */
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
+
 
 /* 共通ユーティリティ（すでに存在する場合は上書き） */
 .hide-scrollbar::-webkit-scrollbar {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Globe } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -79,7 +80,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, category, fallbackPo
           {article.title}
         </h4>
         <span className="text-on-surface-variant font-label text-[10px] md:text-xs mt-1 flex items-center gap-1">
-          <span className="material-symbols-outlined text-[14px]">public</span>
+          <Globe className="w-3.5 h-3.5" />
           {article.source}
         </span>
       </div>

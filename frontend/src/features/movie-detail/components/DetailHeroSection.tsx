@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Star } from 'lucide-react';
 import { getBackdropSrcSet } from '@/utils/image';
 import { MovieDetail } from '@/types/api/dto';
 
@@ -91,12 +92,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
         )}
 
         <div className="absolute items-center hidden gap-1 px-2 py-1 border rounded-md shadow-lg top-4 right-4 bg-surface-container-highest/80 backdrop-blur-md border-white/10 md:flex z-overlay">
-          <span
-            className="material-symbols-outlined text-[14px] text-primary"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            star
-          </span>
+          <Star className="w-3.5 h-3.5 text-primary fill-primary" />
           <span className="text-xs font-bold tracking-wider font-label">
             {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
           </span>
@@ -116,12 +112,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               <span>{detail.runtime ? `${detail.runtime}分` : '-'}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
               <span className="flex items-center gap-1 font-bold text-yellow-400">
-                <span
-                  className="material-symbols-outlined text-[16px]"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  star
-                </span>
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
               </span>
             </div>
@@ -138,12 +129,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
           </div>
           <div className="flex-col items-center justify-center hidden p-3 border shadow-xl md:flex bg-surface-container-high rounded-xl border-white/5">
             <div className="flex items-center gap-1 text-primary">
-              <span
-                className="material-symbols-outlined text-[24px]"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                star
-              </span>
+              <Star className="w-6 h-6 fill-current" />
               <span className="text-2xl font-black font-headline">
                 {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
               </span>
