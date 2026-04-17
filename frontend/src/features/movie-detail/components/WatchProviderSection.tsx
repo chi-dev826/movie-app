@@ -20,7 +20,7 @@ export const WatchProviderSection: React.FC<WatchProviderSectionProps> = ({ watc
   if (!watchProviders || watchProviders.length === 0) return null;
 
   return (
-    <section className="px-4 py-2 max-w-7xl mx-auto flex flex-col items-start gap-2 overflow-hidden">
+    <section className="w-full px-4 py-2 xl:max-w-7xl mx-auto flex flex-col items-start gap-2 overflow-hidden">
       <span className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest flex-shrink-0">
         Available on
       </span>

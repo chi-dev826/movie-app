@@ -31,7 +31,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
   const isInList = isInWatchList(movieId);
 
   return (
-    <section className="relative px-4 pb-6 mx-auto max-w-7xl z-overlay">
+    <section className="relative w-full px-4 pb-6 mx-auto xl:max-w-7xl z-overlay">
       <div className="flex gap-3 pointer-events-auto">
         {videoKey ? (
           <motion.div
