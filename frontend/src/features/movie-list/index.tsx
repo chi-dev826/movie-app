@@ -21,8 +21,12 @@ const getTitle = (type?: string) => {
 
 const MovieList = () => {
   const { type } = useParams<{
-    type: 'popular' | 'recently_added' | 'now_playing' | 'trending';
+    type: 'recently_added' | 'now_playing' | 'trending';
   }>();
+
+  if (!type) {
+    return <div className="container px-4 py-8 mx-auto text-center">Invalid type</div>;
+  }
   const {
     data,
     isLoading: isCurrentlyLoading,
