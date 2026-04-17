@@ -20,5 +20,17 @@ export const getBackdropSrcSet = (path: string | null | undefined): string | und
   if (!path) return undefined;
   const { BACKDROP } = IMAGE_CONFIG.IMAGE_SIZES;
   const base = IMAGE_CONFIG.IMAGE_BASE_URL;
-  return `${base}${BACKDROP.SMALL}${path} 300w, ${base}${BACKDROP.MEDIUM}${path} 780w, ${base}${BACKDROP.LARGE}${path} 1280w`;
+  return `${base}${BACKDROP.SMALL}${path} 340w, ${base}${BACKDROP.MEDIUM}${path}780w, ${base}${BACKDROP.LARGE}${path}1280w`;
+};
+
+/**
+ * @summary ポスター画像のsrcSet文字列を生成する。ブラウザが画面幅に応じて最適サイズを自動選択する。
+ * @param path TMDB画像パス
+ * @returns srcSet文字列。pathがnullの場合はundefinedを返す
+ */
+export const getPosterSrcSet = (path: string | null | undefined): string | undefined => {
+  if (!path) return undefined;
+  const { POSTER } = IMAGE_CONFIG.IMAGE_SIZES;
+  const base = IMAGE_CONFIG.IMAGE_BASE_URL;
+  return `${base}${POSTER.SMALL}${path} 200w, ${base}${POSTER.MEDIUM}${path} 342w, ${base}${POSTER.LARGE}${path} 500w`;
 };
