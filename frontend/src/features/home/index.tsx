@@ -54,7 +54,6 @@ function HomePage() {
         <UpcomingSpotlightSection
           title="公開予定"
           subtitle="まもなく公開される注目作品"
-          initialData={data.upcoming}
         />
 
         {/* ✦ スポットライト: 公開中 */}

@@ -16,15 +16,19 @@ export class GetUpcomingMovieListUseCase {
 
   /**
    * @param page 取得するページ番号
+   * @param months 取得対象期間（月数）
    * @returns 公開予定映画リスト（エンリッチデータ結合済）とページネーション情報
    */
-  async execute(page: number = 1): Promise<{
+  async execute(
+    page: number,
+    months?: number,
+  ): Promise<{
     movies: EnrichedMovie[];
     currentPage: number;
     totalPages: number;
   }> {
     // 1. 指定されたページのデータを取得
-    const result = await this.tmdbRepo.findUpcomingMovies(page);
+    const result = await this.tmdbRepo.findUpcomingMovies(page, months);
 
     // 2. ビジネスルールに基づくフィルタリングとソート
     const processedMovies = this.upcomingService.sort(

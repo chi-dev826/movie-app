@@ -57,10 +57,14 @@ export const fetchMovieList = async (page: number = 1): Promise<MovieListRespons
 };
 
 export const fetchUpcomingMovies = async (
-  page: number = 1,
+  page: number,
+  months?: number,
 ): Promise<PaginatedResponse<UpcomingMovie>> => {
+  const query = new URLSearchParams({ page: String(page) });
+  if (months) query.append('months', String(months));
+
   return fetchFromApi<PaginatedResponse<UpcomingMovie>>(
-    `${API_PATHS.MOVIES.UPCOMING}?page=${page}`,
+    `${API_PATHS.MOVIES.UPCOMING}?${query.toString()}`,
   );
 };
 

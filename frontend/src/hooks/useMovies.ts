@@ -27,6 +27,8 @@ const movieKeys = {
   ids: (ids: number[]) => [...movieKeys.all, 'ids', ids.join(',')] as const,
 };
 
+export type InfiniteMovieListType = 'trending' | 'now_playing' | 'recently_added';
+
 export const useFullMovieData = (movieId: number) => {
   return useQuery({
     queryKey: movieKeys.detail(movieId),
@@ -86,12 +88,24 @@ export const useUpcomingMovies = () => {
   return useQuery<UpcomingMovie[]>({
     queryKey: movieKeys.list('upcoming'),
     queryFn: async () => {
-      const res = await fetchUpcomingMovies();
+      const res = await fetchUpcomingMovies(30, 2); // 2ヶ月以内を多めに取得
       return res.movies;
     },
-    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
+    staleTime: QUERY_CONFIG.STALE_TIME_UPCOMING,
   });
 };
+
+// export const useUpcomingSpotlightMovies = (initialData?: PaginatedResponse<UpcomingMovie>) => {
+//   return useQuery<UpcomingMovie[]>({
+//     queryKey: movieKeys.list('upcoming_spotlight'),
+//     queryFn: async () => {
+//       const res = await fetchUpcomingMovies(1, 12); // 1年先の大型タイトルを取得
+//       return res.movies;
+//     },
+//     initialData: initialData?.movies,
+//     staleTime: QUERY_CONFIG.STALE_TIME_UPCOMING,
+//   });
+// };
 
 export const useTrendingMovies = () => {
   return useInfiniteQuery({
@@ -107,19 +121,18 @@ export const useTrendingMovies = () => {
 
 /**
  * 【汎用ファサード】リストのカテゴリ(type)を受け取り、無限スクロール用に正規化されたページネーションデータを返す
- * @param type カテゴリ名 ('upcoming', 'now_playing', etc.)
+ * @param type カテゴリ名 ('trending' | 'now_playing' | 'recently_added')
  * @param initialData 初期レンダリング用のページネーションデータ（キャッシュのHydration用）
  */
 export const useInfiniteMovieList = (
-  type: string | undefined,
-  initialData?: PaginatedResponse<Movie | UpcomingMovie>,
+  type: InfiniteMovieListType,
+  initialData?: PaginatedResponse<Movie>,
 ) => {
   return useInfiniteQuery({
-    queryKey: movieKeys.infiniteList(type || 'unknown'),
+    queryKey: movieKeys.infiniteList(type),
     queryFn: async ({ pageParam = 1 }) => {
       if (type === 'trending') return fetchTrendingMovies(pageParam);
       if (type === 'now_playing') return fetchNowPlayingMovies(pageParam);
-      if (type === 'upcoming') return fetchUpcomingMovies(pageParam);
       if (type === 'recently_added') {
         const res = await fetchMovieList(pageParam);
         return res.recently_added;
@@ -137,7 +150,6 @@ export const useInfiniteMovieList = (
         }
       : undefined,
     staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT,
-    enabled: !!type,
   });
 };
 

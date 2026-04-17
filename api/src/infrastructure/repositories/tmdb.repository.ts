@@ -24,6 +24,7 @@ import {
   RELEASE_TYPE,
 } from "../external/tmdb";
 import { IClock } from "../../domain/repositories/clock.service.interface";
+import { ArrayUtils } from "../../utils/array";
 
 /** リポジトリ内部で使用するTMDB固有の設定値 */
 const TMDB_DEFAULTS = {
@@ -113,15 +114,19 @@ export class TmdbRepository implements ITmdbRepository {
   /**
    * 近日公開予定の映画を取得する。
    * 検索期間・リリースタイプ等のAPIパラメータはすべてリポジトリ内部で構築する。
+   * @param page 取得するページ数（1から指定ページまですべて取得）
+   * @param months 検索対象の月数（デフォルト: 2）
    */
-  async findUpcomingMovies(page: number): Promise<{
+  async findUpcomingMovies(
+    page: number,
+    months: number = TMDB_DEFAULTS.UPCOMING_MONTHS,
+  ): Promise<{
     movies: MovieEntity[];
     currentPage: number;
     totalPages: number;
   }> {
-    const periodParams = this.buildUpcomingPeriodParams();
-    const params: DiscoverMovieParams = {
-      page,
+    const periodParams = this.buildUpcomingPeriodParams(months);
+    const baseParams: DiscoverMovieParams = {
       region: TMDB_DEFAULTS.REGION,
       watch_region: TMDB_DEFAULTS.REGION,
       sort_by: SORT_OPTIONS.POPULARITY_DESC,
@@ -131,7 +136,32 @@ export class TmdbRepository implements ITmdbRepository {
       ...periodParams,
     };
 
-    return this.discoverMovies(params);
+    // 1ページ目から指定されたページまでを並列取得
+    const pageNumbers = ArrayUtils.range(page);
+    const rawDataArray = await Promise.all(
+      pageNumbers.map((p) => {
+        const params = { ...baseParams, page: p };
+        return this.cache.getOrSet(
+          `tmdb:upcoming:raw:${JSON.stringify(params)}`,
+          async () => {
+            const response = await this.api.get<
+              PaginatedResponse<MovieResponse>
+            >("/discover/movie", { params });
+            return response.data;
+          },
+          CACHE_TTL.UPCOMING,
+        );
+      }),
+    );
+
+    // 全ページの映画をマージして重複排除
+    const allMovies = rawDataArray.flatMap((data) => data.results);
+    const movies = ArrayUtils.deduplicate(allMovies);
+    return {
+      movies: movies.map((movie) => MovieFactory.createFromApiResponse(movie)),
+      currentPage: rawDataArray[0].page,
+      totalPages: rawDataArray[0].total_pages,
+    };
   }
 
   /** 現在上映中の映画を取得する */
@@ -370,7 +400,9 @@ export class TmdbRepository implements ITmdbRepository {
    * 近日公開映画の検索期間パラメータを構築する。
    * JST基準で「今日」から「N月後」までの期間を算出する。
    */
-  private buildUpcomingPeriodParams(): Pick<
+  private buildUpcomingPeriodParams(
+    months: number,
+  ): Pick<
     DiscoverMovieParams,
     "primary_release_date.gte" | "primary_release_date.lte"
   > {
@@ -384,7 +416,7 @@ export class TmdbRepository implements ITmdbRepository {
       ),
     );
     const endDate = new Date(today);
-    endDate.setUTCMonth(today.getUTCMonth() + TMDB_DEFAULTS.UPCOMING_MONTHS);
+    endDate.setUTCMonth(today.getUTCMonth() + months);
 
     const formatDate = (d: Date) => {
       const y = d.getUTCFullYear();

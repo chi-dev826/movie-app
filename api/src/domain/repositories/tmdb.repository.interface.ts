@@ -20,7 +20,10 @@ export interface ITmdbRepository {
   findPersonIdByName(query: string): Promise<number | null>;
 
   /** 近日公開予定の映画を取得する（地域・期間はリポジトリ内部で決定） */
-  findUpcomingMovies(page: number): Promise<{
+  findUpcomingMovies(
+    page: number,
+    months?: number,
+  ): Promise<{
     movies: MovieEntity[];
     currentPage: number;
     totalPages: number;

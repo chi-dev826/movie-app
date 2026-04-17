@@ -128,8 +128,12 @@ export class MovieController {
    */
   async getUpcomingMovies(req: Request, res: Response, next: NextFunction) {
     try {
-      const page = Number(req.query.page) || 1;
-      const result = await this.getUpcomingMovieListUseCase.execute(page);
+      const page = Number(req.query.page);
+      const months = req.query.months ? Number(req.query.months) : undefined;
+      const result = await this.getUpcomingMovieListUseCase.execute(
+        page,
+        months,
+      );
       res.json({
         movies: this.builder.buildUpcomingList(result.movies, this.clock.now()),
         currentPage: result.currentPage,
