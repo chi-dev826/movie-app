@@ -42,4 +42,3 @@ dist-ssr/
 *.sln
 *.sw?
 .env*.tsbuildinfo
-docs/
