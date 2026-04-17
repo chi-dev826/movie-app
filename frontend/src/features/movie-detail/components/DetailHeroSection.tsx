@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { AnimatePresence, motion } from 'framer-motion';
-import { getTmdbImage } from '@/utils/image';
-import { IMAGE_CONFIG } from '@/constants/config';
+import { getBackdropSrcSet } from '@/utils/image';
 import { MovieDetail } from '@/types/api/dto';
 
 export interface DetailHeroSectionProps {
@@ -26,14 +25,13 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
     return () => clearTimeout(timeoutId);
   }, [isBackdropVisible, videoKey]);
 
-  const backdropUrl =
-    getTmdbImage(detail.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE) || '';
+  const backdropSrcSet = getBackdropSrcSet(detail.backdropPath);
 
   return (
     <>
       {/* 🎬 Hero & Video Autoplay Section */}
       <section className="relative w-full overflow-hidden aspect-video 2xl:aspect-cinema bg-surface-container-high group">
-        <div className="absolute inset-0 z-gradient bg-gradient-to-t from-background via-background/20 to-transparent flex items-center justify-center pointer-events-none" />
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-gradient bg-gradient-to-t from-background via-background/20 to-transparent" />
 
         <AnimatePresence>
           {isBackdropVisible && detail.backdropPath && videoKey && (
@@ -45,7 +43,11 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               exit={{ opacity: 0, scale: 1.1 }}
               transition={{ duration: 1.5, ease: 'easeInOut' }}
             >
-              <img src={backdropUrl} alt={detail.title} className="w-full h-full object-cover" />
+              <img
+                srcSet={backdropSrcSet}
+                alt={detail.title}
+                className="object-cover w-full h-full"
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -82,33 +84,33 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
           </div>
         ) : (
           <img
-            src={backdropUrl}
+            srcSet={backdropSrcSet}
             alt={detail.title}
             className="absolute inset-0 object-cover w-full h-full"
           />
         )}
 
-        <div className="absolute top-4 right-4 bg-surface-container-highest/80 backdrop-blur-md px-2 py-1 items-center gap-1 rounded-md border border-white/10 shadow-lg hidden md:flex z-overlay">
+        <div className="absolute items-center hidden gap-1 px-2 py-1 border rounded-md shadow-lg top-4 right-4 bg-surface-container-highest/80 backdrop-blur-md border-white/10 md:flex z-overlay">
           <span
             className="material-symbols-outlined text-[14px] text-primary"
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
             star
           </span>
-          <span className="text-xs font-label font-bold tracking-wider">
+          <span className="text-xs font-bold tracking-wider font-label">
             {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
           </span>
         </div>
       </section>
 
       {/* 🧾 Title & Immediate Actions */}
-      <section className="px-4 pt-4 pb-6 max-w-7xl mx-auto relative z-overlay pointer-events-none">
-        <div className="flex justify-between items-end mb-4 pointer-events-auto">
+      <section className="relative px-4 pt-4 pb-6 mx-auto pointer-events-none max-w-7xl z-overlay">
+        <div className="flex items-end justify-between mb-4 pointer-events-auto">
           <div>
-            <h1 className="font-headline text-4xl md:text-5xl font-black tracking-tighter text-on-surface leading-tight drop-shadow-lg">
+            <h1 className="text-4xl font-black leading-tight tracking-tighter font-headline md:text-5xl text-on-surface drop-shadow-lg">
               {detail.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-sm md:text-base font-bold text-on-surface-variant tracking-wide">
+            <div className="flex flex-wrap items-center mt-3 text-sm font-bold tracking-wide gap-x-5 gap-y-2 md:text-base text-on-surface-variant">
               <span>{detail.year || '-'}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
               <span>{detail.runtime ? `${detail.runtime}分` : '-'}</span>
@@ -134,7 +136,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               ))}
             </div>
           </div>
-          <div className="hidden md:flex flex-col items-center justify-center bg-surface-container-high rounded-xl p-3 border border-white/5 shadow-xl">
+          <div className="flex-col items-center justify-center hidden p-3 border shadow-xl md:flex bg-surface-container-high rounded-xl border-white/5">
             <div className="flex items-center gap-1 text-primary">
               <span
                 className="material-symbols-outlined text-[24px]"
@@ -142,7 +144,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               >
                 star
               </span>
-              <span className="text-2xl font-headline font-black">
+              <span className="text-2xl font-black font-headline">
                 {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
               </span>
             </div>
