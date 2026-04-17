@@ -51,10 +51,7 @@ function HomePage() {
       {data.hero.length >= 3 && <HeroSwiper movies={data.hero} />}
       <div className="lg:p-6 xl:p-12 2xl:p-20 2xl:pb-0">
         {/* ✦ スポットライト: 公開予定 */}
-        <UpcomingSpotlightSection
-          title="公開予定"
-          subtitle="まもなく公開される注目作品"
-        />
+        <UpcomingSpotlightSection title="公開予定" subtitle="まもなく公開される注目作品" />
 
         {/* ✦ スポットライト: 公開中 */}
         <NowPlayingSpotlightSection
