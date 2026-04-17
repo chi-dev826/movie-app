@@ -1,6 +1,6 @@
 import type { Movie } from '@/types/api/dto';
 import { IMAGE_CONFIG } from '@/constants/config';
-import { StarIcon } from '@heroicons/react/24/solid';
+import { Star } from 'lucide-react';
 import { GENRE_NAMES } from '@/constants/config';
 import { Link } from 'react-router-dom';
 import { APP_PATHS } from '@shared/constants/routes';
@@ -68,7 +68,7 @@ export default function RankingMovieCard({ movie, rank }: Props) {
 
       <div className="flex flex-col items-end gap-2 shrink-0">
         <div className="flex items-center gap-1 font-black text-yellow-400 text-sm md:text-base">
-          <StarIcon className="w-4 h-4" />
+          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
           <span>{displayScore}</span>
         </div>
         <div className="text-xs font-black text-emerald-500 md:text-sm italic">#{rank}</div>

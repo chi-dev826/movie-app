@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { ChevronRight } from 'lucide-react';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type Props = {
@@ -37,7 +37,7 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
             <span className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-md">
               {title}
             </span>
-            <ChevronRightIcon className="w-5 h-5 text-gray-400 transition-transform duration-200 md:w-6 md:h-6 group-hover/header:translate-x-1 group-hover/header:text-red-400 mt-1" />
+            <ChevronRight className="w-5 h-5 text-gray-400 transition-transform duration-200 md:w-6 md:h-6 group-hover/header:translate-x-1 group-hover/header:text-red-400 mt-1" />
           </span>
           {subtitle && (
             <span className="ml-3 text-xs text-gray-400 md:text-sm xl:text-base">{subtitle}</span>
@@ -58,7 +58,7 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
         className="flex items-center text-xs md:text-sm font-bold text-red-500 hover:text-red-400 transition-colors pb-1"
       >
         すべて見る
-        <ChevronRightIcon className="w-3 h-3 md:w-4 md:h-4 ml-0.5" />
+        <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-0.5" />
       </Link>
     </div>
   );

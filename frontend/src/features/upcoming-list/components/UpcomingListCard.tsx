@@ -1,11 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  CalendarDaysIcon,
-  PlayIcon,
-  PlusIcon,
-  CheckIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/24/outline';
+import { CalendarDays, Play, Plus, Check, ChevronRight } from 'lucide-react';
 import type { UpcomingMovie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
@@ -52,7 +46,7 @@ const UpcomingListCard = ({ movie }: Props) => {
         {movie.releaseDateDisplay && (
           <div className="absolute left-4 top-4">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5 text-xs font-bold text-gray-200 border border-white/10">
-              <CalendarDaysIcon className="w-3.5 h-3.5 text-red-500" />
+              <CalendarDays className="w-3.5 h-3.5 text-red-500" />
               {movie.releaseDateDisplay}
             </span>
           </div>
@@ -73,12 +67,12 @@ const UpcomingListCard = ({ movie }: Props) => {
                 to={APP_PATHS.TRAILER.replace(':id', movie.id.toString())}
                 className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 text-sm font-black text-black transition-all hover:from-red-600 hover:to-red-700 active:scale-95 disabled:opacity-50"
               >
-                <PlayIcon className="h-4 w-4 fill-current" />
+                <Play className="h-4 w-4 fill-current" />
                 予告編を観る
               </Link>
             ) : (
               <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gray-800 px-6 py-3 text-sm font-black text-gray-400 transition-all hover:from-gray-600 hover:to-gray-700 active:scale-95 disabled:opacity-50">
-                <PlayIcon className="h-4 w-4 fill-current" />
+                <Play className="h-4 w-4 fill-current" />
                 予告編は準備中
               </button>
             )}
@@ -93,7 +87,7 @@ const UpcomingListCard = ({ movie }: Props) => {
               }`}
               title={isInList ? 'ウォッチリストから削除' : 'ウォッチリストに追加'}
             >
-              {isInList ? <CheckIcon className="h-6 w-6" /> : <PlusIcon className="h-6 w-6" />}
+              {isInList ? <Check className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
             </button>
           </div>
 
@@ -102,7 +96,7 @@ const UpcomingListCard = ({ movie }: Props) => {
             onClick={handleGoToDetail}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-3 text-sm font-bold text-gray-300 transition-all hover:bg-white/10 active:scale-[0.98]"
           >
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" />
             詳細を見る
           </button>
         </div>

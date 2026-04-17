@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Search, X } from 'lucide-react';
 import { APP_PATHS } from '@shared/constants/routes';
 
 type SearchOverlayProps = {
@@ -61,7 +61,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-white">映画を検索</h2>
           <button onClick={onClose} className="text-gray-400 transition-colors hover:text-white">
-            <XMarkIcon className="w-6 h-6" />
+            <X className="w-6 h-6" />
           </button>
         </div>
         <form onSubmit={handleSearch} className="space-y-4">
@@ -74,7 +74,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
               placeholder="映画のタイトルを入力..."
               className="w-full px-4 py-3 pl-12 text-white bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none"
             />
-            <MagnifyingGlassIcon className="absolute text-gray-400 transform -translate-y-1/2 left-4 top-1/2 w-5 h-5" />
+            <Search className="absolute text-gray-400 transform -translate-y-1/2 left-4 top-1/2 w-5 h-5" />
           </div>
           <div className="flex space-x-3">
             <button

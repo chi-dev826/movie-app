@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, useEffect, ReactNode } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Props = {
   children: ReactNode;
@@ -52,7 +52,7 @@ const HorizontalScrollContainer = ({ children }: Props) => {
           onClick={() => handleScroll('left')}
           className="absolute top-0 z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -left-10 group-hover:opacity-100 xl:block"
         >
-          <ChevronLeftIcon className="w-12 h-12 mx-auto text-white" />
+          <ChevronLeft className="w-12 h-12 mx-auto text-white" />
         </button>
       )}
       <div
@@ -66,7 +66,7 @@ const HorizontalScrollContainer = ({ children }: Props) => {
           onClick={() => handleScroll('right')}
           className="absolute top-0 z-10 hidden w-12 h-full transition-opacity duration-300 opacity-0 -right-10 group-hover:opacity-100 xl:block"
         >
-          <ChevronRightIcon className="w-12 h-12 mx-auto text-white" />
+          <ChevronRight className="w-12 h-12 mx-auto text-white" />
         </button>
       )}
     </div>

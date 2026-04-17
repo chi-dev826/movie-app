@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { StarIcon } from '@heroicons/react/24/solid';
+import { Star } from 'lucide-react';
 import type { Movie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
@@ -49,7 +49,7 @@ export default function NewReleaseMovieCard({ movie, className = '' }: Props) {
           {/* 評価バッジ */}
           {movie.voteAverage !== null && movie.voteAverage > 0 && (
             <span className="inline-flex items-center gap-1 px-1.5 md:px-2 py-0.5 md:py-1 text-[9px] md:text-[10px] font-bold text-yellow-300 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 shadow-sm">
-              <StarIcon className="w-2.5 h-2.5 text-yellow-400 md:w-3 md:h-3" />
+              <Star className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400 md:w-3 md:h-3" />
               {(movie.voteAverage ?? 0).toFixed(1)}
             </span>
           )}

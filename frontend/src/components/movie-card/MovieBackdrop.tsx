@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Movie } from '@/types/api/dto';
-import { StarIcon } from '@heroicons/react/24/solid';
+import { Star } from 'lucide-react';
 import { getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
@@ -55,7 +55,7 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
         <div className="absolute flex items-center gap-1 px-2 py-1 text-xs font-bold text-white rounded-full bottom-2 right-2 bg-black/50 backdrop-blur-sm">
           {movie.voteAverage !== null && (
             <>
-              <StarIcon className="w-3 h-3 text-yellow-400" />
+              <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
               <span>{movie.voteAverage.toFixed(1)}</span>
             </>
           )}

@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
-import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
-import { StarIcon } from '@heroicons/react/24/solid';
+import { CalendarDays, Clock, Star } from 'lucide-react';
 
 import type { Movie, UpcomingMovie } from '@/types/api/dto';
-import { getTmdbImage, getBackdropSrcSet } from '@/utils/image';
+import { getPosterSrcSet, getBackdropSrcSet, getTmdbImage } from '@/utils/image';
 import { IMAGE_CONFIG } from '@/constants/config';
 import { APP_PATHS } from '@shared/constants/routes';
 import { usePrefetchMovieDetail } from '@/hooks/useMovies';
@@ -23,11 +22,8 @@ type Props =
 const SpotlightCard = (props: Props) => {
   const { movie } = props;
   const backdropSrcSet = getBackdropSrcSet(movie.backdropPath);
-  const backdropFallbackUrl = getTmdbImage(
-    movie.backdropPath,
-    IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE,
-  );
-  const posterUrl = getTmdbImage(movie.posterPath, IMAGE_CONFIG.IMAGE_SIZES.POSTER.LARGE);
+  const backdropFallbackUrl = getBackdropSrcSet(movie.backdropPath);
+  const posterSrcSet = getPosterSrcSet(movie.posterPath);
   const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
   const prefetchMovieDetail = usePrefetchMovieDetail();
 
@@ -57,10 +53,10 @@ const SpotlightCard = (props: Props) => {
         {/* コンテンツ領域 */}
         <div className="absolute bottom-0 left-0 right-0 flex items-end gap-4 p-4 md:gap-6 md:p-6 xl:gap-8 xl:p-10 2xl:p-12">
           {/* ポスター */}
-          {posterUrl && (
+          {posterSrcSet && (
             <div className="relative flex-shrink-0 hidden overflow-hidden border rounded-lg shadow-2xl md:block w-28 xl:w-36 2xl:w-44 3xl:w-52 aspect-poster border-white/10 shadow-black/50">
               <img
-                src={posterUrl}
+                srcSet={posterSrcSet}
                 loading="lazy"
                 alt={movie.title}
                 className="object-cover w-full h-full"
@@ -98,14 +94,14 @@ const SpotlightCard = (props: Props) => {
                   {/* 公開日 */}
                   {props.movie.releaseDateDisplay && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-200 md:text-sm border border-white/5">
-                      <CalendarDaysIcon className="w-3.5 h-3.5 text-red-400" />
+                      <CalendarDays className="w-3.5 h-3.5 text-red-400" />
                       {props.movie.releaseDateDisplay}
                     </span>
                   )}
                   {/* カウントダウン */}
                   {props.movie.upcomingBadgeLabel && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600/80 backdrop-blur-sm px-3 py-1 text-xs font-bold text-white md:text-sm shadow-lg shadow-red-900/30">
-                      <ClockIcon className="w-3.5 h-3.5" />
+                      <Clock className="w-3.5 h-3.5" />
                       {props.movie.upcomingBadgeLabel}
                     </span>
                   )}
@@ -117,7 +113,7 @@ const SpotlightCard = (props: Props) => {
                   {/* 評価 */}
                   {movie.voteAverage !== null && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-yellow-500/20 backdrop-blur-sm px-3 py-1 text-xs font-bold text-yellow-300 md:text-sm border border-yellow-500/20">
-                      <StarIcon className="w-3.5 h-3.5 text-yellow-400" />
+                      <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
                       {movie.voteAverage.toFixed(1)}
                     </span>
                   )}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Search, Menu, X } from 'lucide-react';
 import { APP_PATHS } from '@shared/constants/routes';
 
 import SearchOverlay from '../features/search/components/SearchOverlay';
@@ -80,7 +80,7 @@ const Header = () => {
               >
                 <div className="relative">
                   <div className="absolute inset-0 transition-transform duration-300 scale-0 rounded-full bg-white/10 blur-md group-hover:scale-150" />
-                  <MagnifyingGlassIcon className="relative w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
+                  <Search className="relative w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
                 </div>
               </button>
 
@@ -92,9 +92,9 @@ const Header = () => {
               >
                 <div className="absolute inset-0 transition-transform duration-300 scale-0 rounded-full bg-white/5 blur-md group-hover:scale-125" />
                 {isMobileMenuOpen ? (
-                  <XMarkIcon className="relative w-7 h-7" />
+                  <X className="relative w-7 h-7" />
                 ) : (
-                  <Bars3Icon className="relative w-7 h-7" />
+                  <Menu className="relative w-7 h-7" />
                 )}
               </button>
             </div>

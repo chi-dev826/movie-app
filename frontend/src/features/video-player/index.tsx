@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XMarkIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import { X, AlertTriangle } from 'lucide-react';
 import { useFullMovieData } from '@/hooks/useMovies';
 
 /**
@@ -31,7 +31,7 @@ const TrailerPage: React.FC = () => {
         className="hidden lg:block lg:absolute top-6 right-6 z-[110] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all active:scale-90 group"
         aria-label="閉じる"
       >
-        <XMarkIcon className="w-8 h-8 text-white transition-transform group-hover:scale-110" />
+        <X className="w-8 h-8 text-white transition-transform group-hover:scale-110" />
       </button>
 
       <AnimatePresence mode="wait">
@@ -56,7 +56,7 @@ const TrailerPage: React.FC = () => {
             className="flex flex-col items-center gap-6 px-8 text-center"
           >
             <div className="flex items-center justify-center w-20 h-20 border rounded-full bg-red-500/20 border-red-500/50">
-              <ExclamationTriangleIcon className="w-10 h-10 text-red-500" />
+              <AlertTriangle className="w-10 h-10 text-red-500" />
             </div>
             <div>
               <h2 className="mb-2 text-2xl font-bold text-white">

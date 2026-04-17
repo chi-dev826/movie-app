@@ -43,6 +43,7 @@ export const CastCarouselSection: React.FC<CastCarouselSectionProps> = ({ cast }
                   <img
                     src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w185${actor.profilePath}`}
                     alt={actor.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 ) : (
