@@ -38,7 +38,7 @@ export const WatchProviderSection: React.FC<WatchProviderSectionProps> = ({ watc
                 src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w92${provider.logoPath}`}
                 alt={provider.name}
                 title={provider.name}
-                fetchPriority='high'
+                fetchPriority="high"
                 className="w-12 h-12 md:w-16 md:h-16 rounded-xl border border-white/10 shadow-lg"
               />
             </a>

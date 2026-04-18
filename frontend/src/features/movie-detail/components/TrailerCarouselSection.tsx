@@ -43,7 +43,7 @@ const LazyTrailerCard: React.FC<{
           <img
             src={`https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`}
             alt="Trailer Thumbnail"
-            fetchPriority='high'
+            fetchPriority="high"
             className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">

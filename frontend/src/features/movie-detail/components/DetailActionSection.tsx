@@ -72,7 +72,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
           onClick={() => toggleWatchList(movieId)}
           className={`flex-1 ${isInList ? 'bg-surface-container-highest text-primary border border-primary/30' : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'} py-3.5 rounded-xl font-label font-bold text-sm tracking-widest uppercase transition-colors active:scale-95 flex justify-center items-center gap-2`}
         >
-          {isInList ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5"/>}
+          {isInList ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
           {isInList ? 'リストから削除' : 'リストへ追加'}
         </button>
       </div>
