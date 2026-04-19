@@ -57,7 +57,7 @@ const NowPlayingCard = ({ movie, className = '' }: Props) => {
             {movie.voteAverage !== null && (
               <span className="inline-flex items-center gap-0.5 text-[10px] text-yellow-300">
                 <Star className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400" />
-                <span className="font-bold">{movie.voteAverage.toFixed(1)}</span>
+                <span className="font-bold">{movie.voteAverage}</span>
               </span>
             )}
 

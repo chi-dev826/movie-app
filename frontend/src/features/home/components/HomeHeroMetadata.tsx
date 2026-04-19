@@ -40,7 +40,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
           {movie.voteAverage !== null && movie.voteAverage > 0 && (
             <span className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-yellow-300 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 md:text-xs">
               <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-              {movie.voteAverage.toFixed(1)}
+              {movie.voteAverage}
             </span>
           )}
 

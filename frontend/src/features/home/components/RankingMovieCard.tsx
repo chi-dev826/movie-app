@@ -20,8 +20,6 @@ export default function RankingMovieCard({ movie, rank }: Props) {
   const displayGenres = movie.genreIds
     ?.slice(0, 2)
     .map((id) => GENRE_NAMES[id as keyof typeof GENRE_NAMES]);
-  // 5段階評価を10段階に戻す（Mapperで半分にされているため）
-  const displayScore = movie.voteAverage ? (movie.voteAverage * 2).toFixed(1) : '0.0';
   const prefetchMovieDetail = usePrefetchMovieDetail();
 
   return (
@@ -69,7 +67,7 @@ export default function RankingMovieCard({ movie, rank }: Props) {
       <div className="flex flex-col items-end gap-2 shrink-0">
         <div className="flex items-center gap-1 font-black text-yellow-400 text-sm md:text-base">
           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-          <span>{displayScore}</span>
+          <span>{movie.voteAverage}</span>
         </div>
         <div className="text-xs font-black text-emerald-500 md:text-sm italic">#{rank}</div>
       </div>

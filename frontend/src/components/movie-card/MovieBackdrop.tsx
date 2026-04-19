@@ -56,7 +56,7 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
           {movie.voteAverage !== null && (
             <>
               <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-              <span>{movie.voteAverage.toFixed(1)}</span>
+              <span>{movie.voteAverage}</span>
             </>
           )}
         </div>

@@ -101,7 +101,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
         <div className="absolute items-center hidden gap-1 px-2 py-1 border rounded-md shadow-lg top-4 right-4 bg-surface-container-highest/80 backdrop-blur-md border-white/10 md:flex z-overlay">
           <Star className="w-3.5 h-3.5 text-primary fill-primary" />
           <span className="text-xs font-bold tracking-wider font-label">
-            {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
+            {detail.voteAverage ? detail.voteAverage : '-'}
           </span>
         </div>
       </section>
@@ -119,8 +119,8 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               <span>{detail.runtime ? `${detail.runtime}分` : '-'}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
               <span className="flex items-center gap-1 font-bold text-yellow-400">
-                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                {detail.voteAverage ? detail.voteAverage.toFixed(1) : '-'}
+                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                {detail.voteAverage ? detail.voteAverage : '-'}
               </span>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
