@@ -33,6 +33,7 @@ const SpotlightCard = (props: Props) => {
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
       onMouseEnter={() => prefetchMovieDetail(movie.id)}
+      viewTransition
       className="relative block w-full overflow-hidden bg-gray-900 group/spotlight rounded-xl"
     >
       {/* バックドロップ画像 */}

@@ -24,6 +24,7 @@ const UpcomingMovieCard = ({ movie, className = '' }: Props) => {
     posterSrcSet && (
       <Link
         to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+        viewTransition
         className={`group/card relative block flex-shrink-0 rounded-lg overflow-hidden bg-gray-800 shadow-2xl cursor-pointer transition-all duration-500 ease-out hover:scale-105 hover:shadow-red-900/20 border border-gray-800 w-full aspect-poster ${className}`}
       >
         {/* ポスター画像 */}

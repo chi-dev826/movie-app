@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X } from 'lucide-react';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -60,7 +59,7 @@ const Header = () => {
                 { path: APP_PATHS.MOVIES.UPCOMING, label: '公開予定' },
                 { path: APP_PATHS.WATCH_LIST, label: 'ウォッチリスト' },
               ].map((link) => (
-                <Link key={link.path} to={link.path} className="relative py-2 group">
+                <Link key={link.path} to={link.path} className="relative py-2 group" viewTransition>
                   <span className="relative z-10 text-sm font-medium text-gray-400 transition-colors duration-300 group-hover:text-white">
                     {link.label}
                   </span>
@@ -102,13 +101,8 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation Drawer (OLED Cinema Style) */}
-        <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            <div
               className="fixed inset-0 z-[100] w-full h-[100dvh] bg-[#000000] md:hidden flex flex-col justify-start pt-32 px-8"
             >
               <nav className="flex flex-col gap-8">
@@ -116,19 +110,17 @@ const Header = () => {
                   { path: APP_PATHS.HOME, label: 'Home', jp: 'ホーム' },
                   { path: APP_PATHS.MOVIES.UPCOMING, label: 'Coming Soon', jp: '公開予定' },
                   { path: APP_PATHS.WATCH_LIST, label: 'Watchlist', jp: 'ウォッチリスト' },
-                ].map((link, index) => {
+                ].map((link) => {
                   const isActive = location.pathname === link.path;
                   return (
-                    <motion.div
+                    <div
                       key={link.path}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
                     >
                       <Link
                         to={link.path}
                         className="flex flex-col items-start group"
                         onClick={() => setIsMobileMenuOpen(false)}
+                        viewTransition
                       >
                         <span
                           className={`text-5xl font-bold tracking-tighter transition-all duration-300 ${
@@ -149,16 +141,15 @@ const Header = () => {
                           {link.jp}
                         </span>
                       </Link>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </nav>
 
               {/* Decorative Glow */}
               <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none bg-gradient-to-t from-blue-900/20 to-transparent" />
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </header>
 
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

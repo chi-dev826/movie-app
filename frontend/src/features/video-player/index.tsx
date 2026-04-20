@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactPlayer from 'react-player';
-import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertTriangle } from 'lucide-react';
 import { useFullMovieData } from '@/hooks/useMovies';
 
@@ -20,10 +19,8 @@ const TrailerPage: React.FC = () => {
   };
 
   return (
-    <motion.div
-      layoutId="trailer-player"
+    <div
       className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden"
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
       {/* 閉じるボタン (フローティング) */}
       <button
@@ -34,25 +31,19 @@ const TrailerPage: React.FC = () => {
         <X className="w-8 h-8 text-white transition-transform group-hover:scale-110" />
       </button>
 
-      <AnimatePresence mode="wait">
+      
         {isLoading ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className="flex flex-col items-center gap-4"
           >
             <div className="w-12 h-12 border-4 rounded-full border-primary border-t-transparent animate-spin" />
             <p className="text-sm font-bold tracking-widest uppercase text-white/60">
               Loading Preview...
             </p>
-          </motion.div>
+          </div>
         ) : error || !data?.videoUrl ? (
-          <motion.div
+          <div
             key="error"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center gap-6 px-8 text-center"
           >
             <div className="flex items-center justify-center w-20 h-20 border rounded-full bg-red-500/20 border-red-500/50">
@@ -74,14 +65,14 @@ const TrailerPage: React.FC = () => {
             >
               今すぐ戻る
             </button>
-          </motion.div>
+          </div>
         ) : (
-          <motion.div
+          <div
             key="player"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
             className="relative w-full h-full"
+            style={{
+              viewTransitionName: 'trailer-modal',
+            }}
           >
             <ReactPlayer
               src={data.videoUrl!}
@@ -91,15 +82,14 @@ const TrailerPage: React.FC = () => {
               height="100%"
               onEnded={handleClose}
             />
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       {/* 背景の装飾的なグラデーション */}
       {!isLoading && data?.videoUrl && (
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-transparent to-black/20 z-[105]" />
       )}
-    </motion.div>
+    </div>
   );
 };
 

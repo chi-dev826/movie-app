@@ -27,6 +27,7 @@ export default function NewReleaseMovieCard({ movie, className = '' }: Props) {
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
       onMouseEnter={() => prefetchMovieDetail(movie.id)}
+      viewTransition
       className={`group block shrink-0 cursor-pointer ${className}`}
     >
       <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-gray-900 mb-2.5 border border-gray-800 group/card hover/card:border-gray-600 transition-colors shadow-lg">

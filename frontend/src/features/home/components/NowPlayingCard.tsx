@@ -32,6 +32,7 @@ const NowPlayingCard = ({ movie, className = '' }: Props) => {
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
       onMouseEnter={() => prefetchMovieDetail(movie.id)}
+      viewTransition
       className={`group/now-playing relative block flex-shrink-0 rounded-lg overflow-hidden bg-gray-900 cursor-pointer transition-all duration-500 ease-out hover:scale-[1.03] hover:shadow-xl hover:shadow-red-900/10 border border-gray-800/50 hover:border-red-700/30 aspect-poster ${className}`}
     >
       {/* ポスター画像 */}

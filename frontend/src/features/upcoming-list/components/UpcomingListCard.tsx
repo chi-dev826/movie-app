@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { CalendarDays, Play, Plus, Check, ChevronRight } from 'lucide-react';
 import type { UpcomingMovie } from '@/types/api/dto';
 import { getTmdbImage } from '@/utils/image';
@@ -15,16 +15,11 @@ type Props = {
  * 公開予定一覧ページ専用のリッチな映画カード
  */
 const UpcomingListCard = ({ movie }: Props) => {
-  const navigate = useNavigate();
   const { isInWatchList, toggleWatchList } = useWatchList();
   const isInList = isInWatchList(movie.id);
   const prefetchMovieDetail = usePrefetchMovieDetail();
 
   const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.LARGE);
-
-  const handleGoToDetail = () => {
-    navigate(APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString()));
-  };
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl bg-[#0d0d0d] border border-white/5 shadow-2xl transition-all duration-300 hover:border-white/10">
@@ -32,6 +27,7 @@ const UpcomingListCard = ({ movie }: Props) => {
       <Link
         to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
         onMouseEnter={() => prefetchMovieDetail(movie.id)}
+        viewTransition
         className="relative block aspect-video overflow-hidden"
       >
         <img
@@ -65,6 +61,7 @@ const UpcomingListCard = ({ movie }: Props) => {
             {movie.video ? (
               <Link
                 to={APP_PATHS.TRAILER.replace(':id', movie.id.toString())}
+                viewTransition
                 className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 text-sm font-black text-black transition-all hover:from-red-600 hover:to-red-700 active:scale-95 disabled:opacity-50"
               >
                 <Play className="h-4 w-4 fill-current" />
@@ -92,13 +89,14 @@ const UpcomingListCard = ({ movie }: Props) => {
           </div>
 
           {/* 詳細を見る */}
-          <button
-            onClick={handleGoToDetail}
+          <Link
+            to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
+            viewTransition
             className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-3 text-sm font-bold text-gray-300 transition-all hover:bg-white/10 active:scale-[0.98]"
           >
             <ChevronRight className="h-4 w-4" />
             詳細を見る
-          </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -8,7 +8,7 @@ body {
 
 
 
-/* 共通ユーティリティ（すでに存在する場合は上書き） */
+/* 共通ユーティリティ */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -59,16 +59,30 @@ body {
   background: rgba(239, 68, 68, 0.9);
 }
 
-/* --- Layout Debugging Utilities --- */
-.debug-outline,
-.debug-outline * {
-  outline: 1px solid rgba(255, 0, 0, 0.5);
+html {
+  background-color: #030712; /* gray-950: 遷移のベース背景色 */
 }
-.debug-outline .debug-outline,
-.debug-outline .debug-outline * {
-  outline: 1px solid rgba(0, 255, 0, 0.5);
+
+::view-transition {
+  background-color: #030712; /* 遷移コンテナ自体の背景も固定 */
 }
-.debug-outline .debug-outline .debug-outline,
-.debug-outline .debug-outline .debug-outline * {
-  outline: 1px solid rgba(0, 0, 255, 0.5);
+
+::view-transition-group(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
 }
+
+::view-transition-old(root) {
+  animation: slide-left-out 0.3s ease-in-out both;
+}
+
+@keyframes slide-left-out {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes slide-left-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+

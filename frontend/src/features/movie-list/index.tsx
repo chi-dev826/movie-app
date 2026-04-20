@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useMemo } from 'react';
 import { useInfiniteMovieList } from '@/hooks/useMovies';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { MoviePoster } from '@/components/movie-card';
@@ -39,7 +40,17 @@ const MovieList = () => {
 
   const sentinelRef = useInfiniteScroll(hasNextPage, isFetchingNextPage, fetchNextPage);
 
-  const movieList = data?.pages.flatMap((page) => page.movies) ?? [];
+  // 重複排除(追加でデータを取得した際に重複することがあるため)
+  const filteredMovies = new Set<number>();
+  const movieList = useMemo(() => {
+    return data?.pages.flatMap((page) => page.movies).filter((movie) => {
+      if (filteredMovies.has(movie.id)) {
+        return false;
+      }
+      filteredMovies.add(movie.id);
+      return true;
+    }) ?? [];
+  }, [data]);
   const currentError = isError;
 
   const title = getTitle(type);
@@ -72,6 +83,7 @@ const MovieList = () => {
           <Link
             to="/"
             className="inline-flex items-center mb-4 text-gray-400 transition-colors hover:text-white"
+            viewTransition
           >
             <ArrowLeft size={20} className="mr-2" />
             ホームに戻る

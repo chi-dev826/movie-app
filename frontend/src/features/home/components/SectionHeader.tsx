@@ -31,6 +31,7 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
         <Link
           to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', type)}
           className="group/header inline-flex flex-col gap-1"
+          viewTransition
         >
           <span className="flex items-center gap-2">
             <span className="inline-block w-1.5 h-6 rounded-full bg-gradient-to-b from-red-500 to-red-700 md:h-8 lg:h-9" />
@@ -56,6 +57,7 @@ const SectionHeader = ({ title, subtitle, type, variant = 'secondary' }: Props) 
       <Link
         to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', type)}
         className="flex items-center text-xs md:text-sm font-bold text-red-500 hover:text-red-400 transition-colors pb-1"
+        viewTransition
       >
         すべて見る
         <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-0.5" />

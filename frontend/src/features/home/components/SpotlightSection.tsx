@@ -68,7 +68,7 @@ const SpotlightSection = <T extends { id: number | string }>(props: Props<T>) =>
       {remainingItems.length > 0 && (
         <div className="pt-4">
           {/* リスト表示ページへのリンク */}
-          <Link to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', type)}>
+          <Link to={APP_PATHS.MOVIES.BY_TYPE.replace(':type', type)} viewTransition>
             <span className="flex items-center gap-1 mb-1 ml-4 text-xs font-semibold text-gray-500 hover:text-gray-300">
               {title}
               <ChevronRight className="relative w-3 h-3 -bottom-px" />

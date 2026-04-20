@@ -26,6 +26,7 @@ export default function RankingMovieCard({ movie, rank }: Props) {
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
       onMouseEnter={() => prefetchMovieDetail(movie.id)}
+      viewTransition
       className="flex items-center gap-4 p-2 bg-[#131313] rounded-3xl group hover:bg-[#1a1a1a] transition-colors duration-300"
     >
       {/* ポスター */}
