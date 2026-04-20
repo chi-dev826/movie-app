@@ -7,6 +7,7 @@ import React, { ReactNode } from 'react';
 import SectionHeader from './SectionHeader';
 import HorizontalScrollContainer from '@/components/HorizontalScrollContainer';
 import { APP_PATHS } from '@shared/constants/routes';
+import { MovieListType } from '../../../types/movieListType';
 
 import 'swiper/css';
 import 'swiper/css/effect-fade';
@@ -19,7 +20,7 @@ const SPOTLIGHT_COUNT = 5;
 type Props<T> = {
   title: string;
   subtitle?: string;
-  type: string;
+  type: MovieListType;
   items: T[];
   renderSpotlightItem: (item: T) => ReactNode;
   renderRemainingItem: (item: T) => ReactNode;

@@ -4,11 +4,10 @@ import { useMemo } from 'react';
 import { useInfiniteMovieList } from '@/hooks/useMovies';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { MoviePoster } from '@/components/movie-card';
+import { InfiniteMovieListType } from '../../types/movieListType';
 
-const getTitle = (type?: string) => {
+const getTitle = (type: InfiniteMovieListType) => {
   switch (type) {
-    case 'popular':
-      return '人気映画';
     case 'trending':
       return '今週人気の映画';
     case 'recently_added':
@@ -21,13 +20,8 @@ const getTitle = (type?: string) => {
 };
 
 const MovieList = () => {
-  const { type } = useParams<{
-    type: 'recently_added' | 'now_playing' | 'trending';
-  }>();
+  const { type } = useParams<{ type: string }>() as { type: InfiniteMovieListType };
 
-  if (!type) {
-    return <div className="container px-4 py-8 mx-auto text-center">Invalid type</div>;
-  }
   const {
     data,
     isLoading: isCurrentlyLoading,
@@ -41,15 +35,17 @@ const MovieList = () => {
   const sentinelRef = useInfiniteScroll(hasNextPage, isFetchingNextPage, fetchNextPage);
 
   // 重複排除(追加でデータを取得した際に重複することがあるため)
-  const filteredMovies = new Set<number>();
   const movieList = useMemo(() => {
-    return data?.pages.flatMap((page) => page.movies).filter((movie) => {
-      if (filteredMovies.has(movie.id)) {
-        return false;
-      }
-      filteredMovies.add(movie.id);
-      return true;
-    }) ?? [];
+    const seenIds = new Set<number>();
+    return (
+      data?.pages
+        .flatMap((page) => page.movies)
+        .filter((movie) => {
+          if (seenIds.has(movie.id)) return false;
+          seenIds.add(movie.id);
+          return true;
+        }) ?? []
+    );
   }, [data]);
   const currentError = isError;
 
