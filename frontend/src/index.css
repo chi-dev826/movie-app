@@ -72,8 +72,12 @@ html {
   animation-timing-function: ease-in-out;
 }
 
+::view-transition-new(root) {
+  animation: slide-left-in 0.3s ease-in-out both;
+}
+
 ::view-transition-old(root) {
-  animation: slide-left-out 0.3s ease-in-out both;
+  animation: slide-left-out 0.15s ease-in-out both;
 }
 
 @keyframes slide-left-out {
