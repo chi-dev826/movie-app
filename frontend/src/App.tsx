@@ -1,11 +1,10 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 import Header from './components/Header';
-import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <div className="min-h-screen text-white bg-gray-950 overflow-x-hidden">
-      <ScrollToTop />
+      <ScrollRestoration />
       <Header />
       <main className="pt-14">
         {/* ヘッダーの高さ分だけコンテンツ開始位置を調整 */}
