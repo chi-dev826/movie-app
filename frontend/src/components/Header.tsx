@@ -101,55 +101,51 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation Drawer (OLED Cinema Style) */}
-          {isMobileMenuOpen && (
-            <div
-              className="fixed inset-0 z-[100] w-full h-[100dvh] bg-[#000000] md:hidden flex flex-col justify-start pt-32 px-8"
-            >
-              <nav className="flex flex-col gap-8">
-                {[
-                  { path: APP_PATHS.HOME, label: 'Home', jp: 'ホーム' },
-                  { path: APP_PATHS.MOVIES.UPCOMING, label: 'Coming Soon', jp: '公開予定' },
-                  { path: APP_PATHS.WATCH_LIST, label: 'Watchlist', jp: 'ウォッチリスト' },
-                ].map((link) => {
-                  const isActive = location.pathname === link.path;
-                  return (
-                    <div
-                      key={link.path}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] bg-[#000000] md:hidden flex flex-col justify-start pt-32 px-8">
+            <nav className="flex flex-col gap-8">
+              {[
+                { path: APP_PATHS.HOME, label: 'Home', jp: 'ホーム' },
+                { path: APP_PATHS.MOVIES.UPCOMING, label: 'Coming Soon', jp: '公開予定' },
+                { path: APP_PATHS.WATCH_LIST, label: 'Watchlist', jp: 'ウォッチリスト' },
+              ].map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <div key={link.path}>
+                    <Link
+                      to={link.path}
+                      className="flex flex-col items-start group"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      viewTransition
                     >
-                      <Link
-                        to={link.path}
-                        className="flex flex-col items-start group"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        viewTransition
+                      <span
+                        className={`text-5xl font-bold tracking-tighter transition-all duration-300 ${
+                          isActive
+                            ? 'text-blue-500 scale-105 origin-left'
+                            : 'text-white/40 group-hover:text-white'
+                        }`}
                       >
-                        <span
-                          className={`text-5xl font-bold tracking-tighter transition-all duration-300 ${
-                            isActive
-                              ? 'text-blue-500 scale-105 origin-left'
-                              : 'text-white/40 group-hover:text-white'
-                          }`}
-                        >
-                          {link.label}
-                        </span>
+                        {link.label}
+                      </span>
 
-                        {/* Japanese Label as small accent */}
-                        <span
-                          className={`text-sm tracking-widest mt-2 uppercase transition-colors duration-300 ${
-                            isActive ? 'text-blue-400' : 'text-zinc-600 group-hover:text-zinc-400'
-                          }`}
-                        >
-                          {link.jp}
-                        </span>
-                      </Link>
-                    </div>
-                  );
-                })}
-              </nav>
+                      {/* Japanese Label as small accent */}
+                      <span
+                        className={`text-sm tracking-widest mt-2 uppercase transition-colors duration-300 ${
+                          isActive ? 'text-blue-400' : 'text-zinc-600 group-hover:text-zinc-400'
+                        }`}
+                      >
+                        {link.jp}
+                      </span>
+                    </Link>
+                  </div>
+                );
+              })}
+            </nav>
 
-              {/* Decorative Glow */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none bg-gradient-to-t from-blue-900/20 to-transparent" />
-            </div>
-          )}
+            {/* Decorative Glow */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none bg-gradient-to-t from-blue-900/20 to-transparent" />
+          </div>
+        )}
       </header>
 
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

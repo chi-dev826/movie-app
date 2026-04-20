@@ -19,9 +19,7 @@ const TrailerPage: React.FC = () => {
   };
 
   return (
-    <div
-      className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden"
-    >
+    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
       {/* 閉じるボタン (フローティング) */}
       <button
         onClick={handleClose}
@@ -31,59 +29,53 @@ const TrailerPage: React.FC = () => {
         <X className="w-8 h-8 text-white transition-transform group-hover:scale-110" />
       </button>
 
-      
-        {isLoading ? (
-          <div
-            className="flex flex-col items-center gap-4"
-          >
-            <div className="w-12 h-12 border-4 rounded-full border-primary border-t-transparent animate-spin" />
-            <p className="text-sm font-bold tracking-widest uppercase text-white/60">
-              Loading Preview...
+      {isLoading ? (
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 rounded-full border-primary border-t-transparent animate-spin" />
+          <p className="text-sm font-bold tracking-widest uppercase text-white/60">
+            Loading Preview...
+          </p>
+        </div>
+      ) : error || !data?.videoUrl ? (
+        <div key="error" className="flex flex-col items-center gap-6 px-8 text-center">
+          <div className="flex items-center justify-center w-20 h-20 border rounded-full bg-red-500/20 border-red-500/50">
+            <AlertTriangle className="w-10 h-10 text-red-500" />
+          </div>
+          <div>
+            <h2 className="mb-2 text-2xl font-bold text-white">
+              {error ? 'エラーが発生しました' : '予告編が見つかりません'}
+            </h2>
+            <p className="text-sm text-white/60">
+              申し訳ありません。この作品の予告編は現在視聴できません。
+              <br />
+              自動的に前の画面に戻ります。
             </p>
           </div>
-        ) : error || !data?.videoUrl ? (
-          <div
-            key="error"
-            className="flex flex-col items-center gap-6 px-8 text-center"
+          <button
+            onClick={handleClose}
+            className="px-8 py-3 font-bold text-black transition-colors bg-white rounded-full hover:bg-gray-200"
           >
-            <div className="flex items-center justify-center w-20 h-20 border rounded-full bg-red-500/20 border-red-500/50">
-              <AlertTriangle className="w-10 h-10 text-red-500" />
-            </div>
-            <div>
-              <h2 className="mb-2 text-2xl font-bold text-white">
-                {error ? 'エラーが発生しました' : '予告編が見つかりません'}
-              </h2>
-              <p className="text-sm text-white/60">
-                申し訳ありません。この作品の予告編は現在視聴できません。
-                <br />
-                自動的に前の画面に戻ります。
-              </p>
-            </div>
-            <button
-              onClick={handleClose}
-              className="px-8 py-3 font-bold text-black transition-colors bg-white rounded-full hover:bg-gray-200"
-            >
-              今すぐ戻る
-            </button>
-          </div>
-        ) : (
-          <div
-            key="player"
-            className="relative w-full h-full"
-            style={{
-              viewTransitionName: 'trailer-modal',
-            }}
-          >
-            <ReactPlayer
-              src={data.videoUrl!}
-              playing={true}
-              controls={true}
-              width="100%"
-              height="100%"
-              onEnded={handleClose}
-            />
-          </div>
-        )}
+            今すぐ戻る
+          </button>
+        </div>
+      ) : (
+        <div
+          key="player"
+          className="relative w-full h-full"
+          style={{
+            viewTransitionName: 'trailer-modal',
+          }}
+        >
+          <ReactPlayer
+            src={data.videoUrl!}
+            playing={true}
+            controls={true}
+            width="100%"
+            height="100%"
+            onEnded={handleClose}
+          />
+        </div>
+      )}
 
       {/* 背景の装飾的なグラデーション */}
       {!isLoading && data?.videoUrl && (
