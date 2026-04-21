@@ -65,5 +65,5 @@ export interface ITmdbRepository {
   ): Promise<{ logoPath: string | null; name: string }[]>;
 
   /** 補助データ: 類似映画を取得する */
-  getSimilarMovies(movieId: number, page?: number): Promise<MovieEntity[]>;
+  getRecommendedMovies(movieId: number, page?: number): Promise<MovieEntity[]>;
 }

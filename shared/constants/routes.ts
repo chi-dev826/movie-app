@@ -15,7 +15,7 @@ export const API_PATHS = {
   MOVIE: {
     DETAIL_BASEINFO: "/movie/:movieId/detail-baseinfo",
     DETAIL_RESOURCES: "/movie/:movieId/detail-resources",
-    RECOMMENDATIONS: "/movie/:movieId/recommendations/:collectionId",
+    RECOMMENDATIONS: "/movie/:movieId/recommendations/{:collectionId}",
     EIGA_COM_NEWS: "/movie/:movieId/eiga-com-news",
     ANALYSIS: "/movie/:movieId/analysis",
   },

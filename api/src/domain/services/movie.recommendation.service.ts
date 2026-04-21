@@ -9,7 +9,7 @@ export class MovieRecommendationService {
   getRecommendations(
     movieId: number,
     collection: CollectionEntity | null,
-    similarMovies: readonly MovieEntity[],
+    recommendedMovies: readonly MovieEntity[],
   ): { title: string; movies: readonly MovieEntity[] } {
     // 1. シリーズ作品の確認
     if (collection) {
@@ -25,7 +25,7 @@ export class MovieRecommendationService {
     // 2. 類似作品にフォールバック
     return {
       title: "関連作品",
-      movies: similarMovies,
+      movies: recommendedMovies,
     };
   }
 }

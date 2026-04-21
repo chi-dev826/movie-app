@@ -340,13 +340,16 @@ export class TmdbRepository implements ITmdbRepository {
   /**
    * 補助データ: 取得失敗時は空配列を返し、上位層の処理を中断させない
    */
-  async getSimilarMovies(movieId: number, page = 1): Promise<MovieEntity[]> {
+  async getRecommendedMovies(
+    movieId: number,
+    page = 1,
+  ): Promise<MovieEntity[]> {
     try {
       const rawData = await this.cache.getOrSet(
-        `tmdb:movie:${movieId}:similar:raw:${page}`,
+        `tmdb:movie:${movieId}:recommendations:raw:${page}`,
         async () => {
           const response = await this.api.get<PaginatedResponse<MovieResponse>>(
-            `/movie/${movieId}/similar`,
+            `/movie/${movieId}/recommendations`,
             { params: { page } },
           );
           return response.data.results;

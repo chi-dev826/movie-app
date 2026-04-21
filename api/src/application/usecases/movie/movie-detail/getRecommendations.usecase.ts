@@ -12,8 +12,8 @@ export class GetRecommendationsUseCase {
     movieId: number,
     collectionId: number | null,
   ): Promise<RecommendationsDomainData> {
-    const [similarMovies, collection] = await Promise.all([
-      this.tmdbRepo.getSimilarMovies(movieId),
+    const [recommendedMovies, collection] = await Promise.all([
+      this.tmdbRepo.getRecommendedMovies(movieId),
       collectionId
         ? this.tmdbRepo.getCollection(collectionId)
         : Promise.resolve(null),
@@ -22,7 +22,7 @@ export class GetRecommendationsUseCase {
     const recommendations = this.recommendationService.getRecommendations(
       movieId,
       collection,
-      similarMovies,
+      recommendedMovies,
     );
 
     return {
