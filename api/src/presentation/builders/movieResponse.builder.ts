@@ -5,7 +5,7 @@ import { MovieMapper } from "../mappers/movie.mapper";
 import { MoviePresenter } from "../presenters/movie.presenter";
 import {
   Movie as MovieDto,
-  MovieDetailBase,
+  MovieDetail,
   UpcomingMovie,
 } from "../../../../shared/types/api/dto";
 import {
@@ -26,9 +26,10 @@ export class MovieResponseBuilder {
   /**
    * 映画詳細画面用のレスポンスを構築する
    */
-  buildDetails(detailEntity: MovieDetailEntity): MovieDetailBase {
+  buildDetails(detailEntity: MovieDetailEntity, today: Date): MovieDetail {
     // 1. 基本情報のDTO変換と装飾
-    return MovieMapper.toDetailBffDto(detailEntity);
+    const detailDto = MovieMapper.toDetailBffDto(detailEntity);
+    return MoviePresenter.toMovieDetail(detailDto, today);
   }
 
   buildResources(resources: ResourcesResponse): ResourcesResponse {

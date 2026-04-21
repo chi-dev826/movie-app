@@ -49,7 +49,7 @@ export class MovieController {
       }
 
       const domainData = await this.getDetailBaseInfoUseCase.execute(id);
-      const response = this.builder.buildDetails(domainData);
+      const response = this.builder.buildDetails(domainData, this.clock.now());
 
       res.json(response);
     } catch (error) {
