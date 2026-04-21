@@ -44,6 +44,7 @@ export const MovieDetailPage: React.FC = () => {
           movieId={detail.id}
           videoKey={videoUrl || null}
           watchProviders={watchProviders}
+          homePageUrl={detail.homePageUrl || null}
         />
         <WatchProviderSection watchProviders={watchProviders} />
 

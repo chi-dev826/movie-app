@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Play, Check, Plus } from 'lucide-react';
+import { Play, Check, Plus, SquareArrowOutUpRight } from 'lucide-react';
 import { useWatchList } from '@/hooks/useWatchList';
 import { APP_PATHS } from '@shared/constants/routes';
 
@@ -14,6 +14,7 @@ export interface DetailActionSectionProps {
   movieId: number;
   videoKey: string | null;
   watchProviders?: WatchProvider[];
+  homePageUrl: string | null;
 }
 
 /**
@@ -25,6 +26,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
   movieId,
   videoKey,
   watchProviders,
+  homePageUrl,
 }) => {
   const { isInWatchList, toggleWatchList } = useWatchList();
 
@@ -32,45 +34,66 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
 
   return (
     <section className="relative w-full px-4 pb-6 mx-auto xl:max-w-7xl z-overlay">
-      <div className="flex gap-3 pointer-events-auto">
-        {videoKey ? (
-          <div className="flex-1">
-            <Link
-              to={APP_PATHS.TRAILER.replace(':id', movieId.toString())}
-              className="w-full h-full bg-red-500 from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm flex justify-center items-center gap-2 shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95"
-              viewTransition
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-3 pointer-events-auto">
+          {videoKey ? (
+            <div className="flex-1">
+              <Link
+                to={APP_PATHS.TRAILER.replace(':id', movieId.toString())}
+                className="w-full h-full bg-red-500 from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm flex justify-center items-center gap-2 shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95"
+                viewTransition
+              >
+                <Play className="w-5 h-5" />
+                予告編を再生
+              </Link>
+            </div>
+          ) : watchProviders && watchProviders.length > 0 ? (
+            <a
+              href={watchProviders[0].link || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm tracking-widest uppercase shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95 flex justify-center items-center gap-2"
             >
-              <Play className="w-5 h-5 fill-current" />
-              予告編を再生
-            </Link>
-          </div>
-        ) : watchProviders && watchProviders.length > 0 ? (
+              <Play className="w-5 h-5" />
+              Watch Now
+            </a>
+          ) : (
+            <button
+              disabled
+              className="flex items-center justify-center flex-1 gap-2 py-5 text-sm font-bold text-gray-400 bg-gray-700 opacity-50 cursor-not-allowed rounded-xl font-label"
+            >
+              <Play className="w-5 h-5" />
+              予告編なし
+            </button>
+          )}
+
+          <button
+            onClick={() => toggleWatchList(movieId)}
+            className={`flex-1 ${isInList ? 'bg-surface-container-highest text-primary border border-primary/30' : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'} py-3.5 rounded-xl font-label font-bold text-sm tracking-widest uppercase transition-colors active:scale-95 flex justify-center items-center gap-2`}
+          >
+            {isInList ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            {isInList ? 'リストから削除' : 'リストへ追加'}
+          </button>
+        </div>
+          {homePageUrl ?(
           <a
-            href={watchProviders[0].link || '#'}
+            href={homePageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary py-5 rounded-xl font-label font-bold text-sm tracking-widest uppercase shadow-[0_4px_14px_0_rgba(255,142,130,0.39)] transition-transform active:scale-95 flex justify-center items-center gap-2"
+            className="flex-1 bg-surface-container-highest text-on-surfac hover:bg-surface-container-high py-3.5 rounded-xl font-label font-bold text-sm tracking-widest uppercase transition-colors active:scale-95 flex justify-center items-center gap-2"
           >
-            <Play className="w-5 h-5 fill-current" />
-            Watch Now
+            <SquareArrowOutUpRight className="w-5 h-5" />
+            Official Site
           </a>
-        ) : (
-          <button
-            disabled
-            className="flex items-center justify-center flex-1 gap-2 py-5 text-sm font-bold text-gray-400 bg-gray-700 opacity-50 cursor-not-allowed rounded-xl font-label"
-          >
-            <Play className="w-5 h-5" />
-            予告編なし
-          </button>
-        )}
-
-        <button
-          onClick={() => toggleWatchList(movieId)}
-          className={`flex-1 ${isInList ? 'bg-surface-container-highest text-primary border border-primary/30' : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'} py-3.5 rounded-xl font-label font-bold text-sm tracking-widest uppercase transition-colors active:scale-95 flex justify-center items-center gap-2`}
-        >
-          {isInList ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
-          {isInList ? 'リストから削除' : 'リストへ追加'}
-        </button>
+          ) : (
+            <button
+              disabled
+              className="flex items-center justify-center flex-1 gap-2 py-5 text-sm font-bold text-gray-400 bg-gray-700 opacity-50 pointer-events-none rounded-xl font-label"
+            >
+              <SquareArrowOutUpRight className="w-5 h-5" />
+              Official Site
+            </button>
+          )}
       </div>
     </section>
   );
