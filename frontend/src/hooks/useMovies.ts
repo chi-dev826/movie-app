@@ -13,6 +13,7 @@ import {
 import { MovieListResponse, HomePageResponse, PaginatedResponse } from '@/types/api/response';
 import { Movie, UpcomingMovie } from '@/types/api/dto';
 import { QUERY_CONFIG } from '@/constants/config';
+import { InfiniteMovieListType } from '../types/movieListType';
 
 const movieKeys = {
   all: ['movies'] as const,
@@ -26,8 +27,6 @@ const movieKeys = {
   searchByPerson: (name: string) => [...movieKeys.all, 'searchByPerson', name] as const,
   ids: (ids: number[]) => [...movieKeys.all, 'ids', ids.join(',')] as const,
 };
-
-export type InfiniteMovieListType = 'trending' | 'now_playing' | 'recently_added';
 
 export const useFullMovieData = (movieId: number) => {
   return useQuery({
