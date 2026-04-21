@@ -88,7 +88,7 @@ export class MovieController {
   ) {
     try {
       const id = Number(req.params.movieId);
-      const collectionId = Number(req.params.collectionId);
+      const collectionId = Number(req.query.collectionId);
       if (!req.params.movieId || isNaN(id)) {
         return res
           .status(HTTP_STATUS.BAD_REQUEST)
