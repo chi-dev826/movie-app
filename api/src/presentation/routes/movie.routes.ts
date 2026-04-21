@@ -11,9 +11,19 @@ export const createMovieRoutes = ({
   const router = Router();
 
   router.get(
-    API_PATHS.MOVIE.FULL,
+    API_PATHS.MOVIE.DETAIL_BASEINFO,
     (req: Request, res: Response, next: NextFunction) =>
       movieController.getMovieDetails(req, res, next),
+  );
+  router.get(
+    API_PATHS.MOVIE.DETAIL_RESOURCES,
+    (req: Request, res: Response, next: NextFunction) =>
+      movieController.getMovieResources(req, res, next),
+  );
+  router.get(
+    API_PATHS.MOVIE.RECOMMENDATIONS,
+    (req: Request, res: Response, next: NextFunction) =>
+      movieController.getMovieRecommendations(req, res, next),
   );
   router.get(
     API_PATHS.MOVIE.EIGA_COM_NEWS,

@@ -13,9 +13,11 @@ export const APP_PATHS = {
 export const API_PATHS = {
   HOME: "/home",
   MOVIE: {
-    FULL: "/movie/:movieId/full",
+    DETAIL_BASEINFO: "/movie/:movieId/detail-baseinfo",
+    DETAIL_RESOURCES: "/movie/:movieId/detail-resources",
+    RECOMMENDATIONS: "/movie/:movieId/recommendations",
     EIGA_COM_NEWS: "/movie/:movieId/eiga-com-news",
-    ANALYSIS: "/movie/:movieId/movie-analysis",
+    ANALYSIS: "/movie/:movieId/analysis",
   },
   SEARCH: {
     MOVIE: "/search/movie",

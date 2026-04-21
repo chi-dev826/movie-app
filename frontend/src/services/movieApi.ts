@@ -1,6 +1,7 @@
-import { Movie, UpcomingMovie, Article } from '@/types/api/dto';
+import { Movie, MovieDetailBase, UpcomingMovie, Article } from '@/types/api/dto';
 import {
-  FullMovieData,
+  ResourcesResponse,
+  RecommendationsResponse,
   MovieListResponse,
   HomePageResponse,
   PaginatedResponse,
@@ -27,8 +28,28 @@ export const fetchFromApi = async <T>(endpoint: string): Promise<T> => {
   return response.json();
 };
 
-export const fetchFullMovieData = async (movieId: number): Promise<FullMovieData> => {
-  return fetchFromApi<FullMovieData>(API_PATHS.MOVIE.FULL.replace(':movieId', movieId.toString()));
+export const fetchDetailBaseInfo = async (movieId: number): Promise<MovieDetailBase> => {
+  return fetchFromApi<MovieDetailBase>(
+    API_PATHS.MOVIE.DETAIL_BASEINFO.replace(':movieId', movieId.toString()),
+  );
+};
+
+export const fetchDetailResources = async (movieId: number): Promise<ResourcesResponse> => {
+  return fetchFromApi<ResourcesResponse>(
+    API_PATHS.MOVIE.DETAIL_RESOURCES.replace(':movieId', movieId.toString()),
+  );
+};
+
+export const fetchRecommendations = async (
+  movieId: number,
+  collectionId: number | null,
+): Promise<RecommendationsResponse> => {
+  return fetchFromApi<RecommendationsResponse>(
+    API_PATHS.MOVIE.RECOMMENDATIONS.replace(':movieId', movieId.toString()).replace(
+      ':collectionId',
+      collectionId?.toString() || '',
+    ),
+  );
 };
 
 export const fetchEigaComNews = async (movieId: number, movieTitle: string): Promise<Article[]> => {

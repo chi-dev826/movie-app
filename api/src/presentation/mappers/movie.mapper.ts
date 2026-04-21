@@ -24,7 +24,9 @@ export class MovieMapper {
       backdropPath: entity.backdropPath,
       releaseDate: entity.releaseDate ?? undefined,
       // TMDB の 10 段階評価を星 5 段階に変換
-      voteAverage: entity.voteAverage ? Number((entity.voteAverage / 2).toFixed(1)) : null,
+      voteAverage: entity.voteAverage
+        ? Number((entity.voteAverage / 2).toFixed(1))
+        : null,
       genreIds: [...entity.genreIds],
 
       // オプションのエンリッチデータ

@@ -10,3 +10,10 @@ export type EnrichedMovie = {
   readonly logoPath: string | null;
   readonly videoKey: string | null;
 };
+
+export type RecommendationsDomainData = {
+  recommendations: {
+    title: string;
+    movies: readonly MovieEntity[];
+  };
+};

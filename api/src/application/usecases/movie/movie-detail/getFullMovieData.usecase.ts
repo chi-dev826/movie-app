@@ -1,8 +1,8 @@
-import { MovieEntity } from "../../../domain/models/movie";
-import { MovieDetailEntity } from "../../../domain/models/movieDetail";
-import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.interface";
-import { MovieEnrichService } from "../../services/movie.enrich.service";
-import { MovieRecommendationService } from "../../../domain/services/movie.recommendation.service";
+import { MovieEntity } from "../../../../domain/models/movie";
+import { MovieDetailEntity } from "../../../../domain/models/movieDetail";
+import { ITmdbRepository } from "../../../../domain/repositories/tmdb.repository.interface";
+import { MovieEnrichService } from "../../../services/movie.enrich.service";
+import { MovieRecommendationService } from "../../../../domain/services/movie.recommendation.service";
 
 /**
  * 映画の詳細表示に必要な関連リソースを一括取得するドメイン関心事のオーケストレーション。
@@ -29,7 +29,6 @@ export class GetFullMovieDataUseCase {
   /**
    * @param movieId - 対象の映画ID
    * @returns ドメインデータの集合体
-   * @throws {Error} 必須データ（詳細情報）が取得できない場合
    */
   async execute(movieId: number): Promise<FullMovieDomainData> {
     const today = new Date();

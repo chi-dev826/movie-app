@@ -60,7 +60,7 @@ describe("アプリケーション統合", () => {
   it("存在しない映画IDにアクセスした場合、404を返すこと", async () => {
     const nonExistentMovieId = 99999999; // 存在しない映画IDを指定
     const res = await request(app).get(
-      `/api${API_PATHS.MOVIE.FULL}/${nonExistentMovieId}`,
+      `/api${API_PATHS.MOVIE.DETAIL_BASEINFO}/${nonExistentMovieId}`,
     ); // 例： '/api/movies/99999999'
     expect(res.statusCode).toEqual(404); // ステータスコードが404であること
   });

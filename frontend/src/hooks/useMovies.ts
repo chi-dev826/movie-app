@@ -1,6 +1,8 @@
 import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  fetchFullMovieData,
+  fetchDetailBaseInfo,
+  fetchDetailResources,
+  fetchRecommendations,
   fetchMovieList,
   fetchUpcomingMovies,
   fetchNowPlayingMovies,
@@ -28,13 +30,36 @@ const movieKeys = {
   ids: (ids: number[]) => [...movieKeys.all, 'ids', ids.join(',')] as const,
 };
 
-export const useFullMovieData = (movieId: number) => {
-  return useQuery({
-    queryKey: movieKeys.detail(movieId),
-    queryFn: () => fetchFullMovieData(movieId),
+export const useMovieDetailFlow = (movieId: number) => {
+  // 基本情報（タイトル、公開日、あらすじ、キャストなど）
+  const baseInfo = useQuery({
+    queryKey: [...movieKeys.detail(movieId), 'base'],
+    queryFn: () => fetchDetailBaseInfo(movieId),
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT,
     enabled: !!movieId,
-    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT, // オプション：キャッシュ時間を設定(1時間)
   });
+
+  // 関連情報（ポスター、予告編、配信情報など）
+  const resources = useQuery({
+    queryKey: [...movieKeys.detail(movieId), 'resources'],
+    queryFn: () => fetchDetailResources(movieId),
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT,
+    enabled: !!movieId,
+  });
+
+  // 関連映画（基本情報のcollectionIdが必要）
+  const recommendations = useQuery({
+    queryKey: [...movieKeys.detail(movieId), 'recommendations'],
+    queryFn: () => fetchRecommendations(movieId, baseInfo.data?.belongsToCollectionId || null),
+    staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT,
+    enabled: !!movieId && baseInfo.isSuccess, // 基本情報の取得成功を待つ
+  });
+
+  return {
+    baseInfo,
+    resources,
+    recommendations,
+  };
 };
 
 export const useSearchMovies = (query: string) => {
@@ -173,7 +198,7 @@ export const usePrefetchMovieDetail = () => {
   return (movieId: number) => {
     queryClient.prefetchQuery({
       queryKey: movieKeys.detail(movieId),
-      queryFn: () => fetchFullMovieData(movieId),
+      queryFn: () => fetchDetailBaseInfo(movieId),
       staleTime: QUERY_CONFIG.STALE_TIME_DEFAULT,
     });
   };

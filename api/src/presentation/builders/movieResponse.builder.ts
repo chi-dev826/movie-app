@@ -1,18 +1,22 @@
 import { MovieEntity } from "../../domain/models/movie";
-import { FullMovieDomainData } from "../../application/usecases/movie/getFullMovieData.usecase";
 import { HomePageData } from "../../application/usecases/movie/getHomePage.usecase";
-import { EnrichedMovie } from "../../application/types/enrichedMovie";
 import { MovieDetailEntity } from "../../domain/models/movieDetail";
 import { MovieMapper } from "../mappers/movie.mapper";
 import { MoviePresenter } from "../presenters/movie.presenter";
 import {
   Movie as MovieDto,
+  MovieDetailBase,
   UpcomingMovie,
 } from "../../../../shared/types/api/dto";
 import {
-  FullMovieData,
   HomePageResponse,
+  ResourcesResponse,
+  RecommendationsResponse,
 } from "../../../../shared/types/api/response";
+import {
+  RecommendationsDomainData,
+  EnrichedMovie,
+} from "../../application/types/movie.types";
 
 /**
  * MovieControllerから受け取ったドメイン層データを、API公開用の形状(DTO)へと構築する。
@@ -22,39 +26,35 @@ export class MovieResponseBuilder {
   /**
    * 映画詳細画面用のレスポンスを構築する
    */
-  buildDetails(domainData: FullMovieDomainData, today: Date): FullMovieData {
+  buildDetails(detailEntity: MovieDetailEntity): MovieDetailBase {
     // 1. 基本情報のDTO変換と装飾
-    const decoratedDetail = MoviePresenter.toMovieDetail(
-      MovieMapper.toDetailBffDto(domainData.detail, {
-        videoKey: domainData.videoInfo.video,
-      }),
-      today,
-    );
+    return MovieMapper.toDetailBffDto(detailEntity);
+  }
 
-    // 2. おすすめ映画の変換 (ロゴパスの結合含む)
-    const recommendations = {
-      title: domainData.recommendation.title,
-      movies: domainData.recommendation.movies.map((m) =>
-        MovieMapper.toBffDto(m, { logoPath: domainData.recLogosMap.get(m.id) }),
-      ),
-    };
-
-    // 3. 配信情報の装飾
-    const watchProviders = MoviePresenter.enrichWatchProviderLinks(
-      domainData.watchProviders,
-      domainData.detail.baseInfo.title,
-    );
-
-    // 4. 最終形状の組み立て
+  buildResources(resources: ResourcesResponse): ResourcesResponse {
     return {
-      detail: decoratedDetail,
-      image: domainData.imagePath,
-      videoUrl: MoviePresenter.enrichVideoUrl(domainData.videoInfo.video),
-      otherVideoUrls: domainData.videoInfo.otherVideos
-        .map((key) => MoviePresenter.enrichVideoUrl(key))
-        .filter((url): url is string => url !== null),
-      recommendations,
-      watchProviders,
+      imagePath: resources.imagePath,
+      watchProviders: resources.watchProviders,
+      videoInfo: {
+        video: MoviePresenter.enrichVideoUrl(resources.videoInfo.video),
+        otherVideos: (resources.videoInfo.otherVideos ?? [])
+          .map((v) => MoviePresenter.enrichVideoUrl(v))
+          .filter((url): url is string => url !== null),
+      },
+    };
+  }
+
+  /**
+   * 映画詳細画面用のおすすめ映画のレスポンスを構築する
+   */
+  buildRecommendations(
+    recommendations: RecommendationsDomainData,
+  ): RecommendationsResponse {
+    return {
+      title: recommendations.recommendations.title,
+      movies: recommendations.recommendations.movies.map((m) =>
+        MovieMapper.toBffDto(m),
+      ),
     };
   }
 

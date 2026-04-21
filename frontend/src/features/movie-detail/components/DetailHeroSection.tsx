@@ -3,10 +3,10 @@ import ReactPlayer from 'react-player';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { getBackdropSrcSet } from '@/utils/image';
-import { MovieDetail } from '@/types/api/dto';
+import { MovieDetailBase } from '@/types/api/dto';
 
 export interface DetailHeroSectionProps {
-  detail: MovieDetail;
+  detail: MovieDetailBase;
   videoKey: string | null;
 }
 

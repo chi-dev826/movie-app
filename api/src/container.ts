@@ -8,7 +8,9 @@ import { GoogleSearchRepository } from "./infrastructure/repositories/googleSear
 import { YoutubeRepository } from "./infrastructure/repositories/youtube.repository";
 
 // New imports for Movie features
-import { GetFullMovieDataUseCase } from "./application/usecases/movie/getFullMovieData.usecase";
+import { GetDetailBaseInfoUseCase } from "./application/usecases/movie/movie-detail/getDetailBaseInfo.usecase";
+import { GetDetailResourcesUseCase } from "./application/usecases/movie/movie-detail/getDetailResources.usecase";
+import { GetRecommendationsUseCase } from "./application/usecases/movie/movie-detail/getRecommendations.usecase";
 import { GetHomePageUseCase } from "./application/usecases/movie/getHomePage.usecase";
 import { GetHomePageMovieListUseCase } from "./application/usecases/movie/getHomePageMovieList.usecase";
 import { GetUpcomingMovieListUseCase } from "./application/usecases/movie/getUpcomingMovieList.usecase";
@@ -66,9 +68,13 @@ export const createContainer = (): Dependencies => {
   const movieResponseBuilder = new MovieResponseBuilder();
 
   // UseCases
-  const getFullMovieDataUseCase = new GetFullMovieDataUseCase(
+  const getDetailBaseInfoUseCase = new GetDetailBaseInfoUseCase(tmdbRepository);
+  const getDetailResourcesUseCase = new GetDetailResourcesUseCase(
     tmdbRepository,
     movieEnrichService,
+  );
+  const getRecommendationsUseCase = new GetRecommendationsUseCase(
+    tmdbRepository,
     movieRecommendationService,
   );
   const getHomePageMovieListUseCase = new GetHomePageMovieListUseCase(
@@ -105,7 +111,9 @@ export const createContainer = (): Dependencies => {
 
   // コントローラのインスタンス化
   const movieController = new MovieController(
-    getFullMovieDataUseCase,
+    getDetailBaseInfoUseCase,
+    getDetailResourcesUseCase,
+    getRecommendationsUseCase,
     getHomePageUseCase,
     getHomePageMovieListUseCase,
     getUpcomingMovieListUseCase,

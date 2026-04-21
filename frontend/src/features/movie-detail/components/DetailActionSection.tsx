@@ -75,7 +75,7 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
             {isInList ? 'リストから削除' : 'リストへ追加'}
           </button>
         </div>
-          {homePageUrl ?(
+        {homePageUrl ? (
           <a
             href={homePageUrl}
             target="_blank"
@@ -85,15 +85,15 @@ export const DetailActionSection: React.FC<DetailActionSectionProps> = ({
             <SquareArrowOutUpRight className="w-5 h-5" />
             Official Site
           </a>
-          ) : (
-            <button
-              disabled
-              className="flex items-center justify-center flex-1 gap-2 py-5 text-sm font-bold text-gray-400 bg-gray-700 opacity-50 pointer-events-none rounded-xl font-label"
-            >
-              <SquareArrowOutUpRight className="w-5 h-5" />
-              Official Site
-            </button>
-          )}
+        ) : (
+          <button
+            disabled
+            className="flex items-center justify-center flex-1 gap-2 py-5 text-sm font-bold text-gray-400 bg-gray-700 opacity-50 pointer-events-none rounded-xl font-label"
+          >
+            <SquareArrowOutUpRight className="w-5 h-5" />
+            Official Site
+          </button>
+        )}
       </div>
     </section>
   );

@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { ERROR_MESSAGES } from "../constants/messages";
-import { GetFullMovieDataUseCase } from "../../application/usecases/movie/getFullMovieData.usecase";
+import { GetDetailBaseInfoUseCase } from "../../application/usecases/movie/movie-detail/getDetailBaseInfo.usecase";
+import { GetDetailResourcesUseCase } from "../../application/usecases/movie/movie-detail/getDetailResources.usecase";
+import { GetRecommendationsUseCase } from "../../application/usecases/movie/movie-detail/getRecommendations.usecase";
 import { GetHomePageUseCase } from "../../application/usecases/movie/getHomePage.usecase";
 import { GetHomePageMovieListUseCase } from "../../application/usecases/movie/getHomePageMovieList.usecase";
 import { GetUpcomingMovieListUseCase } from "../../application/usecases/movie/getUpcomingMovieList.usecase";
@@ -19,7 +21,9 @@ import { IClock } from "../../domain/repositories/clock.service.interface";
  */
 export class MovieController {
   constructor(
-    private readonly getFullMovieDataUseCase: GetFullMovieDataUseCase,
+    private readonly getDetailBaseInfoUseCase: GetDetailBaseInfoUseCase,
+    private readonly getDetailResourcesUseCase: GetDetailResourcesUseCase,
+    private readonly getRecommendationsUseCase: GetRecommendationsUseCase,
     private readonly getHomePageUseCase: GetHomePageUseCase,
     private readonly getHomePageMovieListUseCase: GetHomePageMovieListUseCase,
     private readonly getUpcomingMovieListUseCase: GetUpcomingMovieListUseCase,
@@ -33,7 +37,7 @@ export class MovieController {
   ) {}
 
   /**
-   * 映画の詳細情報を取得する (GET /api/movie/:movieId/full)
+   * 映画の詳細ページ用の基本情報を取得する (GET /api/movie/:movieId)
    */
   async getMovieDetails(req: Request, res: Response, next: NextFunction) {
     try {
@@ -44,8 +48,58 @@ export class MovieController {
           .json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
       }
 
-      const domainData = await this.getFullMovieDataUseCase.execute(id);
-      const response = this.builder.buildDetails(domainData, this.clock.now());
+      const domainData = await this.getDetailBaseInfoUseCase.execute(id);
+      const response = this.builder.buildDetails(domainData);
+
+      res.json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * 映画の詳細ページ用のリソースを取得する (GET /api/movie/:movieId/resources)
+   */
+  async getMovieResources(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params.movieId);
+      if (!req.params.movieId || isNaN(id)) {
+        return res
+          .status(HTTP_STATUS.BAD_REQUEST)
+          .json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
+      }
+
+      const domainData = await this.getDetailResourcesUseCase.execute(id);
+      const response = this.builder.buildResources(domainData);
+
+      res.json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * 映画の詳細ページ用のおすすめ作品を取得する (GET /api/movie/:movieId/recommendations)
+   */
+  async getMovieRecommendations(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const id = Number(req.params.movieId);
+      const collectionId = Number(req.params.collectionId);
+      if (!req.params.movieId || isNaN(id)) {
+        return res
+          .status(HTTP_STATUS.BAD_REQUEST)
+          .json({ message: ERROR_MESSAGES.MOVIE_ID_REQUIRED });
+      }
+
+      const domainData = await this.getRecommendationsUseCase.execute(
+        id,
+        collectionId,
+      );
+      const response = this.builder.buildRecommendations(domainData);
 
       res.json(response);
     } catch (error) {

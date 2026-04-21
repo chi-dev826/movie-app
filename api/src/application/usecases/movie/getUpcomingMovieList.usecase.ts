@@ -2,7 +2,7 @@ import { ITmdbRepository } from "../../../domain/repositories/tmdb.repository.in
 import { MovieEnrichService } from "../../services/movie.enrich.service";
 import { UpcomingMovieService } from "../../../domain/services/upcomingMovie.service";
 import { ArrayUtils } from "../../../utils/array";
-import { EnrichedMovie } from "../../types/enrichedMovie";
+import { EnrichedMovie } from "../../types/movie.types";
 
 /**
  * 日本で近日公開予定の映画リストを取得・加工するユースケース。

@@ -3,7 +3,7 @@ import { GetHomePageMovieListUseCase as PopularUseCase } from "./getHomePageMovi
 import { GetUpcomingMovieListUseCase } from "./getUpcomingMovieList.usecase";
 import { GetNowPlayingMoviesUseCase } from "./getNowPlayingMovies.usecase";
 import { GetTrendingListUseCase } from "./getTrendingList.usecase";
-import { EnrichedMovie } from "../../types/enrichedMovie";
+import { EnrichedMovie } from "../../types/movie.types";
 
 /**
  * ホーム画面表示用の全データを一括取得するドメイン関心事のオーケストレーション。

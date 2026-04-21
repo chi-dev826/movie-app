@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import { X, AlertTriangle } from 'lucide-react';
-import { useFullMovieData } from '@/hooks/useMovies';
+import { useMovieDetailFlow } from '@/hooks/useMovies';
 
 /**
  * TrailerPage
@@ -12,7 +12,7 @@ import { useFullMovieData } from '@/hooks/useMovies';
 const TrailerPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data, isLoading, error } = useFullMovieData(Number(id));
+  const { resources } = useMovieDetailFlow(Number(id));
 
   const handleClose = () => {
     navigate(-1);
@@ -29,21 +29,21 @@ const TrailerPage: React.FC = () => {
         <X className="w-8 h-8 text-white transition-transform group-hover:scale-110" />
       </button>
 
-      {isLoading ? (
+      {resources.isLoading ? (
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 rounded-full border-primary border-t-transparent animate-spin" />
           <p className="text-sm font-bold tracking-widest uppercase text-white/60">
             Loading Preview...
           </p>
         </div>
-      ) : error || !data?.videoUrl ? (
+      ) : resources.error || !resources.data?.videoInfo.video ? (
         <div key="error" className="flex flex-col items-center gap-6 px-8 text-center">
           <div className="flex items-center justify-center w-20 h-20 border rounded-full bg-red-500/20 border-red-500/50">
             <AlertTriangle className="w-10 h-10 text-red-500" />
           </div>
           <div>
             <h2 className="mb-2 text-2xl font-bold text-white">
-              {error ? 'エラーが発生しました' : '予告編が見つかりません'}
+              {resources.error ? 'エラーが発生しました' : '予告編が見つかりません'}
             </h2>
             <p className="text-sm text-white/60">
               申し訳ありません。この作品の予告編は現在視聴できません。
@@ -67,7 +67,7 @@ const TrailerPage: React.FC = () => {
           }}
         >
           <ReactPlayer
-            src={data.videoUrl!}
+            src={resources.data?.videoInfo.video!}
             playing={true}
             controls={true}
             width="100%"
@@ -78,7 +78,7 @@ const TrailerPage: React.FC = () => {
       )}
 
       {/* 背景の装飾的なグラデーション */}
-      {!isLoading && data?.videoUrl && (
+      {!resources.isLoading && resources.data?.videoInfo.video && (
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-transparent to-black/20 z-[105]" />
       )}
     </div>
