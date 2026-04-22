@@ -11,13 +11,14 @@ import { MovieStatsSection } from './components/MovieStatsSection';
 import { NewsAnalysisSection } from './components/NewsAnalysisSection';
 import { TrailerCarouselSection } from './components/TrailerCarouselSection';
 import { RecommendationSection } from './components/RecommendationSection';
+import { MovieDetailSkeleton } from './components/MovieDetailSkeleton';
 
 export const MovieDetailPage: React.FC = () => {
   const { id: movieId } = useParams<{ id: string }>();
   const { baseInfo, resources, recommendations } = useMovieDetailFlow(Number(movieId));
 
   if (baseInfo.isLoading) {
-    return <div>Loading...</div>;
+    return <MovieDetailSkeleton />;
   }
 
   if (baseInfo.error) {
