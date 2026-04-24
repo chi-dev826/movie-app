@@ -13,11 +13,10 @@
     "**/node_modules": true,
     "**/dist": true
   },
-  "typescript.updateImportsOnFileMove.enabled": "always",
+  "ts.updateImportsOnFileMove.enabled": "always",
   "explorer.compactFolders": false,
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "workbench.iconTheme": "vs-seti",
-  "workbench.colorTheme": "Default Dark+",
+  "workbench.colorTheme": "Dark+",
   "breadcrumbs.enabled": true
-
 }
