@@ -11,22 +11,17 @@ type Props = {
   className?: string;
 };
 
-/**
- * @summary 新着作品用カード。バックドロップ（またはポスター）を利用した小型の横長サムネイル。
- * @param movie 映画エンティティ
- */
 export default function NewReleaseMovieCard({ movie, className = '' }: Props) {
-  // バックドロップがない場合はポスターをフォールバックとして利用
   const imageUrl = getTmdbImage(
     movie.backdropPath || movie.posterPath,
     IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.SMALL,
   );
-  const prefetchMovieDetail = usePrefetchMovieDetail();
+  const prefetch = usePrefetchMovieDetail();
 
   return (
     <Link
       to={APP_PATHS.MOVIE_DETAIL.replace(':id', movie.id.toString())}
-      onMouseEnter={() => prefetchMovieDetail(movie.id)}
+      onMouseEnter={() => prefetch(movie.id)}
       viewTransition
       className={`group block shrink-0 cursor-pointer ${className}`}
     >
