@@ -36,6 +36,7 @@ const ArticleThumbnail: React.FC<ArticleThumbnailProps> = ({
       <img
         src={imageUrl}
         fetchPriority="high"
+        decoding="sync"
         alt={alt}
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />

@@ -88,7 +88,8 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               <img
                 srcSet={backdropSrcSet}
                 alt={detail.title}
-                fetchPriority="high" // ブラウザに「最優先リソース」と伝える
+                fetchPriority="high" 
+                decoding="sync"
                 className="object-cover w-full h-full"
               />
             </motion.div>

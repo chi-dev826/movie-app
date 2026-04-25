@@ -39,6 +39,7 @@ export const WatchProviderSection: React.FC<WatchProviderSectionProps> = ({ watc
                 alt={provider.name}
                 title={provider.name}
                 fetchPriority="high"
+                decoding="sync"
                 className="w-12 h-12 md:w-16 md:h-16 rounded-xl border border-white/10 shadow-lg"
               />
             </a>
