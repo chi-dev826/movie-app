@@ -9,11 +9,11 @@ export class GetMovieWatchListUseCase {
 
   /**
    * @param movieIds - 取得対象の映画ID配列
-   * @returns 映画の詳細データと画像のペアの配列
+   * @returns 映画の詳細データの配列
    */
   async execute(
     movieIds: number[],
-  ): Promise<{ detailEntity: MovieDetailEntity; image: string | null }[]> {
+  ): Promise<{ detailEntity: MovieDetailEntity }[]> {
     if (!movieIds || movieIds.length === 0) {
       return [];
     }
@@ -22,21 +22,18 @@ export class GetMovieWatchListUseCase {
     const results = await Promise.all(
       movieIds.map(async (id) => {
         try {
-          const [detailEntity, image] = await Promise.all([
-            this.tmdbRepo.getMovieDetails(id),
-            this.tmdbRepo.getMovieImages(id),
-          ]);
-          return { detailEntity, image };
+          const detailEntity = await this.tmdbRepo.getMovieDetails(id);
+          return { detailEntity };
         } catch (error) {
           console.error(`映画ID ${id} の取得に失敗しました:`, error);
-          return { detailEntity: null, image: null };
+          return { detailEntity: null };
         }
       }),
     );
 
     // 2. 有効なデータのみを抽出して返却
     return results.filter(
-      (item): item is { detailEntity: MovieDetailEntity; image: string | null } =>
+      (item): item is { detailEntity: MovieDetailEntity } =>
         item.detailEntity !== null,
     );
   }
