@@ -44,7 +44,6 @@ export const fetchRecommendations = async (
   movieId: number,
   collectionId: number | null,
 ): Promise<RecommendationsResponse> => {
-  console.log(API_PATHS.MOVIE.RECOMMENDATIONS.replace(':movieId', movieId.toString()) + `?collectionId=${collectionId}`);
   return fetchFromApi<RecommendationsResponse>(
     API_PATHS.MOVIE.RECOMMENDATIONS.replace(':movieId', movieId.toString()) + `?collectionId=${collectionId}`,
   );
