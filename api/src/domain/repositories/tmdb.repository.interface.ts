@@ -1,6 +1,7 @@
 import { MovieEntity } from "../models/movie";
 import { MovieDetailEntity } from "../models/movieDetail";
 import { CollectionEntity } from "../models/collection";
+import { MovieImages } from "../models/movieImage";
 import { Video } from "../models/video";
 
 export interface ITmdbRepository {
@@ -56,8 +57,8 @@ export interface ITmdbRepository {
   /** 補助データ: 映画の動画情報を取得する */
   getMovieVideos(movieId: number): Promise<Video[]>;
 
-  /** 補助データ: 映画のロゴ画像パスを取得する */
-  getMovieImages(movieId: number): Promise<string | null>;
+  /** 補助データ: 映画の画像情報を取得する */
+  getMovieImages(movieId: number): Promise<MovieImages | null>;
 
   /** 補助データ: 映画の配信情報を取得する */
   getMovieWatchProviders(

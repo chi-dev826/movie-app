@@ -6,6 +6,7 @@ import { MovieEntity } from "../../domain/models/movie";
 import { MovieDetailEntity } from "../../domain/models/movieDetail";
 import { CollectionEntity } from "../../domain/models/collection";
 import { Video } from "../../domain/models/video";
+import { MovieImages } from "../../domain/models/movieImage";
 import { CACHE_TTL } from "../constants/cacheTtl";
 import { tmdbApi } from "../lib/tmdb.client";
 import {
@@ -289,7 +290,7 @@ export class TmdbRepository implements ITmdbRepository {
   /**
    * 補助データ: 取得失敗時は null を返し、上位層の処理を中断させない
    */
-  async getMovieImages(movieId: number): Promise<string | null> {
+  async getMovieImages(movieId: number): Promise<MovieImages | null> {
     try {
       return await this.cache.getOrSet(
         `tmdb:movie:${movieId}:images`,
@@ -297,7 +298,7 @@ export class TmdbRepository implements ITmdbRepository {
           const response = await this.api.get<ImageResponse>(
             `/movie/${movieId}/images`,
           );
-          return response.data.logos?.[0]?.file_path ?? null;
+          return MovieFactory.createFromImageResponse(response.data);
         },
         CACHE_TTL.STANDARD,
       );
