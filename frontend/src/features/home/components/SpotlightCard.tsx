@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom';
 import { CalendarDays, Clock, Star } from 'lucide-react';
 
 import type { Movie, UpcomingMovie } from '@/types/api/dto';
-import { getPosterSrcSet, getBackdropSrcSet, getTmdbImage } from '@/utils/image';
-import { IMAGE_CONFIG } from '@/constants/config';
+import { getPosterSrcSet, getBackdropSrcSet } from '@/utils/image';
 import { APP_PATHS } from '@shared/constants/routes';
 import { usePrefetchMovieDetail } from '@/hooks/useMovies';
 
@@ -24,7 +23,6 @@ const SpotlightCard = (props: Props) => {
   const backdropSrcSet = getBackdropSrcSet(movie.backdropPath);
   const backdropFallbackUrl = getBackdropSrcSet(movie.backdropPath);
   const posterSrcSet = getPosterSrcSet(movie.posterPath);
-  const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.LARGE);
   const prefetchMovieDetail = usePrefetchMovieDetail();
 
   if (!backdropFallbackUrl) return null;
@@ -67,19 +65,10 @@ const SpotlightCard = (props: Props) => {
 
           {/* メタ情報 */}
           <div className="flex flex-col gap-2 pb-1 md:gap-3 md:pb-2">
-            {/* ロゴ or タイトル */}
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                loading="lazy"
-                alt={`${movie.title} logo`}
-                className="object-contain max-w-32 md:max-w-48 xl:max-w-64 2xl:max-w-72 3xl:max-w-sm drop-shadow-lg"
-              />
-            ) : (
-              <h3 className="text-lg font-bold text-white md:text-2xl xl:text-3xl 2xl:text-4xl drop-shadow-lg">
-                {movie.title}
-              </h3>
-            )}
+            {/* タイトル */}
+            <h3 className="text-lg font-bold text-white md:text-2xl xl:text-3xl 2xl:text-4xl drop-shadow-lg">
+              {movie.title}
+            </h3>
 
             {/* あらすじ */}
             {movie.overview && (

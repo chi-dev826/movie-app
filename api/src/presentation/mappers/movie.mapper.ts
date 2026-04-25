@@ -12,7 +12,7 @@ export class MovieMapper {
    */
   static toBffDto(
     entity: MovieEntity,
-    options?: { videoKey?: string | null; logoPath?: string | null },
+    options?: { videoKey?: string | null },
   ): MovieDTO {
     return {
       id: entity.id,
@@ -31,7 +31,6 @@ export class MovieMapper {
 
       // オプションのエンリッチデータ
       video: MoviePresenter.enrichVideoUrl(options?.videoKey ?? null),
-      logoPath: options?.logoPath ?? null,
     };
   }
 
@@ -40,7 +39,7 @@ export class MovieMapper {
    */
   static toDetailBffDto(
     detailEntity: MovieDetailEntity,
-    options?: { videoKey?: string | null; logoPath?: string | null },
+    options?: { videoKey?: string | null },
   ): MovieDetailBaseDTO {
     const baseDto = this.toBffDto(detailEntity.baseInfo, options);
 

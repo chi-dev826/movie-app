@@ -34,7 +34,6 @@ export class MovieResponseBuilder {
 
   buildResources(resources: ResourcesResponse): ResourcesResponse {
     return {
-      imagePath: resources.imagePath,
       watchProviders: resources.watchProviders,
       videoInfo: {
         video: MoviePresenter.enrichVideoUrl(resources.videoInfo.video),
@@ -70,7 +69,6 @@ export class MovieResponseBuilder {
     const upcomingDto = data.upcoming.movies.map((m) =>
       MoviePresenter.toUpcomingMovie(
         MovieMapper.toBffDto(m.entity, {
-          logoPath: m.logoPath,
           videoKey: m.videoKey,
         }),
         today,
@@ -122,7 +120,6 @@ export class MovieResponseBuilder {
     return movies.map((m) =>
       MoviePresenter.toUpcomingMovie(
         MovieMapper.toBffDto(m.entity, {
-          logoPath: m.logoPath,
           videoKey: m.videoKey,
         }),
         today,
@@ -140,13 +137,9 @@ export class MovieResponseBuilder {
   /**
    * ウォッチリスト(複数映画データ)のレスポンスを構築する
    */
-  buildWatchList(
-    items: { detailEntity: MovieDetailEntity; image: string | null }[],
-  ): MovieDto[] {
+  buildWatchList(items: { detailEntity: MovieDetailEntity }[]): MovieDto[] {
     return items.map((item) =>
-      MovieMapper.toBffDto(item.detailEntity.baseInfo, {
-        logoPath: item.image,
-      }),
+      MovieMapper.toBffDto(item.detailEntity.baseInfo),
     );
   }
 }

@@ -13,33 +13,7 @@ export class MovieEnrichService {
   ) {}
 
   /**
-   * 対象の映画IDリストに対して並行してロゴ画像を取得し、IDをキーとしたMapを返す
-   */
-  async getLogos(movieIds: readonly number[]): Promise<Map<number, string>> {
-    const results = new Map<number, string>();
-    const promises = movieIds.map(async (id) => {
-      const logoPath = await this.tmdbRepo.getMovieImages(id);
-      if (logoPath) {
-        results.set(id, logoPath);
-      }
-    });
-    await Promise.all(promises);
-    return results;
-  }
-
-  /**
-   * 単一映画IDのロゴ画像を取得する。
-   * 実装上はバルクAPI（getLogos）をラップすることで、
-   * 外部APIへのアクセス戦略（レート制限対応・並列数制御など）を
-   * getLogos に集約できるようにしている。
-   */
-  async getLogo(movieId: number): Promise<string | null> {
-    const results = await this.getLogos([movieId]);
-    return results.get(movieId) ?? null;
-  }
-
-  /**
-   * 対象の映画IDリストに対して並行して予告編を取得し、IDをキーとしたMapを返す
+   * 対象の映画IDリストに対して並行して予告編動画を取得し、IDをキーとしたMapを返す
    */
   async getTrailers(
     movieIds: readonly number[],

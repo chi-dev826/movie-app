@@ -1,6 +1,5 @@
 import { MovieEntity } from "../models/movie";
 import { MovieDetailEntity } from "../models/movieDetail";
-import { MovieImages } from "../models/movieImage";
 import { Video } from "../models/video";
 import {
   MovieResponse,
@@ -114,14 +113,6 @@ export class MovieFactory {
       data.vote_average ?? null,
       data.genre_ids ?? [],
       data.media_type,
-    );
-  }
-
-  static createFromImageResponse(data: ImageResponse): MovieImages {
-    return new MovieImages(
-      data.backdrops.map((image) => image.file_path),
-      data.posters.map((image) => image.file_path),
-      data.logos.map((image) => image.file_path),
     );
   }
 }

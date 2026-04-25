@@ -13,7 +13,6 @@ type Props = {
 
 const MovieBackdrop = ({ movie, className = '' }: Props) => {
   const backdropUrl = getTmdbImage(movie.backdropPath, IMAGE_CONFIG.IMAGE_SIZES.BACKDROP.MEDIUM);
-  const logoUrl = getTmdbImage(movie.logoPath, IMAGE_CONFIG.IMAGE_SIZES.LOGO.MEDIUM);
   const prefetch = usePrefetchMovieDetail();
 
   return (
@@ -38,18 +37,6 @@ const MovieBackdrop = ({ movie, className = '' }: Props) => {
           }
         >
           <h3 className="text-xs font-bold text-white 3xl:text-sm 4xl:text-base">{movie.title}</h3>
-        </div>
-
-        {/* ロゴ画像 */}
-        <div className="hidden xl:block xl:absolute xl:top-0 xl:max-w-24 2xl:max-w-28 3xl:max-w-32 4xl:max-w-48">
-          {logoUrl && (
-            <img
-              src={logoUrl}
-              alt={movie.originalTitle}
-              className="object-contain w-full h-full opacity-80"
-              loading="lazy"
-            />
-          )}
         </div>
 
         {/* 評価スコア */}

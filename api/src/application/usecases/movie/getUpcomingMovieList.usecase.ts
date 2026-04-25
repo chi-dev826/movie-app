@@ -39,15 +39,11 @@ export class GetUpcomingMovieListUseCase {
 
     // 3. エンリッチメント（AppServiceによる並行取得）
     const movieIds = processedMovies.map((m) => m.id);
-    const [logosMap, trailersMap] = await Promise.all([
-      this.enrichService.getLogos(movieIds),
-      this.enrichService.getTrailers(movieIds),
-    ]);
+    const trailersMap = await this.enrichService.getTrailers(movieIds);
 
     // 4. ドメインエンティティと補助データの合成
     const enrichedMovies: EnrichedMovie[] = processedMovies.map((movie) => ({
       entity: movie,
-      logoPath: logosMap.get(movie.id) ?? null,
       videoKey: trailersMap.get(movie.id) ?? null,
     }));
 

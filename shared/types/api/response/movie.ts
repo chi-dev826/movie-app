@@ -12,7 +12,6 @@ export type RecommendationsResponse = {
 };
 
 export type ResourcesResponse = {
-  imagePath: string | null;
   watchProviders: { logoPath: string | null; name: string }[];
   videoInfo: { video: string | null; otherVideos: string[] };
 };

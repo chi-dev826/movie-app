@@ -8,12 +8,19 @@ jest.mock("../../src/infrastructure/repositories/youtube.repository");
 jest.mock("../../src/infrastructure/repositories/tmdb.repository", () => {
   return {
     TmdbRepository: jest.fn().mockImplementation(() => ({
-      findUpcomingMovies: jest.fn().mockResolvedValue([]),
-      findNowPlayingMovies: jest.fn().mockResolvedValue([]),
-      findRecentlyAddedMovies: jest.fn().mockResolvedValue([]),
-      findTrendingMovies: jest.fn().mockResolvedValue([]),
+      findUpcomingMovies: jest
+        .fn()
+        .mockResolvedValue({ movies: [], currentPage: 1, totalPages: 1 }),
+      findNowPlayingMovies: jest
+        .fn()
+        .mockResolvedValue({ movies: [], currentPage: 1, totalPages: 1 }),
+      findRecentlyAddedMovies: jest
+        .fn()
+        .mockResolvedValue({ movies: [], currentPage: 1, totalPages: 1 }),
+      findTrendingMovies: jest
+        .fn()
+        .mockResolvedValue({ movies: [], currentPage: 1, totalPages: 1 }),
       getMovieDetails: jest.fn(),
-      getMovieImages: jest.fn().mockResolvedValue(null),
       getMovieWatchProviders: jest.fn().mockResolvedValue([]),
       getSimilarMovies: jest.fn().mockResolvedValue([]),
       getCollection: jest.fn(),
@@ -43,13 +50,13 @@ describe("アプリケーション統合", () => {
     // 3. 各映画リストの基本的な構造を検証
     const categories = ["upcoming", "nowPlaying", "recentlyAdded", "trending"];
     for (const category of categories) {
-      const list = body[category];
-      expect(Array.isArray(list)).toBe(true);
-      if (list.length > 0) {
-        const movie = list[0];
+      const paginated = body[category];
+      expect(Array.isArray(paginated.movies)).toBe(true);
+      if (paginated.movies.length > 0) {
+        const movie = paginated.movies[0];
         expect(movie).toHaveProperty("id");
         expect(movie).toHaveProperty("title");
-        expect(movie).toHaveProperty("poster_path");
+        expect(movie).toHaveProperty("posterPath");
         expect(typeof movie.id).toBe("number");
         expect(typeof movie.title).toBe("string");
       }

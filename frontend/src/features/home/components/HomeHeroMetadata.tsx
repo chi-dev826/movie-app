@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Calendar } from 'lucide-react';
-
-import { IMAGE_CONFIG } from '@/constants/config';
 import type { HeroMovie } from '@/types/api/response';
 
 /** カテゴリに対応するバッジのラベルとスタイル */
@@ -53,7 +51,7 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
           )}
         </div>
 
-        {/* ロゴ部分 */}
+        {/* タイトル部分 */}
         <motion.h2
           layout // ← 高さ変化をFramer Motionが補間して吸収
           animate={
@@ -62,17 +60,9 @@ export const HomeHeroMetadata = ({ movie }: Props) => {
           transition={{ type: 'spring', stiffness: 220, damping: 24 }}
           className="inline-block mb-4"
         >
-          {movie.logoPath ? (
-            <img
-              src={`${IMAGE_CONFIG.IMAGE_BASE_URL}w1280${movie.logoPath}`}
-              alt={`${movie.title} logo`}
-              className="object-cover max-w-28 md:max-w-52 lg:max-w-64 2xl:max-w-72 3xl:max-w-sm 4xl:max-w-xl drop-shadow-lg"
-            />
-          ) : (
-            <span className="text-lg font-bold md:text-2xl lg:text-4xl 2xl:text-6xl 4xl:text-8xl drop-shadow-lg">
-              {movie.title}
-            </span>
-          )}
+          <span className="text-lg font-bold md:text-2xl lg:text-4xl 2xl:text-6xl 4xl:text-8xl drop-shadow-lg">
+            {movie.title}
+          </span>
         </motion.h2>
 
         {/* 概要部分（アンマウントせず高さと不透明度をアニメーションしてレイアウトのジャンプを防ぐ） */}

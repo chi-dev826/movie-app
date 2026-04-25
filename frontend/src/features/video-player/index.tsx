@@ -67,7 +67,7 @@ const TrailerPage: React.FC = () => {
           }}
         >
           <ReactPlayer
-            src={resources.data?.videoInfo.video!}
+            src={resources.data?.videoInfo.video}
             playing={true}
             controls={true}
             width="100%"

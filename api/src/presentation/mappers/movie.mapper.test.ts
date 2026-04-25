@@ -24,14 +24,12 @@ describe("MovieMapper", () => {
       expect(dto.voteAverage).toBe(4.2);
     });
 
-    it("オプションのビデオキーとロゴパスが反映されること", () => {
+    it("オプションのビデオキーが反映されること", () => {
       const movie = createMovie();
       const dto = MovieMapper.toBffDto(movie, {
         videoKey: "video123",
-        logoPath: "/logo.png",
       });
-      expect(dto.video).toBe("video123");
-      expect(dto.logoPath).toBe("/logo.png");
+      expect(dto.video).toBe("https://www.youtube.com/watch?v=video123");
     });
   });
 

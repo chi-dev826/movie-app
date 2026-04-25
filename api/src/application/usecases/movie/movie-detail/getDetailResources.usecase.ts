@@ -9,14 +9,12 @@ export class GetDetailResourcesUseCase {
   ) {}
 
   async execute(movieId: number): Promise<ResourcesResponse> {
-    const [imagePath, watchProvidersRaw, videoInfo] = await Promise.all([
-      this.tmdbRepo.getMovieImages(movieId),
+    const [watchProvidersRaw, videoInfo] = await Promise.all([
       this.tmdbRepo.getMovieWatchProviders(movieId),
       this.enrichService.getDetailedVideos(movieId),
     ]);
 
     return {
-      imagePath,
       watchProviders: watchProvidersRaw,
       videoInfo,
     };

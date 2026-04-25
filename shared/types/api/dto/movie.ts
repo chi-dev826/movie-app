@@ -8,7 +8,6 @@ export type Movie = {
   readonly overview: string;
   readonly posterPath: string | null;
   readonly voteAverage: number | null;
-  readonly logoPath?: string | null;
   readonly video?: string | null;
   readonly releaseDate?: string | null;
   readonly genreIds?: number[];

@@ -88,7 +88,7 @@ export const DetailHeroSection: React.FC<DetailHeroSectionProps> = ({ detail, vi
               <img
                 srcSet={backdropSrcSet}
                 alt={detail.title}
-                fetchPriority="high" 
+                fetchPriority="high"
                 decoding="sync"
                 className="object-cover w-full h-full"
               />

@@ -12,7 +12,7 @@ export const MovieDetailSkeleton: React.FC = () => {
       <section className="relative w-full overflow-hidden aspect-video 2xl:aspect-cinema bg-surface-container-high">
         {/* 背景画像のプレースホルダー */}
         <div className="w-full h-full bg-surface-container-highest" />
-        
+
         {/* グラデーションオーバーレイ */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-background via-background/20 to-transparent" />
 
@@ -25,7 +25,7 @@ export const MovieDetailSkeleton: React.FC = () => {
         <div className="mb-4">
           {/* タイトル プレースホルダー */}
           <div className="w-3/4 h-10 mb-4 rounded-lg bg-surface-container-highest md:h-12 md:w-1/2" />
-          
+
           {/* 公開年、上映時間、評価ラインのプレースホルダー */}
           <div className="flex items-center gap-5 mt-3">
             <div className="w-12 h-4 rounded-md bg-surface-container-high" />
@@ -38,10 +38,7 @@ export const MovieDetailSkeleton: React.FC = () => {
           {/* ジャンルタグ プレースホルダー */}
           <div className="flex flex-wrap gap-2 mt-4">
             {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="w-16 h-6 rounded-full bg-surface-container-high"
-              />
+              <div key={i} className="w-16 h-6 rounded-full bg-surface-container-high" />
             ))}
           </div>
         </div>
@@ -53,11 +50,11 @@ export const MovieDetailSkeleton: React.FC = () => {
           <div className="flex gap-3">
             {/* メインアクションボタン (予告編) プレースホルダー */}
             <div className="flex-1 h-[60px] md:h-[68px] bg-surface-container-highest rounded-xl" />
-            
+
             {/* サブアクションボタン (リスト追加) プレースホルダー */}
             <div className="flex-1 h-[60px] md:h-[68px] bg-surface-container-high rounded-xl" />
           </div>
-          
+
           {/* サードアクションボタン (公式サイト) プレースホルダー */}
           <div className="w-full h-[52px] md:h-[60px] bg-surface-container-highest rounded-xl" />
         </div>
