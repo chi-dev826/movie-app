@@ -29,17 +29,15 @@ export class GetMovieWatchListUseCase {
           return { detailEntity, image };
         } catch (error) {
           console.error(`映画ID ${id} の取得に失敗しました:`, error);
-          return null;
+          return { detailEntity: null, image: null };
         }
       }),
     );
 
     // 2. 有効なデータのみを抽出して返却
     return results.filter(
-      (
-        item,
-      ): item is { detailEntity: MovieDetailEntity; image: string | null } =>
-        item !== null,
+      (item): item is { detailEntity: MovieDetailEntity; image: string | null } =>
+        item.detailEntity !== null,
     );
   }
 }
